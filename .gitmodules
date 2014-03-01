@@ -1,0 +1,3 @@
+[submodule "cleanpress"]
+	path = cleanpress
+	url = git://github.com/macjasp/cleanpress.git
