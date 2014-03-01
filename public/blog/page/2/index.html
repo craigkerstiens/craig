@@ -9,7 +9,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Just as PostgreSQL 9.3 was coming out I had a need to take advantage of the JSON datatype and some of the operators and functions within it. The use &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,141 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/11/18/best-postgres-feature-youre-not-using/">
+		
+			The Best Postgres Feature You&#8217;re Not Using – CTEs Aka WITH Clauses</a>
+	</h2>
+	<div class="entry-content">
+		<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
+
+<p>The feature itself is known as CTEs or common table expressions, you may also here it referred to as <code>WITH</code> clauses. The general idea is that it allows you to create something somewhat equivilant to a view that only exists during that transaction. You can create multiple of these which then allow for clear building blocks and make it simple to follow what you&rsquo;re doing.</p>
+
+
+		
+		<a href="/2013/11/18/best-postgres-feature-youre-not-using/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-18T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/10/13/simple-but-informative-emails/">
+		
+			Tooling for Simple but Informative Emails</a>
+	</h2>
+	<div class="entry-content">
+		<p>Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some->many-> all. Its still highly effective even as much noise as we receive in our inboxes. Over the years I&rsquo;ve tried a lot of email tools from custom built solutions, to newer entrants that help around drip actions (<a href="http://www.intercom.io">intercom.io</a> and <a href="http://www.customer.io">customer.io</a>), to more &ldquo;enterprise&rdquo; tools such as Marketo. While I have varying opinions on all of those, I still find myself coming back to a simple one off script setup to deliver clear concise emails.</p>
+
+
+		
+		<a href="/2013/10/13/simple-but-informative-emails/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/09/12/disabling-muting-while-typing-in-hangouts/">
+		
+			Disabling Muting While Typing in Google Hangouts</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
+
+<pre><code> defaults write com.google.googletalkplugind exps -string [\"-tm\"]
+</code></pre>
+
+<p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -431,148 +566,6 @@ mymodel.results = result.to_json
 <div class="tags">
 
 	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/27/Pivoting-in-Postgres/">
-		
-			Pivoting in Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p>Earlier today on an internal Heroku group alias there was a <a href="https://postgres.heroku.com/dataclips">dataclip</a> shared. The dataclip listed off some data grouped by a category, there was a reply a few minutes later with a modification to the query that used the <code>crosstab</code> function to pivot directly in SQL. There were immediately several reactions on the list that went something like this:</p>
-
-<p><img src="http://f.cl.ly/items/1b0G101r0B2W243b2933/Image%202013.06.27%202%3A06%3A23%20PM.gif" alt="mindblown" /></p>
-
-<p>While a mostly simple function in Postgres (there are a few rough edges), it really is all too handy. So here it is in action. Taking some data that looks like</p>
-
-<ul>
-<li>row identifier, in this case date</li>
-<li>category grouping, in this case OS</li>
-<li>value</li>
-</ul>
-
-
-
-		
-		<a href="/2013/06/27/Pivoting-in-Postgres/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/25/javascript-functions-for-postgres/">
-		
-			Javascript Functions for PostgreSQL</a>
-	</h2>
-	<div class="entry-content">
-		<p>Javascript in Postgres has gotten a good bit of love lately, part of that is from <a href="http://postgres.herpku.com">Heroku Postgres</a> recently <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">adding support for Javascript</a> and part from a variety of people championing the power of it such as <a href="http://twitter.com/leinweber">@leinweber</a> (<a href="http://www.youtube.com/watch?v=fRupMAVdmWA">Embracing the web with JSON and PLV8</a>) and <a href="http://twitter.com/selenamarie">@selenamarie</a> (<a href="https://speakerdeck.com/selenamarie/schema-liberation-with-json-and-plv8-and-postgres">schema liberation with JSON and PLV8</a>). In a recent conversation it was pointed out that it seems a bit of headache to have to create your own functions, or at least having an initial collection would make it that much more powerful. While many can look forward to <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">PostgreSQL 9.3</a> which will have a bit more built in support for JSON a few functions can really help make it more useful today.</p>
-
-
-		
-		<a href="/2013/06/25/javascript-functions-for-postgres/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-25T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/13/explaining-your-data/">
-		
-			Explaining Your PostgreSQL Data</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve written a bit before about <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">understanding the output</a> from <code>EXPLAIN</code> and <code>EXPLAIN ANALYZE</code> in PostgreSQL. Though understandably getting a grasp on execution plans could probably use some more guidance. Yet, this time around I&rsquo;m taking a bit of a cop out and highlighting a few tools instead of documenting myself, which I&rsquo;ve done in a talk I&rsquo;ve frequently given <a href="https://speakerdeck.com/craigkerstiens/postgres-demystified-1">Postgres Demystified</a>.</p>
-
-<p><img src="http://f.cl.ly/items/2Y0A0H2B2q3C0622261C/Screenshot_6_13_13_9_57_AM.png" alt="Explain explained" /></p>
-
-
-		
-		<a href="/2013/06/13/explaining-your-data/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
 
 </div>
 
