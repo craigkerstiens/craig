@@ -1,0 +1,329 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>How I work with Postgres – psql, My PostgreSQL Admin  | Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="On at least a weekly basis and not uncommonly multiple times in a single week I get this question: I&#8217;ve been hunting for a nice PG interface &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">How I Work With Postgres – Psql, My PostgreSQL Admin</h2>
+	<div class="entry-content"><p>On at least a weekly basis and not uncommonly multiple times in a single week I get this question:</p>
+
+<blockquote><p>I&#8217;ve been hunting for a nice PG interface that works within other things. PGAdmin kinda works, except the SQL editor is a piece of shit</p><footer><strong>@neilmiddleton</strong> <cite><a href='https://twitter.com/neilmiddleton'></a></cite></footer></blockquote>
+
+
+<p>Sometimes it leans more to, what is the Sequel Pro equivilant for Postgres. My default answer is I just use psql, though I do have to then go on to explain how I use it. For those just interested you can read more below or just get the highlights here:</p>
+
+<ul>
+<li>Set your default <code>EDITOR</code> then use \e</li>
+<li>On postgres 9.2 and up <code>\x auto</code> is your friend</li>
+<li>Set history to unlimited</li>
+<li><code>\d</code> all the things</li>
+</ul>
+
+
+<p>Before going into detail on why psql works perfectly fine as an interface I want to rant for a minute about what the problems with current editors are and where I expect them to go in the future. First this is not a knock on the work thats been done on previous ones, for their time PgAdmin, phpPgAdmin, and others were valuable tools, but we&rsquo;re coming to a point where theres a broader set of users of databases than ever before and empowering them is becoming ever more important.</p>
+
+<p>Empowering developers, DBA&rsquo;s, product people, marketers and others to be comfortable with their database will lead to more people taking advantage of whats in their data. <a href="http://craigkerstiens.com/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a> was a great start to this laying a great foundation for valuable information being captured. Even with all of the powerful stats being captured in the statistics of PostgreSQL so many are still terrified when they see something like:</p>
+
+<pre><code>                                                   QUERY PLAN
+----------------------------------------------------------------------------------------------------------------
+ Hash Join  (cost=4.25..8.62 rows=100 width=107) (actual time=0.126..0.230 rows=100 loops=1)
+   Hash Cond: (purchases.user_id = users.id)
+   -&gt;  Seq Scan on purchases  (cost=0.00..3.00 rows=100 width=84) (actual time=0.012..0.035 rows=100 loops=1)
+   -&gt;  Hash  (cost=3.00..3.00 rows=100 width=27) (actual time=0.097..0.097 rows=100 loops=1)
+         Buckets: 1024  Batches: 1  Memory Usage: 6kB
+         -&gt;  Seq Scan on users  (cost=0.00..3.00 rows=100 width=27) (actual time=0.007..0.042 rows=100 loops=1)
+ Total runtime: 0.799 ms
+(7 rows)
+</code></pre>
+
+<p>Empowering more developers by surfacing this information in a digestable form, such as building on top of <code>pg_stat_statements</code> tools such as <a href="http://datascope.heroku.com">datascope</a> by <a href="http://www.twitter.com/leinweber">@leinweber</a> and getting this to be part of the default admin we will truly begin empowering a new set of user.</p>
+
+<p>But enough of a detour, those tools aren&rsquo;t available today. If you&rsquo;re interested in helping build those to make the community better please reach out. For now I live in a work where I&rsquo;m quite content with simple ole <code>psql</code> here&rsquo;s how:</p>
+
+<!--more-->
+
+
+<h3>Editor</h3>
+
+<p>Ensuring you&rsquo;ve exported your preferred editor to the environment variable <code>EDITOR</code> when you run \e it will allow you to view and edit your last run query in your editor of choice. This works for vim, emacs, or even sublime text.</p>
+
+<pre><code>export EDITOR=subl
+psql
+\e 
+</code></pre>
+
+<p>Gives me:</p>
+
+<p><img src="http://f.cl.ly/items/2I0f3M0B1T3k0d290v3k/Screenshot_2_12_13_9_58_AM.png" alt="sublime text" /></p>
+
+<p><em>Note you need to make sure you connect with psql and have your editor set, once you do that saving and exiting the file will then execute the query</em></p>
+
+<h3>\x auto</h3>
+
+<p>psql has long had a method of formatting output. You can toggle this on and off easily by just running the <code>\x</code> command. Running a basic query you get the output:</p>
+
+<pre><code>SELECT * 
+FROM users 
+LIMIt 1;
+ id | first_name | last_name |           email            |    data    |     created_at      |     updated_at      |     last_login
+ ----+------------+-----------+----------------------------+------------+---------------------+---------------------+---------------------
+   1 | Rosemary   | Wassink   | Rosemary.Wassink@yahoo.com | "sex"=&gt;"F" | 2010-07-01 18:16:00 | 2011-05-14 11:47:00 | 2011-06-07 23:04:00
+</code></pre>
+
+<p>With toggling the output and re-running the same query we can see how its now formatted:</p>
+
+<pre><code>\x
+Expanded display is on.
+craig=# SELECT * from users limit 1;
+-[ RECORD 1 ]--------------------------
+id         | 1
+first_name | Rosemary
+last_name  | Wassink
+email      | Rosemary.Wassink@yahoo.com
+data       | "sex"=&gt;"F"
+created_at | 2010-07-01 18:16:00
+updated_at | 2011-05-14 11:47:00
+last_login | 2011-06-07 23:04:00
+</code></pre>
+
+<p>Using <code>\x auto</code> will automatically put this in what Postgres believes is the most intelligible format to read it in.</p>
+
+<h3>psql history</h3>
+
+<p>Hopefully this needs no justification&hellip; having an unlimited history of all your queries is incredibly handy. Ensuring you set the following environment variables will ensure you never lose that query you ran several months ago again:</p>
+
+<pre><code>export HISTFILESIZE=
+export HISTSIZE=
+</code></pre>
+
+<h3>\d</h3>
+
+<p>And while the last on the list one of the first things I do when connecting to any database is check out whats in it. I don&rsquo;t do this by running a bunch of queries but rather checking out the schema and then poking at definitions of specific tables. <code>\d</code> and variations on it are incredibly handy for this. Here&rsquo;s a few highlights below:</p>
+
+<p>Listing all relations with simply <code>\d</code>:</p>
+
+<pre><code>\d
+                 List of relations
+ Schema |       Name       |     Type      | Owner
+--------+------------------+---------------+-------
+ public | products         | table         | craig
+ public | products_id_seq  | sequence      | craig
+ public | purchases        | table         | craig
+ public | purchases_id_seq | sequence      | craig
+ public | redis_db0        | foreign table | craig
+ public | users            | table         | craig
+ public | users_id_seq     | sequence      | craig
+(7 rows)
+</code></pre>
+
+<p>List only all tables with <code>dt</code>:</p>
+
+<pre><code>\dt
+         List of relations
+ Schema |   Name    | Type  | Owner
+--------+-----------+-------+-------
+ public | products  | table | craig
+ public | purchases | table | craig
+ public | users     | table | craig
+(3 rows)
+</code></pre>
+
+<p>Describe a specific relation with <code>\d RELATIONNAMEHERE</code>:</p>
+
+<pre><code>\d users
+                                     Table "public.users"
+   Column   |            Type             |                     Modifiers
+------------+-----------------------------+----------------------------------------------------
+ id         | integer                     | not null default nextval('users_id_seq'::regclass)
+ first_name | character varying(50)       |
+ last_name  | character varying(50)       |
+ email      | character varying(255)      |
+ data       | hstore                      |
+ created_at | timestamp without time zone |
+ updated_at | timestamp without time zone |
+ last_login | timestamp without time zone |
+</code></pre>
+
+<p>One more pro-tip if you&rsquo;re running a transaction with many tables and forget which are involved in it you can run &lsquo;\d *transaction*&rsquo; and it&rsquo;ll display tables curently affected.</p>
+
+<p><em>Have a tool you prefer, have something you use daily in psql that I missed, or interested in helping create a new admin experience please reach out and lets talk craig.kerstiens at gmail.com</em></p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-13T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Craig Kerstiens
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

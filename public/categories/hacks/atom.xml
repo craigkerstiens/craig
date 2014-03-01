@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Hacks | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/hacks/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Tooling for Simple but Informative Emails]]></title>
+    <link href="http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails/"/>
+    <updated>2013-10-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails</id>
+    <content type="html"><![CDATA[<p>Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some->many-> all. Its still highly effective even as much noise as we receive in our inboxes. Over the years I&rsquo;ve tried a lot of email tools from custom built solutions, to newer entrants that help around drip actions (<a href="http://www.intercom.io">intercom.io</a> and <a href="http://www.customer.io">customer.io</a>), to more &ldquo;enterprise&rdquo; tools such as Marketo. While I have varying opinions on all of those, I still find myself coming back to a simple one off script setup to deliver clear concise emails.</p>
+
+<!--more-->
+
+
+<h3>Getting the Data</h3>
+
+<p>The first step of any email is deciding what you want to do, but hopefully you know that already. The part that is usually a bit more effort is actually getting the list to send it to and formatting it appropriately. I usually opt for SQL. While the specifics of the query of course always vary it common follows a general structure:</p>
+
+<pre><code>WITH initial_data AS (
+  SELECT 
+         email,
+         app_name,
+         information_about_app 
+  FROM
+       users,
+       apps
+  WHERE users.id = apps.user_id
+    AND some_filter_to_limit_data
+),
+
+candidates_for_email AS ... --- likely to have additional CTEs
+
+--- Finally I build up the list
+
+SELECT email,
+       array_to_string(array_agg(data_for_email), '
+') --- an important note is to add a newline or not here depending on how you wish to format it
+FROM candidates_for_email
+GROUP BY email;
+</code></pre>
+
+<p>The query structure you&rsquo;ll want is first column email, second column whatever data you want to include in your email.</p>
+
+<p>From here I usually create a dataclip of it. This makes it easy to allow my data to change over time. If I&rsquo;m testing an email for data over the last 7 days I just come back in 7 days and I have new data. It also lets me easily share and iterate on the data. The nice part is there&rsquo;s an easy way to click a button and get the data as a CSV which is what you want for sending.</p>
+
+<p>Once you download the CSV you&rsquo;ll want to remove the header line as its not needed for the script.</p>
+
+<h3>Sending the Mail</h3>
+
+<p>To actually send the email you&rsquo;ll need this script, which is largely credited to <a href="http://www.twitter.com/leinweber">@leinweber</a>:</p>
+
+<pre><code>require 'mail'
+require 'csv'
+FILE = ARGV[0]
+
+Mail.defaults do
+  delivery_method :smtp, {
+    address: 'smtp address',
+    port: 587,
+    domain: 'gmail.com',
+    user_name: 'craig.kerstiens@gmail.com',
+    password: ENV.fetch('EMAIL_PASSWORD'),
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+end
+
+
+def send_email(address, app)
+  mail = Mail.new do
+    to      address
+    from    'Craig Kerstiens &lt;craig.kerstiens@gmail.com&gt;'
+    subject "Your email subject in here"
+    body    generate_body(app)
+  end
+end
+
+def generate_body(app)
+  %Q( 
+Hi,
+
+Your list of apps: 
+
+#{app}
+
+Various email content in here...
+
+  )
+end
+
+
+CSV.parse(File.read(FILE)).each do |line|
+  address = line[0]
+  app     = line[1]
+  m = send_email(address, app)
+  puts m.to_s
+  p m.deliver!
+
+  puts
+  puts
+end
+</code></pre>
+
+<p><em>You&rsquo;ll want to make sure to export the PW of your email provider with EXPORT EMAIL_PASSWORD=pw_here</em></p>
+
+<p>You can easily download this script from off of <a href="https://gist.github.com/craigkerstiens/6922897">Github&rsquo;s Gist</a>. I&rsquo;d recommend using an email service provider other than Gmail in sending your emails such as <a href="http://www.mailgun.com">mailgun</a> as they&rsquo;re built to handle sending a large amount of emails. Finally send your emails:</p>
+
+<pre><code>ruby email.rb nameofyourfile.csv
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Disabling muting while typing in Google hangouts]]></title>
+    <link href="http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts/"/>
+    <updated>2013-09-12T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts</id>
+    <content type="html"><![CDATA[<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
+
+<pre><code> defaults write com.google.googletalkplugind exps -string [\"-tm\"]
+</code></pre>
+
+<p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
+]]></content>
+  </entry>
+  
+</feed>

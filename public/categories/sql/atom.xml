@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: SQL | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/sql/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The missing PostgreSQL documentation]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/07/the-missing-postgresql-documentation/"/>
+    <updated>2013-08-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/07/the-missing-postgresql-documentation</id>
+    <content type="html"><![CDATA[<p>For a couple of years I&rsquo;ve complained about the Postgres documentation and at the same time paraded it as one of the best sets of documentation I&rsquo;ve encountered. In many ways the reason I veer towards <a href="http://www.postgresql.org">Postgres</a> as well as <a href="http://www.python.org">Python</a> and <a href="http://www.djangoproject.com">Django</a> is the quality of their documentation. If you need to find details about something its documented, and more importantly well and thoroughly documented.</p>
+
+<p>In large part I came to Python by happenstance through <a href="http://www.djangoproject.com">Django</a>, and Postgres through happenstance of an employer. Yet, Django was very little of an accident. The Django Tutorial got me a large part of what I needed to know and more excited about development than I had been in some time. Python has done some work at adding docs to make this even better, sadly its still very much needed for PostgreSQL.</p>
+
+<!--more-->
+
+
+<h3>Whats Missing in the Postgres Docs</h3>
+
+<p>Theres a huge variety of types of documentation, off the top of my head theres:</p>
+
+<ul>
+<li>Reference docs (Postgres excels at this)</li>
+<li>Onboarding (Postgres tutorial huh?)</li>
+<li>Tailored guides (Postgres? I can haz? Nope&hellip; We don&rsquo;t understand&hellip;.)</li>
+</ul>
+
+
+<p>Postgres is great if you know the name of what you&rsquo;re looking for, but if you don&rsquo;t you&rsquo;re entirely left in the dark.</p>
+
+<h3>Understanding the power of Postgres</h3>
+
+<p>Postgres is good enough at performance, good enough at usability, and awesome at how powerful and flexible it can be. But all of this is entirely lost if you have to know the esoteric name of what you&rsquo;re looking for.</p>
+
+<p><em>What the hell is an hstore&hellip; In so many ways KVstore makes infintely more sense. In the same sense PLV8, I have to know not only what PL stands for but V8 as well, versus the JavaScript extension for Postgres.</em></p>
+
+<p>I understand there are plenty of reasons why some of these things are the way they are, but its also limiting how great the broader perception is. Postgres externally is this hard to use DB, that well is just a database, versus giving developers a set of powerful and useful functions to make their lives better.</p>
+
+<h3>The Solution</h3>
+
+<p>Lets fix things, there are a ton of people that would love to know more about all things Postgres. This ranges from a good set of onboarding docs, to specific blog posts on topics that people are curious about. Just last week I got an email about improving <strong>the</strong> Postgres tutorial&hellip; Yes theres a tutorial hidden in the <a href="http://www.postgresql.org/docs/9.2/static/tutorial.html">2000 page set of documentation for Postgres</a>. Its simply old, mostly uninteresting, and well just needs to be completely recreated. A great alternative would be a few tutorials/guides for:</p>
+
+<ul>
+<li>Noobs to databases in general (Total 101 guide)</li>
+<li>Building and architecting your application with Postgres (App Devs)</li>
+<li>Administering and maintaining Postgres (DBAs)</li>
+<li>SQL and reporting in Postgres (consumers of data, analysts, product people, marketing, etc.)</li>
+</ul>
+
+
+<p>If jumping in and contributing to fixing the core tutorial isn&rsquo;t your cup of tea because you don&rsquo;t want to learn and write in <a href="http://www-sul.stanford.edu/tools/tutorials/html2.0/gentle.html">SGML</a>, send a pull request to <a href="http://postgresguide.com">postgresguide.com</a> or do a <a href="mailto:craig.kerstiens@gmail.com].%20If%20thats%20too%20much%20effort%20please%20just%20let%20us%20know,%20what%20do%20you%20want%20to%20see%20-%20[craig.kerstiens%20at%20gmail.com](mailto:craig.kerstiens@gmail.com">guest post on my blog</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A look at Foreign Data Wrappers]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/"/>
+    <updated>2013-08-05T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs</id>
+    <content type="html"><![CDATA[<p>There are two particular sets of features that continue to keep me very excited about the momentum of Postgres. And while PostgreSQL has had some great momentum in the past few years these features may give it an entirely new pace all together. One is extensions, which is really its own category. Dimitri Fontaine was talking about doing a full series just on extensions, so here&rsquo;s hoping he does so I dont have to :)</p>
+
+<p>One subset of extensions which I consider entirely separate is the other thing, which is foreign data wrappers or FDWs. FDWs allow you to connect to other data sources from within Postgres. From there you can query them with SQL, join across disparate data sets, or join across different systems. Recently I had a good excuse to give the <code>postgres_fdw</code> a try. And while I&rsquo;ve blogged about the Redis FDW previously, the Postgres one is particularly exciting because with PostgreSQL 9.3 it will ship as a contrib module, which means all Postgres installers should have it&hellip; you just have to turn it on.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s take a look at getting it setup and then dig into it a bit. First, because I don&rsquo;t have Postgres 9.3 sitting around on my system I&rsquo;m going to provision one from Heroku Postgres:</p>
+
+<pre><code>$ heroku addons:add heroku-postgresql:crane --version 9.3
+</code></pre>
+
+<p>Once it becomes available I&rsquo;m going to connect to it then enable the extension:</p>
+
+<pre><code>$ heroku pg:psql BLACK -acraig
+# CREATE EXTENSION postgres_fdw;
+</code></pre>
+
+<p>Now its there, so we can actually start using it. To use the FDW there&rsquo;s four basic things you&rsquo;ll want to do:</p>
+
+<ol>
+<li>Create the remote server</li>
+<li>Create a user mapping for the remote server</li>
+<li>Create your foreign tables</li>
+<li>Start querying some things</li>
+</ol>
+
+
+<h3>The setup</h3>
+
+<p>You&rsquo;ll only need to do each of the following once, once you&rsquo;re server, user and foreign table are all setup you can simply query away. This is a nice advantage over db_link which only exists for the set session. <em>One downside I did find was that you can&rsquo;t use a full Postgres connection string, which would make setting it up much simpler</em>. So onto setting up our server:</p>
+
+<pre><code># CREATE SERVER app_db 
+  FOREIGN DATA WRAPPER postgres_fdw 
+  OPTIONS (dbname 'dbnamehere', host 'hostname-here);
+</code></pre>
+
+<p>Next we&rsquo;ll actually create our user mapping. In this case we&rsquo;ll take the remote username and password and map it to our current user we&rsquo;re already connected with.</p>
+
+<pre><code># CREATE USER MAPPING for user_current 
+  SERVER app_db 
+  OPTIONS (user 'remote_user', password 'remote_password');
+</code></pre>
+
+<p>And finally we&rsquo;re going to configure our tables. <em>There were some additional pains here as there wasn&rsquo;t a perfectly clean way to generate the <code>CREATE TABLE</code>. Sure you could pg_dump just that table, but overall it felt a bit cludgey.</em></p>
+
+<pre><code># CREATE FOREIGN TABLE users
+  (
+    id integer,
+    email text,
+      created_at timestamp,
+      first_name text,
+      last_name text
+  )
+  SERVER app_db OPTIONS (table_name 'users')
+</code></pre>
+
+<p>Now we&rsquo;ve got all of our local data, as well as remote data. For that report against two databases where you previously wrote a ruby or python script, ran a query, constructed another query, then executed it you can directly do in your database. We can simply query our new table &ndash; <code>SELECT * FROM users LIMIT 5;</code></p>
+
+<p>But the real power of foreign data wrappers goes well beyond just Postgres to Postgres. Having a defined contract in translating from one system to another, will really allow reinventing the way we work with data. This is especially true in large datasets where doing ETL on terrabytes of data takes longer than asking the questions of it.</p>
+
+<p>While we&rsquo;re waiting for more FDWs to be ready to use in production situations the Postgres FDW is a great start, <em>though the Redis one is on its way</em>. Even better is that it ships with standard installs of Postgres, meaning it will see more usage and help push them to advance further.</p>
+
+<p><em>One final nicety, you&rsquo;re not required to have ALL Postgres 9.3 DBs, just one that can then connect to the others, so go ahead and give it try :)</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres Dollar Quoting]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere/"/>
+    <updated>2013-08-02T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere</id>
+    <content type="html"><![CDATA[<p>After my most recent post on <a href="/2013/07/29/documenting-your-postgres-database/">documenting your database</a> I had a colleague and friend chime in:</p>
+
+<p><blockquote><p>@craigkerstiens You may want to mention for another post the generality of dollar quoting: it&rsquo;s not just for CREATE FUNCTION.</p><footer><strong>@danfarina <a href="https://twitter.com/danfarina/status/362007008079126528">https://twitter.com/danfarina/status/362007008079126528</a></strong></footer></blockquote></p>
+
+<p>Luckily I was able to convince him to create the post. You can read a bit more on him below, but without further adieu here&rsquo;s a bit on dollar quoting within Postgres:</p>
+
+<!--more-->
+
+
+<p>Postgres supports two forms of entry of data literals into the system.
+One is the familiar single-quote:</p>
+
+<pre><code>=&gt; SELECT 'hello';
+ ?column?
+----------
+ hello
+(1 row)
+</code></pre>
+
+<p>This format is problematic when one might be using single quotes in
+the textual string.</p>
+
+<p>Postgres also supports another way to enter data
+literals, most often seen in <code>CREATE FUNCTION</code>, but can be profitably
+used anywhere.  This is called &ldquo;dollar quoting,&rdquo; and it looks like
+this:</p>
+
+<pre><code>=&gt; SELECT $$hello's the name of the game$$;
+           ?column?
+------------------------------
+ hello's the name of the game
+(1 row)
+</code></pre>
+
+<p>If one needs nested dollar quoting, one can specify a string, much
+like the &lsquo;heredoc&rsquo; feature seen in some programming languages:</p>
+
+<pre><code>=&gt; SELECT $goodbye$hello's the name of the $$ game$goodbye$;
+            ?column?
+---------------------------------
+ hello's the name of the $$ game
+(1 row)
+</code></pre>
+
+<p>This can appear anywhere where single quotes would otherwise be,
+simplifying tasks like using contractions in database object comments,
+for example:</p>
+
+<pre><code>=&gt; CREATE TABLE described(a int);
+=&gt; COMMENT ON TABLE described IS $$I'm describing this,
+including newlines and an apostrophe in the contraction "I'm."$$;
+</code></pre>
+
+<p>Or, alternatively, entry of literals for types that may include
+apostrophes in their serialization, such as &lsquo;text&rsquo; or &lsquo;json&rsquo;:</p>
+
+<pre><code>=&gt; CREATE TABLE json(data json);
+=&gt; INSERT INTO json(data) VALUES
+       ($${"quotation": "'there is no time like the present'"}$$);
+</code></pre>
+
+<h3>Security</h3>
+
+<p>Even though dollar quotes can be used to reduce the pain of many
+quoting problems, don&rsquo;t be tempted to use them to avoid SQL injection:
+an adversary that knows one is using dollar quoting can still mount
+exactly the same kind of attacks as if one were using single quotes.</p>
+
+<p>There is also no need, because any place a data literal can appear can
+also be used with parameter binding (e.g. <code>$1</code>, <code>$2</code>, <code>$3</code>&hellip;), which one&rsquo;s
+Postgres driver should support.  Nevertheless, for data or scripts one
+is working with by hand, dollar quoting can make things much easier to
+read.</p>
+
+<h3>About the Author</h3>
+
+<p>Daniel Farina is a long time colleague and friend, having worked together at 5 different companies. He&rsquo;s part of the <a href="https://twitter.com/danfarina/status/362007008079126528">Heroku Postgres</a> team as the resident tuple groomer, and the creator of <a href="https://github.com/wal-e/wal-e">WAL-E</a>.</p>
+
+<p><em>As is always the case if you have articles you&rsquo;d like to see created or if you&rsquo;re interested in doing a guest post  please feel free to drop me a line <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a>. And if you have articles you feel are helpful to others in the Postgres world drop me a note as well for including them in <a href="http://www.postgresweekly.com">Postgres Weekly</a>.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Documenting your PostgreSQL database]]></title>
+    <link href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/"/>
+    <updated>2013-07-29T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database</id>
+    <content type="html"><![CDATA[<p>Just a few days ago I was surprised by what someone was doing with their database, and not in the typical horrifying travesty against mankind. Rather, it was a feature that while familiar with I&rsquo;d never seen anyone fully take proper advantage of &ndash; <code>COMMENT</code> or describing tables. Postgres has a nice facility for you to provide a description for just about anything:</p>
+
+<ul>
+<li>Table</li>
+<li>Column</li>
+<li>Function</li>
+<li>Schema</li>
+<li>View</li>
+<li>Index</li>
+<li>Etc.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>The specific use case was a database acting as a datamart pulling in data from multiple sources to be able to report against disparate data. Over the years I&rsquo;ve seen this occur really one three ways, the first is that a limited set of people, typically one person, have knowledge over all the datasources and thus far the sole individual responsible for creating reports and answering questions of the data. The second, is wide open access to anyone that wishes for it. In this case you often have people asking questions of the data, and because they don&rsquo;t understand the relationships coming up to entirely wrong conclusions. The final approach is to create some external documentation, entity relationship diagrams, data dictionaries, etc. This last one often works okay enough, but often suffers from lack of updates and being too heavyweight.</p>
+
+<p>A better solution, and all around good process is simply documenting clearly within the database itself. Simply comment each table and column, just as you would outside of your DB then it can be quite clear when inside the database working interactivly:</p>
+
+<pre><code>COMMENT ON TABLE products IS 'Products catalog';
+COMMENT ON COLUMN products.price is 'Current price of a single item purchased';
+</code></pre>
+
+<p>While an obvious example above naming even the most mundance columns can help create more accurate reports. Then of course when you want to inspect your DB its quite clear:</p>
+
+<pre><code>\d+ users
+# \d+ users
+                                     Table "public.users"
+   Column   |            Type             | ... | Description
+------------+-----------------------------+-...-+-----------------------------------------
+ id         | integer                     | ... | auto serial pk
+ first_name | character varying(50)       | ... | required first name of user
+ last_name  | character varying(50)       | ... | required first name of user
+ email      | character varying(255)      | ... | email address of account
+ data       | hstore                      | ... | mix of data, city, state, gender
+ created_at | timestamp without time zone | ... | when account was created, not confirmed
+ updated_at | timestamp without time zone | ... | time any details were last updated
+Indexes:
+    "idx_user_created" btree (date_trunc('day'::text, created_at))
+Has OIDs: no
+</code></pre>
+
+<p>But it doesn&rsquo;t necessarily have to stop there. Which actually brings me to one other item, you should be commenting your SQL just the same. SQL comments can be done easily by just starting a line with <code>--</code>, or you can have it at the end of the line with further info. Here&rsquo;s a nice example:</p>
+
+<pre><code>-- Query aggregates all project names that have open past due tasks grouped by email
+SELECT 
+  users.email,
+  array_to_string(array_agg(projects.name), ',')) as projects # Aggregate all projects and separate by comma
+FROM
+  projects,
+  tasks,
+  users
+-- A user has a project, which has tasks
+WHERE projects.id = tasks.project_id
+  -- Check for tasks that are due before now and not done yet
+  AND tasks.due_at &gt; tasks.completed_at
+  AND tasks.due_at &lt; now()
+  AND users.id = projects.user_id
+GROUP BY 
+  users.email
+</code></pre>
+
+<p>You comment your code, why shouldn&rsquo;t you comment your database?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hstore vs. JSON - Which to use in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/"/>
+    <updated>2013-07-03T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/07/03/hstore-vs-json</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re deciding what to put in <a href="http://www.amazon.com/Seven-Databases-Weeks-Modern-Movement/dp/1934356921?tag=mypred-20">Postgres and what not to</a>, consider that Postgres can be a <a href="/2012/06/11/schemaless-django/">perfectly good schema-less database</a>. Of course as soon as people realized this then the common comes a question, is hstore or JSON better. Which do I use and in what cases. Well first, if you&rsquo;re not familiar check out some previous material on them:</p>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore on PostgresGuide</a></li>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore in Postgres docs</a></li>
+<li><a href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/">hstore with Django</a></li>
+<li><a href="http://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.2#JSON_datatype">JSON datatype</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JavaScript support in Postgres</a></li>
+</ul>
+
+
+<p>If you&rsquo;re already up to date with both of them, but still wondering which to use lets dig in.</p>
+
+<!--more-->
+
+
+<h3>hstore</h3>
+
+<p>hstore is a key value store directly within your database. Its been a common favorite of mine and has been for some time. hstore gives you flexibility when working with your schema, as you don&rsquo;t have to define models ahead of time. Though its two big limitations are that 1. it only deals with text and 2. its not a full document store meaning you can&rsquo;t nest objects.</p>
+
+<p>Though major benefits of hstore include the ability to index on it, robust support for various operators, and of course the obvious of flexibility with your data. Some of the basic operators available include:</p>
+
+<p>Return the value from column<code>foo</code> for key <code>bar</code>:</p>
+
+<pre><code>foo-&gt;'bar'
+</code></pre>
+
+<p>Does the specified column <code>foo</code> contain a key <code>bar</code>:</p>
+
+<pre><code>foo?'bar'
+</code></pre>
+
+<p>Does the specified column <code>foo</code> contain a value of <code>baz</code> for key <code>bar</code>:</p>
+
+<pre><code>foo@&gt;'bar-&gt;baz'
+</code></pre>
+
+<p>Perhaps one of the best parts of hstore is that you can index on it. In particular Postgres <code>gin</code> and <code>gist</code> indexes allow you to index all keys and values within an hstore. A talk by <a href="http://www.twitter.com/XoF">Christophe Pettus</a> of PgExperts actually highlights some <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">performance details of hstore with indexes</a>. To give away the big punchline in several cases hstore with gin/gist beats mongodb in performance.</p>
+
+<h3>json</h3>
+
+<p>JSON in contrast to hstore is a full document datatype. In addition to nesting objects you have support for more than just text (read numbers). As you insert JSON into Postgres it will automatically ensure its valid JSON and error if its well not. JSON gets a lot better come Postgres 9.3 as well with <a href="http://www.postgresql.org/docs/devel/static/functions-json.html">some built in operators</a>. Though if you need more functionality in it today you should look at <a href="https://code.google.com/p/plv8js/wiki/PLV8">PLV8</a>.</p>
+
+<h3>Which to Use</h3>
+
+<p>So which do you actually want to use in your application? If you&rsquo;re already using JSON and simply want to store it in your database then the JSON datatype is often the correct pick. However, if you&rsquo;re just looking for flexibility with your data model then hstore is likely the path you want to take. hstore will give you much of the flexibility you want as well as a good ability to query your data in a performant manner. Of course much of this starts to change in Postgres 9.3.</p>
+]]></content>
+  </entry>
+  
+</feed>

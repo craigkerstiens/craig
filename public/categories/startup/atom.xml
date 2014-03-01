@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Startup | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/startup/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Securing your Internal Organization with OpenID]]></title>
+    <link href="http://www.craigkerstiens.com/2012/01/23/securing-your-organization/"/>
+    <updated>2012-01-23T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/01/23/securing-your-organization</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
+
+<p>In our personal lives we use email as our keys to the kingdom. In fact I now almost refuse to sign up for any service that doesn&rsquo;t let me use oauth, so why should a work place be much different. So I inquired with a few companies to see if they were fine with securing things like documentation or wiki&rsquo;s being google auth, they indeed were. Yet they still seem to have users keep one more username and password for their VPN to be able to login to access internal docs/tools.</p>
+
+<!-- more -->
+
+
+<p>Most tech centric companies grow their own apps for many things they do within a company. Even the heavier adopters of SaaS still end up building a lot of internal systems. So why not secure them with your email domain just as you commonly would if it were a public service?</p>
+
+<p>The problem comes in that OpenId with google has an initial setup overhead, but after that works unbelievably well.</p>
+
+<h2>The catch</h2>
+
+<p>In some cases you currently have to identify your domain as an OpenId provider. This means that @yourname.com is an OpenId provider. This simply means creating a url route for openid in your base site similar to the below:</p>
+
+<p>``` xml <a href="http://heroku.com/openid">http://heroku.com/openid</a>
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
+&lt;xrds:XRDS xmlns:xrds=&ldquo;xri://$xrds&rdquo; xmlns=&ldquo;xri://$xrd<em>($v</em>2.0)&rdquo;>
+  <XRD></p>
+
+<pre><code>&lt;Service priority="0"&gt;
+  &lt;Type&gt;http://specs.openid.net/auth/2.0/signon&lt;/Type&gt;
+  &lt;URI&gt;https://www.google.com/a/craigkerstiens.com/o8/ud?be=o8&lt;/URI&gt;
+&lt;/Service&gt;
+</code></pre>
+
+<p>  </XRD>
+&lt;/xrds:XRDS>
+```</p>
+
+<p><em>This is due to an issue of OpenID discovery which you can read more on at: <a href="https://groups.google.com/group/google-federated-login-api/browse_thread/thread/4a7dd2312a47a082/9285cec18a30b9d3?lnk=gst&amp;q=apps+discovery&amp;pli=1#9285cec18a30b9d3.">https://groups.google.com/group/google-federated-login-api/browse_thread/thread/4a7dd2312a47a082/9285cec18a30b9d3?lnk=gst&amp;q=apps+discovery&amp;pli=1#9285cec18a30b9d3.</a> In short, setting up the above can save you a lot of time</em></p>
+
+<h2>Setting up in apps</h2>
+
+<p>Most web frameworks have libraries that make it easy to secure your apps with openid/oauth. In particular Django and Rails both make this pretty easy. To make this even simpler for you below is code to actually secure an internal app for both Django and Rails. You can do similar with Flask or Sinatra as well.</p>
+
+<h3>Rails</h3>
+
+<p>In case your admin controller isn&rsquo;t already generated:</p>
+
+<p><code>
+rails g controller admin/users
+</code></p>
+
+<p>Then anything you want to secure:</p>
+
+<p>```
+module Admin
+  class UsersController &lt; ApplicationController</p>
+
+<pre><code>before_filter :admin_required
+
+def index
+  render :text =&gt; 'Hello from the admin panel!'
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h3>Django</h3>
+
+<p>Finally sync your database:</p>
+
+<p><code>
+python yourapp/manage.py syncdb
+</code></p>
+
+<p>Secure any view with the <code>login_required</code> decorator as your typically would with Django.</p>
+
+<h2>Summary</h2>
+
+<p>In short with some very basic app setup you can have an internal workflow thats just as good as what you use in your day to day outside the office.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Attribution 101]]></title>
+    <link href="http://www.craigkerstiens.com/2011/03/18/attribution-101/"/>
+    <updated>2011-03-18T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2011/03/18/attribution-101</id>
+    <content type="html"><![CDATA[<p>Continuing with the recent posts on metrics and marketing. I want to give a quick primer on attribution. To any marketing or analytics people out there, simply skip this it would aim to be a primer recap at best for you.</p>
+
+<p>The very general meaning behind attribution is to give credit. When it comes to web products this can be giving credit for lots of things:</p>
+
+<ul>
+    <li>A visit to your site</li>
+    <li>A purchase to your site</li>
+    <li>Other events, such as sign up, referring friends, etc.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>Its really wonderful when there&rsquo;s a direct mapping in correlation. Take for example the case where:</p>
+
+<ol>
+    <li>User sees your ad on facebook</li>
+    <li>User clicks on ad</li>
+    <li>User signs up for an account</li>
+    <li>User pays you money</li>
+</ol>
+
+
+<p>In this case it&rsquo;s clear that its worthwhile to advertise on facebook. The hard part becomes when there&rsquo;s a non-linear path in some form (which is almost always the case). Now take the case:</p>
+
+<ol>
+    <li>User sees your ad on facebook</li>
+    <li>User clicks on ad, then leaves</li>
+    <li>User comes back a day later directly, and spends 10 minutes on the site reading</li>
+    <li>User comes back a day later after searching via google, and creates an account</li>
+    <li>User sees a re targeting ad 1 month later and visits</li>
+    <li>User pays for account</li>
+</ol>
+
+
+<p>In a perfect world you have case 1 and can give the full credit or attribution of the purchase to your facebook ad. However, in a real world you have case 2 and it becomes more complicated. Perhaps its something like this though:</p>
+
+<ul>
+    <li>Account creation - 100% to facebook ad</li>
+    <li>Paying for account - 50% to facebook ad, 50% to retargetting?</li>
+</ul>
+
+
+<p>This is where there is not an exact science to attribution, as it could be justified to give 100% of the credit for paying for an account to the re targeting. So if this has you pondering on attribution here&rsquo;s the downer part&hellip;. The tools that allow you to attribute a goal or action to multiple sources:</p>
+
+<ul>
+    <li>Omniture</li>
+    <li>Web Trends</li>
+</ul>
+
+
+<p>Most other tools are the last place the user ever came from, some occasionally are the first place a user came from, but without pony-ing up for a high end product your options on actually getting data don&rsquo;t really exist.</p>
+
+<p>&nbsp;</p>
+
+<p><em>Disclaimer: I have little to no formal training in stats or analytics, have simply learned through launching products so take this for what its worth, someone that has been there and done it.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Startup/Bootstrapped Marketing Recap]]></title>
+    <link href="http://www.craigkerstiens.com/2011/03/07/startupbootstrapped-marketing-recap/"/>
+    <updated>2011-03-07T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2011/03/07/startupbootstrapped-marketing-recap</id>
+    <content type="html"><![CDATA[<p>If you have an hour to spare its well worth it to look back and look back at my series on startup/bootstrapped marketing. But if you&rsquo;re short on time and want the high level summary here&rsquo;s the quick recap:</p>
+
+<p><a href="http://www.craigkerstiens.com/2011/02/14/bootstrappedstartup-marketing-part-1/">Part 1 &ndash; Focus on SEO</a></p>
+
+<ul>
+    <li>Ensure you have a sitemap; <a href="http://www.google.com/support/webmasters/bin/answer.py?answer=183668">http://www.google.com/support/webmasters/bin/answer.py?answer=183668</a>
+<ul>
+    <li>Submit it to google</li>
+    <li>Submit it to yahoo</li>
+    <li>Submit it to bing</li>
+</ul>
+<!--more-->
+</li>
+    <li>Use meta tags and ensure they're unique</li>
+    <li>Use unique titles and h1/h2 tags in your pages</li>
+</ul>
+
+
+<p><a href="http://www.craigkerstiens.com/2011/02/16/bootstrappedstartup-marketing-part-2/">Part 2 &ndash; Find Influencers</a></p>
+
+<ul>
+    <li>Find the key bloggers</li>
+    <li>Be brief and to the point</li>
+    <li>Provide value to them, often by an exclusive</li>
+</ul>
+
+
+<p><a href="http://www.craigkerstiens.com/2011/02/18/bootstrappedstartup-marketing-part-3/">Part 3 &ndash; Traditional Advertising</a></p>
+
+<ul>
+    <li>Contextual - AdSense, target for competitors</li>
+    <li>Demographic - Cast wide net for demographic info, narrow on interests/hobbies</li>
+    <li>Vertical - Ensure to filter out noise and focus on brand</li>
+</ul>
+
+
+<p><a href="http://www.craigkerstiens.com/2011/02/22/bootstrappedstartup-marketing-part-4/">Part 4 &ndash; Retargetting</a></p>
+
+<ul>
+    <li>No matter what do this step, it make's you appear to have a larger presence than you do to users</li>
+    <li>Most recommended service: <a href="http://www.adroll.com">AdRoll</a></li>
+</ul>
+
+
+<p>Again this is just a very high level recap. If any of these items strikes a chord with you please dive deeper. The amount of time it takes to learn about how to market and target your users is a fraction of the return you get from doing it effectively. Finally, if anyone out there needs direction on how to target and measure more effectively always feel free to reach out to me, i&rsquo;m easily found on <a href="http://www.twitter.com/craigkerstiens">twitter</a> among many other services.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reading Metrics to Evaluate Marketing]]></title>
+    <link href="http://www.craigkerstiens.com/2011/03/02/understanding-metrics/"/>
+    <updated>2011-03-02T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2011/03/02/understanding-metrics</id>
+    <content type="html"><![CDATA[<p>A short while backed I talked about <a href="http://www.craigekerstiens.com/2011/02/03/tactical-steps-for-startup-metrics/">tactically measuring metrics</a> for your site/company. Recently I talked a bit about <a href="http://www.craigekerstiens.com/2011/02/14/bootstrappedstartup-marketing-part-1/">methods of marketing</a>. A large key to getting the most out of your time and money is to properly report against the intersection of these two items. First I&rsquo;m going to make the assumption you&rsquo;ve read those posts, if you haven&rsquo;t go back and do that. Next this is heavily on the assumption that you&rsquo;re using Google Analytics as your primary tool for measuring metrics and have setup goals appropriately.</p>
+
+<!--more-->
+
+
+<p>Within measuring you&rsquo;re metrics you&rsquo;ll have abandonment at each level. You may have some visitors that never register, and many that register but never purchase anything. It&rsquo;s wonderful if you&rsquo;re able to immediately have full insight of the best means of marketing to drive revenue, however realistically it occurs in a more phased approach. The first step is to drive visitors and almost immediate second is to convert those users as registered.</p>
+
+<p><em><strong>Acquisition &ndash;&gt; Activation</strong></em></p>
+
+<p>This at a high level makes sense, as does at a high level knowing you should be targeting users in your target market. However, even slightly drilling into this you realize that all traffic is not equal. It&rsquo;s often known that CPC and CPA advertising does not convert well for users, though can drive traffic. This may not always be the case. For Registry Stop to make this analysis easier we&rsquo;ve created a custom report in google.</p>
+
+<p>To create your own custom report simply click Manage Custom Reports under the Custom Reports area then &ldquo;Create new custom report&rdquo;. The custom report ability in google gives you much more ability to drill into the data that you already have at a higher level. To track effectiveness of converting visitors to registered users and which sources are effective at this you&rsquo;d create something that looks like:</p>
+
+<p><a href="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz024.png"><img class="alignnone size-medium wp-image-366" title="Creating Custom Report" src="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz024-300x205.png" alt="Creating Custom Report" width="300" height="205" /></a></p>
+
+<p>Here while very simple we&rsquo;re able to see some very key information quickly. Here&rsquo;s an example of how it would appear over a few day period:</p>
+
+<p><a href="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz0231.png"><img class="alignnone size-medium wp-image-368" title="Google Analytics - Goals Custom Report" src="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz0231-300x205.png" alt="Google Analytics - Goals Custom Report" width="300" height="205" /></a></p>
+
+<p>&nbsp;</p>
+
+<p>As you progress in your stage of bootstrapping or growing your startup you&rsquo;ll want to grow custom reports that allow you to report against as many <a href="http://www.craigekerstiens.com/2011/02/03/tactical-steps-for-startup-metrics/">metrics</a> as possible. The first and last part of my day is spent pouring over these reports. Having this data readily available allows us to drive our business based on data. Perhaps the hardest part of all of this is admitting when the data is counter to what we expect and following its advice.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up Goals and Funnels - Google Analytics]]></title>
+    <link href="http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels/"/>
+    <updated>2011-02-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels</id>
+    <content type="html"><![CDATA[<p>I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">Google Analytics</a> first check that out. With most websites today there is some portion of the site that is event and not page based, meaning you have some workflow on the page based on Javascript. If this is the case you&rsquo;ll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> instead of an event in order to entirely use it in funnels and goals.</p>
+
+<p>A personal recommendation is actually to use both, goals and funnels. The key a funnel is that you need to have successive steps that occur in some order. With regards to metrics tracking this is absolutely needed, but typically you may have 1-2 total funnels with many steps in your site versus goals where you could have 10-15 single goals. For <a href="http://www.registrystop.com">Registry Stop</a> we&rsquo;ve structured our site so that our earlier stage goals become the same as steps in later stage funnels. For us in almost all cases the first part of the funnel is the visit, the second is registering for an account. We do have independent goals for visits and registrations as well, but we do not have funnels on those goals.</p>
+
+<!--more-->
+
+
+<p>A key to getting the most use out of your funnels is to know that there is a <strong>workflow to follow</strong> to getting to that end goal. To highlight this slightly more visually let me walk through an example:</p>
+
+<ol>
+    <li><em><strong>User visits your site.</strong></em></li>
+Here you'll want to create a goal. Likely this is tracking a page view of the homepage.
+    <li><em><strong>User registers for an account.</strong></em></li>
+Here again, you'll create a goal and nothing more. If there is a confirmation page that will be your goal, if there is not, then you'll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> in order to track that goal.
+    <li><em><strong>User adds a product</strong></em></li>
+This is the first place you want to create both a goal and a funnel.</ol>
+
+
+<p>With regards to the goal, it should be pretty simple, tracking some page view. For the funnel though you will likely have 4 parts.</p>
+
+<p>The parts of your funnel will be:</p>
+
+<ol>
+    <li>User visits your site.</li>
+    <li>User registers for an account.</li>
+    <li>User begins process of adding a product</li>
+    <li>User completes product add</li>
+</ol>
+
+
+<p>For Registry Stop we have a similar funnel for users which includes:</p>
+
+<ol>
+    <li>Registering for an account</li>
+    <li>Visiting the sync page</li>
+    <li>Adding a synced registry</li>
+</ol>
+
+
+<p>Now as for actually setting up a goal or funnel. This is slightly unintuitive as it&rsquo;s not from inside a specific site on Google Analytics. At the home level of google analytics you&rsquo;ll have all of your sites setup. For each site to the right you&rsquo;ll have actions, click the Edit to go to the goal area.</p>
+
+<p><a href="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz011.png"><img class="alignnone size-full wp-image-348" title="Google Analytics Settings - Goals and Funnels" src="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz011.png" alt="Google Analytics Settings - Goals and Funnels" width="125" height="64" /></a></p>
+
+<p>Once here it becomes a bit more intuitive. You can begin by simply adding a goal. Your goal types should seem mostly intuitive, as mentioned in an earlier post you cannot use an Event in a goal. For this reason you can fake a pageview as if it actually occurred and then create your goal against that non-existent page view. If you want a few more details of how to do this check out the previous post . So for an example, we have a goal on <a href="http://www.registrystop.com">Registry Stop</a> that detects when a page view occurs as a result of a registry being synced. Because this workflow is heavily javascript and flow based we fake the page view and track it as if the page was actually visited. The goal itself looks like:</p>
+
+<p><a href="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz012.png"><img class="alignnone size-medium wp-image-350" title="Google Analytics Example Goal" src="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz012.png" alt="Google Analytics Example Goal" width="300" height="75" /></a></p>
+
+<p>For setting up your funnel as we mentioned above its generally a set of page views. A very key item is the check box next to the first item in your funnel. If you check this is means any other steps in the funnel are not counted unless you the first step is completed. If you have a very structured 1, 2, 3 workflow this makes sense. However, if there are various ways for the goal to complete then be very careful about selecting this.</p>
+
+<p>For this same goal above we have a corresponding funnel to track in detail how our conversion flows. The funnel itself looks like this once setup:</p>
+
+<p><a href="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz022.png"><img class="alignnone size-medium wp-image-344" title="Google Analytics Funnel Setup" src="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz022.png" alt="Google Analytics Funnel Setup" width="300" height="127" /></a></p>
+
+<p>This results in a funnel report that looks like:</p>
+
+<p><a href="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz011.png"><img class="alignnone size-medium wp-image-342" title="Synced Registry Funnel" src="http://www.craigkerstiens.com/images/Snapz-Pro-XScreenSnapz011.png" alt="Synced Registry Funnel" width="300" height="250" /></a></p>
+
+<p>&nbsp;</p>
+]]></content>
+  </entry>
+  
+</feed>

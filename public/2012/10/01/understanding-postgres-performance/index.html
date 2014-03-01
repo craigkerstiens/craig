@@ -1,0 +1,285 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Understanding Postgres Performance  | Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="Update theres a more recent post that expands further on where to start optimizing specific queries, and of course if you want to dig into optimizing &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Understanding Postgres Performance</h2>
+	<div class="entry-content"><p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
+
+<p>For many application developers their database is a black box. Data goes in, comes back out and in between there developers hope its a pretty short time span. Without becoming a DBA there&rsquo;s a few pieces of data that most application developers can easily grok which will help them understand if their database is performing adequately. This post will provide some quick tips that allow you to determine whether your database performance is slowing down your app, and if so what you can do about it.</p>
+
+<h3>Understanding your Cache and its Hit Rate</h3>
+
+<p>The typical rule for most applications is that only a fraction of its data is regularly accessed. As with many other things data can tend to follow the 80/20 rule with 20% of your data accounting for 80% of the reads and often times its higher than this. Postgres itself actually tracks access patterns of your data and will on its own keep frequently accessed data in cache. Generally you want your database to have a cache hit rate of about 99%. You can find your cache hit rate with:</p>
+
+<pre><code>SELECT 
+  sum(heap_blks_read) as heap_read,
+  sum(heap_blks_hit)  as heap_hit,
+  sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio
+FROM 
+  pg_statio_user_tables;
+</code></pre>
+
+<!-- more -->
+
+
+<p>We can see in this <a href="https://postgres.heroku.com/dataclips/jfrtizxdthixfxkcdesxwesiibly">dataclip</a> that the cache rate for <a href="https://postgres.heroku.com?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> is 99.99%. If you find yourself with a ratio significantly lower than 99% then you likely want to consider increasing the cache available to your database, you can do this on Heroku Postgres by <a href="https://devcenter.heroku.com/articles/fast-database-changeovers?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">performing a fast database changeover</a> or on something like EC2 by performing a dump/restore to a larger instance size.</p>
+
+<h3>Understanding Index Usage</h3>
+
+<p>The other primary piece for improving performance is <a href="https://devcenter.heroku.com/articles/postgresql-indexes?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">indexes</a>. Several frameworks will add indexes on your primary keys, though if you&rsquo;re searching on other fields or joining heavily you may need to manually add such indexes.</p>
+
+<p>Indexes are most valuable across large tables as well. While accessing data from cache is faster than disk, even data within memory can be slow if Postgres must parse through hundreds of thousands of rows to identify if they meet a certain condition. To generate a list of your tables in your database with the largest ones first and the percentage of time which they use an index you can run:</p>
+
+<pre><code>SELECT 
+  relname, 
+  100 * idx_scan / (seq_scan + idx_scan) percent_of_times_index_used, 
+  n_live_tup rows_in_table
+FROM 
+  pg_stat_user_tables
+WHERE 
+    seq_scan + idx_scan &gt; 0 
+ORDER BY 
+  n_live_tup DESC;
+</code></pre>
+
+<p>While there is no perfect answer, if you&rsquo;re not somewhere around 99% on any table over 10,000 rows you may want to consider adding an index. When examining where to add an index you should look at what kind of queries you&rsquo;re running. Generally you&rsquo;ll want to add indexes where you&rsquo;re looking up by some other id or on values that you&rsquo;re commonly filtering on such as created_at fields.</p>
+
+<p>Pro tip: If you&rsquo;re adding an index on a production database use <code>CREATE INDEX CONCURRENTLY</code> to have it build your index in the background and not hold a lock on your table. The limitation to creating indexes <a href="http://www.postgresql.org/docs/9.1/static/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY">concurrently</a> is they can typically take 2-3 times longer to create and can&rsquo;t be run within a transaction. Though for any large production site these trade-offs are worth the trade-off in experience to your end users.</p>
+
+<h3>Heroku Dashboard as an Example</h3>
+
+<p>Looking at a real world example of the recently launched Heroku dashboard, we can run this query and see our results:</p>
+
+<pre><code># SELECT relname, 100 * idx_scan / (seq_scan + idx_scan) percent_of_times_index_used, n_live_tup rows_in_table  FROM pg_stat_user_tables ORDER BY n_live_tup DESC;
+       relname       | percent_of_times_index_used | rows_in_table 
+---------------------+-----------------------------+---------------
+ events              |                           0 |        669917
+ app_infos_user_info |                           0 |        198218
+ app_infos           |                          50 |        175640
+ user_info           |                           3 |         46718
+ rollouts            |                           0 |         34078
+ favorites           |                           0 |          3059
+ schema_migrations   |                           0 |             2
+ authorizations      |                           0 |             0
+ delayed_jobs        |                          23 |             0
+</code></pre>
+
+<p>From this we can wee the events table which has around 700,000 rows has no indexes that have been used. From here you could investigate within my application and see some of the common queries that are used, one example is pulling the events for this blog post which you are reaching. You can see your <a href="https://postgresguide.com/performance/explain.html?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">execution plan</a> by running an <a href="https://postgresguide.com/performance/explain.html?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens"><code>EXPLAIN ANALYZE</code></a> which gives you can get a better idea of the performance of a specific query:</p>
+
+<pre><code>EXPLAIN ANALYZE SELECT * FROM events WHERE app_info_id = 7559;                                                 QUERY PLAN
+-------------------------------------------------------------------
+Seq Scan on events  (cost=0.00..63749.03 rows=38 width=688) (actual time=2.538..660.785 rows=89 loops=1)
+  Filter: (app_info_id = 7559)
+Total runtime: 660.885 ms
+</code></pre>
+
+<p>Given there&rsquo;s a sequential scan across all that data this is an area we can optimize with an index. We can add our index concurrently to prevent locking on that table and then see how performance is:</p>
+
+<pre><code>CREATE INDEX CONCURRENTLY idx_events_app_info_id ON events(app_info_id);
+EXPLAIN ANALYZE SELECT * FROM events WHERE app_info_id = 7559;
+
+----------------------------------------------------------------------
+ Index Scan using idx_events_app_info_id on events  (cost=0.00..23.40 rows=38 width=688) (actual time=0.021..0.115 rows=89 loops=1)
+   Index Cond: (app_info_id = 7559)
+ Total runtime: 0.200 ms
+</code></pre>
+
+<p>While we can see the obvious improvement in this single query we can examine the results in <a href="https://addons.heroku.com/newrelic">New Relic</a> and see that we&rsquo;ve significantly reduced our time spent in the database with the addition of this and a few other indexes:</p>
+
+<p><img src="http://f.cl.ly/items/2x3g2h2220162C2M0w0r/Pasted%20Image%2010:1:12%208:55%20AM-2.png" alt="NewRelicGraph" /></p>
+
+<h3>Index Cache Hit Rate</h3>
+
+<p>Finally to combine the two if you&rsquo;re interested in how many of your indexes are within your cache you can run:</p>
+
+<pre><code>SELECT 
+  sum(idx_blks_read) as idx_read,
+  sum(idx_blks_hit)  as idx_hit,
+  (sum(idx_blks_hit) - sum(idx_blks_read)) / sum(idx_blks_hit) as ratio
+FROM 
+  pg_statio_user_indexes;
+</code></pre>
+
+<p>Generally, you should also expect this to be in the 99% similar to your regular cache hit rate.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Craig Kerstiens
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

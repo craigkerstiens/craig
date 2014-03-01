@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Heroku | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/heroku/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Rule of Thirds - followup]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/13/rule-of-thirds/"/>
+    <updated>2013-08-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/13/rule-of-thirds</id>
+    <content type="html"><![CDATA[<p>Several months back I wrote about how we do <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">higher level, long term planning within the Heroku Postgres team</a>. If you haven&rsquo;t read the previous article please start there.</p>
+
+<p>The exercise or rule of thirds is intended to be approximate prioritization and not a perfect science. Since that time I&rsquo;m familiar with some teams both in and out of Heroku who have attempted this exercise with varying levels of success. We&rsquo;ve now done this process 4 times within the team and after the most recent exercise attempted to take some time to internalize why its worked well, creating some more specifics about the process. Heres an attempt to provide even more clarity:</p>
+
+<!--more-->
+
+
+<h2>Gather data ahead of time</h2>
+
+<p>Its really common to have a list things to work on, but knowing the impact of those is commonly pure speculation. There may be some people that talk to customers, but even then its a subset of your actual customer base. Going into the exercise as much data you can have ahead of time on impact of features and specific problems helps. In our case we do this by:</p>
+
+<ol>
+<li>Surveying current customers and users</li>
+<li>Surveying attriters</li>
+<li>Engaging with customer facing teams to hear trends</li>
+<li>Input from external parties such as analysts on trends</li>
+</ol>
+
+
+<h2>Allow for casual discussion</h2>
+
+<p>We typically conduct our planning exercise at an offsite, this is a multi-day time of team bonding, planning, hacking. We intentionally schedule our planning excercise towards the end of the offsite. This allows us to have updates/presentations frmo the data we&rsquo;ve gathered and from those that are customer facing. Presentations are meant to be short and direct, discussion can flow casually after. This gets a lot of people on the same page at a smaller level and reduces the problem of too many cooks in the kitchen come time for the actual exercise.</p>
+
+<h2>The rule of thirds</h2>
+
+<h3>Creating the list</h3>
+
+<p>Coming to the exercise itself&hellip; We begin by everyone writing a list of their ideas individually, this is meant to be a list of the features we want to place on the grid. At this point theres no prioritizing of difficulty or impact. In addition each list while individually created does not have to contain items that only pertain to you, its more a comprehensive list of all the things you can think of that may be important to do.</p>
+
+<h3>Bucketing part 1</h3>
+
+<p>Once individual lists are created you can then collectively or designate one or two people to clean it up. We do this in two forms:</p>
+
+<ol>
+<li>Removing duplicate items, which there should be several of.</li>
+<li>Bucketing my a common/theme idea, this simply makes things more digestable</li>
+</ol>
+
+
+<p>If you&rsquo;re a big group of greater than 7 then it may be advisable to designate two people to do this exercise together. If a smaller group it can be manageable to coordinate collectively.</p>
+
+<h3>Bucketing part 2</h3>
+
+<p>Once you&rsquo;ve removed dupes, identified themes, and removed excess items (depending on your team size you&rsquo;ll find how many feels right &ndash; we aim an average of 5-6 per square for a team of 10) its then on to actually putting them on the grid. In the past we&rsquo;ve done this a variety of ways but our most recent process seemed to be quiet efficient. We gave each item 60 seconds, at the end of that minute wherever the item was it was left there. This forced some quick discussion on impact and difficulty but in the end left us at a very good hit rate without taking multiple hours to complete the exercise.</p>
+
+<h3>Final pass</h3>
+
+<p>We intentionally design it so that low effort and high impact is on the top right corner. Finally once everything is on there we allocate names to the tasks, and put boxes around items we&rsquo;re planning to do in the coming months. With boxes make it very clear of what we are doing as well as explicitly things we are not. The initials or names make it clear of how loaded down people are. If your name is on 3 tasks that are high difficulty, then you&rsquo;re likely over allocated.</p>
+
+<p>At this point things usually fall out pretty quickly and we emerge with some rough roadmap that in retrospect we&rsquo;ve followed pretty accuately.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Prioritizing and Planning within Heroku Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/"/>
+    <updated>2013-03-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing</id>
+    <content type="html"><![CDATA[<p>Over a year ago I blogged about Heroku&rsquo;s approach to <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools</a>. Since that time Heroku has grown from around 25 people to over 100, we&rsquo;ve continued to iterate and find new tools that work for how we do things. For many of the <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">product management</a> and software engineering books I&rsquo;ve read I&rsquo;ve yet to find something that helps a team priorize in a fashion I that feels right.</p>
+
+<p>One process emerged nearly a year ago from within the <a href="https://postgres.heroku.com">Heroku Postgres</a> team and is now followed by many others. Within a team this process is now commonly conducted each 6 months. Lets take a look at how this process looks</p>
+
+<!--more-->
+
+
+<h3>It Starts with Ideas</h3>
+
+<p>Hopefully having ideas of things to work on isn&rsquo;t a problem, if it is just go spend some time with customers – listen to their problems, see how they use the product, then come back and write down the ideas. For most teams this is simply an excercise of thinking back and writing it down. Some teams at Heroku have resorted to keeping running backlogs of things they&rsquo;d like to do this. We do this by keeping a Trello board which columns for:</p>
+
+<ul>
+<li>New ideas</li>
+<li>Ponies</li>
+<li>Stallions</li>
+</ul>
+
+
+<p><em>Ponies and Stallions are things that would be great to do, however a sizeable amount of work must be done on them and we&rsquo;re not currently tackling them. Ponies are less sizeable and likely to get done not in coming weeks but perhaps in coming months up to a year. Stallions are great but large effort and may or may not get done but in the category of things we would like to be able to do.</em></p>
+
+<p>Once you&rsquo;ve got your ideas whether in your head on a backlog we begin by writing them out typically on sticky notes or index cards.</p>
+
+<h3>Laying it all out</h3>
+
+<p>From here we create a simple grid:</p>
+
+<p><img src="http://f.cl.ly/items/1x1J2u0g390C1u1A1R1a/Screenshot_3_8_13_10_37_AM.png" alt="grid" /></p>
+
+<p>The grid has two axis. One is for impact the other for difficulty. At this point we aim to lay out every idea that we&rsquo;ve already written down into a quadrant. Commonly this is done at team offsites where the team is free of distractions and able to devote appropriate time to it. Being able to accomplish this in one sitting with the team is important to having cohesion around the result.</p>
+
+<h3>A plan</h3>
+
+<p>At this point hopefully its quite obvious what you want to tackle. If there&rsquo;s anything in the top right it should be an easy win for something for you to focus on. From we often transcribe this into a powerpoint/keynote document and highlight things that we will definitely aim to accomplish in the next 6 months as well as things we&rsquo;re intentionally not working on. This leaves us with an artifact of both things we will work on and explicit things we wont work on.</p>
+
+<p><img src="http://f.cl.ly/items/2J3K2E0q2z2P0y0C0M3B/Screenshot_3_9_13_8_45_AM.png" alt="grid" /></p>
+
+<h3>What works for us</h3>
+
+<p>In general we try to have more work than we can tackle to ensure we&rsquo;re constrained in a good form and not wasting idle time of people. Ensuring we&rsquo;re selective about the things we&rsquo;re working on and that we&rsquo;re working on the right things works for us. We&rsquo;ve found this simple exercise valuable for many teams to plan and ensure we&rsquo;re working on those right things. Of course this may not work for everyone but for our goals and culture aligns well for us.</p>
+
+<p><em>If you&rsquo;ve got simple but unique techniques that work for your team as always would love to hear about them – craig.kerstiens@gmail.com</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
+    <link href="http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping/"/>
+    <updated>2012-07-19T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping</id>
+    <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Historically with implementing the API fully you can&rsquo;t see how you truly feel about the result, causing this cycle to take longer than it should. Heroku Postgres has <a href="https://postgres.heroku.com/blog/past/2012/1/31/simple_data_sharing_with_data_clips/">Dataclips</a>, which (among other things) can be used for quickly prototyping APIs. <a href="https://postgres.heroku.com/dataclips">Dataclips</a> allows you to easily share data, but more importantly consume it in a form much like you would a restful API. Lets take a look at how this would work:</p>
+
+<h2>Given a schema</h2>
+
+<p><img src="http://f.cl.ly/items/0n0k1h3q1I1W1T373q0D/1.%20psql.png" alt="schema" /></p>
+
+<p>We can see from the screen shot of the schema above we can see we have a few tables. These tables are the complete works of Shakespeare thanks to <a href="http://www.opensourceshakespeare.org/downloads/">opensourceshakespeare</a>. Lets take a couple of hypothetical endpoints we&rsquo;ve decided on that we&rsquo;d like to expose for users and test as an API.</p>
+
+<ul>
+<li>The number of works per year</li>
+<li>Drone factory (this is a fun one courtesy of Richard Morrison &ndash; <a href="https://twitter.com/mozz100">@mozz100</a> essentially who has the longest paragraphs on average in his works.</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Create a dataclip</h2>
+
+<p>Now we open up our database on Heroku Postgres and go down near the bottom to the dataclips section. Click the plus to create a new dataclip and we can enter our queries.</p>
+
+<pre><code>SELECT 
+  year, 
+  count(*) 
+FROM 
+  works 
+GROUP BY 
+  year 
+ORDER BY 
+  year ASC
+</code></pre>
+
+<p>Click <code>Create Clip</code> and you&rsquo;ll be redirected to your new dataclip. This unique URL will always return the results of that query and if you want to shift it to a real time API that re-runs the query you can flip the <code>now</code> switch. For my simple example above my url for this dataclip is now <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex</a>.</p>
+
+<h2>Using the dataclip as a prototype API</h2>
+
+<p>There are many different use cases for dataclips, but of course for our sake we care about prototyping an API instead of sharing the data. To do this you can simply append the format you want to the url above and test as if it were an API:</p>
+
+<ul>
+<li>JSON &ndash; <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.json">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.json</a></li>
+<li>CSV &ndash; <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.csv">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.csv</a></li>
+<li>XLS &ndash; <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.xls">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.xls</a></li>
+</ul>
+
+
+<p>Essentially anything you can bake down to a query (much like you would in your App&rsquo;s API layer) you can expose in this form to quickly test. For a more complicated example you can check out the <a href="https://postgres.heroku.com/dataclips/tzvzbnnijzezyvzwjeoibwdpfjqb">Drone factor query</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sphinx Build Pack on Heroku]]></title>
+    <link href="http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack/"/>
+    <updated>2012-01-25T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack</id>
+    <content type="html"><![CDATA[<p>Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via <a href="http://github.com/heroku/">Heroku&rsquo;s github</a>, you can view several of them at:</p>
+
+<ul>
+<li><a href="https://github.com/heroku/heroku-buildpack-python">Python Build Pack</a></li>
+<li><a href="https://github.com/heroku/heroku-buildpack-ruby">Ruby Build Pack</a></li>
+<li><a href="https://github.com/heroku/heroku-buildpack-scala">Scala Build Pack</a></li>
+</ul>
+
+
+<p><em>There have even been some created as fun weekend hacks such as the <a href="http://github.com/hone/heroku-buildpack-jsnes">NES Rom Buildpack</a>.</em></p>
+
+<!-- more -->
+
+
+<p>Recently at Heroku my teams have started exploring new forms of collaborating and documenting. In particular editing a wiki for communication is contrary to our regular workflow. Much of our day is spent in code and git. To edit a wiki within a web browser and using some markup we&rsquo;re less familiar with is an overhead we were aiming to reduce. As a result we&rsquo;ve tried a few things, the first was simply using a github repo to edit markdown.</p>
+
+<p>Personally I have always been a fan of Sphinx documentation. However, Sphinx has no means to secure a site out of the box. Generating the static site then running it being a Rack app to secure it seemed like a few extra steps that would hinder workflow. As a result I set out to build the Sphinx buildpack which would let you push a Sphinx project to Heroku and automatically run your documentation. The buildpack itself supports two modes, public documentation and a private documentation. To have your documentation secured in private mode you simple need to add your google apps domain as a config var <code>heroku config:add DOMAIN=mydomain.com</code>.</p>
+
+<p><em>If you need more information about setting up OpenID check out my recent post <a href="/2012/01/23/securing-your-organization/">Securing your organization with OpenID </a></em></p>
+
+<p>```bash</p>
+
+<pre><code>$ sphinx-quickstart 
+$ git init .
+$ git add .
+$ git commit -m initial
+$ heroku create -s cedar -b http://github.com/craigkerstiens/heroku-buildpack-sphinx.git
+$ git push heroku master
+$ heroku open
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How Heroku Works - Hiring]]></title>
+    <link href="http://www.craigkerstiens.com/2011/12/02/how-heroku-works-hiring/"/>
+    <updated>2011-12-02T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2011/12/02/how-heroku-works-hiring</id>
+    <content type="html"><![CDATA[<p>I alluded in earlier posts of <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">How Heroku Works</a> that we have talented engineers. In fact I would venture to say that there is not a weak link when it comes to our engineers at Heroku. Ensuring we have talented engineers makes it easier for us to find other talented engineers and maintains a level of quality in our product. This means we must be very careful about not diluting our pool of engineering talent, which is where our hiring process becomes especially key. By the time we hire a new employee, we know without a doubt they&rsquo;re a fit within our organization.</p>
+
+<p><em>Our goal in hiring is seldom to fill a role, but more commonly to find more talented people share our goal (changing the world for developers).</em></p>
+
+<!--more-->
+
+
+<p>So what&rsquo;s our hiring process look like&hellip;.</p>
+
+<ol>
+<li><del>Review Resume/Github Profile</del></li>
+<li><del>Initial Screen</del></li>
+<li><del>Second Screen</del></li>
+<li><del>Starter Project</del></li>
+</ol>
+
+
+<p>While there&rsquo;s definitely a process that we follow that&rsquo;s not what&rsquo;s interesting. We way too often get worried about the steps 1, 2, 3&hellip; Instead you should focus on what&rsquo;s important: are they a fit? Can they get shit done? Who cares about how many phone screens someone goes through?! Five phone screens instead of two doesn&rsquo;t make them a better fit for your company. The short of it is they go through enough screens that you feel comfortable and you progress them through the process. For us at any point in the process if someone is determined to not be a fit the process ends there. If the process does end the hiring manager will relay this in the appropriate form, though always in writing via email as well.</p>
+
+<p>The hiring manager could debatably be the biggest difference between our process and others. When a candidate applies to a position it goes to the hiring manager (<em>not an HR person</em>). The hiring manager will be your manager once at Heroku it&rsquo;s one in the same and this ensures from the start of the process the candidate and the manager mesh well. Yes, having the manager of a group review github profiles and resumes is extra effort, but who better to judge from a quick glance than engineers. In general as a manager you&rsquo;re evaluated on the success of those you manage, as such you should be invested heavily in those you hire. In addition to this we find a big difference in the on boarding process and how quickly someone can succeed. We have used many approaches, but the success of someone at Heroku based on having their hiring manager and manager be the same individual is best highlighted below:</p>
+
+<p><img src="http://f.cl.ly/items/462y1J3G0L3q1f3v1o1U/hiring-1.png" alt="Hiring Manager = Manager" /></p>
+
+<p>While every step in the hiring process is valuable starter projects may be the most valuable to ensuring quality. The final step with nearly everyone we hire is to invite them to come hack with us. Instead of parading someone around for a day long interview we get down to business and write some code. It could be something internal to Heroku, it could be an open source project we use, it could be something interesting that the candidate feels would add value to Heroku. Starter Projects vary slightly between each hiring manager.</p>
+
+<p>Several of our managers prefer to lay out several potential interesting projects, talk through them with the candidate, and then let the candidate decide what they&rsquo;d like to work on. Sometimes there&rsquo;s a pressing need that the candidate can jump right in and add some value. It&rsquo;s <strong>always</strong> important that the starter project is achievable, if it&rsquo;s too broad of difficult for a 1-2 day period then the manager has failed in the hiring process. Regardless of the project it&rsquo;s far more than an exercise on a white board, it&rsquo;s actually what life is like at Heroku. We have lunch at the <a href="http://www.flickr.com/photos/teich/4928103311/">same table</a> that we eat at every other day, we interact just as we normally would, and after work there may or may not <a href="http://drunken-samurai-42.tumblr.com/">be drinks</a> just like any other day.</p>
+
+<p><em>As a slight aside, we even conduct starter projects when current Herokai move from one team to another</em></p>
+
+<p>Starter projects usually last anywhere from a day to several days. At the end of a starter project the candidate presents what they did, in a similar fashion to weekly demos that occur at workshop (more on that some other time). In earlier days it was nearly the entire company that would sit in, ask questions and give feedback. Now it&rsquo;s a bit harder for all us to fit into one conference room, though there&rsquo;s an open invite and anyone that wishes can sit in (often 10-20 Herokai). At the end of the starter project there&rsquo;s no question that the candidate fits or doesn&rsquo;t, often from both sides. Of course if it&rsquo;s a fit we make an offer and welcome them into the family.</p>
+]]></content>
+  </entry>
+  
+</feed>

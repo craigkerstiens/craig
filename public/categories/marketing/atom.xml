@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Marketing | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/marketing/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Where to go with developer content]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/"/>
+    <updated>2014-01-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content</id>
+    <content type="html"><![CDATA[<p>Last week I wrote up some <a href="/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
+
+<p>Perhaps the easiest way to do this is by highlighting some examples of it.</p>
+
+<!--more-->
+
+
+<h3>Teach them how to</h3>
+
+<p><a href="https://www.tindie.com/">Tindie</a> is a marketplace focused on makers. Browsing their site is simply awesome, there&rsquo;s everything from fully <a href="https://www.tindie.com/products/browse/home/">built things</a> to raw supplies to let me <a href="https://www.tindie.com/supplies/">start hacking</a>. The biggest problem though is they don&rsquo;t tell me how to take advantage of so much on their site. Posts similar to New Relic&rsquo;s on how they made their <a href="http://blog.newrelic.com/2013/11/18/making-futurestack-badge/">awesome conference badges</a> with a ready made shopping list of components would both get me excited and teach me something I didn&rsquo;t know how to do prior.</p>
+
+<p>Now a lot of this may seem obvious, but its not just about giving a how to. This doesn&rsquo;t belong in a readme or in product documentation. Instead the activity of regularly crafting relevant stories that stretch how people think about hardware hacking should be a top of mind focus. It also positions you as a thought leader within the space. Right now there is no thought leader for makers, and theres ample opportunity to be that.</p>
+
+<h3>Timely content</h3>
+
+<p>Chipmaker <a href="https://www.spark.io/">Spark.io</a> recently hugely capitalized on the <a href="http://gizmodo.com/google-just-bought-nest-for-3-2-billion-1500503899">Nest acquisition</a> by writing a post only days after of how you can build an <a href="http://blog.spark.io/2014/01/17/open-source-thermostat/">open source Nest for $70</a>. I suspect they didn&rsquo;t have such a post just lying around waiting for the acquisition and instead scrambled to get it all together almost as soon as it occurred.</p>
+
+<p>Over time the opportunity will always present itself in some form to attach yourself to another story. Sometimes this can be related to a direct competitor, sometimes its simply tangential. Being willing to quickly invest time when an opportunity presents itself is key to taking advantage of those opportunities. But please don&rsquo;t let such opportunities be your only way of capturing attention, there should still be a steady beat and focus.</p>
+
+<h3>Let your beliefs come out</h3>
+
+<p>Nearly everytime I sit down with some founder or very early employee at a company the vibe and impression I get from them is an order of magnitude stronger than the company&rsquo;s public persona. At the root of every company trying to do something big is an acute focus on a problem with strong opinions about how to solve them. You don&rsquo;t win people over by giving middle of the road opinions.</p>
+
+<p>Heroku&rsquo;s often been an example of being extremely opinionated. For a long time you found bits of this within our product such as with an ephermal filesystem – which in the long term enables scalability. Or with directing the separation of code and config – which helps reproducability for when things go wrong and spinning up new copies of your app.</p>
+
+<p>Again the biggest problem with this opinionation wasn&rsquo;t that it existed, but that it wasn&rsquo;t talked about clearly or loudly enough. Its now much clearer and broader in the form of <a href="http://12factor.net/">12 Factor</a> which fully codifies those strong opinions which influence the product, but also has applicability outside of Heroku.</p>
+
+<h3>All of the approaches</h3>
+
+<p>Doing just one of the above really isn&rsquo;t enough. Having multiple types of content such as the above three allow you to be much more effective. Of course the way you manage them and distribute them changes based on the type of content, but more on that later.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Where to start with developer content]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/"/>
+    <updated>2014-01-16T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content</id>
+    <content type="html"><![CDATA[<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
+
+<h3>Stop marketing</h3>
+
+<p>Forget trying to &ldquo;market&rdquo; to developers. Hopefully you at least have developers that believe in the product their building, if thats not the case then find a new product or a new team. If you&rsquo;ve got a product targetted at developers and a team that believes in it then you&rsquo;re already half way there to marketing it. Now back to the first point, forget trying to market it. Start with building some form of an audience, reputation, respect among other developers. This isn&rsquo;t done through ads, email marketing, SEO or any of that. Its done by creating content that developers find interesting, as a first step forget your product entirely, but don&rsquo;t worry we&rsquo;ll get there soon enough.</p>
+
+<!--more-->
+
+
+<h3>Sourcing content</h3>
+
+<p>The first piece of it on finding content should actually be extremely simple. Typically engineers love sharing knowledge and information. At least once a week there&rsquo;s an email out to all the engineers of a truly interesting approach to something. This content is often not in a perfect form for external publication, but quite close. In particular Heroku has <a href="https://twitter.com/mmcgrana">one employee</a>, an early employee and now architect, that every email he sends to such a group I pull down and save for future reading. Another example of this was one of the Heroku founder Adam Wiggins, you can find many similar emails slightly cleaned up as blog posts on his own <a href="https://adam.heroku.com/">blog</a>.</p>
+
+<p>Take these emails, find someone technical enough to clean them up and ship them. Your goals here are to simply build some level of connection with other developers. Now a lot of time these may not be in the right &ldquo;voice&rdquo; for your company blog. Thats quite fine, I&rsquo;m a strong proponent of letting developers create their own personalitiies. The place for the content then may not always be on the company blog. In general I find there&rsquo;s three groupings:</p>
+
+<ul>
+<li>Content for the company blog by an employee</li>
+<li>Content for an individuals blog (the caveat here is they need to regularly create content &ndash; every 6 months doesnt cut it)</li>
+<li>Content for an <a href="http://codeascraft.com/">engineering blog</a> (if you have enough of the above that blog infrequently this is a great home for it)</li>
+</ul>
+
+
+<h3>Don&rsquo;t worry about the product yet</h3>
+
+<p>No really don&rsquo;t worry about pitching your product. There was an awesome piece on the <a href="http://insideintercom.io/new-features-usually-flop/">intercom blog talking about why most features fail</a> and how companies pitch the details versus the problem they solve. Though there was a hidden gem in there:</p>
+
+<p><blockquote><p>Telling your customers something is a “ground up rewrite”, “HTML5 based”, “responsive” or anything like that will miss the mark unless you’re selling to developers.</p><footer><strong>[Des Traynor] [<a href="http://insideintercom.io/new-features-usually-flop/">http://insideintercom.io/new-features-usually-flop/</a>] [New Features Usually Flop]</strong></footer></blockquote></p>
+
+<p>For companies targetting developers this actually works really well, as a developer I care about the how. Simply put its interesting. Another great example of this is <a href="http://blog.priceonomics.com/">priceonomics</a>. To be honest I only checked what they actually do in writing this post, but their posts I regularly find interesting.</p>
+
+<h3>Whats next</h3>
+
+<p>What do you want to know about? Creating a voice/brand, starting to pitch your product, content distribution? Let me know. A good about of my time is spent on these and happy to discuss further on whats valuable to others so we don&rsquo;t have to suffer through painful marketing. Let me know <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a> or <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CX – Conference Experience (Facilitating Communication)]]></title>
+    <link href="http://www.craigkerstiens.com/2013/04/29/cx_conference_experience_communicate/"/>
+    <updated>2013-04-29T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/04/29/cx_conference_experience_communicate</id>
+    <content type="html"><![CDATA[<p>Following up on my earlier post about CX or Conference Experience – I&rsquo;m going to dig in a bit on how you get good conversation to happen. In the past two years I&rsquo;ve been to nearly 20 conferences, I&rsquo;ve been to conferences with great talks, with great parties, with great swag, and hands down my favorite conferences have always been a result of great conversation. With the number of talks that are recorded and immediately available online after, <em>what can I say I&rsquo;m a hallway track guy</em>.</p>
+
+<p>I&rsquo;ve seen a number of conferences intentionally design around this concept, in some ways the unconference is purely a hallway track conference. I&rsquo;ve also seen conferences that weren&rsquo;t clearly planned for this and have pulled off some of the best situations where people turn their phones off and engage in real conversation.</p>
+
+<!--more-->
+
+
+<h2>Breaks</h2>
+
+<p>Breaks are always a hard part to balance. Every conference organizer I&rsquo;ve talked to felt they had the perfect mix for breaks. If you&rsquo;re designing for convesation then you need to allow time for conversation to actually happen. Whether a multi-track or single track conference 15 minutes for breaks doesn&rsquo;t give you the time to actually engage in conversation. If multitrack its time enough to grab a drink then head to the next room. If single track its time to have the entire room leave and then come back.</p>
+
+<p>Even 30 minute breaks fall into this category. At a multitrack conference I&rsquo;m usually saying hi to enough people during a 30 minute break that I don&rsquo;t have the chance to really get deep into a conversation. If I do it usually results in skipping the next talk.</p>
+
+<h2>Staggered Talks</h2>
+
+<div style="display:block;clear:both;height:0px"></div>
+
+
+<p><img src="http://f.cl.ly/items/3V1S1A2W1K2h3z0r3p2b/Blank.png" style="float:left;height:215px;width:325px;vertical-align:bottom; margin-right: 10px;" >
+One pattern thats a bit more unique is to schedule talks so that you cannot catch the next talk. This forces either moderate breaks or very long breaks intentionally forcing a hallway track. Though for most anyone thats used to conferences or new comers this concept has to be clearly explained otherwise people try to rush from one talk to the next and it can be a bit chaotic</p>
+
+<h2>Locations for Conversations</h2>
+
+<p>Having places for people to get away an talk is critical, in a venue that only has 1 main room and no convenient places for a quick coffee or beer it becomes very hard for conversations to happen. If its on the agenda to facilitate such things thats great, but going a step further and allowing for it to be facilitated naturally is even better. On more than one occasion I&rsquo;ve been mid conversation wtih someone, we cut it off agreeing to pick it back up at the next break only to never locate them again for the rest of the conference. I&rsquo;d have just as much preferred to continue the conversation there, but sadly there was in the middle of a talk room with no where else feasible to go.</p>
+
+<h2>Water</h2>
+
+<div style="float:right;">
+<img src="http://f.cl.ly/items/1l1N331x2B42300Q3D36/Image%202013.04.28%2011%3A04%3A27%20AM.jpeg" style="height:215px;width:285px;margin-left:6px;">
+<p>Image courtesy of <a href="http://www.twitter.com/sundaykofax">@sundaykofax</a></p>
+</div>
+
+
+<p> This one caught me by surprise&hellip; The event was <a href="http://py.codeconf.com/">PyCodeConf in Miami</a> and it was one of the evening activities – a pool party with food, drinks, and mariachi band. Early into the evening, inevitably someone was thrown into the pool (by friends in a general good nature), but thus ruining a lovely iPhone. As a result I&rsquo;m pretty most people, just as I did, went to their rooms but their cell phone away, or set it near their stuff. Much of the rest of the evening was an entirely internet and twitter free evening. Causing lots of uninterrupted conversations to happen and resulted in a pool full of geeks.</p>
+
+<h2>Welcoming noobs</h2>
+
+<p>The big difference between just assuming this will happen and actively working to facilitate it is who gets involved in the conversation. For a first time presenter there&rsquo;s a wealth of nerves about talking. For a first time attendee there&rsquo;s a wealth of knowledge to soak up. First time attendees may not feel as comfortable interjecting them into a conversation, approaching presenters, or talking to someone they&rsquo;ve been following for years – <em>yet they have just as much to add as anyone else</em>.</p>
+
+<p>Creating places where more conversation is happening helps ease this and build a better community.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CX – Conference Experience (Talks)]]></title>
+    <link href="http://www.craigkerstiens.com/2013/04/27/cx_conference_experience_talks/"/>
+    <updated>2013-04-27T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/04/27/cx_conference_experience_talks</id>
+    <content type="html"><![CDATA[<p>A couple of weekends ago I had the great opportunity to attend <a href="http://lessconf.com">lessconf</a>. It was an all around great conference, and as a result of the greatness I ended up having a conversation with a few people around conference experience. I must give much of the credit to <a href="http://twitter.com/swiftalphaone">Swift</a>, as he mentioned he&rsquo;d already been thinking alot about this since <a href="http://waza.heroku.com">Waza</a>. In general it feels like there&rsquo;s a few key themes that any conference should focus on, then a lot of small things that can really push it over the top. Here&rsquo;s a few:</p>
+
+<p>In general the key areas for any great conference are:</p>
+
+<ul>
+<li>Talks</li>
+<li>Great people</li>
+<li>Ensuring communication happens</li>
+<li>Bonus points</li>
+</ul>
+
+
+<p>Digging in deeper on the first area&hellip;</p>
+
+<!--more-->
+
+
+<h2>Talks</h2>
+
+<p>Quality talks are obviously important. A conference should at whatever cost ensure that the talks are good. This can happen a variety of ways, but regardless of the method you should ensure talks are worthwhile; since this is largely what most people are paying to attend for.</p>
+
+<h3>Invite-only</h3>
+
+<p>Perhaps the easiest way to do this is via invite only to speakers you know will do a good job. The downside ot this of course is that you must already know enough people to fill out a good agenda, and also you limit the ability for others to contribute.</p>
+
+<h3>Coaching/Practicing</h3>
+
+<p>This is not an either/or option with any of the other pieces for getting a good agenda. Having presenters do a trial run can ensure a minimum level of quality, and working with them to coach them can help make the talk even more effective. Its likely that the organizers know the audience as well as anyone, so no one better than them to help with this. Of course this is a time sink for both parties, but can give good returns. Of course this could be done independent of a specific conference such as through <a href="http://speakup.io/">speakup</a>.</p>
+
+<p><em>At a very least getting a quick run through, outline, or something of that nature can ensure that a presenter doesn&rsquo;t fill a 45 minute talk slot with only 5 minutes of content.</em></p>
+
+<h3>Open CFP</h3>
+
+<p>Likely the most common approach to getting speakers is having an entirely open CFP. Its typical then that either the organizers or a speaker selection commitee then discusses and makes selections. This can usually work to have a nice balance of experienced and known to be good speakers and newer less experienced speakers that can have great potential as well.</p>
+
+<h3>Open Open CFP</h3>
+
+<p>Going even further is an open CFP where all talks are published after the CFP then voted on. While this does a great deal to ensure transparency, it doesn&rsquo;t necessarily improve ensuring theres a great line up of speakers. Being able to write an interesting talk proposal is an entirely separate process from delivering an interesting talk.</p>
+
+<h3>Blind?</h3>
+
+<p>There&rsquo;s a common question lately for both the open CFP and open open ones one whether to do blind review of the talks. The logic here is an attempt to be entirely fair, versus having some bias. This is an understandable goal, but can come at the expense of quality. Truth be told; I&rsquo;m not entirely sure of a way to balance this.</p>
+
+<h2>Choosing</h2>
+
+<p>There&rsquo;s definitely not a one size fits all. If you&rsquo;re goal is to provide a good list of talks then you should keep that in mind in how you decide your talks. If you&rsquo;re goal is to pull others in then it should be shaped differently. Zach Holman recently talked a bit about this and had some interesting ideas to <a href="http://zachholman.com/posts/the-conference-circuit/">minimize risk for new speakers</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scaling Evangelism – Creating Advocates]]></title>
+    <link href="http://www.craigkerstiens.com/2013/04/16/creating-advocates/"/>
+    <updated>2013-04-16T07:59:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/04/16/creating-advocates</id>
+    <content type="html"><![CDATA[<p>The first area I tend to think about when it comes to developer marketing is around advocates. A simple definition of an advocate is <em>someone that speaks/writes in favor of some thing</em>.</p>
+
+<p>Creating advocates is a means of creating more of myself to go out and talk loudly and ideally effectively. However, they do take time to cultivate and it is a hard item to track. But by cultivating advocates I&rsquo;m able to scale what would otherwise be a bottleneck of my own personal time.</p>
+
+<!--more-->
+
+
+<h3>Mentorship</h3>
+
+<p><img src="http://f.cl.ly/items/3H2y400S2n1M3A2v0F18/Blank.png" style="height:200px; float:right; margin-left:12px;" />
+At a team offsite nearly a year ago <a href="http://twitter.com/_JamesWard">James Ward</a> talked about his Pyramid of mentorship. His process was essentially having three levels of which you&rsquo;re working to grow and cultivate these people or in some sense your general network. These three levels drop off with the frequency and depth of engagement more at each level. At any given time there would be 3 people he was heavily mentoring, 12 he would frequently work to cultivate heavily, and then an outer 72 that he&rsquo;d still consider in his circle.</p>
+
+<p>The people in your group of 3 you&rsquo;ll have nearly daily communications with, even if quick. These are the first people you think to work and collaborate with. It&rsquo;s the case with all, but especially so here that there may be some strong mutual benefit. With both the groups of 3 and 12 you&rsquo;ll be looking to:</p>
+
+<ul>
+<li>Co-author content with</li>
+<li>Collaborate on projects</li>
+<li>Help amplify their content</li>
+</ul>
+
+
+<h3>Helping them Succeed</h3>
+
+<p>For a few years I&rsquo;ve followed a similar process to this. Essentially creating advocates is done through first <strong>making them successful</strong>, then empowering to talk about their success. I&rsquo;ve often done this by giving people a private channel to me – through IM, SMS, Phone, Skype, or even in person. Sure its easy enough to get my work email address, its a pretty easy one to guess, and even at that address I do aim to respond to every request. These channels in reality don&rsquo;t make me more available; but they do allow a different type of communication to happen.</p>
+
+<p>My personal approach has found it more out of place to ask how someones weekend was over email – IM or Skype make this easy. Broader questions of how someones actually doing in life generally are much easier to do over a coffee or a beer. This allows for a deeper relationship; at the same time I can ensure everyone I interact with is successful. It&rsquo;s easier to ensure someones successful if they&rsquo;re willing to talk to you, actually connecting with people enables this.</p>
+
+<h3>Communicate</h3>
+
+<p>Once someones been successful theres usually some value in their story. This doesn&rsquo;t need to come in a marketing-ese approach though. Instead contribute back the value of what you did to the broader community with <a href="http://blog.mailgun.net/post/how-tealeaf-academy-increased-student-engagement-3x/">clear steps how they can get the same benefit</a>. For many developers they feel talking about their own success is a bit of imposter syndrome. While this isn&rsquo;t always the case; if it is you can help to work with someone to highlight the value in what they&rsquo;ve done. This could be as simple as some encouragement to actually helping review drafts of blog posts.</p>
+
+<p>Of course once someones started talking about what they were able to accomplish help them celebrate the success. Yelling from the rooftops only helps to further their efforts and give them the confidence to do it all over again.</p>
+
+<h3>Conclusion</h3>
+
+<p>To create advocates you don&rsquo;t have to write a list of people you wish to shoot for, but realizing there are limiitations on your time can help you be more intentional. Knowing that where you spend your time and who you spend it with has a cost can allow you to be more explicit about ensuring you&rsquo;re providing value to them, from there it should naturally run its course. Want to discuss this more? Email me at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a>.</p>
+
+<!-- Perfect Audience - Developer Marketing - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=711656&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+]]></content>
+  </entry>
+  
+</feed>

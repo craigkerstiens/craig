@@ -1,0 +1,262 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Why Postgres  | Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Why Postgres</h2>
+	<div class="entry-content"><p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
+
+<p><em>UPDATE: A <a href="/2012/05/07/why-postgres-part-2/">part 2</a> has been posted on <a href="/2012/05/07/why-postgres-part-2/">Why Use Postgres</a></em></p>
+
+<p>Very often recently I find myself explaining why Postgres is so great. In an effort to save myself a bit of time in repeating this, I though it best to consolidate why Postgres is so great and dispel some of the historical arguments against it.</p>
+
+<h2>Replication</h2>
+
+<p>For some time the biggest argument for MySQL over Postgres was the lack of a good replication story for Postgres. With the release of <a href="http://www.postgresql.org/docs/8.4/static/high-availability.html">8.4 Postgres&rsquo;s</a> story around replication quickly became much better.</p>
+
+<p><em>While replication is indeed very important, are users actually setting up replication each time with MySQL or is it to only have the option later?</em></p>
+
+<h2>Window functions</h2>
+
+<p>This is a feature those familiar with Oracle greatly missed in Postgres. In fact even SQL Server had some form of them, though it was with T-SQL, which adds a bit more complexity to the feature. This is a feature that once you have you can&rsquo;t live without; the other options that existed before were slower and much more complicated. With the release of <a href="http://www.postgresql.org/docs/9.1/static/tutorial-window.html">8.4</a> window functions were added to bring Postgres on par with Oracle in this area. For more info on using them check the Postgres docs above or <a href="http://postgresguide.com/tips/window.html">PostgresGuide.com</a>.</p>
+
+<h2>Flexible Datatypes</h2>
+
+<p>Creating a custom column is simpler in Postgres than any other database I&rsquo;ve used by far. Excluding custom datatypes, even Postgres&rsquo;s out of the box datatypes make Postgres stand out far ahead of other databases. In particular the ability to create a column as an <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> of some datatype. Want to store a game of tic-tac-toe in a database, or an array of 1 user&rsquo;s phone numbers? It simply becomes a single column that can contain multiple phone numbers for a user.</p>
+
+<!-- more -->
+
+
+<h2>Functions</h2>
+
+<p>Need to do some logic outside of standard SQL? Postgres likely has a function already available to do it for you. What about the time you wanted to take all rows returned by a query and combine them into a function? Give <a href="http://www.postgresql.org/docs/9.1/static/functions-aggregate.html">array_agg a look</a>. Need to split a string and grab a part of it or some other string action, there&rsquo;s a <a href="http://www.postgresql.org/docs/9.1/static/functions-string.html">function for that</a>.</p>
+
+<h2>Custom Languages</h2>
+
+<p>Want to use another language inside your database? Postgres probably supports it:</p>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/9.1/static/plpython.html">Python in Postgres</a></li>
+<li><a href="https://github.com/knu/postgresql-plruby">Ruby in Postgres</a></li>
+<li><a href="http://www.joeconway.com/plr/">R in Postgres</a></li>
+<li><a href="http://code.google.com/p/plv8js/wiki/PLV8">V8 in Postgres</a></li>
+</ul>
+
+
+<h2>Extensions</h2>
+
+<p>Need to go beyond standard Postgres? There&rsquo;s a good chance that someone else has, and that there&rsquo;s already an extension for it. Extensions take Postgres further with things such as Geospatial support, JSON data types, Key Value Stores, and connecting to external data sources (Oracle, MySQL, Redis). I could easily have a full post on extensions available alone, fortunately someone else has already created an awesome one &ndash; <a href="http://blog.railsware.com/2012/04/23/postgresql-most-useful-extensions/">PostgreSQL Most Useful Extensions</a>.</p>
+
+<h2>NoSQL gives flexibility</h2>
+
+<p>I don&rsquo;t want to get too NoSQL versus SQL debate&hellip;. no matter which side you fall on you can get both in Postgres. With hstore and <a href="http://code.google.com/p/plv8js/wiki/PLV8">PLV8</a> you&rsquo;ll get the flexibility in your data that you would with Mongo along with all of the above features. <a href="http://www.twitter.com/leinweber">Will Leinweber</a> has a talk that he&rsquo;s given at several conferences recently that highlights <a href="http://ssql-railsconf.herokuapp.com/">Schemaless SQL</a>.</p>
+
+<h2>Custom Functions</h2>
+
+<p>Didn&rsquo;t find the function you wanted in the above? Try creating it yourself:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>CREATE FUNCTION awesomeness<span class="o">(</span>varchar<span class="o">)</span> RETURNS boolean
+</span><span class='line'>    AS <span class="s1">&#39;CASE WHEN $1 == \&#39;postgres\&#39; THEN TRUE ELSE FALSE END;&#39;</span>
+</span><span class='line'>    LANGUAGE SQL
+</span><span class='line'>    IMMUTABLE
+</span><span class='line'>    RETURNS NULL ON NULL INPUT;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Common Table Expressions</h2>
+
+<p>Often times when exploring data or creating a new view you&rsquo;ll want to load data into a temporary table. When exploring data you only need this for a temporary time. Why actually go through the effort of putting it into a temporary table, especially if you only need it for a single query. <a href="http://www.postgresql.org/docs/8.4/static/queries-with.html">Common Table Expressions</a> let you accomplish just that.</p>
+
+<h2>Development Pace</h2>
+
+<p>For some period of time MySQL and Postgres were both moving at fast paces. In recent years though Postgres has rapidly picked up its pace of how much gets packed into a single release. Just take a look at the  <a href="http://en.wikipedia.org/wiki/PostgreSQL#Major_releases">Major Releases</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>Hopefully you&rsquo;re convinced on why Postgres is a great tool. Next take a visit to <a href="http://www.postgresguide.com">PostgresGuide</a> if you need some direction on where to start or how to use many of the above features.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Craig Kerstiens
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

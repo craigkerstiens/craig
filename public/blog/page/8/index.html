@@ -1,0 +1,552 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>  | Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">
+		
+			Events With Google Analytics and Tricking Pageviews</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond this. There are two key items with tracking that you can do that will let you get a bit further. There&rsquo;s also plenty more on the reporting side, but we&rsquo;ll get to some of that later. On the tracking side the first item is event tracking. This is perhaps most commonly used for tracking various Javascript events that occur during a visit, however it can also be a bit more flexible towards tracking values. A very simple example might be:</p>
+
+<pre>_ga._trackEvent(category, action, opt_label, opt_value)</pre>
+
+
+<p>Or a real life example of this, might be on a FAQ screen, clicking the link to an anchored section of the page:</p>
+
+<pre>_ga._trackEvent('faq', 'anchor click', $(this))</pre>
+
+
+<p>But events by their sheer nature give a bit more flexibility with that value field. In the case of a user sending a message 
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T16:28:56-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/02/converting-bookmarklet-to-chrome-extension/">
+		
+			Converting Bookmarklet to Chrome Extension</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google&rsquo;s documentation is pretty good when it comes to how to create an extension that opens a full page and has large functionality. But if you&rsquo;re more interested in transforming an existing bookmarklet into an extension there&rsquo;s not great quality on it. The steps themselves are really quite simple. The big key that&rsquo;s not heavily documented is creating a background html that creates an event listener. After the jump is a full sample that would then call your javascript to activate the bookmarklet:</p>
+
+
+		
+		<a href="/2011/02/02/converting-bookmarklet-to-chrome-extension/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T00:34:49-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/12/27/selling-something-new/">
+		
+			Selling Something New</a>
+	</h2>
+	<div class="entry-content">
+		<p>I have a tendency of really latching onto very simple ideas. Typically these ideas don&rsquo;t require complex engineering to make them happen. This is not to say the engineering is not important, but more so that it is some variation of engineering feats that have been done before. The reason I tend to like these over more complex engineering that really makes something better is that making something better is typically a marginal improvement. When it&rsquo;s a marginal improvement it&rsquo;s a lot harder to sell.</p>
+
+
+		
+		<a href="/2010/12/27/selling-something-new/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-27T17:04:50-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/08/29/interviewing-a-reflection-of-the-company/">
+		
+			Interviewing, a Reflection of the Company</a>
+	</h2>
+	<div class="entry-content">
+		<p>The more I&rsquo;ve been exposed to it the more the way a company conducts interviews is a very strong reflection of how the company&rsquo;s current state is. If you experience a very half hazard interview it&rsquo;s likely a result that the person interviewing is half hazard in other aspects of their day to day. If you experience that someone is very set in their mind in what they want, and expecting a very cookie cutter answer, it&rsquo;s a reflection of how they think. There are some cases in which the interviewers simply do not know various methods/styles as such I&rsquo;d like to address what I feel should be appropriate interviewing process. I&rsquo;ve been in situations where more of this process was followed than not, and in those cases bad hires were the exception not the norm. The biggest unknown after that was how long until someone was fully integrated into the culture and not a noob but a veteran in some area that others deferred to.</p>
+
+
+		
+		<a href="/2010/08/29/interviewing-a-reflection-of-the-company/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-29T17:39:05-07:00" pubdate data-updated="true">Aug 29<span>th</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/05/03/selling-seduction-same-difference/">
+		
+			Selling&#8230; Seduction&#8230; Same Difference</a>
+	</h2>
+	<div class="entry-content">
+		<p>On an entirely separate blog I have a full write up on seduction. The other posts contain steps for how a guy would seduce a girl, I think it&rsquo;s actually quite pertinent to selling sighing business. Before you start making to many assumptions about the other post let me explain a little further, but dorm the selling side within business.</p>
+
+
+		
+		<a href="/2010/05/03/selling-seduction-same-difference/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-03T21:25:01-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/04/05/why-the-cloud-will-finally-work/">
+		
+			Why the Cloud Will Finally Work</a>
+	</h2>
+	<div class="entry-content">
+		<p>The cloud has a lot of technical arguments going for it. The problem is consumers don&rsquo;t understand the cloud, they don&rsquo;t understand virtual storage and growth and syncing and the complexities of things. The average consumer is generally pretty dumb, they just want to be able to do things and it just work. If they ask a question they want an answer, not the deduction behind the answer. It&rsquo;s why I loved mint.com so much when it launched. I gave it accounts and it told me everything I wanted to know. If it was wrong I seldom noticed it, such as classifying a purchase into a wrong category. My suspicion is that 98% of the users don&rsquo;t notice much of the mis-classification that happens. They look the first time and it looks pretty good so they trust it, because if you look at 90% of purchases and classify them, why use mint, why not just use excel, or even go back to a paper and notebook?</p>
+
+
+		
+		<a href="/2010/04/05/why-the-cloud-will-finally-work/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-05T17:29:35-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/02/27/valuing-employees/">
+		
+			Valuing Employees</a>
+	</h2>
+	<div class="entry-content">
+		<p>A coworker and I were recently having conversations over employee compensation. We covered the gambit around employee feedback, evals, and compensation. He mentioned Joel Spolsky, and his format of being very open about where individuals were ranked. He also pointed me to: <a href="http://alumnit.ca/~apenwarr/log/?m=200904#05">http://alumnit.ca/~apenwarr/log/?m=200904#05</a> which provided good insight, though I most like his final point. The end goal with evaluating your employees and compensation for them is to make sure they&rsquo;re happy. Sure the business should make sure they feel like you&rsquo;re worth what you&rsquo;re being paid, but usually there is no question about this, or if there is you&rsquo;re quickly escorted out the door. While this is an interesting model, I think it can be much simpler, but companies usually confine themselves too much in giving credit to employees.</p>
+
+<p>There was another recent occasion where a statement was made of &lsquo;no more playing stick them up, until next year&rsquo;. When I first thought about this, I knew I didn&rsquo;t like the statement, but was unsure of why. The reason is that there can be several reasons why employees leave. Only one of which is compensation. If you feel you&rsquo;re being adequately compensated for the job you&rsquo;re doing it makes sense.</p>
+
+<p>But there&rsquo;s another reason thats very clear in the valley but less clear in other parts of the country. Paul Buchheit at Startup School this weekend in Berkeley said it very well: If you&rsquo;ve been at your job too long, QUIT. Meaning if you&rsquo;re comfortable, you know the people, you know how to do your job, and you&rsquo;re not being challenged, then you should go somewhere where you are challenged.</p>
+
+
+		
+		<a href="/2010/02/27/valuing-employees/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-27T17:10:23-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/01/26/who-will-filter-the-stream-first/">
+		
+			Who Will Filter the Stream First?</a>
+	</h2>
+	<div class="entry-content">
+		<p>Facebook is where I have more noise than any other social site, twitter may even tie facebook at amount of sheer content I receive in my feed. With regards to the ratio of what I care about to what I see facebook is a lot better, due to their news feed versus live feed. However, their news feed is still very often off. I wrote some time back about web 3.0, and how essentially showing what I want to see is what the web will become. You&rsquo;ll take the vast amount of content and distill it into what I want to see. People seem to be taking very half-hazard shots at it and its quite a let down.</p>
+
+
+		
+		<a href="/2010/01/26/who-will-filter-the-stream-first/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-26T17:56:01-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/01/25/issues-arent-always-bad/">
+		
+			Issues Aren&#8217;t Always Bad</a>
+	</h2>
+	<div class="entry-content">
+		<p>I often encounter people whether at my office or at other places of employment that are distraught after getting an earful from a manager from some problem arising. The problem usually isn&rsquo;t in their control, and therefore they don&rsquo;t understand why they get heat for this. Most managers though do actually understand when issues come up, however what they don&rsquo;t appreciate is late notice, lack of problem solving, and dictating what should be done next.</p>
+
+
+		
+		<a href="/2010/01/25/issues-arent-always-bad/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-25T17:30:10-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2010/01/21/forget-doing-something-better-do-something-different/">
+		
+			Forget Doing Something Better, Do Something Different</a>
+	</h2>
+	<div class="entry-content">
+		<p>I have a tendency of really latching onto very simple ideas. Typically these ideas don&rsquo;t require complex engineering to make them happen. This is not to say the engineering is not important, but more so that it is some variation of engineering feats that have been done before. The reason I tend to like these over more complex engineering that really makes something better is that making something better is typically a marginal improvement. When it&rsquo;s a marginal improvement it&rsquo;s a lot harder to sell.</p>
+
+<p>With marginal improvements you have to:</p>
+
+<ol>
+    <li>Convince the customer it&#8217;s not good enough today</li>
+    <li>Convince the customer that you&#8217;re better</li>
+    <li>Convince the customer you&#8217;re worth the headache of changing</li>
+</ol>
+
+
+<p>While a lot of companies focus solely on taking an existing problem and solving it better than someone else has, I have my doubts about how reproducible this model is. If I&rsquo;m a large company with lots of resources I&rsquo;m going to keep iterating and improving myself, which means a smaller company really has to have some magic bullet that will displace me.</p>
+
+<p>In contrast if I address a problem that hasn&rsquo;t been solved my life instantly becomes a lot easier. I no longer have an argument of something not being good enough today, it becomes a question of value and how much its worth to solve the problem. Haggling over price is a conversation I&rsquo;d rather have than trying to justify value and convince a customer they&rsquo;ve been wrong in their choice for so many years.</p>
+
+<p>Over the coming days I&rsquo;m going to be posting a few of these examples/ideas and why I like them. Many of them are still being thought through, and while as I sort them out, I&rsquo;m generally happy to publish high points about them. The even bigger key here is that success is typically in the execution and less so in the idea, though even then I&rsquo;d prefer to execute on something that has less battles than something that from the onset has more. By doing something that is being done today you get no advantages of penetrating the market.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-21T14:49:33-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time></div>
+	
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/7/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/9/" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Craig Kerstiens
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'craigkerstiens';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

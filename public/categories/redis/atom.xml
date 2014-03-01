@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Redis | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/redis/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Redis in my Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/"/>
+    <updated>2012-10-18T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres</id>
+    <content type="html"><![CDATA[<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
+
+<p>SQL is an expressive language, though people are often okay with accessing Mongo data through its own ORM. The real value is that you could actually query the data from within Postgres then join across your data stores, without having to do some ETL process to move data around.  Think&hellip; joining sales data from Postgres with user reviews stored in Mongo or searching for visits to a website (retained in redis) against purchases by user in Postgres.</p>
+
+<p>The mechanism pointed out was a MongoDB Foreign Data Wrapper. A Foreign Data Wrapper or FDW essentially lets you connect to an external datastore from within a Postgres database. In addition to the Mongo FDW released the other day there&rsquo;s  many others. For example Postgres 9.0 and up ships with one called <code>db_link</code>, which lets you query and join across two different Postgres databases. Beyond that there&rsquo;s support for a variety of other data stores including some you may have never expected:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/file_textarray_fdw/">Textfile</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/odbc_fdw/">ODBC</a></li>
+<li><a href="http://pgxn.org/dist/ldap_fdw/">LDAP</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+<li><a href="http://pgxn.org/tag/fdw/">More</a></li>
+</ul>
+
+
+<p>Lets look at actually getting the Redis one running then see what some of the power of it really looks like. First we have to get the code then build it:</p>
+
+<!--more-->
+
+
+<pre><code>git clone git://github.com/antirez/hiredis.git
+cd hiredis
+make 
+sudo make install
+</code></pre>
+
+<p>Then download the FDW from <a href="http://pgxn.org/dist/redis_fdw/">PGXN</a></p>
+
+<pre><code>PATH=/Applications/Postgres.app/Contents/MacOS/bin/:$PATH USE_PGXS=1 make
+sudo PATH=/Applications/Postgres.app/Contents/MacOS/bin/:$PATH USE_PGXS=1 make install
+</code></pre>
+
+<p>Now you&rsquo;ll want to connect to your Postgres database, using <code>psql</code> and enable the extension, and finally create your foreign table to your redis server. This is assuming a locally running redis, though you could connect to a remote just as easily:</p>
+
+<pre><code>CREATE EXTENSION redis_fdw;
+
+CREATE SERVER redis_server 
+    FOREIGN DATA WRAPPER redis_fdw 
+    OPTIONS (address '127.0.0.1', port '6379');
+
+CREATE FOREIGN TABLE redis_db0 (key text, value text) 
+    SERVER redis_server
+    OPTIONS (database '0');
+
+CREATE USER MAPPING FOR PUBLIC
+    SERVER redis_server
+    OPTIONS (password 'secret');
+</code></pre>
+
+<p>With <code>dt</code> we can now see the list of all of our tables:</p>
+
+<pre><code># \dt
+         List of relations
+ Schema |   Name    | Type  | Owner 
+--------+-----------+-------+-------
+ public | products  | table | craig
+ public | purchases | table | craig
+ public | users     | table | craig
+(3 rows)
+</code></pre>
+
+<p>And with a full <code>\d</code> we can see not just the tables but also see we have a foreign table as well:</p>
+
+<pre><code># \d
+                 List of relations
+ Schema |       Name       |     Type      | Owner 
+--------+------------------+---------------+-------
+ public | products         | table         | craig
+ public | purchases        | table         | craig
+ public | redis_db0        | foreign table | craig
+ public | users            | table         | craig
+(4 rows)
+</code></pre>
+
+<p>Finally we can actually query against it:</p>
+
+<pre><code># SELECT * from redis_db0 limit 5;   
+   key   | value 
+---------+-------
+ user_40 | 44
+ user_41 | 32
+ user_42 | 11
+ user_43 | 3
+ user_80 | 7
+(5 rows)
+</code></pre>
+
+<p>Or more interestingly we can join it against other parts of our data and filter accordingly. Below we&rsquo;ll show users that have logged in at least 40 times:</p>
+
+<pre><code>SELECT 
+  id, 
+  email, 
+  value as visits 
+FROM 
+  users, 
+  redis_db0 
+WHERE 
+      ('user_' || cast(id as text)) = cast(redis_db0.key as text) 
+  AND cast(value as int) &gt; 40;
+
+ id |           email            | visits 
+----+----------------------------+--------
+ 40 | Cherryl.Crissman@gmail.com | 44
+ 44 | Brady.Paramo@gmail.com     | 44
+ 46 | Laronda.Razor@yahoo.com    | 44
+ 47 | Karole.Sosnowski@gmail.com | 44
+ 12 | Jami.Jeon@yahoo.com        | 49
+ 14 | Jenee.Morrissey@gmail.com  | 47
+ 16 | Yuki.Alber@yahoo.com       | 48
+ 18 | Marquis.Tartaglia@aol.com  | 44
+ 31 | Collin.Parrilla@gmail.com  | 46
+ 39 | Nydia.Bukowski@aol.com     | 47
+  2 | Gaye.Monteith@aol.com      | 48
+  6 | Letitia.Tripodi@aol.com    | 41
+(12 rows)
+</code></pre>
+
+<p>While several of the current FDWs are not production ready yet, some are more battle tested including db_link, textfile, ODBC and MySQL ones.</p>
+]]></content>
+  </entry>
+  
+</feed>

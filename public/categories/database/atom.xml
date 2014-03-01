@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Database | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/database/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Getting more out of psql (The PostgreSQL CLI)]]></title>
+    <link href="http://www.craigkerstiens.com/2013/02/21/more-out-of-psql/"/>
+    <updated>2013-02-21T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/02/21/more-out-of-psql</id>
+    <content type="html"><![CDATA[<p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
+
+<h2>Get the most of psql</h2>
+
+<p>Psql, the CLI postgreSQL client, is a powerful tool. Sadly, lot of developers are not aware of the features and instead look for a GUI to provide what they need. Let&rsquo;s fly over what can psql do for you.</p>
+
+<!--more-->
+
+
+<h2>Feel yourself at home</h2>
+
+<p>One of the most common misconception people have about CLI is «They are a poor user interface». C'mon, the CLI is <strong>the most efficient user interface ever</strong>. There is nothing to disturb you from what you are doing and you are by far fastest without switching to your mouse all the time. Let&rsquo;s see how we can configure psql at our convenience.</p>
+
+<p>First, you&rsquo;ll have managed to choose a nice and fancy <a href="http://hivelogic.com/articles/top-10-programming-fonts">terminal font</a> like monofur or inconsolata. Do not underestimate the power of the font</p>
+
+<p><img src="http://public.coolkeums.org/github/power_font.png" alt="monofur font in action" /></p>
+
+<p>The nice line style shown above can be set with <code>\pset linestyle unicode</code> and <code>\pset border 2</code>. This is just an example of the many environment variables you can play with to get your preferred style of working out of psql.</p>
+
+<p>For example, I found the character ¤ the most accurate to express nullity (instead of default <code>NULL</code>). Let&rsquo;s just <code>\pset null ¤</code> and here it is:</p>
+
+<pre><code>SELECT * FROM very_interesting_stat;
+┌──────┬──────┬──────┬──────┬──────┐
+│  a   │  b   │  c   │  d   │  e   │
+├──────┼──────┼──────┼──────┼──────┤
+│ 9.06 │    ¤ │    ¤ │    ¤ │    ¤ │
+│ 7.30 │ 3.55 │ 7.57 │ 3.31 │    ¤ │
+│ 7.20 │ 5.08 │    ¤ │ 6.58 │ 5.90 │
+...
+</code></pre>
+
+<p>Another hugely value to get environment variables is colors in the prompt. Colors in the prompt are important because it makes easier to spot where output starts and ends between two interactions at the console. The <a href="http://www.postgresql.org/docs/9.2/static/app-psql.html#APP-PSQL-PROMPTING">PROMPT1</a> environment variable will even let you set an indicator to notify you are inside a transaction or not, give this a try for a sweet surprise&hellip;</p>
+
+<pre><code>\set PROMPT1 '%[%033[33;1m%]%x%[%033[0m%]%[%033[1m%]%/%[%033[0m%]%R%# '
+</code></pre>
+
+<p>I also like to disable the pager by default <code>\pset pager off</code> and display the time every issued query takes <code>\timing</code>. If you are used to psql, you may notice in the picture above, some content is wrapped. This is <code>\pset format wrapped</code> option.</p>
+
+<p>Of course, writing all that on every connection would be a pain, so just write them in a <code>~/.psqlrc</code> file, it will be sourced every time psql is launched.</p>
+
+<p>If you are familiar with <code>bash</code> or other recent unix shells, you might also declare aliases in your configuration file. You can do the same with psql. For example if you want to have a query for slow queries such as from this <a href="http://craigkerstiens.com/2013/01/10/more-on-postgres-performance/">earlier post</a> but not have to remember the query every time you can set it up as:</p>
+
+<pre><code>\set show_slow_queries 
+'SELECT 
+  (total_time / 1000 / 60) as total_minutes, 
+  (total_time/calls) as average_time, query 
+FROM pg_stat_statements 
+ORDER BY 1 DESC 
+LIMIT 100;'
+</code></pre>
+
+<p>Now, just entering <code>:show_slow_queries</code> in your psql client will launch this query and give you the results:</p>
+
+<pre><code>    total_time    |     avg_time     |                                                                                                                                                              query
+------------------+------------------+------------------------------------------------------------
+ 295.761165833319 | 10.1374053278061 | SELECT id FROM users WHERE email LIKE ?
+ 219.138564283326 | 80.24530822355305 | SELECT * FROM address WHERE user_id = ? AND current = True
+</code></pre>
+
+<h2>Psql at your fingertips</h2>
+
+<p>Now you have got a fancy prompt, here is the real question you ask, what can psql do for me ? and <code>\?</code> has all of the answers. It has built-in queries to describe almost all database objects from tables to operators, indexes, triggers etc&hellip; with clever auto-completion. Not only completion on tables and columns &mdash; but also on aliases (sweet), <strong>SQL commands</strong> (w00t) and database objects.</p>
+
+<p>Now we can enter some SQL commands. As usual, you need to check in the documentation how the heck to write this damn <code>ALTER TABLE</code>. Relax, psql proposes inline documentation. Just enter <code>\h alter table</code> (auto complete w00t) and you ll be ok.</p>
+
+<h3>Interacting with your editor</h3>
+
+<p>psql provides two very handy commands: \e and \i. This last command sources a sql file in the client&rsquo;s current session. \e edits the last command using the editor defined in the <code>EDITOR</code> shell environment variables (aka vim). This grant you with real editor feature when it comes to writing long queries. What psql does, it saves the buffer in a temporary file and fires up the editor with that file. Once the editor is terminated, psql sources the file. Of course, you can use your editor to save queries in other places where they would be under version control, but the \e has a serious limitation: it spawns only the last query. Even if you sent several queries on the same line. (Note that \r clears psql&rsquo;s last query buffer).</p>
+
+<p>Note: <code>\ef my_function</code> opens stored function source code (With auto completion, I know, it&rsquo;s awesome).</p>
+
+<p>Vim users can here benefit from Vim&rsquo;s server mode. If you launch a vim specifying a server name (let' say &ldquo;PSQL&rdquo;) somewhere, and set the EDITOR variable as is <code>export EDITOR="vim --servername PSQL --remote-tab-wait</code> then psql will open a new tab on the running vim with the last query and run it as soon as you close this tab. Tmux or gnu/screen users will split their screen to have Vim and psql running on the same terminal window.</p>
+
+<p><img src="http://public.coolkeums.org/github/vim_tmux.png" alt="Vim, psql and tmux" /></p>
+
+<h3>Call a friend</h3>
+
+<p>Vim power users know it is possible to pipe a buffer (or selection) directly in a program that can be &hellip; psql (Using the <code>:w !psql</code> syntax). Even from the shell, you might want to take advantage of the fantastic <code>\copy</code> feature that loads formated file in the database (I use it to load apache logs). But always having to specify connection parameters are a hassle. Let&rsquo;s use shell environment instead. Psql is sensitive to the following variables:</p>
+
+<ul>
+<li>PGDATABASE</li>
+<li>PGHOST</li>
+<li>PGPORT</li>
+<li>PGUSER</li>
+<li>PGCLUSTER (debian wrapper).</li>
+</ul>
+
+
+<p>Set them once for all in you shell environment and call <code>psql</code> to connect to the database. In case you want to skip password prompt, you can store your pass in a 600 mode access file named <code>.pgpass</code> in your home (do not do that on shared or exposed computers). Although this is nice for development database servers, I do NOT recommend this for production servers since it should not be easy to mess with them.</p>
+
+<p>Resource for additional information is &hellip; the man page and <a href="http://www.postgresql.org/docs/9.2/static/index.html">Postgres Docs</a>. All <a href="http://www.postgresql.org/docs/9.2/static/index.html">PostgreSQL documentation</a> is an example of what software reference documentation should be. Enjoy!</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How I work with Postgres – psql, My PostgreSQL Admin]]></title>
+    <link href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/"/>
+    <updated>2013-02-13T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres</id>
+    <content type="html"><![CDATA[<p>On at least a weekly basis and not uncommonly multiple times in a single week I get this question:</p>
+
+<p><blockquote><p>I&rsquo;ve been hunting for a nice PG interface that works within other things. PGAdmin kinda works, except the SQL editor is a piece of shit</p><footer><strong>@neilmiddleton <a href="https://twitter.com/neilmiddleton">https://twitter.com/neilmiddleton</a></strong></footer></blockquote></p>
+
+<p>Sometimes it leans more to, what is the Sequel Pro equivilant for Postgres. My default answer is I just use psql, though I do have to then go on to explain how I use it. For those just interested you can read more below or just get the highlights here:</p>
+
+<ul>
+<li>Set your default <code>EDITOR</code> then use \e</li>
+<li>On postgres 9.2 and up <code>\x auto</code> is your friend</li>
+<li>Set history to unlimited</li>
+<li><code>\d</code> all the things</li>
+</ul>
+
+
+<p>Before going into detail on why psql works perfectly fine as an interface I want to rant for a minute about what the problems with current editors are and where I expect them to go in the future. First this is not a knock on the work thats been done on previous ones, for their time PgAdmin, phpPgAdmin, and others were valuable tools, but we&rsquo;re coming to a point where theres a broader set of users of databases than ever before and empowering them is becoming ever more important.</p>
+
+<p>Empowering developers, DBA&rsquo;s, product people, marketers and others to be comfortable with their database will lead to more people taking advantage of whats in their data. <a href="http://craigkerstiens.com/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a> was a great start to this laying a great foundation for valuable information being captured. Even with all of the powerful stats being captured in the statistics of PostgreSQL so many are still terrified when they see something like:</p>
+
+<pre><code>                                                   QUERY PLAN
+----------------------------------------------------------------------------------------------------------------
+ Hash Join  (cost=4.25..8.62 rows=100 width=107) (actual time=0.126..0.230 rows=100 loops=1)
+   Hash Cond: (purchases.user_id = users.id)
+   -&gt;  Seq Scan on purchases  (cost=0.00..3.00 rows=100 width=84) (actual time=0.012..0.035 rows=100 loops=1)
+   -&gt;  Hash  (cost=3.00..3.00 rows=100 width=27) (actual time=0.097..0.097 rows=100 loops=1)
+         Buckets: 1024  Batches: 1  Memory Usage: 6kB
+         -&gt;  Seq Scan on users  (cost=0.00..3.00 rows=100 width=27) (actual time=0.007..0.042 rows=100 loops=1)
+ Total runtime: 0.799 ms
+(7 rows)
+</code></pre>
+
+<p>Empowering more developers by surfacing this information in a digestable form, such as building on top of <code>pg_stat_statements</code> tools such as <a href="http://datascope.heroku.com">datascope</a> by <a href="http://www.twitter.com/leinweber">@leinweber</a> and getting this to be part of the default admin we will truly begin empowering a new set of user.</p>
+
+<p>But enough of a detour, those tools aren&rsquo;t available today. If you&rsquo;re interested in helping build those to make the community better please reach out. For now I live in a work where I&rsquo;m quite content with simple ole <code>psql</code> here&rsquo;s how:</p>
+
+<!--more-->
+
+
+<h3>Editor</h3>
+
+<p>Ensuring you&rsquo;ve exported your preferred editor to the environment variable <code>EDITOR</code> when you run \e it will allow you to view and edit your last run query in your editor of choice. This works for vim, emacs, or even sublime text.</p>
+
+<pre><code>export EDITOR=subl
+psql
+\e 
+</code></pre>
+
+<p>Gives me:</p>
+
+<p><img src="http://f.cl.ly/items/2I0f3M0B1T3k0d290v3k/Screenshot_2_12_13_9_58_AM.png" alt="sublime text" /></p>
+
+<p><em>Note you need to make sure you connect with psql and have your editor set, once you do that saving and exiting the file will then execute the query</em></p>
+
+<h3>\x auto</h3>
+
+<p>psql has long had a method of formatting output. You can toggle this on and off easily by just running the <code>\x</code> command. Running a basic query you get the output:</p>
+
+<pre><code>SELECT * 
+FROM users 
+LIMIt 1;
+ id | first_name | last_name |           email            |    data    |     created_at      |     updated_at      |     last_login
+ ----+------------+-----------+----------------------------+------------+---------------------+---------------------+---------------------
+   1 | Rosemary   | Wassink   | Rosemary.Wassink@yahoo.com | "sex"=&gt;"F" | 2010-07-01 18:16:00 | 2011-05-14 11:47:00 | 2011-06-07 23:04:00
+</code></pre>
+
+<p>With toggling the output and re-running the same query we can see how its now formatted:</p>
+
+<pre><code>\x
+Expanded display is on.
+craig=# SELECT * from users limit 1;
+-[ RECORD 1 ]--------------------------
+id         | 1
+first_name | Rosemary
+last_name  | Wassink
+email      | Rosemary.Wassink@yahoo.com
+data       | "sex"=&gt;"F"
+created_at | 2010-07-01 18:16:00
+updated_at | 2011-05-14 11:47:00
+last_login | 2011-06-07 23:04:00
+</code></pre>
+
+<p>Using <code>\x auto</code> will automatically put this in what Postgres believes is the most intelligible format to read it in.</p>
+
+<h3>psql history</h3>
+
+<p>Hopefully this needs no justification&hellip; having an unlimited history of all your queries is incredibly handy. Ensuring you set the following environment variables will ensure you never lose that query you ran several months ago again:</p>
+
+<pre><code>export HISTFILESIZE=
+export HISTSIZE=
+</code></pre>
+
+<h3>\d</h3>
+
+<p>And while the last on the list one of the first things I do when connecting to any database is check out whats in it. I don&rsquo;t do this by running a bunch of queries but rather checking out the schema and then poking at definitions of specific tables. <code>\d</code> and variations on it are incredibly handy for this. Here&rsquo;s a few highlights below:</p>
+
+<p>Listing all relations with simply <code>\d</code>:</p>
+
+<pre><code>\d
+                 List of relations
+ Schema |       Name       |     Type      | Owner
+--------+------------------+---------------+-------
+ public | products         | table         | craig
+ public | products_id_seq  | sequence      | craig
+ public | purchases        | table         | craig
+ public | purchases_id_seq | sequence      | craig
+ public | redis_db0        | foreign table | craig
+ public | users            | table         | craig
+ public | users_id_seq     | sequence      | craig
+(7 rows)
+</code></pre>
+
+<p>List only all tables with <code>dt</code>:</p>
+
+<pre><code>\dt
+         List of relations
+ Schema |   Name    | Type  | Owner
+--------+-----------+-------+-------
+ public | products  | table | craig
+ public | purchases | table | craig
+ public | users     | table | craig
+(3 rows)
+</code></pre>
+
+<p>Describe a specific relation with <code>\d RELATIONNAMEHERE</code>:</p>
+
+<pre><code>\d users
+                                     Table "public.users"
+   Column   |            Type             |                     Modifiers
+------------+-----------------------------+----------------------------------------------------
+ id         | integer                     | not null default nextval('users_id_seq'::regclass)
+ first_name | character varying(50)       |
+ last_name  | character varying(50)       |
+ email      | character varying(255)      |
+ data       | hstore                      |
+ created_at | timestamp without time zone |
+ updated_at | timestamp without time zone |
+ last_login | timestamp without time zone |
+</code></pre>
+
+<p>One more pro-tip if you&rsquo;re running a transaction with many tables and forget which are involved in it you can run &lsquo;\d *transaction*&rsquo; and it&rsquo;ll display tables curently affected.</p>
+
+<p><em>Have a tool you prefer, have something you use daily in psql that I missed, or interested in helping create a new admin experience please reach out and lets talk craig.kerstiens at gmail.com</em></p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing django-db-tools]]></title>
+    <link href="http://www.craigkerstiens.com/2013/02/08/django-read-only-mode/"/>
+    <updated>2013-02-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/02/08/django-read-only-mode</id>
+    <content type="html"><![CDATA[<p>For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple add a <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">column here or add an index there</a>, but rather truly sizeable migrations&hellip; Going from <a href="http://lanyrd.com/blog/2012/lanyrds-big-move/">MySQL to Postgres</a> or migrating from an older version of Postgres such as a <a href="http://blog.sendhub.com/post/30041247598/how-to-upgrade-a-legacy-heroku-database">32 bit instance</a> to a newer 64 bit instance. In these cases the default approach is to just schedule downtime often throwing up a splash screen saying so.</p>
+
+<p>For many sites this approach is simply wrong and lazy, with little effort you can improve the experience and there by ease the burden in conducting these types of migrations. By having the ability to turn your site into a read only mode which <a href="http://twitter.com/simonw">Simon Wilson</a> talked about in his post on Lanyrd you can still continue to operate just in a limited capacity. <a href="http://www.aeracode.org/2012/11/13/one-change-not-enough/">Andrew Godwin</a> further talks about some of this as well in regards to the Lanyrd move and even includes  the script they used to <a href="https://github.com/lanyrd/mysql-postgresql-converter/">migrate data from MySQL to Postgres</a>. Though just in talking with Simon about this a week ago it occurred to me they had not released the code for their read-only mode.</p>
+
+<p>Finally onto the announcing, today I&rsquo;m releasing <a href="https://github.com/craigkerstiens/django-db-tools">django-db-tools</a>. This is currently a very lightweight utility that allows you to flip your site into two modes.</p>
+
+<!--more-->
+
+
+<h3>Anonymous Mode</h3>
+
+<p>For sites that offer a bulk of their data to unauthenticated users anonymous mode will be what you want. This ensures all users appear logged out and thus cannot interact with data. To enable anonymous mode you&rsquo;d simple set the environment variable or config var on heroku as follows:</p>
+
+<pre><code>READ_ONLY_MODE = True
+</code></pre>
+
+<h3>Restricting POSTs</h3>
+
+<p>The other bucket of sites is one that allows users to stay logged in but not insert data. Django did not appear to have a convenient means to know whether data was actually being inserted into the DB or not. As a good practice when inserting data it should be receiving a HTTP POST. The <code>GET_ONLY_MODE</code> mimmicks all POSTs as if they were sent via GETs thus hopefully eliminating inserting data into your application. To turn it on simply set the environment variabel or config var on heroku to:</p>
+
+<pre><code>GET_ONLY_MODE = True
+</code></pre>
+
+<h3>Installing</h3>
+
+<p>The tool itself is largely middleware, to install:</p>
+
+<ol>
+<li>Run <code>pip install django-db-tools</code> or add it to your <code>requirements.txt</code></li>
+<li>Add <code>db_tools</code> to your <code>INSTALLED_APPS</code> in your <code>settings.py</code></li>
+<li>Add <code>'dbtools.middleware.ReadOnlyMiddleware',</code> to your <code>MIDDLEWARE_CLASSES</code> in <code>settings.py</code></li>
+</ol>
+
+
+<h3>Contributing</h3>
+
+<p>As with all code this is largely a work in progress. There&rsquo;s many items still to do such as providing default copy and error pages and potentially handling other edge cases. I&rsquo;d welcome others to contribute and give feedback if they find it helpful or how it can be improved on Github.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Redis in my Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/"/>
+    <updated>2012-10-18T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres</id>
+    <content type="html"><![CDATA[<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
+
+<p>SQL is an expressive language, though people are often okay with accessing Mongo data through its own ORM. The real value is that you could actually query the data from within Postgres then join across your data stores, without having to do some ETL process to move data around.  Think&hellip; joining sales data from Postgres with user reviews stored in Mongo or searching for visits to a website (retained in redis) against purchases by user in Postgres.</p>
+
+<p>The mechanism pointed out was a MongoDB Foreign Data Wrapper. A Foreign Data Wrapper or FDW essentially lets you connect to an external datastore from within a Postgres database. In addition to the Mongo FDW released the other day there&rsquo;s  many others. For example Postgres 9.0 and up ships with one called <code>db_link</code>, which lets you query and join across two different Postgres databases. Beyond that there&rsquo;s support for a variety of other data stores including some you may have never expected:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/file_textarray_fdw/">Textfile</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/odbc_fdw/">ODBC</a></li>
+<li><a href="http://pgxn.org/dist/ldap_fdw/">LDAP</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+<li><a href="http://pgxn.org/tag/fdw/">More</a></li>
+</ul>
+
+
+<p>Lets look at actually getting the Redis one running then see what some of the power of it really looks like. First we have to get the code then build it:</p>
+
+<!--more-->
+
+
+<pre><code>git clone git://github.com/antirez/hiredis.git
+cd hiredis
+make 
+sudo make install
+</code></pre>
+
+<p>Then download the FDW from <a href="http://pgxn.org/dist/redis_fdw/">PGXN</a></p>
+
+<pre><code>PATH=/Applications/Postgres.app/Contents/MacOS/bin/:$PATH USE_PGXS=1 make
+sudo PATH=/Applications/Postgres.app/Contents/MacOS/bin/:$PATH USE_PGXS=1 make install
+</code></pre>
+
+<p>Now you&rsquo;ll want to connect to your Postgres database, using <code>psql</code> and enable the extension, and finally create your foreign table to your redis server. This is assuming a locally running redis, though you could connect to a remote just as easily:</p>
+
+<pre><code>CREATE EXTENSION redis_fdw;
+
+CREATE SERVER redis_server 
+    FOREIGN DATA WRAPPER redis_fdw 
+    OPTIONS (address '127.0.0.1', port '6379');
+
+CREATE FOREIGN TABLE redis_db0 (key text, value text) 
+    SERVER redis_server
+    OPTIONS (database '0');
+
+CREATE USER MAPPING FOR PUBLIC
+    SERVER redis_server
+    OPTIONS (password 'secret');
+</code></pre>
+
+<p>With <code>dt</code> we can now see the list of all of our tables:</p>
+
+<pre><code># \dt
+         List of relations
+ Schema |   Name    | Type  | Owner 
+--------+-----------+-------+-------
+ public | products  | table | craig
+ public | purchases | table | craig
+ public | users     | table | craig
+(3 rows)
+</code></pre>
+
+<p>And with a full <code>\d</code> we can see not just the tables but also see we have a foreign table as well:</p>
+
+<pre><code># \d
+                 List of relations
+ Schema |       Name       |     Type      | Owner 
+--------+------------------+---------------+-------
+ public | products         | table         | craig
+ public | purchases        | table         | craig
+ public | redis_db0        | foreign table | craig
+ public | users            | table         | craig
+(4 rows)
+</code></pre>
+
+<p>Finally we can actually query against it:</p>
+
+<pre><code># SELECT * from redis_db0 limit 5;   
+   key   | value 
+---------+-------
+ user_40 | 44
+ user_41 | 32
+ user_42 | 11
+ user_43 | 3
+ user_80 | 7
+(5 rows)
+</code></pre>
+
+<p>Or more interestingly we can join it against other parts of our data and filter accordingly. Below we&rsquo;ll show users that have logged in at least 40 times:</p>
+
+<pre><code>SELECT 
+  id, 
+  email, 
+  value as visits 
+FROM 
+  users, 
+  redis_db0 
+WHERE 
+      ('user_' || cast(id as text)) = cast(redis_db0.key as text) 
+  AND cast(value as int) &gt; 40;
+
+ id |           email            | visits 
+----+----------------------------+--------
+ 40 | Cherryl.Crissman@gmail.com | 44
+ 44 | Brady.Paramo@gmail.com     | 44
+ 46 | Laronda.Razor@yahoo.com    | 44
+ 47 | Karole.Sosnowski@gmail.com | 44
+ 12 | Jami.Jeon@yahoo.com        | 49
+ 14 | Jenee.Morrissey@gmail.com  | 47
+ 16 | Yuki.Alber@yahoo.com       | 48
+ 18 | Marquis.Tartaglia@aol.com  | 44
+ 31 | Collin.Parrilla@gmail.com  | 46
+ 39 | Nydia.Bukowski@aol.com     | 47
+  2 | Gaye.Monteith@aol.com      | 48
+  6 | Letitia.Tripodi@aol.com    | 41
+(12 rows)
+</code></pre>
+
+<p>While several of the current FDWs are not production ready yet, some are more battle tested including db_link, textfile, ODBC and MySQL ones.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding Postgres Performance]]></title>
+    <link href="http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/"/>
+    <updated>2012-10-01T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance</id>
+    <content type="html"><![CDATA[<p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
+
+<p>For many application developers their database is a black box. Data goes in, comes back out and in between there developers hope its a pretty short time span. Without becoming a DBA there&rsquo;s a few pieces of data that most application developers can easily grok which will help them understand if their database is performing adequately. This post will provide some quick tips that allow you to determine whether your database performance is slowing down your app, and if so what you can do about it.</p>
+
+<h3>Understanding your Cache and its Hit Rate</h3>
+
+<p>The typical rule for most applications is that only a fraction of its data is regularly accessed. As with many other things data can tend to follow the 80/20 rule with 20% of your data accounting for 80% of the reads and often times its higher than this. Postgres itself actually tracks access patterns of your data and will on its own keep frequently accessed data in cache. Generally you want your database to have a cache hit rate of about 99%. You can find your cache hit rate with:</p>
+
+<pre><code>SELECT 
+  sum(heap_blks_read) as heap_read,
+  sum(heap_blks_hit)  as heap_hit,
+  sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio
+FROM 
+  pg_statio_user_tables;
+</code></pre>
+
+<!-- more -->
+
+
+<p>We can see in this <a href="https://postgres.heroku.com/dataclips/jfrtizxdthixfxkcdesxwesiibly">dataclip</a> that the cache rate for <a href="https://postgres.heroku.com?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> is 99.99%. If you find yourself with a ratio significantly lower than 99% then you likely want to consider increasing the cache available to your database, you can do this on Heroku Postgres by <a href="https://devcenter.heroku.com/articles/fast-database-changeovers?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">performing a fast database changeover</a> or on something like EC2 by performing a dump/restore to a larger instance size.</p>
+
+<h3>Understanding Index Usage</h3>
+
+<p>The other primary piece for improving performance is <a href="https://devcenter.heroku.com/articles/postgresql-indexes?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">indexes</a>. Several frameworks will add indexes on your primary keys, though if you&rsquo;re searching on other fields or joining heavily you may need to manually add such indexes.</p>
+
+<p>Indexes are most valuable across large tables as well. While accessing data from cache is faster than disk, even data within memory can be slow if Postgres must parse through hundreds of thousands of rows to identify if they meet a certain condition. To generate a list of your tables in your database with the largest ones first and the percentage of time which they use an index you can run:</p>
+
+<pre><code>SELECT 
+  relname, 
+  100 * idx_scan / (seq_scan + idx_scan) percent_of_times_index_used, 
+  n_live_tup rows_in_table
+FROM 
+  pg_stat_user_tables
+WHERE 
+    seq_scan + idx_scan &gt; 0 
+ORDER BY 
+  n_live_tup DESC;
+</code></pre>
+
+<p>While there is no perfect answer, if you&rsquo;re not somewhere around 99% on any table over 10,000 rows you may want to consider adding an index. When examining where to add an index you should look at what kind of queries you&rsquo;re running. Generally you&rsquo;ll want to add indexes where you&rsquo;re looking up by some other id or on values that you&rsquo;re commonly filtering on such as created_at fields.</p>
+
+<p>Pro tip: If you&rsquo;re adding an index on a production database use <code>CREATE INDEX CONCURRENTLY</code> to have it build your index in the background and not hold a lock on your table. The limitation to creating indexes <a href="http://www.postgresql.org/docs/9.1/static/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY">concurrently</a> is they can typically take 2-3 times longer to create and can&rsquo;t be run within a transaction. Though for any large production site these trade-offs are worth the trade-off in experience to your end users.</p>
+
+<h3>Heroku Dashboard as an Example</h3>
+
+<p>Looking at a real world example of the recently launched Heroku dashboard, we can run this query and see our results:</p>
+
+<pre><code># SELECT relname, 100 * idx_scan / (seq_scan + idx_scan) percent_of_times_index_used, n_live_tup rows_in_table  FROM pg_stat_user_tables ORDER BY n_live_tup DESC;
+       relname       | percent_of_times_index_used | rows_in_table 
+---------------------+-----------------------------+---------------
+ events              |                           0 |        669917
+ app_infos_user_info |                           0 |        198218
+ app_infos           |                          50 |        175640
+ user_info           |                           3 |         46718
+ rollouts            |                           0 |         34078
+ favorites           |                           0 |          3059
+ schema_migrations   |                           0 |             2
+ authorizations      |                           0 |             0
+ delayed_jobs        |                          23 |             0
+</code></pre>
+
+<p>From this we can wee the events table which has around 700,000 rows has no indexes that have been used. From here you could investigate within my application and see some of the common queries that are used, one example is pulling the events for this blog post which you are reaching. You can see your <a href="https://postgresguide.com/performance/explain.html?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">execution plan</a> by running an <a href="https://postgresguide.com/performance/explain.html?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens"><code>EXPLAIN ANALYZE</code></a> which gives you can get a better idea of the performance of a specific query:</p>
+
+<pre><code>EXPLAIN ANALYZE SELECT * FROM events WHERE app_info_id = 7559;                                                 QUERY PLAN
+-------------------------------------------------------------------
+Seq Scan on events  (cost=0.00..63749.03 rows=38 width=688) (actual time=2.538..660.785 rows=89 loops=1)
+  Filter: (app_info_id = 7559)
+Total runtime: 660.885 ms
+</code></pre>
+
+<p>Given there&rsquo;s a sequential scan across all that data this is an area we can optimize with an index. We can add our index concurrently to prevent locking on that table and then see how performance is:</p>
+
+<pre><code>CREATE INDEX CONCURRENTLY idx_events_app_info_id ON events(app_info_id);
+EXPLAIN ANALYZE SELECT * FROM events WHERE app_info_id = 7559;
+
+----------------------------------------------------------------------
+ Index Scan using idx_events_app_info_id on events  (cost=0.00..23.40 rows=38 width=688) (actual time=0.021..0.115 rows=89 loops=1)
+   Index Cond: (app_info_id = 7559)
+ Total runtime: 0.200 ms
+</code></pre>
+
+<p>While we can see the obvious improvement in this single query we can examine the results in <a href="https://addons.heroku.com/newrelic">New Relic</a> and see that we&rsquo;ve significantly reduced our time spent in the database with the addition of this and a few other indexes:</p>
+
+<p><img src="http://f.cl.ly/items/2x3g2h2220162C2M0w0r/Pasted%20Image%2010:1:12%208:55%20AM-2.png" alt="NewRelicGraph" /></p>
+
+<h3>Index Cache Hit Rate</h3>
+
+<p>Finally to combine the two if you&rsquo;re interested in how many of your indexes are within your cache you can run:</p>
+
+<pre><code>SELECT 
+  sum(idx_blks_read) as idx_read,
+  sum(idx_blks_hit)  as idx_hit,
+  (sum(idx_blks_hit) - sum(idx_blks_read)) / sum(idx_blks_hit) as ratio
+FROM 
+  pg_statio_user_indexes;
+</code></pre>
+
+<p>Generally, you should also expect this to be in the 99% similar to your regular cache hit rate.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+]]></content>
+  </entry>
+  
+</feed>

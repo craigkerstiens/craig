@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/python/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Fixing Database Connections in Django]]></title>
+    <link href="http://www.craigkerstiens.com/2013/03/07/Fixing-django-db-connections/"/>
+    <updated>2013-03-07T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/03/07/Fixing-django-db-connections</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re looking to get better performance from your Django apps you can check out <a href="http://www.amazon.com/Pro-Django-Experts-Voice-Development/dp/1430210478?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Pro Django</a>, <a href="http://www.amazon.com/PostgreSQL-High-Performance-Gregory-Smith/dp/184951030X?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">PostgreSQL High Performance</a>, or read some my earlier posts on <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">Postgres Performance</a>. All of these are of course good things to do – you can also start by correcting an incredibly common but also painful performance issue, that until 1.6 is unaddressed in Django.</p>
+
+<p>Django&rsquo;s current default behavior is to establish a connection for each request within a Django application. In many cases any particularly in distributed cloud environments this is a large time sink of your response time. An example application running on <a href="http://www.heroku.com">Heroku</a> shows a typical connection time of 70ms. A large part of this time is the SSL negotiation that occurs in connecting to your database, <em>which is a good practice to ensure security of your data</em>. Regardless, this is a long time in simply establishing a connection. As a point of comparisson its commonly encourage that most queries to your database are under 10ms.</p>
+
+<p>An example that highlights this in a small lightweight application shows the bulk of a request time being within a connection displayed by <a href="http://www.newrelic.com">New Relic</a>:</p>
+
+<p><img src="http://f.cl.ly/items/0X3u0e3Q3G0L19263k2Z/Screenshot_3_6_13_1_12_PM.png" alt="connection time" /></p>
+
+<!--more-->
+
+
+<p><img src="http://f.cl.ly/items/1h2w450F3n0X1m1c0S38/Screenshot_2_22_13_3_18_PM-2.png" alt="connection time" /></p>
+
+<p>One option to remedy this is by running a connection pooler on your Database side such as <a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">Pgpool</a> or <a href="http://pgfoundry.org/projects/pgbouncer">PgBouncer</a>. In fact <a href="http://www.askthepony.com/blog/2011/07/getting-django-on-heroku-prancing-8-times-faster/">Ask the Pony</a> already highlighted these potential gains. While running an external DB they&rsquo;re essentially testing the benefits of conncetion pooling. This is an obvious gain and can be in a much more lightweight format.</p>
+
+<h3>Connection Pooling in Django</h3>
+
+<p>As Django establishes a connection on each request it has an opportunity to both pool connections and persist connections. There are two major options for pooling, each works quite well with Django and provides some dramatic improvements. While the first request may take the 70ms of connection time, subsequent requests show absolutely no connection time since the connection already exists. This is highlighed by these two comparissons of before and after in actually the times it grabs a connection:</p>
+
+<p><img src="http://f.cl.ly/items/2H0J2x3P2L2K2n0M3i38/Screen_Shot_2013-02-22_at_8.28.21_PM.png" alt="before" />
+<img src="http://f.cl.ly/items/0T1l1I03433u0c0t3e2o/Screen_Shot_2013-02-22_at_8.28.36_PM.png" alt="after" /></p>
+
+<p>Clearly theres plenty of value to having a persistent connection or a pool within Django itself. As of today theres a few options for that:</p>
+
+<h3>Django-PostgresPool</h3>
+
+<p>The first <a href="https://github.com/kennethreitz/django-postgrespool">Django-PostgresPool</a> is created by <a href="http://twitter.com/kennethreitz">kennethreitz</a>. As in general I&rsquo;d encourage the use of <a href="">dj_database_url</a> you can easily begin using his package (once installed) with:</p>
+
+<pre><code>import dj_database_url
+
+DATABASE = { 'default': dj_database_url.config() }
+DATABASES['default']['ENGINE'] = 'django_postgrespool'
+</code></pre>
+
+<p>An important thing to note is if you&rsquo;re using <a href="http://south.aeracode.org/">South</a> you&rsquo;ll also want to setup the adapter for it:</p>
+
+<pre><code>SOUTH_DATABASE_ADAPTERS = {
+    'default': 'south.db.postgresql_psycopg2'
+}
+</code></pre>
+
+<h3>djorm-ext-pool</h3>
+
+<p>The second option <a href="https://github.com/niwibe/djorm-ext-pool">djorm-ext-pool</a> is created by <a href="http://twitter.com/niwibe">niwibe</a>. Once you&rsquo;ve installed <code>djorm-ext-pool</code> you then add it to your <code>INSTALLED_APPS</code> within your <code>settings.py</code>. From here then you can setup your pool:</p>
+
+<pre><code>DJORM_POOL_OPTIONS = {
+    "pool_size": 20,
+    "max_overflow": 0
+} 
+</code></pre>
+
+<h3>django-db-pool</h3>
+
+<p>The third and final option is <a href="https://github.com/gmcguire/django-db-pool">django-db-pool</a>. You can set it up with:</p>
+
+<pre><code>DATABASES = {'default': dj_database_url.config()}
+DATABASES['default']['ENGINE'] = 'dbpool.db.backends.postgresql_psycopg2'
+DATABASES['default']['OPTIONS'] = {
+    'MAX_CONNS': 10
+}
+</code></pre>
+
+<h3>Gotchas</h3>
+
+<p>Each of these does work with recent versions of Django, though in some cases there are gotchas. If using a prodution worthy python web server such as Gunicorn or uwsgi and running with gevent or eventlet some edge cases can present themselves. Regardless of potential gotchas it is worth attempting this and of course providing feedback to maintainers and the community as you find those.</p>
+
+<h3>The future</h3>
+
+<p>Django more recently has directly started to address these issues of large costs of establishing a connection. The first major step here is <a href="https://github.com/django/django/commit/2ee21d">this patch</a> from <a href="http://twitter.com/aymericaugustin">Aymeric</a>. You can find more dicussion around this particular patch <a href="https://groups.google.com/forum/#!topic/django-developers/NwY9CHM4xpU/discussion">here</a>. Essentially with this patch which will hit in Django 1.6 developers then get a persistent connection which will help reduce the time. If you&rsquo;re interested in trying the 1.6 master you can do this by adding it to your requirements.txt as:</p>
+
+<pre><code>https://github.com/django/django/archive/master.zip
+</code></pre>
+
+<p>At this point it does not introduce pooling which could allow even more gains, though I&rsquo;m sure if there&rsquo;s enough need it&rsquo;ll be on a roadmap at some point. Though, as it stands today before 1.6 your best bet is one of the above options.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing django-db-tools]]></title>
+    <link href="http://www.craigkerstiens.com/2013/02/08/django-read-only-mode/"/>
+    <updated>2013-02-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/02/08/django-read-only-mode</id>
+    <content type="html"><![CDATA[<p>For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple add a <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">column here or add an index there</a>, but rather truly sizeable migrations&hellip; Going from <a href="http://lanyrd.com/blog/2012/lanyrds-big-move/">MySQL to Postgres</a> or migrating from an older version of Postgres such as a <a href="http://blog.sendhub.com/post/30041247598/how-to-upgrade-a-legacy-heroku-database">32 bit instance</a> to a newer 64 bit instance. In these cases the default approach is to just schedule downtime often throwing up a splash screen saying so.</p>
+
+<p>For many sites this approach is simply wrong and lazy, with little effort you can improve the experience and there by ease the burden in conducting these types of migrations. By having the ability to turn your site into a read only mode which <a href="http://twitter.com/simonw">Simon Wilson</a> talked about in his post on Lanyrd you can still continue to operate just in a limited capacity. <a href="http://www.aeracode.org/2012/11/13/one-change-not-enough/">Andrew Godwin</a> further talks about some of this as well in regards to the Lanyrd move and even includes  the script they used to <a href="https://github.com/lanyrd/mysql-postgresql-converter/">migrate data from MySQL to Postgres</a>. Though just in talking with Simon about this a week ago it occurred to me they had not released the code for their read-only mode.</p>
+
+<p>Finally onto the announcing, today I&rsquo;m releasing <a href="https://github.com/craigkerstiens/django-db-tools">django-db-tools</a>. This is currently a very lightweight utility that allows you to flip your site into two modes.</p>
+
+<!--more-->
+
+
+<h3>Anonymous Mode</h3>
+
+<p>For sites that offer a bulk of their data to unauthenticated users anonymous mode will be what you want. This ensures all users appear logged out and thus cannot interact with data. To enable anonymous mode you&rsquo;d simple set the environment variable or config var on heroku as follows:</p>
+
+<pre><code>READ_ONLY_MODE = True
+</code></pre>
+
+<h3>Restricting POSTs</h3>
+
+<p>The other bucket of sites is one that allows users to stay logged in but not insert data. Django did not appear to have a convenient means to know whether data was actually being inserted into the DB or not. As a good practice when inserting data it should be receiving a HTTP POST. The <code>GET_ONLY_MODE</code> mimmicks all POSTs as if they were sent via GETs thus hopefully eliminating inserting data into your application. To turn it on simply set the environment variabel or config var on heroku to:</p>
+
+<pre><code>GET_ONLY_MODE = True
+</code></pre>
+
+<h3>Installing</h3>
+
+<p>The tool itself is largely middleware, to install:</p>
+
+<ol>
+<li>Run <code>pip install django-db-tools</code> or add it to your <code>requirements.txt</code></li>
+<li>Add <code>db_tools</code> to your <code>INSTALLED_APPS</code> in your <code>settings.py</code></li>
+<li>Add <code>'dbtools.middleware.ReadOnlyMiddleware',</code> to your <code>MIDDLEWARE_CLASSES</code> in <code>settings.py</code></li>
+</ol>
+
+
+<h3>Contributing</h3>
+
+<p>As with all code this is largely a work in progress. There&rsquo;s many items still to do such as providing default copy and error pages and potentially handling other edge cases. I&rsquo;d welcome others to contribute and give feedback if they find it helpful or how it can be improved on Github.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Protips for Conference Talks]]></title>
+    <link href="http://www.craigkerstiens.com/2012/06/19/pro-tips-for-conference-talks/"/>
+    <updated>2012-06-19T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/06/19/pro-tips-for-conference-talks</id>
+    <content type="html"><![CDATA[<p>A few weeks ago I was sitting at the hotel in Zurich with <a href="http://www.twitter.com/jacobian">Jacob Kaplan Moss</a> prior to <a href="http://klewel.com/conferences/djangocon-2012/">DjangoCon EU</a> enjoying a beer, talking about Django, and discussing a bit about our upcoming talks for the conference. He talked briefly about his upcoming <a href="http://klewel.com/conferences/djangocon-2012/index.php?talkID=2">keynote</a> and how he was doing something different, including essentially 5 mini-talks. This seemed interesting enough, but the part that surprised me was when Jacob said, &ldquo;I&rsquo;m among friends here so it&rsquo;ll be a good place to test this format.&rdquo; Many if not all in the community know who Jacob is as one of the creators of Django, though still to be &ldquo;among friends&rdquo; at a roughly 300 person conference surprised me. However, as someone thats keynoted several times, spoken at conferences for many years, and familiar with many people in the community; for the 150-200 people there he had not met before, he was still truly among friends. While giving a keynote is never an easy feat, it seems to ease the worry ahead of time of doing such.</p>
+
+<p>Saturday night there was a bit of conversation on twitter that had some related discussion. In the last minute rush for DjangoCon US talk submissions a few that have been involved in the community for some time discussed submitting their first talk proposals. In parallel to that was some discussion around diversity, I volunteered the idea of not including presenters name&rsquo;s in the list when reviewing and voting on talks. While both of the above are controversial topics alone, I hope that can be left to another later time. The key idea that emerged that can be helpful to anyone looking to submit a talk to a conference is how the &ldquo;pro&rsquo;s do it&rdquo;, as <a href="http://www.twitter.com/jdunck">Jeremy Dunck</a> put it.</p>
+
+<p>So without further adieu, hopefully without speaking too much for him here&rsquo;s likely why Jacob viewed his 300 person keynote as being among friends:</p>
+
+<h2>1. Start small</h2>
+
+<p>Whether its practicing the talk itself or writing the abstract for a proposal practicing each step lets you refine this well ahead of time. In my experience, providing a talk description for a meetup can often be far harder than for a conference. For a meetup I feel confined to 2-3 sentences, versus an abstract a solid paragraph or two. Yet, I still have to make it as exciting, because of course I don&rsquo;t want 4 people to show up to the meetup because it sounds uninteresting. In the case I&rsquo;m most familiar with <a href="http://www.djangocon.us/">DjangoCon</a> and DjangoCon.eu both happen once a year, though many smaller regional conferences related to Python exist and especially meetup groups:</p>
+
+<!-- more -->
+
+
+<h3>Regional Conferences</h3>
+
+<ul>
+<li><a href="http://www.pytexas.org/2011/">PyTexas</a></li>
+<li><a href="http://pyarkansas.wordpress.com/">PyArkansas</a></li>
+<li><a href="https://pygotham.org/">PyGotham</a></li>
+<li><a href="http://pyohio.org/">PyOhio</a></li>
+</ul>
+
+
+<h3>Meetups</h3>
+
+<ul>
+<li><a href="http://www.meetup.com/pythonkc/">Kansas City</a></li>
+<li><a href="http://www.djangonyc.org/">NYC</a></li>
+<li><a href="http://www.meetup.com/The-San-Francisco-Django-Meetup-Group/">SF</a></li>
+<li><a href="http://www.meetup.com/austinwebpythonusergroup/">Austin</a></li>
+<li><a href="http://www.meetup.com/pdxpython/">Portland</a></li>
+<li><a href="http://www.meetup.com/python-atlanta/">Atlanta</a></li>
+<li><a href="http://chipy.org/">Chicago</a></li>
+</ul>
+
+
+<h3>Other avenues</h3>
+
+<ul>
+<li><a href="http://igniteshow.com/cities/all">Ignite</a></li>
+<li>At your office to colleagues</li>
+</ul>
+
+
+<p><em>Check <a href="http://lanyrd.com/topics/python/">lanyard</a> for a list of relevant events where you might be able to start at</em></p>
+
+<p>Take your pick, there&rsquo;s a conference or a meet-up near you. Even better if you can manage to do both at some point.</p>
+
+<h2>2. Get feedback early</h2>
+
+<p>If you&rsquo;ve been around the community you may know what talks would be interesting. Though even if you&rsquo;ve been involved in the community and not given a talk at a conference before, this may be harder to come up with than you realize. If you&rsquo;re thinking about submitting a talk, its likely you have many you can get feedback from. Do this early and often, if you&rsquo;re submitting a talk its likely you have something interesting to say, the hardest part can be having that succinctly come across in an abstract. Sure there&rsquo;s certain hot topics, such as in the Django community:</p>
+
+<ul>
+<li>Diversity</li>
+<li>Class Based Views</li>
+<li>Testing</li>
+<li>APIs/Services</li>
+</ul>
+
+
+<p>At almost every Django and Python conference there will probably be 3+ talks on each of these topics submitted. Why does yours stand out differently? Its likely in how you position the problem and the answer you can deliver in a talk, which isn&rsquo;t a quality of the talk but the abstract rather.</p>
+
+<h2>3. Focus on your talk more than others</h2>
+
+<p>I&rsquo;m not sure this is the case of all presenters at every conference, but every time I&rsquo;ve paid attention to it; presenters seem to make themselves slightly less available during a conference. Or at least they do this up until they give their talk. Often you&rsquo;ll have several of the presenters missing other talks while they&rsquo;re holed up in their room prepping or maybe their enjoying a hallway track with other presenters. Either way they&rsquo;re likely walking through their slides and talk key points in some form. As a presenter the dynamic of the conference changes ever so slightly, you spend a little less time on all of the talks that happen (fortunately videos help for catching up later). Though on the plus side, you also get the opportunity to have engaging conversations after your talk about a topic you hopefully find interesting.</p>
+
+<h2>4. Get the critical feedback</h2>
+
+<p>People know its nerve wrecking to give a talk in front of a crowd. Each time you do it, it becomes easier, but in my experience its never as easy as a conversation over a cup of coffee. Because of this, most people will be quite encouraging of any job you do. This isn&rsquo;t a bad thing, encouragement is good, your talk will be better the second time you give it. However, by getting the critical feedback out of people you&rsquo;ll be able to improve your talk much more the second/third/fourth time around.</p>
+
+<!-- ## 5. Flesh out your talk
+
+Talks are great, but there's a good chance you'll miss something in the process. Whether its the first time giving it or the last time you plan to give a particular talk at some point documenting your key points can be helpful for those that care about the information. Blogging the full breadth of what you want to cover will help you with any content you wish to make sure you cover and provide an in depth record for those that want it. 
+
+-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Schemaless Postgres in Django]]></title>
+    <link href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/"/>
+    <updated>2012-06-11T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/06/11/schemaless-django</id>
+    <content type="html"><![CDATA[<p>Earlier this week while I was at <a href="http://lanyrd.com/2012/djangocon-europe/">DjangoCon EU</a> there seemed to be a surprising amount of talk about MongoDB. My problem with this isn&rsquo;t with MongoDB, but in  the assumption that only Mongo can solve what you&rsquo;re looking for. By and far the most common feature is people want schemaless. It gives them flexibility in their data model and lets them iterate quickly. While I still opt for relational models that map cleanly to a relational database, there are cases where developers may want schemaless. I gave a quick lightning talk on this with slides <a href="https://speakerdeck.com/u/craigkerstiens/p/django-and-hstore">here</a>, but it is worth recapping.</p>
+
+<p>The example given by <a href="http://www.twitter.com/pydanny">pydanny</a> was a product catalog. You may have different items you want to store for a catalog. Lets take an example below:</p>
+
+<pre><code>django_pony = {'name': 'Django Pony', 'rating': '5'}
+pink_pony = {'name': 'Pink Pony', 'rating': '4', 'color': 'pink'}
+</code></pre>
+
+<p>In the case of a product catalog it could be understandable you don&rsquo;t want to normalize every possible spec for the product. The argument for Mongo is so commonly that you can easily work with this data model. Admittedly it is quite simple:</p>
+
+<pre><code>from pymongo import Connection
+connection = Connection()
+django_pony = {'name': 'Django Pony', 'rating': '5'}
+connection.product.insert(django_pony)
+</code></pre>
+
+<p>The problem is that this assumes other schemaless options don&rsquo;t exist or are inferior.</p>
+
+<h2>Enter hStore</h2>
+
+<p><a href="http://www.postgresql.org/docs/8.4/static/hstore.html">hStore</a> is a column type within Postgres. It is a key value store that allows you to store a dictionary, with text values. It alone is not a full document store replacement, but allows for flexibility in your data model where you need it while letting you use relational models elsewhere. Its not exactly new within Postgres either, as its been available since 8.4, however its recently become easier to work with and is supported in some form or another by more frameworks.</p>
+
+<p>To do the same as above we only need to do a few steps:</p>
+
+<!-- more -->
+
+
+<p>Within your Postgres 9.1 or higher database:</p>
+
+<pre><code>create extension hstore;
+</code></pre>
+
+<p><em>If you don&rsquo;t have Postgres already if you&rsquo;re on a Mac quickly grab and install <a href="http://postgresapp.com">Postgres.app</a>.</em></p>
+
+<p>Now for actually using it within your Django application. You first need to install django-hstore to your project:</p>
+
+<pre><code>pip install django-hstore
+</code></pre>
+
+<p>Then you can add it to your models:</p>
+
+<pre><code>from django.db import models
+from django_hstore import hstore
+
+class Product(models.Model):
+    name = models.CharField(max_length=250)
+    data = hstore.DictionaryField(db_index=True)
+    objects = hstore.Manager()
+
+    def __unicode__(self):
+        return self.name
+</code></pre>
+
+<p>Once you&rsquo;ve sync'ed your database models you can now add your products in a very similar form to above:</p>
+
+<pre><code>Product.objects.create(name='Django Pony', data={'rating': '5'})
+Product.objects.create(name='Pony', data={'color': 'pink', 'rating': '4'})
+</code></pre>
+
+<p>At this point you&rsquo;ve got your schemaless data into Postgres and can interact with it. However, this is where the benefits of Postgres quickly start to come into play. In addition to the schemaless model you&rsquo;re able to add indexes and filter on keys/values just as you would expect. In fact within Django it maps similarly to how it would within the ORM:</p>
+
+<pre><code>colored_ponies = Product.objects.filter(data__contains='color')
+print colored_ponies[0].data['color']
+
+favorite_ponies = Product.objects.filter(data__contains={'rating': '5'})
+print colored_ponies[0]
+</code></pre>
+
+<p>To add indexes within postgres we could index on the same items that we&rsquo;re filtering above:</p>
+
+<pre><code>create index on product(((data-&gt;'color')::int)) where ((data-&gt;'size') is not null);
+create index on product(((data-&gt;'rating')::int)) where ((data-&gt;'rating') = '5');
+</code></pre>
+
+<p>If you need a sample project to start with immediately check out this one on <a href="https://github.com/craigkerstiens/hstore-demo">github</a>.</p>
+
+<p>When evaluating any database its important to choose the features you&rsquo;re evaluating it on, then examine further. Mongo may be great because its schemaless, this doesn&rsquo;t mean an RDMS can&rsquo;t be schemaless as well (and do a good job of it). In the long run, schemaless is likely to just become another feature in databases, but more on that later.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apps to Services]]></title>
+    <link href="http://www.craigkerstiens.com/2012/04/13/apps_to_services/"/>
+    <updated>2012-04-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/04/13/apps_to_services</id>
+    <content type="html"><![CDATA[<p><em>Update the talk for this is now viewable on YouTube <a href="http://www.youtube.com/watch?v=ztGpK-v2Oow">here</a></em></p>
+
+<p>When I first came across Django I was an immediate fan. It featured:</p>
+
+<ul>
+<li>Good documentation</li>
+<li>Steady but stable progress</li>
+<li>Community around apps which encouraged <em>DRY</em></li>
+</ul>
+
+
+<p>I&rsquo;ve been a user off and on depending on my needs for nearly four years since discovering it, and throughout that time all of the above have remained true. However, as I&rsquo;ve worked on and encountered more complex applications there&rsquo;s one thing that has time and again broke down for me, which is the Django apps model. It hasn&rsquo;t broken down due to Django only though, I&rsquo;ve seen it break down in Ruby (Rails), Java, .Net, take you&rsquo;re pick of language or framework.</p>
+
+<p>The breakdown of this model is due to several things:</p>
+
+<!-- more -->
+
+
+<ul>
+<li>Successful applications grow which mean more complex applications and more developers</li>
+<li>More complex applications often mean larger code bases
+
+<ul>
+<li>Deprecating code is good, but not always easy in large code bases</li>
+<li>More code means more testing, but slower releases</li>
+</ul>
+</li>
+</ul>
+
+
+<p>At Heroku one way we often describe the platform to others is <em>&ldquo;A distributed Unix in the cloud.&rdquo;</em> There may be many reasons for this, but one of which is that we love the Unix approach and philosophy of <em>Small sharp tools</em>. Sticking to that, many of our internal pieces are small individual apps that talk across defined contracts or APIs.</p>
+
+<p>Back to Django&rsquo;s app structure&hellip; Many people build apps and re-use them and often share them with the world. This is truly great for re-usability, which means you can focus on building key features. However, this does not enable your application to be more maintainable in the future nor does it enable scalability. Yes, you can absolutely scale a monolithic application, but it doesn&rsquo;t mean you should. This doesn&rsquo;t mean the app structure is entirely broken, it just means that it is a partial step to where you should be. The real solution is to build more of these pieces of your greater application as services.</p>
+
+<p>A Django app is defined as <em>A web application that does something. I.e. Weblog, Poll, Ticket system</em>. Within Django an app contains:</p>
+
+<ul>
+<li>Models</li>
+<li>Views</li>
+<li>URLs</li>
+</ul>
+
+
+<p>I couldn&rsquo;t find a great definition of a Service that was succinct and also said something of value (If you have one please pass along as I&rsquo;d love to have a definition from a source other than myself). For the sake setting something in place I&rsquo;m defining a service as <em>Method of communication over the web with a provider using a defined contract</em>. By this definition a service contains:</p>
+
+<ul>
+<li>Provider</li>
+<li>Endpoint</li>
+<li>Contract</li>
+</ul>
+
+
+<p>Let me clarify this a bit further&hellip;</p>
+
+<p>Tangible example/parable:</p>
+
+<p>Django Apps::</p>
+
+<ul>
+<li>Ticket</li>
+<li>FAQ</li>
+</ul>
+
+
+<p>Company Teams::</p>
+
+<ul>
+<li>Support</li>
+<li>Community Evangelist</li>
+</ul>
+
+
+<p>You start with two apps, that maybe share a little code. Moreover they at least exist in a central code base. Then you deploy something and the Ticket app can no longer create FAQ, due to a change in one or the other. There&rsquo;s no finger to point, but more importantly, you don&rsquo;t know how to contact to resolve. Neither team wants to deploy, so you test more. Before every deploy you run tests&hellip; and validate a build&hellip; and deployment slows&hellip; well maybe not with two teams. But as you get to 5 teams it does, and more so with 15, and more so with 30 teams. Then you hire a build master and release master, who really wants that?</p>
+
+<p>So within Django maybe you go from apps all in the same codebase to releasing private versions of apps&hellip;</p>
+
+<p>Your requirements.txt for a main site looks like:</p>
+
+<p>``` python requirements.txt</p>
+
+<p>FAQ==0.2</p>
+
+<p>```</p>
+
+<p>You have 3 apps which depend on it, support, marketing, billing. You bump a version <code>FAQ==0.3</code> but then all three or no teams have to upgrade the version to the new APIs. However if your interface was:</p>
+
+<p>``` python</p>
+
+<p>data = {
+‘question’: “my question”,
+‘source’: 123
+}
+requests.POST(os.environ[‘FAQ_API’] + ‘/v1/create’, data=data)</p>
+
+<p>```</p>
+
+<p>You could also have:</p>
+
+<p>``` python</p>
+
+<p>data = {
+‘question’: “my question”,
+‘source’: 123,
+‘related’: [456, 789]
+}
+requests.POST(os.environ[‘FAQ_API’] + ‘/v2/create’, data=data)</p>
+
+<p>```</p>
+
+<p>Then you can easily support both, deprecate v1, and track its usage easily. This doesn&rsquo;t guarantee, but it does enable <em>re-usability</em>, <em>scalability</em>, <em>maintainability</em>. And of course continues to let you build features instead of maintaining software.</p>
+
+<p>In the next post I&rsquo;ll go into a bit more detail of how a real example looks with apps in both forms, using a set of Django Apps and using a set of Services built on Django Apps.</p>
+
+<p><em>Slides from a corresponding talk at DjangoCong are <a href="http://bit.ly/djangocong">here</a></em></p>
+]]></content>
+  </entry>
+  
+</feed>

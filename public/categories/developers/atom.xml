@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Developers | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/developers/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Where to go with developer content]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/"/>
+    <updated>2014-01-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content</id>
+    <content type="html"><![CDATA[<p>Last week I wrote up some <a href="/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
+
+<p>Perhaps the easiest way to do this is by highlighting some examples of it.</p>
+
+<!--more-->
+
+
+<h3>Teach them how to</h3>
+
+<p><a href="https://www.tindie.com/">Tindie</a> is a marketplace focused on makers. Browsing their site is simply awesome, there&rsquo;s everything from fully <a href="https://www.tindie.com/products/browse/home/">built things</a> to raw supplies to let me <a href="https://www.tindie.com/supplies/">start hacking</a>. The biggest problem though is they don&rsquo;t tell me how to take advantage of so much on their site. Posts similar to New Relic&rsquo;s on how they made their <a href="http://blog.newrelic.com/2013/11/18/making-futurestack-badge/">awesome conference badges</a> with a ready made shopping list of components would both get me excited and teach me something I didn&rsquo;t know how to do prior.</p>
+
+<p>Now a lot of this may seem obvious, but its not just about giving a how to. This doesn&rsquo;t belong in a readme or in product documentation. Instead the activity of regularly crafting relevant stories that stretch how people think about hardware hacking should be a top of mind focus. It also positions you as a thought leader within the space. Right now there is no thought leader for makers, and theres ample opportunity to be that.</p>
+
+<h3>Timely content</h3>
+
+<p>Chipmaker <a href="https://www.spark.io/">Spark.io</a> recently hugely capitalized on the <a href="http://gizmodo.com/google-just-bought-nest-for-3-2-billion-1500503899">Nest acquisition</a> by writing a post only days after of how you can build an <a href="http://blog.spark.io/2014/01/17/open-source-thermostat/">open source Nest for $70</a>. I suspect they didn&rsquo;t have such a post just lying around waiting for the acquisition and instead scrambled to get it all together almost as soon as it occurred.</p>
+
+<p>Over time the opportunity will always present itself in some form to attach yourself to another story. Sometimes this can be related to a direct competitor, sometimes its simply tangential. Being willing to quickly invest time when an opportunity presents itself is key to taking advantage of those opportunities. But please don&rsquo;t let such opportunities be your only way of capturing attention, there should still be a steady beat and focus.</p>
+
+<h3>Let your beliefs come out</h3>
+
+<p>Nearly everytime I sit down with some founder or very early employee at a company the vibe and impression I get from them is an order of magnitude stronger than the company&rsquo;s public persona. At the root of every company trying to do something big is an acute focus on a problem with strong opinions about how to solve them. You don&rsquo;t win people over by giving middle of the road opinions.</p>
+
+<p>Heroku&rsquo;s often been an example of being extremely opinionated. For a long time you found bits of this within our product such as with an ephermal filesystem – which in the long term enables scalability. Or with directing the separation of code and config – which helps reproducability for when things go wrong and spinning up new copies of your app.</p>
+
+<p>Again the biggest problem with this opinionation wasn&rsquo;t that it existed, but that it wasn&rsquo;t talked about clearly or loudly enough. Its now much clearer and broader in the form of <a href="http://12factor.net/">12 Factor</a> which fully codifies those strong opinions which influence the product, but also has applicability outside of Heroku.</p>
+
+<h3>All of the approaches</h3>
+
+<p>Doing just one of the above really isn&rsquo;t enough. Having multiple types of content such as the above three allow you to be much more effective. Of course the way you manage them and distribute them changes based on the type of content, but more on that later.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Where to start with developer content]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/"/>
+    <updated>2014-01-16T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content</id>
+    <content type="html"><![CDATA[<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
+
+<h3>Stop marketing</h3>
+
+<p>Forget trying to &ldquo;market&rdquo; to developers. Hopefully you at least have developers that believe in the product their building, if thats not the case then find a new product or a new team. If you&rsquo;ve got a product targetted at developers and a team that believes in it then you&rsquo;re already half way there to marketing it. Now back to the first point, forget trying to market it. Start with building some form of an audience, reputation, respect among other developers. This isn&rsquo;t done through ads, email marketing, SEO or any of that. Its done by creating content that developers find interesting, as a first step forget your product entirely, but don&rsquo;t worry we&rsquo;ll get there soon enough.</p>
+
+<!--more-->
+
+
+<h3>Sourcing content</h3>
+
+<p>The first piece of it on finding content should actually be extremely simple. Typically engineers love sharing knowledge and information. At least once a week there&rsquo;s an email out to all the engineers of a truly interesting approach to something. This content is often not in a perfect form for external publication, but quite close. In particular Heroku has <a href="https://twitter.com/mmcgrana">one employee</a>, an early employee and now architect, that every email he sends to such a group I pull down and save for future reading. Another example of this was one of the Heroku founder Adam Wiggins, you can find many similar emails slightly cleaned up as blog posts on his own <a href="https://adam.heroku.com/">blog</a>.</p>
+
+<p>Take these emails, find someone technical enough to clean them up and ship them. Your goals here are to simply build some level of connection with other developers. Now a lot of time these may not be in the right &ldquo;voice&rdquo; for your company blog. Thats quite fine, I&rsquo;m a strong proponent of letting developers create their own personalitiies. The place for the content then may not always be on the company blog. In general I find there&rsquo;s three groupings:</p>
+
+<ul>
+<li>Content for the company blog by an employee</li>
+<li>Content for an individuals blog (the caveat here is they need to regularly create content &ndash; every 6 months doesnt cut it)</li>
+<li>Content for an <a href="http://codeascraft.com/">engineering blog</a> (if you have enough of the above that blog infrequently this is a great home for it)</li>
+</ul>
+
+
+<h3>Don&rsquo;t worry about the product yet</h3>
+
+<p>No really don&rsquo;t worry about pitching your product. There was an awesome piece on the <a href="http://insideintercom.io/new-features-usually-flop/">intercom blog talking about why most features fail</a> and how companies pitch the details versus the problem they solve. Though there was a hidden gem in there:</p>
+
+<p><blockquote><p>Telling your customers something is a “ground up rewrite”, “HTML5 based”, “responsive” or anything like that will miss the mark unless you’re selling to developers.</p><footer><strong>[Des Traynor] [<a href="http://insideintercom.io/new-features-usually-flop/">http://insideintercom.io/new-features-usually-flop/</a>] [New Features Usually Flop]</strong></footer></blockquote></p>
+
+<p>For companies targetting developers this actually works really well, as a developer I care about the how. Simply put its interesting. Another great example of this is <a href="http://blog.priceonomics.com/">priceonomics</a>. To be honest I only checked what they actually do in writing this post, but their posts I regularly find interesting.</p>
+
+<h3>Whats next</h3>
+
+<p>What do you want to know about? Creating a voice/brand, starting to pitch your product, content distribution? Let me know. A good about of my time is spent on these and happy to discuss further on whats valuable to others so we don&rsquo;t have to suffer through painful marketing. Let me know <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a> or <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
+]]></content>
+  </entry>
+  
+</feed>

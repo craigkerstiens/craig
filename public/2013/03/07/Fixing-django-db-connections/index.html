@@ -1,0 +1,253 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Fixing Database Connections in Django  | Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="If you&rsquo;re looking to get better performance from your Django apps you can check out Pro Django, PostgreSQL High Performance, or read some my &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Fixing Database Connections in Django</h2>
+	<div class="entry-content"><p>If you&rsquo;re looking to get better performance from your Django apps you can check out <a href="http://www.amazon.com/Pro-Django-Experts-Voice-Development/dp/1430210478?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Pro Django</a>, <a href="http://www.amazon.com/PostgreSQL-High-Performance-Gregory-Smith/dp/184951030X?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">PostgreSQL High Performance</a>, or read some my earlier posts on <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">Postgres Performance</a>. All of these are of course good things to do – you can also start by correcting an incredibly common but also painful performance issue, that until 1.6 is unaddressed in Django.</p>
+
+<p>Django&rsquo;s current default behavior is to establish a connection for each request within a Django application. In many cases any particularly in distributed cloud environments this is a large time sink of your response time. An example application running on <a href="http://www.heroku.com">Heroku</a> shows a typical connection time of 70ms. A large part of this time is the SSL negotiation that occurs in connecting to your database, <em>which is a good practice to ensure security of your data</em>. Regardless, this is a long time in simply establishing a connection. As a point of comparisson its commonly encourage that most queries to your database are under 10ms.</p>
+
+<p>An example that highlights this in a small lightweight application shows the bulk of a request time being within a connection displayed by <a href="http://www.newrelic.com">New Relic</a>:</p>
+
+<p><img src="http://f.cl.ly/items/0X3u0e3Q3G0L19263k2Z/Screenshot_3_6_13_1_12_PM.png" alt="connection time" /></p>
+
+<!--more-->
+
+
+<p><img src="http://f.cl.ly/items/1h2w450F3n0X1m1c0S38/Screenshot_2_22_13_3_18_PM-2.png" alt="connection time" /></p>
+
+<p>One option to remedy this is by running a connection pooler on your Database side such as <a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">Pgpool</a> or <a href="http://pgfoundry.org/projects/pgbouncer">PgBouncer</a>. In fact <a href="http://www.askthepony.com/blog/2011/07/getting-django-on-heroku-prancing-8-times-faster/">Ask the Pony</a> already highlighted these potential gains. While running an external DB they&rsquo;re essentially testing the benefits of conncetion pooling. This is an obvious gain and can be in a much more lightweight format.</p>
+
+<h3>Connection Pooling in Django</h3>
+
+<p>As Django establishes a connection on each request it has an opportunity to both pool connections and persist connections. There are two major options for pooling, each works quite well with Django and provides some dramatic improvements. While the first request may take the 70ms of connection time, subsequent requests show absolutely no connection time since the connection already exists. This is highlighed by these two comparissons of before and after in actually the times it grabs a connection:</p>
+
+<p><img src="http://f.cl.ly/items/2H0J2x3P2L2K2n0M3i38/Screen_Shot_2013-02-22_at_8.28.21_PM.png" alt="before" />
+<img src="http://f.cl.ly/items/0T1l1I03433u0c0t3e2o/Screen_Shot_2013-02-22_at_8.28.36_PM.png" alt="after" /></p>
+
+<p>Clearly theres plenty of value to having a persistent connection or a pool within Django itself. As of today theres a few options for that:</p>
+
+<h3>Django-PostgresPool</h3>
+
+<p>The first <a href="https://github.com/kennethreitz/django-postgrespool">Django-PostgresPool</a> is created by <a href="http://twitter.com/kennethreitz">kennethreitz</a>. As in general I&rsquo;d encourage the use of <a href="">dj_database_url</a> you can easily begin using his package (once installed) with:</p>
+
+<pre><code>import dj_database_url
+
+DATABASE = { 'default': dj_database_url.config() }
+DATABASES['default']['ENGINE'] = 'django_postgrespool'
+</code></pre>
+
+<p>An important thing to note is if you&rsquo;re using <a href="http://south.aeracode.org/">South</a> you&rsquo;ll also want to setup the adapter for it:</p>
+
+<pre><code>SOUTH_DATABASE_ADAPTERS = {
+    'default': 'south.db.postgresql_psycopg2'
+}
+</code></pre>
+
+<h3>djorm-ext-pool</h3>
+
+<p>The second option <a href="https://github.com/niwibe/djorm-ext-pool">djorm-ext-pool</a> is created by <a href="http://twitter.com/niwibe">niwibe</a>. Once you&rsquo;ve installed <code>djorm-ext-pool</code> you then add it to your <code>INSTALLED_APPS</code> within your <code>settings.py</code>. From here then you can setup your pool:</p>
+
+<pre><code>DJORM_POOL_OPTIONS = {
+    "pool_size": 20,
+    "max_overflow": 0
+} 
+</code></pre>
+
+<h3>django-db-pool</h3>
+
+<p>The third and final option is <a href="https://github.com/gmcguire/django-db-pool">django-db-pool</a>. You can set it up with:</p>
+
+<pre><code>DATABASES = {'default': dj_database_url.config()}
+DATABASES['default']['ENGINE'] = 'dbpool.db.backends.postgresql_psycopg2'
+DATABASES['default']['OPTIONS'] = {
+    'MAX_CONNS': 10
+}
+</code></pre>
+
+<h3>Gotchas</h3>
+
+<p>Each of these does work with recent versions of Django, though in some cases there are gotchas. If using a prodution worthy python web server such as Gunicorn or uwsgi and running with gevent or eventlet some edge cases can present themselves. Regardless of potential gotchas it is worth attempting this and of course providing feedback to maintainers and the community as you find those.</p>
+
+<h3>The future</h3>
+
+<p>Django more recently has directly started to address these issues of large costs of establishing a connection. The first major step here is <a href="https://github.com/django/django/commit/2ee21d">this patch</a> from <a href="http://twitter.com/aymericaugustin">Aymeric</a>. You can find more dicussion around this particular patch <a href="https://groups.google.com/forum/#!topic/django-developers/NwY9CHM4xpU/discussion">here</a>. Essentially with this patch which will hit in Django 1.6 developers then get a persistent connection which will help reduce the time. If you&rsquo;re interested in trying the 1.6 master you can do this by adding it to your requirements.txt as:</p>
+
+<pre><code>https://github.com/django/django/archive/master.zip
+</code></pre>
+
+<p>At this point it does not introduce pooling which could allow even more gains, though I&rsquo;m sure if there&rsquo;s enough need it&rsquo;ll be on a roadmap at some point. Though, as it stands today before 1.6 your best bet is one of the above options.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Craig Kerstiens
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

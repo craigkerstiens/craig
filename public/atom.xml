@@ -1,0 +1,1333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Tracking Month over Month Growth in SQL]]></title>
+    <link href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/"/>
+    <updated>2014-02-26T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL</id>
+    <content type="html"><![CDATA[<p>In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
+
+<!--more-->
+
+
+<p>I&rsquo;ll jump write in, first lets assume you have some method of querying your revenue. In this case you may have some basic query similar to:</p>
+
+<pre><code>SELECT date_trunc('month', mydate) as date, 
+       sum(mymoney) as revenue
+FROM foo
+GROUP BY date
+ORDER BY date ASC;
+</code></pre>
+
+<p>This should give you a nice clean result:</p>
+
+<pre><code> date                   | revenue  
+------------------------+----------
+ 2013-10-01 00:00:00+00 | 10000    
+ 2013-11-01 00:00:00+00 | 11000    
+ 2013-12-01 00:00:00+00 | 11500    
+</code></pre>
+
+<p>Now this is great, but the first thing I want to do is start to see what my percentage growth month over month is. Surprise, surprise, I can do this directly in SQL. To do so I&rsquo;ll use a <a href="http://postgresguide.com/tips/window.html">window function</a> and then use the <a href="http://www.postgresql.org/docs/9.3/static/functions-window.html">lag function</a>. According to the Postgres docs</p>
+
+<p><em>lag(value any [, offset integer [, default any ]]) same type as value returns value evaluated at the row that is offset rows before the current row within the partition; if there is no such row, instead return default. Both offset and default are evaluated with respect to the current row. If omitted, offset defaults to 1 and default to null</em></p>
+
+<p>Essentially it orders it based on the <a href="http://www.postgresql.org/docs/9.3/static/tutorial-window.html">window function</a> and then pulls in the value from the row before. So in action it looks something like:</p>
+
+<pre><code>SELECT date_trunc('month', mydate) as date, 
+       sum(mymoney) as revenue,
+       lag(mymoney, 1) over w previous_month_revenue
+FROM foo
+WINDOW w as (order by date)
+GROUP BY date
+ORDER BY date ASC;
+</code></pre>
+
+<p>Combining to actually make it a bit more pretty (with some casting to a numeric and then formatting a bit) in terms of a percentage:</p>
+
+<pre><code>SELECT date_trunc('month', mydate) as date, 
+       sum(mymoney) as revenue,
+       round((1.0 - (cast(mymoney as numeric) / lag(mymoney, 1) over w)) * 100, 1) myVal_growth
+FROM foo
+WINDOW w as (order by date)
+GROUP BY date
+ORDER BY date ASC;
+</code></pre>
+
+<p>And you finally get a nice clean output of your month over month growth directly <a href="http://www.amazon.com/dp/B0043EWUQQ?tag=mypred-20">in SQL</a>:</p>
+
+<pre><code> date                   | revenue  | growth
+------------------------+----------+--------
+ 2013-10-01 00:00:00+00 | 10000    |   null 
+ 2013-11-01 00:00:00+00 | 11000    |   10.0 
+ 2013-12-01 00:00:00+00 | 11500    |   4.5 
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[PostgreSQL 9.4 - What I was hoping for]]></title>
+    <link href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/"/>
+    <updated>2014-02-15T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted</id>
+    <content type="html"><![CDATA[<p>Theres no doubt that the <a href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/">9.4 release</a> of PostgreSQL will have some great improvements. However, for all of the improvements it delivering it had the promise of being perhaps the most impactful release of <a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">Postgres</a> yet. Several of the features that would have given it my stamp of best release in at least 5 years are now already not making it and a few others are still on the border. Here&rsquo;s a look at few of the things that were hoped for and not to be at least until another 18 months.</p>
+
+<!--more-->
+
+
+<h3>Upsert</h3>
+
+<p>Upsert, merge, whatever you want to call it, this is been a sore hole for sometime now. Essentially this is insert based on this ID or if that key already exists update other values. This was something being worked on pretty early on in this release, and throughout the process continuing to make progress. Yet as progress was made so were exteneded discussions about syntax, approach, etc. In the end two differing views on how it should be implemented have the patch still sitting there with other thoughts on an implementation but not code ready to commit.</p>
+
+<p>At the same time I&rsquo;ll acknowledge upsert as a hard problem to address. The locking and concurrency issues are non-trivial, but regardless of those having this in there mostly kills the final argument for anyone to chose MySQL.</p>
+
+<h3>Better JSON</h3>
+
+<p>JSON is Postgres is super flexible, powerful, and <strong>generally slow</strong>. Postgres does validation and some parsing of JSON, but without something like <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">PLV8</a>, or <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> you may not get great performance. This is because under the covers the JSON is represented as text and as a result many of the more powerful indexes that could lend benefit, such as GIN or GIST, simply don&rsquo;t apply here.</p>
+
+<p>As a related effort to this <a href="http://postgresguide.com/sexy/hstore.html">hstore</a>, the key/value store, is working on being updated. This new support will add types and nesting making it much more usable overall. However the syntax and matching of how JSON functions isn&rsquo;t guranteed to be part of it. The proposal and actually work is still there and not rejected yet, but looks heavily at risk. Backing a new binary representation of JSON with hstore 2 would deliver so many benefits further building upon the foundation of hstore, JSON, PLV8 that exists today for Postgres.</p>
+
+<h3>apt-get for your extensions</h3>
+
+<p>I&rsquo;m almost not even sure where to start with this one. The notion within a Postgres community is that packaging for distros is super simple and extensions should just be packaged for them. Then there&rsquo;s <a href="http://pgxn.org/">PGXN</a> the Postgres extension network where you can download and compile and muck with annoying settings to get extensions to build. This proposal would have delivered a built in installer much like NPM or rubygems or PyPi and the ability for someone to simply say install extension from this centralized repository. No, it was setting out to solve the issue of having a single repository but would make it much easier for people to run one.</p>
+
+<p>For all the awesome-ness that exists in extensions such as <a href="http://tapoueh.org/blog/2013/02/25-postgresql-hyperloglog">HyperLogLog</a>, <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">foreign data wrappers</a>, <a href="http://madlib.net/">madlib</a> theres hundreds of other extensions that could be written and be valuable. They don&rsquo;t even all require C, they could fully exist in JavaScript with PLV8. Yet I&rsquo;m on the fence encouraging people to write such because if no one uses it then much of the point in the reusability of an extension is lost. Here&rsquo;s hoping that there&rsquo;s a change of opinion in the future that packaging is a solved problem and that creating an ecosystem for others to contribute to the Postgres world without knowing C is a positive thing.</p>
+
+<h3>Logical replication</h3>
+
+<p>When I first heard this might have some shot at making it in 9.4 I was shocked. This is something that while some may not take notice of I&rsquo;ve felt pain of for many years. Logical replication means in short enabling upgrades across PostgreSQL versions without a dump and restore, but even more so laying the ground work for more complicated architectures like perhaps multi-master. Yes, even with logical replication in theres still plenty of work to do, but having the groundwork laid goes a long way. There are options for it today with third party tools, but the management of these is painful at best.</p>
+
+<h3>In conclusion</h3>
+
+<p>The positive of this one is that the building blocks are in and its continuing to make progress. Its just that we&rsquo;ll have to wait about 18 months before the release of PostgreSQL 9.5 before its in our hands.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How I hack email]]></title>
+    <link href="http://www.craigkerstiens.com/2014/02/07/my-email-hacks/"/>
+    <updated>2014-02-07T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/02/07/my-email-hacks</id>
+    <content type="html"><![CDATA[<p>In a conversation with <a href="http://www.twitter.com/alexbaldwin">@alexbaldwin</a> yesterday the topic of email came up, with each of us quickly diving into various observations, how its both awesome and a great form of communication/engagement, how most people still do it really bad. Alex has some good experience with it with hack design having over 100,000 subscribers. A tangent in an entirely unrelated meeting with <a href="http://www.twitter.com/mschoening">@mschoening</a> and others it was suggested instead of emailing a list to send out a ton of individual emails instead. Both of these reminded me that email is incredibly powerful, but taking advantage of its power has to be intentional.</p>
+
+<p>This is not about ways to get to inbox 0 or better manage your inflow of emails. Rather its about how to get the maximum output out of emails that you send, or minimum output depending on what you prefer.</p>
+
+<!--more-->
+
+
+<p></p>
+
+<h3>1 email to 100 vs. 100 emails to 1</h3>
+
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x61;&#108;&#108;&#64;&#x79;&#111;&#117;&#114;&#x63;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#121;&#46;&#99;&#x6f;&#x6d;">&#x61;&#x6c;&#x6c;&#64;&#121;&#111;&#117;&#114;&#x63;&#x6f;&#x6d;&#x70;&#97;&#x6e;&#x79;&#46;&#99;&#x6f;&#x6d;</a> or <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#111;&#x75;&#x72;&#x67;&#x72;&#111;&#117;&#112;&#64;&#109;&#121;&#99;&#111;&#x6d;&#112;&#x61;&#110;&#121;&#46;&#x63;&#x6f;&#109;&#46;">&#111;&#x75;&#114;&#103;&#x72;&#111;&#x75;&#112;&#64;&#x6d;&#x79;&#x63;&#111;&#109;&#x70;&#97;&#110;&#x79;&#x2e;&#x63;&#111;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+
+<p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
+
+<p>Finally in certain situations you&rsquo;ll want to hear the same thing 100 times. Hearing something once doesn&rsquo;t represent how much others echo that. You&rsquo;ll only see so many +1s on a thread, getting 100 individual responses ensure you get not only the breadth of responses but amplitude of them.</p>
+
+<p><em>FWIW, I ran a test of this sending an email to essentially all@heroku, then an individualized email in a similar form. The one directly addressed to people received 5x response as well as more thorough responses in the same time frame</em></p>
+
+<h3>Scaling requests for input</h3>
+
+<p>The issue that typically exists with the above is that you don&rsquo;t want 100 responses from 100 people most of the time. Most of the time you want feedback from 2 or 3, then feedback from 4 or 5, then smaller feedback or revision from the rest of that 100. This is actually how I craft blog posts, I start with broad messaging/theming. At that level there&rsquo;s truly 100 different directions it could go, that kind of input it not helpful when I have to narrow it down to a single one. When collecting product/roadmap input it can be helpful. Knowing which of the two I&rsquo;m aiming for is critical in deciding a method.</p>
+
+<h3>Being explicit about the before and the ask</h3>
+
+<p>On the note of crafting a blog post I do usually start with a request from 2 or 3 to get general direction. This takes the effect of, is this interesting? From here though theres still further refinement. The next phase is, does this flow, does it make sense? Here having a broader list is helpful so usually it&rsquo;ll hit around 4 to 5 people. Finally I&rsquo;ll revert to the 1 email to 100 people on a mailing list asking for grammar input because mine is crap. Here I don&rsquo;t mind the bystander effect because I want people to intentionally filter so it works well.</p>
+
+<p>The key at each step of the process is being extremely clear of whats already been done. With a blog post as an example&hellip; If I don&rsquo;t explain the process of people having reviewed and set the goals and some consensus that it meets them, that several have been over it for flow, and that what I&rsquo;m looking for now which is grammar feedback.</p>
+
+<h3>Circulating through people</h3>
+
+<p>Email and requests are a time burden on people. I commonly diversify and circle through a set of people. Much in the same way I reach out to people to have drinks or coffee every so often I am to not do the same person every week and only that person with the exception of my wife.</p>
+
+<p>Having more of a rotating basis of getting through people increases their excited-ness to provide input. If I&rsquo;m always going back to the same people they may feel slightly drained by my constant requests, and quite rightfully so. At the same time the input is good, but diversifying where you receive it gives a broader perspective.</p>
+
+<h3>Delayed sending</h3>
+
+<p>This is one that may be a little more obvious to people. But sending an email to slow down a thread, not seem over eager, or for whatever other reason you may have is hugely useful. There&rsquo;s really two tools I look to here: 1. <a href="http://www.boomeranggmail.com/referral_download.html?ref=vsz82">Boomerang</a> and 2. <a href="http://www.yesware.com">Yesware</a>. Both have slightly different benefits. Boomerang with a much simpler interface, Yesware better integration with Salesforce. Regardless of which you choose, if you ever want to type and email but send it at some point later one of these is critical.</p>
+
+<h3>Fin.</h3>
+
+<p>While this list is less of a defined process and more of a collection of random processes, several of these I&rsquo;d be much less effective without, and the collection of all makes getting appropriate reactions from email incredibly useful. I&rsquo;d love to hear what hacks you use to elicit positive impact from the emails you receive, as always if you have feedback please drop me a note.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Examining Postgres 9.4 - A first look]]></title>
+    <link href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/"/>
+    <updated>2014-02-02T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">PostgreSQL</a> is currently entering its final commit fest. While its still going, which means there could still be more great features to come, we can start to take a look at what you can expect from it now. This release seems to bring a lot of minor increments versus some bigger highlights of previous ones. At the same time there&rsquo;s still a lot on the bubble that may or may not make it which could entirely change the shape of this one. For a peek back of some of the past ones:</p>
+
+<!--more-->
+
+
+<h3>Highlights of 9.2</h3>
+
+<ul>
+<li><a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a></li>
+<li><a href="https://wiki.postgresql.org/wiki/Index-only_scans">Index only scans</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/#json_support">JSON Support</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/#range_type_support">Range types</a></li>
+<li>Huge performance improvements</li>
+</ul>
+
+
+<h3>Highlights of 9.3</h3>
+
+<ul>
+<li><a href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/">Postgres foreign data wrapper</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/#materialized_views">Materialized views</a></li>
+<li>Checksums</li>
+</ul>
+
+
+<h2>On to 9.4</h2>
+
+<p>With 9.4 instead of a simply list lets dive into a little deeper to the more noticable one.</p>
+
+<h3>pg_prewarm</h3>
+
+<p>I&rsquo;ll lead with one that those who need it should see huge gains (read larger apps that have a read replica they eventually may fail over to). Pg_prewarm will pre-warm your cache by loading data into memory. You may be interested in running <code>pg_prewarm</code> before bringing up a new Postgres DB or on a replica to keep it fresh.</p>
+
+<p><em>Why it matters</em>  &ndash; If you have a read replica it won&rsquo;t have the same cache as the leader. This can work great as you can send queries to it and it&rsquo;ll optimize its own cache. However, if you&rsquo;re using it as a failover when you do have to failover you&rsquo;ll be running in a degraded mode while your cache warms up. Running <code>pg_pregwarm</code> against it on a periodic basis will make the experience when you do failover a much better one.</p>
+
+<h3>Refresh materialized view concurrently</h3>
+
+<p>Materialized views just came into Postgres in 9.3. The problem with them is they were largely unusable. This was because they 1. Didn&rsquo;t auto-refresh and 2. When you did refresh them it would lock the table while it ran the refresh making it unreadable during that time.</p>
+
+<p>Materialized views are often most helpful on large reporting tables that can take some time to generate. Often such a query can take 10-30 minutes or even more to run. If you&rsquo;re unable to access said view during that time it greatly dampens their usefulness. Now running <code>REFRESH MATERIALIZED VIEW CONCURRENTLY foo</code> will regenerate it in the background so long as you have a unique index for the view.</p>
+
+<h3>Ordered Set Aggregates</h3>
+
+<p>I&rsquo;m almost not really sure where to begin with this, the name itself almost makes me not want to take advantage. That said what this enables is if a few really awesome things you could do before that would require a few extra steps.</p>
+
+<p>While there&rsquo;s plenty of aggregate functions in postgres getting something like percentile 95 or percentile 99 takes a little more effort. First you must order the entire set, then re-iterate over it to find the position you want. This is something I&rsquo;ve commonly done by using a window function coupled with a CTE. Now its much easier:</p>
+
+<pre><code>SELECT percentile_disc(0.95) 
+WITHIN GROUP (ORDER BY response_time) 
+FROM pageviews;
+</code></pre>
+
+<p>In addition to varying percentile functions you can get quite a few others including:</p>
+
+<ul>
+<li>Mode</li>
+<li>percentile_disc</li>
+<li>percentile_cont</li>
+<li>rank</li>
+<li>dense_rank</li>
+</ul>
+
+
+<h3>More to come</h3>
+
+<p>As I mentiend earlier the commit fest is still ongoing this means some things are still in flight. Here&rsquo;s a few that still offer some huge promise but haven&rsquo;t been committed yet:</p>
+
+<ul>
+<li>Insert on duplicate key or better known as Upsert</li>
+<li>HStore 2 &ndash; various improvements to HStore</li>
+<li>JSONB &ndash; Binary format of JSON built on top of HStore</li>
+<li>Logical replication &ndash; this one looks like some pieces will make it, but not a wholey usable implementation.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Where to go with developer content]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/"/>
+    <updated>2014-01-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content</id>
+    <content type="html"><![CDATA[<p>Last week I wrote up some <a href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
+
+<p>Perhaps the easiest way to do this is by highlighting some examples of it.</p>
+
+<!--more-->
+
+
+<h3>Teach them how to</h3>
+
+<p><a href="https://www.tindie.com/">Tindie</a> is a marketplace focused on makers. Browsing their site is simply awesome, there&rsquo;s everything from fully <a href="https://www.tindie.com/products/browse/home/">built things</a> to raw supplies to let me <a href="https://www.tindie.com/supplies/">start hacking</a>. The biggest problem though is they don&rsquo;t tell me how to take advantage of so much on their site. Posts similar to New Relic&rsquo;s on how they made their <a href="http://blog.newrelic.com/2013/11/18/making-futurestack-badge/">awesome conference badges</a> with a ready made shopping list of components would both get me excited and teach me something I didn&rsquo;t know how to do prior.</p>
+
+<p>Now a lot of this may seem obvious, but its not just about giving a how to. This doesn&rsquo;t belong in a readme or in product documentation. Instead the activity of regularly crafting relevant stories that stretch how people think about hardware hacking should be a top of mind focus. It also positions you as a thought leader within the space. Right now there is no thought leader for makers, and theres ample opportunity to be that.</p>
+
+<h3>Timely content</h3>
+
+<p>Chipmaker <a href="https://www.spark.io/">Spark.io</a> recently hugely capitalized on the <a href="http://gizmodo.com/google-just-bought-nest-for-3-2-billion-1500503899">Nest acquisition</a> by writing a post only days after of how you can build an <a href="http://blog.spark.io/2014/01/17/open-source-thermostat/">open source Nest for $70</a>. I suspect they didn&rsquo;t have such a post just lying around waiting for the acquisition and instead scrambled to get it all together almost as soon as it occurred.</p>
+
+<p>Over time the opportunity will always present itself in some form to attach yourself to another story. Sometimes this can be related to a direct competitor, sometimes its simply tangential. Being willing to quickly invest time when an opportunity presents itself is key to taking advantage of those opportunities. But please don&rsquo;t let such opportunities be your only way of capturing attention, there should still be a steady beat and focus.</p>
+
+<h3>Let your beliefs come out</h3>
+
+<p>Nearly everytime I sit down with some founder or very early employee at a company the vibe and impression I get from them is an order of magnitude stronger than the company&rsquo;s public persona. At the root of every company trying to do something big is an acute focus on a problem with strong opinions about how to solve them. You don&rsquo;t win people over by giving middle of the road opinions.</p>
+
+<p>Heroku&rsquo;s often been an example of being extremely opinionated. For a long time you found bits of this within our product such as with an ephermal filesystem – which in the long term enables scalability. Or with directing the separation of code and config – which helps reproducability for when things go wrong and spinning up new copies of your app.</p>
+
+<p>Again the biggest problem with this opinionation wasn&rsquo;t that it existed, but that it wasn&rsquo;t talked about clearly or loudly enough. Its now much clearer and broader in the form of <a href="http://12factor.net/">12 Factor</a> which fully codifies those strong opinions which influence the product, but also has applicability outside of Heroku.</p>
+
+<h3>All of the approaches</h3>
+
+<p>Doing just one of the above really isn&rsquo;t enough. Having multiple types of content such as the above three allow you to be much more effective. Of course the way you manage them and distribute them changes based on the type of content, but more on that later.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rethinking the limits on relational databases]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/"/>
+    <updated>2014-01-24T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational</id>
+    <content type="html"><![CDATA[<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
+
+<h3>Forget migrations</h3>
+
+<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
+
+<!--more-->
+
+
+<p>This is often viewed as a limitation of relational databases. Yet it doesn&rsquo;t really have to. You see even in schema-less database the relationships are still there, its just you&rsquo;re managing it at the application level. There&rsquo;s no reason higher level frameworks or ORMs couldn&rsquo;t handle the migration process. As it is today the process of adding a column to a relational database is quite straightforward in a sense where it doesn&rsquo;t introduce downtime and is capable of letting the developer still move quickly its just not automatically baked in.</p>
+
+<pre><code># Assuming a column thats referenced doesn't exist
+# Automatically execute relevant bits in your ORM
+# This isn't code meant for you to run 
+
+ALTER TABLE foo ADD COLUMN bar varchar(255); # This is near instant
+# Set your default value in your ORM
+UPDATE TABLE foo SET bar = 'DEFAULT VALUE' WHERE bar IS NULL;
+ALTER TABLE foo ALTER COLUMN bar NOT NULL;
+</code></pre>
+
+<p>Having Rails/Django/(Framework of your choice) automatically notice the need for a column to exist and make appropriate modifications you could work with it the same way you would managing a document relation in your code. Sure this is a manual painful process today, but theres no reason this can&rsquo;t be fully handled by PostgreSQL or directly within an ORM .</p>
+
+<h3>Documents</h3>
+
+<p>The other really strong case for the MongoDB/CouchDB camp is document storage. In this case I&rsquo;m going to equate a document directly to a JSON object. JSON itself is a wonderfully simply model that works so well for portability, and having to convert it within your application layer is well just painful. Yes Postgres has a JSON datatype, and the JSON datatype is continuing to be adopted now by many other relational databases. <em>I was shocked to hear that DB2 is getting support for JSON myself, while I expect improvements to come to it JSON was not at the top of my list</em>.</p>
+
+<p>And JSON does absolutely make sense as a data type within a column. But thats still a bit limiting as a full document store, what you want in those cases is any query result as a full JSON object. This is heavily undersold within Postgres that you can simply convert a full row to JSON with a <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">single function</a> &ndash; <code>row_to_json</code>.</p>
+
+<p>Again having higher level frameworks take full advantage so that under the covers you can have your strongly typed tables, but a flexibility to map them to flexible JSON objects makes a great deal of sense here.</p>
+
+<h3>Out of the box interfaces</h3>
+
+<p>This isn&rsquo;t a strict benefit of schema-less databases. Some schema-less databases have this more out of the box such as Couch where others less so. The concept of exposing a rest interface is not something new, and has been tried on top of relational databases a <a href="http://htsql.org/">few times over</a>. This is clearly something that does need to be delivered. The case for it is pretty clear, it reduces the work of people having to recreate admin screens and gives an easy onboarding process for noobs.</p>
+
+<p>Unfortunately there&rsquo;s not clear progress on this today for Postgres or other relational databases. In contrast other databases are delivering on this front often from day one :/</p>
+
+<h3>Where to</h3>
+
+<p>Some of the shifts in schema-less or really in other databases in general are not so large they cannot be subsummed into a broader option. At the same time there are some strong merits such as the ones above which do take an active effort to deliver on expanding what is a &ldquo;relational database&rdquo;.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Where to start with developer content]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/"/>
+    <updated>2014-01-16T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content</id>
+    <content type="html"><![CDATA[<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
+
+<h3>Stop marketing</h3>
+
+<p>Forget trying to &ldquo;market&rdquo; to developers. Hopefully you at least have developers that believe in the product their building, if thats not the case then find a new product or a new team. If you&rsquo;ve got a product targetted at developers and a team that believes in it then you&rsquo;re already half way there to marketing it. Now back to the first point, forget trying to market it. Start with building some form of an audience, reputation, respect among other developers. This isn&rsquo;t done through ads, email marketing, SEO or any of that. Its done by creating content that developers find interesting, as a first step forget your product entirely, but don&rsquo;t worry we&rsquo;ll get there soon enough.</p>
+
+<!--more-->
+
+
+<h3>Sourcing content</h3>
+
+<p>The first piece of it on finding content should actually be extremely simple. Typically engineers love sharing knowledge and information. At least once a week there&rsquo;s an email out to all the engineers of a truly interesting approach to something. This content is often not in a perfect form for external publication, but quite close. In particular Heroku has <a href="https://twitter.com/mmcgrana">one employee</a>, an early employee and now architect, that every email he sends to such a group I pull down and save for future reading. Another example of this was one of the Heroku founder Adam Wiggins, you can find many similar emails slightly cleaned up as blog posts on his own <a href="https://adam.heroku.com/">blog</a>.</p>
+
+<p>Take these emails, find someone technical enough to clean them up and ship them. Your goals here are to simply build some level of connection with other developers. Now a lot of time these may not be in the right &ldquo;voice&rdquo; for your company blog. Thats quite fine, I&rsquo;m a strong proponent of letting developers create their own personalitiies. The place for the content then may not always be on the company blog. In general I find there&rsquo;s three groupings:</p>
+
+<ul>
+<li>Content for the company blog by an employee</li>
+<li>Content for an individuals blog (the caveat here is they need to regularly create content &ndash; every 6 months doesnt cut it)</li>
+<li>Content for an <a href="http://codeascraft.com/">engineering blog</a> (if you have enough of the above that blog infrequently this is a great home for it)</li>
+</ul>
+
+
+<h3>Don&rsquo;t worry about the product yet</h3>
+
+<p>No really don&rsquo;t worry about pitching your product. There was an awesome piece on the <a href="http://insideintercom.io/new-features-usually-flop/">intercom blog talking about why most features fail</a> and how companies pitch the details versus the problem they solve. Though there was a hidden gem in there:</p>
+
+<blockquote><p>Telling your customers something is a “ground up rewrite”, “HTML5 based”, “responsive” or anything like that will miss the mark unless you’re selling to developers.</p><footer><strong>[Des Traynor] [http://insideintercom.io/new-features-usually-flop/] [New Features Usually Flop]</strong></footer></blockquote>
+
+
+<p>For companies targetting developers this actually works really well, as a developer I care about the how. Simply put its interesting. Another great example of this is <a href="http://blog.priceonomics.com/">priceonomics</a>. To be honest I only checked what they actually do in writing this post, but their posts I regularly find interesting.</p>
+
+<h3>Whats next</h3>
+
+<p>What do you want to know about? Creating a voice/brand, starting to pitch your product, content distribution? Let me know. A good about of my time is spent on these and happy to discuss further on whats valuable to others so we don&rsquo;t have to suffer through painful marketing. Let me know <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a> or <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The best Postgres feature you're not using – CTEs aka WITH clauses]]></title>
+    <link href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/"/>
+    <updated>2013-11-18T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using</id>
+    <content type="html"><![CDATA[<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
+
+<p>The feature itself is known as CTEs or common table expressions, you may also here it referred to as <code>WITH</code> clauses. The general idea is that it allows you to create something somewhat equivilant to a view that only exists during that transaction. You can create multiple of these which then allow for clear building blocks and make it simple to follow what you&rsquo;re doing.</p>
+
+<!--more-->
+
+
+<p>Lets take a look at a nice simple one:</p>
+
+<pre><code>WITH users_tasks AS (
+  SELECT 
+         users.email,
+         array_agg(tasks.name) as task_list,
+         projects.title
+  FROM
+       users,
+       tasks,
+       project
+  WHERE
+        users.id = tasks.user_id
+        projects.title = tasks.project_id
+  GROUP BY
+           users.email,
+           projects.title
+)
+</code></pre>
+
+<p>Using this I could now just append some basic other query on to the end that references this CTE <code>users_tasks</code>. Something akin to:</p>
+
+<pre><code>SELECT *
+FROM users_tasks;
+</code></pre>
+
+<p>But where it becomes more interesting is chaining these together. So while I have all tasks assigned to each user here, perhaps I want to then find which users are responsible for more than 50% of the tasks on a given project, thus being the bottleneck. To oversimplify this we could do it a couple of ways, total up the tasks for each project, and then total up the tasks for each user per project:</p>
+
+<pre><code>total_tasks_per_project AS (
+  SELECT 
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY project_id
+),
+
+tasks_per_project_per_user AS (
+  SELECT 
+         user_id,
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY user_id, project_id
+),
+</code></pre>
+
+<p>Then we would want to combine and find the users that are now over that 50%:</p>
+
+<pre><code>overloaded_users AS (
+  SELECT tasks_per_project_per_user.user_id,
+
+  FROM tasks_per_project_per_user,
+       total_tasks_per_project
+  WHERE tasks_per_project_per_user.task_count &gt; (total_tasks_per_project / 2)
+)
+</code></pre>
+
+<p>Now as a final goal I&rsquo;d want to get a comma separated list of tasks of the overloaded users. So we&rsquo;re simply giong to join against that <code>overloaded_users</code> and our initial list of <code>users_tasks</code>. Putting it all together it looks somewhat long, but becomes much more readable. And as a bonus I layered in some comments.</p>
+
+<pre><code>--- Created by Craig Kerstiens 11/18/2013
+--- Query highlights users that have over 50% of tasks on a given project
+--- Gives comma separated list of their tasks and the project
+
+
+--- Initial query to grab project title and tasks per user
+WITH users_tasks AS (
+  SELECT 
+         users.id as user_id,
+         users.email,
+         array_agg(tasks.name) as task_list,
+         projects.title
+  FROM
+       users,
+       tasks,
+       project
+  WHERE
+        users.id = tasks.user_id
+        projects.title = tasks.project_id
+  GROUP BY
+           users.email,
+           projects.title
+),
+
+--- Calculates the total tasks per each project
+total_tasks_per_project AS (
+  SELECT 
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY project_id
+),
+
+--- Calculates the projects per each user
+tasks_per_project_per_user AS (
+  SELECT 
+         user_id,
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY user_id, project_id
+),
+
+--- Gets user ids that have over 50% of tasks assigned
+overloaded_users AS (
+  SELECT tasks_per_project_per_user.user_id,
+
+  FROM tasks_per_project_per_user,
+       total_tasks_per_project
+  WHERE tasks_per_project_per_user.task_count &gt; (total_tasks_per_project / 2)
+)
+
+SELECT 
+       email,
+       task_list,
+       title
+FROM 
+     users_tasks,
+     overloaded_users
+WHERE
+      users_tasks.user_id = overloaded_users.user_id
+</code></pre>
+
+<p>CTEs won&rsquo;t always be quite as performant as optimizing your SQL to be as concise as possible. In most cases I have seen performance differences smaller than a 2X difference, this tradeoff for readability is a nobrainer as far as I&rsquo;m concerned. And with time the Postgres optimizer should continue to get better about such performance.</p>
+
+<p>As for the verbosity, yes I could have done this query in probably 10-15 lines of very concise SQL. Yet, most may not be able to understand it quickly if at all. Readability is huge when it comes to SQL to ensure its doing the right thing. SQL will almost always tell you an answer, it just may not be to the question you think you&rsquo;re asking. Ensuring your queries can be reasoned about is critical to ensuring accuracy and CTEs are one great way of accomplishing that.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tooling for Simple but Informative Emails]]></title>
+    <link href="http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails/"/>
+    <updated>2013-10-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails</id>
+    <content type="html"><![CDATA[<p>Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some->many-> all. Its still highly effective even as much noise as we receive in our inboxes. Over the years I&rsquo;ve tried a lot of email tools from custom built solutions, to newer entrants that help around drip actions (<a href="http://www.intercom.io">intercom.io</a> and <a href="http://www.customer.io">customer.io</a>), to more &ldquo;enterprise&rdquo; tools such as Marketo. While I have varying opinions on all of those, I still find myself coming back to a simple one off script setup to deliver clear concise emails.</p>
+
+<!--more-->
+
+
+<h3>Getting the Data</h3>
+
+<p>The first step of any email is deciding what you want to do, but hopefully you know that already. The part that is usually a bit more effort is actually getting the list to send it to and formatting it appropriately. I usually opt for SQL. While the specifics of the query of course always vary it common follows a general structure:</p>
+
+<pre><code>WITH initial_data AS (
+  SELECT 
+         email,
+         app_name,
+         information_about_app 
+  FROM
+       users,
+       apps
+  WHERE users.id = apps.user_id
+    AND some_filter_to_limit_data
+),
+
+candidates_for_email AS ... --- likely to have additional CTEs
+
+--- Finally I build up the list
+
+SELECT email,
+       array_to_string(array_agg(data_for_email), '
+') --- an important note is to add a newline or not here depending on how you wish to format it
+FROM candidates_for_email
+GROUP BY email;
+</code></pre>
+
+<p>The query structure you&rsquo;ll want is first column email, second column whatever data you want to include in your email.</p>
+
+<p>From here I usually create a dataclip of it. This makes it easy to allow my data to change over time. If I&rsquo;m testing an email for data over the last 7 days I just come back in 7 days and I have new data. It also lets me easily share and iterate on the data. The nice part is there&rsquo;s an easy way to click a button and get the data as a CSV which is what you want for sending.</p>
+
+<p>Once you download the CSV you&rsquo;ll want to remove the header line as its not needed for the script.</p>
+
+<h3>Sending the Mail</h3>
+
+<p>To actually send the email you&rsquo;ll need this script, which is largely credited to <a href="http://www.twitter.com/leinweber">@leinweber</a>:</p>
+
+<pre><code>require 'mail'
+require 'csv'
+FILE = ARGV[0]
+
+Mail.defaults do
+  delivery_method :smtp, {
+    address: 'smtp address',
+    port: 587,
+    domain: 'gmail.com',
+    user_name: 'craig.kerstiens@gmail.com',
+    password: ENV.fetch('EMAIL_PASSWORD'),
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+end
+
+
+def send_email(address, app)
+  mail = Mail.new do
+    to      address
+    from    'Craig Kerstiens &lt;craig.kerstiens@gmail.com&gt;'
+    subject "Your email subject in here"
+    body    generate_body(app)
+  end
+end
+
+def generate_body(app)
+  %Q( 
+Hi,
+
+Your list of apps: 
+
+#{app}
+
+Various email content in here...
+
+  )
+end
+
+
+CSV.parse(File.read(FILE)).each do |line|
+  address = line[0]
+  app     = line[1]
+  m = send_email(address, app)
+  puts m.to_s
+  p m.deliver!
+
+  puts
+  puts
+end
+</code></pre>
+
+<p><em>You&rsquo;ll want to make sure to export the PW of your email provider with EXPORT EMAIL_PASSWORD=pw_here</em></p>
+
+<p>You can easily download this script from off of <a href="https://gist.github.com/craigkerstiens/6922897">Github&rsquo;s Gist</a>. I&rsquo;d recommend using an email service provider other than Gmail in sending your emails such as <a href="http://www.mailgun.com">mailgun</a> as they&rsquo;re built to handle sending a large amount of emails. Finally send your emails:</p>
+
+<pre><code>ruby email.rb nameofyourfile.csv
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Disabling muting while typing in Google hangouts]]></title>
+    <link href="http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts/"/>
+    <updated>2013-09-12T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts</id>
+    <content type="html"><![CDATA[<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
+
+<pre><code> defaults write com.google.googletalkplugind exps -string [\"-tm\"]
+</code></pre>
+
+<p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Diving into Postgres JSON operators and functions]]></title>
+    <link href="http://www.craigkerstiens.com/2013/09/11/diving-into-postgres-json-operators/"/>
+    <updated>2013-09-11T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/09/11/diving-into-postgres-json-operators</id>
+    <content type="html"><![CDATA[<p>Just as <a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/">PostgreSQL 9.3</a> was coming out I had a need to take advantage of the JSON datatype and some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">operators and functions</a> within it. The use case was pretty simple, run a query across a variety of databases, then take the results and store them. We explored doing something more elaborate with the columns/values, but in the end just opted to save the entire result set as JSON then I could use the operators to explore it as desired.</p>
+
+<p>Here&rsquo;s the general idea in code (using sequel):</p>
+
+<pre><code>result = r.connection { |c| c.fetch(self.query).all }
+mymodel.results = result.to_json
+</code></pre>
+
+<!--more-->
+
+
+<p>As the entire dataset was stored as some compressed JSON I needed to do a bit of manipulation to get it back into a form that was workable. Fortunately all the steps were fairly straightforward.</p>
+
+<p>First you want to unnest each result from the json array, in my case this looked like:</p>
+
+<pre><code>SELECT json_array_elements(result)
+</code></pre>
+
+<p>The above will unnest all of the array elements so I have an individual result as JSON. A real world example would look something similar to:</p>
+
+<pre><code>SELECT json_array_elements(result) 
+FROM query_results 
+LIMIT 2;
+      json_array_elements
+</code></pre>
+
+<hr />
+
+<p> {&ldquo;column_name&rdquo;:&ldquo;data_in_here&rdquo;}
+ {&ldquo;column_name_2&rdquo;:&ldquo;other_data_in_here&rdquo;}
+(2 rows)</p>
+
+<p>From here based on the query I would want to get some specific value. In this case I&rsquo;m going to search for the text key column_name_2:</p>
+
+<pre><code>SELECT json_array_elements(result)-&gt;'column_name_2' 
+FROM query_results 
+LIMIT 1;
+
+  json_array_elements  
+-----------------------
+ "other_data_in_here"
+(1 rows)
+</code></pre>
+
+<p><em>One gotcha I encountered was when I wanted to search for some value or exclude some value&hellip; Expecting I could just compare the result of the above in a where statement I was sadly mistaken because the equals operator didn&rsquo;t translate.</em> My first attempt at fixing this was to cast in this form:</p>
+
+<pre><code>SELECT json_array_elements(result)-&gt;'column_name_2'::text
+</code></pre>
+
+<p>The sad part is because of the operator the cast doesn&rsquo;t get applied as I&rsquo;d expect. Instead you&rsquo;ll want to do:</p>
+
+<pre><code>SELECT (json_array_elements(result)-&gt;'column_name_2')::text
+</code></pre>
+
+<p>Of course theres plenty more you can do with the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">JSON operators in the new Postgres 9.3</a>. If you&rsquo;ve already got JSON in your application give them a look today. And while slightly worse, if you&rsquo;ve got JSON stored in a text field simply cast it with <code>::json</code> to begin using the operators.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Rule of Thirds - followup]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/13/rule-of-thirds/"/>
+    <updated>2013-08-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/13/rule-of-thirds</id>
+    <content type="html"><![CDATA[<p>Several months back I wrote about how we do <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">higher level, long term planning within the Heroku Postgres team</a>. If you haven&rsquo;t read the previous article please start there.</p>
+
+<p>The exercise or rule of thirds is intended to be approximate prioritization and not a perfect science. Since that time I&rsquo;m familiar with some teams both in and out of Heroku who have attempted this exercise with varying levels of success. We&rsquo;ve now done this process 4 times within the team and after the most recent exercise attempted to take some time to internalize why its worked well, creating some more specifics about the process. Heres an attempt to provide even more clarity:</p>
+
+<!--more-->
+
+
+<h2>Gather data ahead of time</h2>
+
+<p>Its really common to have a list things to work on, but knowing the impact of those is commonly pure speculation. There may be some people that talk to customers, but even then its a subset of your actual customer base. Going into the exercise as much data you can have ahead of time on impact of features and specific problems helps. In our case we do this by:</p>
+
+<ol>
+<li>Surveying current customers and users</li>
+<li>Surveying attriters</li>
+<li>Engaging with customer facing teams to hear trends</li>
+<li>Input from external parties such as analysts on trends</li>
+</ol>
+
+
+<h2>Allow for casual discussion</h2>
+
+<p>We typically conduct our planning exercise at an offsite, this is a multi-day time of team bonding, planning, hacking. We intentionally schedule our planning excercise towards the end of the offsite. This allows us to have updates/presentations frmo the data we&rsquo;ve gathered and from those that are customer facing. Presentations are meant to be short and direct, discussion can flow casually after. This gets a lot of people on the same page at a smaller level and reduces the problem of too many cooks in the kitchen come time for the actual exercise.</p>
+
+<h2>The rule of thirds</h2>
+
+<h3>Creating the list</h3>
+
+<p>Coming to the exercise itself&hellip; We begin by everyone writing a list of their ideas individually, this is meant to be a list of the features we want to place on the grid. At this point theres no prioritizing of difficulty or impact. In addition each list while individually created does not have to contain items that only pertain to you, its more a comprehensive list of all the things you can think of that may be important to do.</p>
+
+<h3>Bucketing part 1</h3>
+
+<p>Once individual lists are created you can then collectively or designate one or two people to clean it up. We do this in two forms:</p>
+
+<ol>
+<li>Removing duplicate items, which there should be several of.</li>
+<li>Bucketing my a common/theme idea, this simply makes things more digestable</li>
+</ol>
+
+
+<p>If you&rsquo;re a big group of greater than 7 then it may be advisable to designate two people to do this exercise together. If a smaller group it can be manageable to coordinate collectively.</p>
+
+<h3>Bucketing part 2</h3>
+
+<p>Once you&rsquo;ve removed dupes, identified themes, and removed excess items (depending on your team size you&rsquo;ll find how many feels right &ndash; we aim an average of 5-6 per square for a team of 10) its then on to actually putting them on the grid. In the past we&rsquo;ve done this a variety of ways but our most recent process seemed to be quiet efficient. We gave each item 60 seconds, at the end of that minute wherever the item was it was left there. This forced some quick discussion on impact and difficulty but in the end left us at a very good hit rate without taking multiple hours to complete the exercise.</p>
+
+<h3>Final pass</h3>
+
+<p>We intentionally design it so that low effort and high impact is on the top right corner. Finally once everything is on there we allocate names to the tasks, and put boxes around items we&rsquo;re planning to do in the coming months. With boxes make it very clear of what we are doing as well as explicitly things we are not. The initials or names make it clear of how loaded down people are. If your name is on 3 tasks that are high difficulty, then you&rsquo;re likely over allocated.</p>
+
+<p>At this point things usually fall out pretty quickly and we emerge with some rough roadmap that in retrospect we&rsquo;ve followed pretty accuately.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The missing PostgreSQL documentation]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/07/the-missing-postgresql-documentation/"/>
+    <updated>2013-08-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/07/the-missing-postgresql-documentation</id>
+    <content type="html"><![CDATA[<p>For a couple of years I&rsquo;ve complained about the Postgres documentation and at the same time paraded it as one of the best sets of documentation I&rsquo;ve encountered. In many ways the reason I veer towards <a href="http://www.postgresql.org">Postgres</a> as well as <a href="http://www.python.org">Python</a> and <a href="http://www.djangoproject.com">Django</a> is the quality of their documentation. If you need to find details about something its documented, and more importantly well and thoroughly documented.</p>
+
+<p>In large part I came to Python by happenstance through <a href="http://www.djangoproject.com">Django</a>, and Postgres through happenstance of an employer. Yet, Django was very little of an accident. The Django Tutorial got me a large part of what I needed to know and more excited about development than I had been in some time. Python has done some work at adding docs to make this even better, sadly its still very much needed for PostgreSQL.</p>
+
+<!--more-->
+
+
+<h3>Whats Missing in the Postgres Docs</h3>
+
+<p>Theres a huge variety of types of documentation, off the top of my head theres:</p>
+
+<ul>
+<li>Reference docs (Postgres excels at this)</li>
+<li>Onboarding (Postgres tutorial huh?)</li>
+<li>Tailored guides (Postgres? I can haz? Nope&hellip; We don&rsquo;t understand&hellip;.)</li>
+</ul>
+
+
+<p>Postgres is great if you know the name of what you&rsquo;re looking for, but if you don&rsquo;t you&rsquo;re entirely left in the dark.</p>
+
+<h3>Understanding the power of Postgres</h3>
+
+<p>Postgres is good enough at performance, good enough at usability, and awesome at how powerful and flexible it can be. But all of this is entirely lost if you have to know the esoteric name of what you&rsquo;re looking for.</p>
+
+<p><em>What the hell is an hstore&hellip; In so many ways KVstore makes infintely more sense. In the same sense PLV8, I have to know not only what PL stands for but V8 as well, versus the JavaScript extension for Postgres.</em></p>
+
+<p>I understand there are plenty of reasons why some of these things are the way they are, but its also limiting how great the broader perception is. Postgres externally is this hard to use DB, that well is just a database, versus giving developers a set of powerful and useful functions to make their lives better.</p>
+
+<h3>The Solution</h3>
+
+<p>Lets fix things, there are a ton of people that would love to know more about all things Postgres. This ranges from a good set of onboarding docs, to specific blog posts on topics that people are curious about. Just last week I got an email about improving <strong>the</strong> Postgres tutorial&hellip; Yes theres a tutorial hidden in the <a href="http://www.postgresql.org/docs/9.2/static/tutorial.html">2000 page set of documentation for Postgres</a>. Its simply old, mostly uninteresting, and well just needs to be completely recreated. A great alternative would be a few tutorials/guides for:</p>
+
+<ul>
+<li>Noobs to databases in general (Total 101 guide)</li>
+<li>Building and architecting your application with Postgres (App Devs)</li>
+<li>Administering and maintaining Postgres (DBAs)</li>
+<li>SQL and reporting in Postgres (consumers of data, analysts, product people, marketing, etc.)</li>
+</ul>
+
+
+<p>If jumping in and contributing to fixing the core tutorial isn&rsquo;t your cup of tea because you don&rsquo;t want to learn and write in <a href="http://www-sul.stanford.edu/tools/tutorials/html2.0/gentle.html">SGML</a>, send a pull request to <a href="http://postgresguide.com">postgresguide.com</a> or do a <a href="mailto:craig.kerstiens@gmail.com].%20If%20thats%20too%20much%20effort%20please%20just%20let%20us%20know,%20what%20do%20you%20want%20to%20see%20-%20[craig.kerstiens%20at%20gmail.com](mailto:craig.kerstiens@gmail.com">guest post on my blog</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A look at Foreign Data Wrappers]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/"/>
+    <updated>2013-08-05T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs</id>
+    <content type="html"><![CDATA[<p>There are two particular sets of features that continue to keep me very excited about the momentum of Postgres. And while PostgreSQL has had some great momentum in the past few years these features may give it an entirely new pace all together. One is extensions, which is really its own category. Dimitri Fontaine was talking about doing a full series just on extensions, so here&rsquo;s hoping he does so I dont have to :)</p>
+
+<p>One subset of extensions which I consider entirely separate is the other thing, which is foreign data wrappers or FDWs. FDWs allow you to connect to other data sources from within Postgres. From there you can query them with SQL, join across disparate data sets, or join across different systems. Recently I had a good excuse to give the <code>postgres_fdw</code> a try. And while I&rsquo;ve blogged about the Redis FDW previously, the Postgres one is particularly exciting because with PostgreSQL 9.3 it will ship as a contrib module, which means all Postgres installers should have it&hellip; you just have to turn it on.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s take a look at getting it setup and then dig into it a bit. First, because I don&rsquo;t have Postgres 9.3 sitting around on my system I&rsquo;m going to provision one from Heroku Postgres:</p>
+
+<pre><code>$ heroku addons:add heroku-postgresql:crane --version 9.3
+</code></pre>
+
+<p>Once it becomes available I&rsquo;m going to connect to it then enable the extension:</p>
+
+<pre><code>$ heroku pg:psql BLACK -acraig
+# CREATE EXTENSION postgres_fdw;
+</code></pre>
+
+<p>Now its there, so we can actually start using it. To use the FDW there&rsquo;s four basic things you&rsquo;ll want to do:</p>
+
+<ol>
+<li>Create the remote server</li>
+<li>Create a user mapping for the remote server</li>
+<li>Create your foreign tables</li>
+<li>Start querying some things</li>
+</ol>
+
+
+<h3>The setup</h3>
+
+<p>You&rsquo;ll only need to do each of the following once, once you&rsquo;re server, user and foreign table are all setup you can simply query away. This is a nice advantage over db_link which only exists for the set session. <em>One downside I did find was that you can&rsquo;t use a full Postgres connection string, which would make setting it up much simpler</em>. So onto setting up our server:</p>
+
+<pre><code># CREATE SERVER app_db 
+  FOREIGN DATA WRAPPER postgres_fdw 
+  OPTIONS (dbname 'dbnamehere', host 'hostname-here);
+</code></pre>
+
+<p>Next we&rsquo;ll actually create our user mapping. In this case we&rsquo;ll take the remote username and password and map it to our current user we&rsquo;re already connected with.</p>
+
+<pre><code># CREATE USER MAPPING for user_current 
+  SERVER app_db 
+  OPTIONS (user 'remote_user', password 'remote_password');
+</code></pre>
+
+<p>And finally we&rsquo;re going to configure our tables. <em>There were some additional pains here as there wasn&rsquo;t a perfectly clean way to generate the <code>CREATE TABLE</code>. Sure you could pg_dump just that table, but overall it felt a bit cludgey.</em></p>
+
+<pre><code># CREATE FOREIGN TABLE users
+  (
+    id integer,
+    email text,
+      created_at timestamp,
+      first_name text,
+      last_name text
+  )
+  SERVER app_db OPTIONS (table_name 'users')
+</code></pre>
+
+<p>Now we&rsquo;ve got all of our local data, as well as remote data. For that report against two databases where you previously wrote a ruby or python script, ran a query, constructed another query, then executed it you can directly do in your database. We can simply query our new table &ndash; <code>SELECT * FROM users LIMIT 5;</code></p>
+
+<p>But the real power of foreign data wrappers goes well beyond just Postgres to Postgres. Having a defined contract in translating from one system to another, will really allow reinventing the way we work with data. This is especially true in large datasets where doing ETL on terrabytes of data takes longer than asking the questions of it.</p>
+
+<p>While we&rsquo;re waiting for more FDWs to be ready to use in production situations the Postgres FDW is a great start, <em>though the Redis one is on its way</em>. Even better is that it ships with standard installs of Postgres, meaning it will see more usage and help push them to advance further.</p>
+
+<p><em>One final nicety, you&rsquo;re not required to have ALL Postgres 9.3 DBs, just one that can then connect to the others, so go ahead and give it try :)</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres Dollar Quoting]]></title>
+    <link href="http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere/"/>
+    <updated>2013-08-02T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere</id>
+    <content type="html"><![CDATA[<p>After my most recent post on <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">documenting your database</a> I had a colleague and friend chime in:</p>
+
+<blockquote><p>@craigkerstiens You may want to mention for another post the generality of dollar quoting: it&#8217;s not just for CREATE FUNCTION.</p><footer><strong>@danfarina</strong> <cite><a href='https://twitter.com/danfarina/status/362007008079126528'>twitter.com/danfarina/status/&hellip;</a></cite></footer></blockquote>
+
+
+<p>Luckily I was able to convince him to create the post. You can read a bit more on him below, but without further adieu here&rsquo;s a bit on dollar quoting within Postgres:</p>
+
+<!--more-->
+
+
+<p>Postgres supports two forms of entry of data literals into the system.
+One is the familiar single-quote:</p>
+
+<pre><code>=&gt; SELECT 'hello';
+ ?column?
+----------
+ hello
+(1 row)
+</code></pre>
+
+<p>This format is problematic when one might be using single quotes in
+the textual string.</p>
+
+<p>Postgres also supports another way to enter data
+literals, most often seen in <code>CREATE FUNCTION</code>, but can be profitably
+used anywhere.  This is called &ldquo;dollar quoting,&rdquo; and it looks like
+this:</p>
+
+<pre><code>=&gt; SELECT $$hello's the name of the game$$;
+           ?column?
+------------------------------
+ hello's the name of the game
+(1 row)
+</code></pre>
+
+<p>If one needs nested dollar quoting, one can specify a string, much
+like the &lsquo;heredoc&rsquo; feature seen in some programming languages:</p>
+
+<pre><code>=&gt; SELECT $goodbye$hello's the name of the $$ game$goodbye$;
+            ?column?
+---------------------------------
+ hello's the name of the $$ game
+(1 row)
+</code></pre>
+
+<p>This can appear anywhere where single quotes would otherwise be,
+simplifying tasks like using contractions in database object comments,
+for example:</p>
+
+<pre><code>=&gt; CREATE TABLE described(a int);
+=&gt; COMMENT ON TABLE described IS $$I'm describing this,
+including newlines and an apostrophe in the contraction "I'm."$$;
+</code></pre>
+
+<p>Or, alternatively, entry of literals for types that may include
+apostrophes in their serialization, such as &lsquo;text&rsquo; or &lsquo;json&rsquo;:</p>
+
+<pre><code>=&gt; CREATE TABLE json(data json);
+=&gt; INSERT INTO json(data) VALUES
+       ($${"quotation": "'there is no time like the present'"}$$);
+</code></pre>
+
+<h3>Security</h3>
+
+<p>Even though dollar quotes can be used to reduce the pain of many
+quoting problems, don&rsquo;t be tempted to use them to avoid SQL injection:
+an adversary that knows one is using dollar quoting can still mount
+exactly the same kind of attacks as if one were using single quotes.</p>
+
+<p>There is also no need, because any place a data literal can appear can
+also be used with parameter binding (e.g. <code>$1</code>, <code>$2</code>, <code>$3</code>&hellip;), which one&rsquo;s
+Postgres driver should support.  Nevertheless, for data or scripts one
+is working with by hand, dollar quoting can make things much easier to
+read.</p>
+
+<h3>About the Author</h3>
+
+<p>Daniel Farina is a long time colleague and friend, having worked together at 5 different companies. He&rsquo;s part of the <a href="https://twitter.com/danfarina/status/362007008079126528">Heroku Postgres</a> team as the resident tuple groomer, and the creator of <a href="https://github.com/wal-e/wal-e">WAL-E</a>.</p>
+
+<p><em>As is always the case if you have articles you&rsquo;d like to see created or if you&rsquo;re interested in doing a guest post  please feel free to drop me a line <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a>. And if you have articles you feel are helpful to others in the Postgres world drop me a note as well for including them in <a href="http://www.postgresweekly.com">Postgres Weekly</a>.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Documenting your PostgreSQL database]]></title>
+    <link href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/"/>
+    <updated>2013-07-29T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database</id>
+    <content type="html"><![CDATA[<p>Just a few days ago I was surprised by what someone was doing with their database, and not in the typical horrifying travesty against mankind. Rather, it was a feature that while familiar with I&rsquo;d never seen anyone fully take proper advantage of &ndash; <code>COMMENT</code> or describing tables. Postgres has a nice facility for you to provide a description for just about anything:</p>
+
+<ul>
+<li>Table</li>
+<li>Column</li>
+<li>Function</li>
+<li>Schema</li>
+<li>View</li>
+<li>Index</li>
+<li>Etc.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>The specific use case was a database acting as a datamart pulling in data from multiple sources to be able to report against disparate data. Over the years I&rsquo;ve seen this occur really one three ways, the first is that a limited set of people, typically one person, have knowledge over all the datasources and thus far the sole individual responsible for creating reports and answering questions of the data. The second, is wide open access to anyone that wishes for it. In this case you often have people asking questions of the data, and because they don&rsquo;t understand the relationships coming up to entirely wrong conclusions. The final approach is to create some external documentation, entity relationship diagrams, data dictionaries, etc. This last one often works okay enough, but often suffers from lack of updates and being too heavyweight.</p>
+
+<p>A better solution, and all around good process is simply documenting clearly within the database itself. Simply comment each table and column, just as you would outside of your DB then it can be quite clear when inside the database working interactivly:</p>
+
+<pre><code>COMMENT ON TABLE products IS 'Products catalog';
+COMMENT ON COLUMN products.price is 'Current price of a single item purchased';
+</code></pre>
+
+<p>While an obvious example above naming even the most mundance columns can help create more accurate reports. Then of course when you want to inspect your DB its quite clear:</p>
+
+<pre><code>\d+ users
+# \d+ users
+                                     Table "public.users"
+   Column   |            Type             | ... | Description
+------------+-----------------------------+-...-+-----------------------------------------
+ id         | integer                     | ... | auto serial pk
+ first_name | character varying(50)       | ... | required first name of user
+ last_name  | character varying(50)       | ... | required first name of user
+ email      | character varying(255)      | ... | email address of account
+ data       | hstore                      | ... | mix of data, city, state, gender
+ created_at | timestamp without time zone | ... | when account was created, not confirmed
+ updated_at | timestamp without time zone | ... | time any details were last updated
+Indexes:
+    "idx_user_created" btree (date_trunc('day'::text, created_at))
+Has OIDs: no
+</code></pre>
+
+<p>But it doesn&rsquo;t necessarily have to stop there. Which actually brings me to one other item, you should be commenting your SQL just the same. SQL comments can be done easily by just starting a line with <code>--</code>, or you can have it at the end of the line with further info. Here&rsquo;s a nice example:</p>
+
+<pre><code>-- Query aggregates all project names that have open past due tasks grouped by email
+SELECT 
+  users.email,
+  array_to_string(array_agg(projects.name), ',')) as projects # Aggregate all projects and separate by comma
+FROM
+  projects,
+  tasks,
+  users
+-- A user has a project, which has tasks
+WHERE projects.id = tasks.project_id
+  -- Check for tasks that are due before now and not done yet
+  AND tasks.due_at &gt; tasks.completed_at
+  AND tasks.due_at &lt; now()
+  AND users.id = projects.user_id
+GROUP BY 
+  users.email
+</code></pre>
+
+<p>You comment your code, why shouldn&rsquo;t you comment your database?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hstore vs. JSON - Which to use in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/"/>
+    <updated>2013-07-03T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/07/03/hstore-vs-json</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re deciding what to put in <a href="http://www.amazon.com/Seven-Databases-Weeks-Modern-Movement/dp/1934356921?tag=mypred-20">Postgres and what not to</a>, consider that Postgres can be a <a href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/">perfectly good schema-less database</a>. Of course as soon as people realized this then the common comes a question, is hstore or JSON better. Which do I use and in what cases. Well first, if you&rsquo;re not familiar check out some previous material on them:</p>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore on PostgresGuide</a></li>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore in Postgres docs</a></li>
+<li><a href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/">hstore with Django</a></li>
+<li><a href="http://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.2#JSON_datatype">JSON datatype</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JavaScript support in Postgres</a></li>
+</ul>
+
+
+<p>If you&rsquo;re already up to date with both of them, but still wondering which to use lets dig in.</p>
+
+<!--more-->
+
+
+<h3>hstore</h3>
+
+<p>hstore is a key value store directly within your database. Its been a common favorite of mine and has been for some time. hstore gives you flexibility when working with your schema, as you don&rsquo;t have to define models ahead of time. Though its two big limitations are that 1. it only deals with text and 2. its not a full document store meaning you can&rsquo;t nest objects.</p>
+
+<p>Though major benefits of hstore include the ability to index on it, robust support for various operators, and of course the obvious of flexibility with your data. Some of the basic operators available include:</p>
+
+<p>Return the value from column<code>foo</code> for key <code>bar</code>:</p>
+
+<pre><code>foo-&gt;'bar'
+</code></pre>
+
+<p>Does the specified column <code>foo</code> contain a key <code>bar</code>:</p>
+
+<pre><code>foo?'bar'
+</code></pre>
+
+<p>Does the specified column <code>foo</code> contain a value of <code>baz</code> for key <code>bar</code>:</p>
+
+<pre><code>foo@&gt;'bar-&gt;baz'
+</code></pre>
+
+<p>Perhaps one of the best parts of hstore is that you can index on it. In particular Postgres <code>gin</code> and <code>gist</code> indexes allow you to index all keys and values within an hstore. A talk by <a href="http://www.twitter.com/XoF">Christophe Pettus</a> of PgExperts actually highlights some <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">performance details of hstore with indexes</a>. To give away the big punchline in several cases hstore with gin/gist beats mongodb in performance.</p>
+
+<h3>json</h3>
+
+<p>JSON in contrast to hstore is a full document datatype. In addition to nesting objects you have support for more than just text (read numbers). As you insert JSON into Postgres it will automatically ensure its valid JSON and error if its well not. JSON gets a lot better come Postgres 9.3 as well with <a href="http://www.postgresql.org/docs/devel/static/functions-json.html">some built in operators</a>. Though if you need more functionality in it today you should look at <a href="https://code.google.com/p/plv8js/wiki/PLV8">PLV8</a>.</p>
+
+<h3>Which to Use</h3>
+
+<p>So which do you actually want to use in your application? If you&rsquo;re already using JSON and simply want to store it in your database then the JSON datatype is often the correct pick. However, if you&rsquo;re just looking for flexibility with your data model then hstore is likely the path you want to take. hstore will give you much of the flexibility you want as well as a good ability to query your data in a performant manner. Of course much of this starts to change in Postgres 9.3.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pivoting in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres/"/>
+    <updated>2013-06-27T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres</id>
+    <content type="html"><![CDATA[<p>Earlier today on an internal Heroku group alias there was a <a href="https://postgres.heroku.com/dataclips">dataclip</a> shared. The dataclip listed off some data grouped by a category, there was a reply a few minutes later with a modification to the query that used the <code>crosstab</code> function to pivot directly in SQL. There were immediately several reactions on the list that went something like this:</p>
+
+<p><img src="http://f.cl.ly/items/1b0G101r0B2W243b2933/Image%202013.06.27%202%3A06%3A23%20PM.gif" alt="mindblown" /></p>
+
+<p>While a mostly simple function in Postgres (there are a few rough edges), it really is all too handy. So here it is in action. Taking some data that looks like</p>
+
+<ul>
+<li>row identifier, in this case date</li>
+<li>category grouping, in this case OS</li>
+<li>value</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>Given a really basic query that generates some sample data it may look something like this:</p>
+
+<pre><code>SELECT generate_series AS date,
+       b.desc AS TYPE,
+       (random() * 10000 + 1)::int AS val
+FROM generate_series((now() - '100 days'::interval)::date, now()::date, '1 day'::interval),
+  (SELECT unnest(ARRAY['OSX', 'Windows', 'Linux']) AS DESC) b;
+</code></pre>
+
+<p>  You get results that look like:</p>
+
+<iframe _tmplitem="2"  src='https://dataclips.heroku.com/cwtnbdhfkpgjhegzktolakjkkpyj/embed?result=1&version=1' width="500px" height="300px"></iframe>
+
+
+<p>But of course this isn&rsquo;t overly helpful in comparing day to day overall. You can do so on a OS by OS basis, but its annoying enough as is. The easy solution is to simply use a pivot table on your data. Most people at this point would pull it up into Excel or Google Docs, or you can do it directly in Postgres. To do so you&rsquo;ll first enable the extension <code>tablefunc</code>:</p>
+
+<pre><code>CREATE EXTENSION tablefunc
+</code></pre>
+
+<p>Then you&rsquo;ll use the crosstab function. The function looks something like:</p>
+
+<pre><code>SELECT * 
+FROM crosstab(
+  'SELECT row_name, category_grouping, value FROM foo',
+  'SELECT category_names FROM bar')
+AS
+  ct_result (category_name text, category1 text, category2 text, etc.)
+</code></pre>
+
+<p>Lets see it an actual action. Given the same query we used to generate fake data we can actually pivot on it now directly in PostgreSQL:</p>
+
+<pre><code>SELECT *
+FROM crosstab(
+  'SELECT
+    a date,
+    b.desc AS os,
+    (random() * 10000 + 1)::int AS value
+     FROM generate_series((now() - ''100 days''::interval)::date, now()::date, ''1 DAY''::interval) a,
+          (SELECT unnest(ARRAY[''OSX'', ''Windows'', ''Linux'']) AS DESC) b ORDER BY 1,2
+  ','SELECT unnest(ARRAY[''OSX'', ''Windows'', ''Linux''])'
+) 
+AS ct(date date, OSX int, Windows int, Linux int);
+</code></pre>
+
+<p>And see some results:</p>
+
+<iframe _tmplitem="1"  src='https://dataclips.heroku.com/dgzcrjoqqjzsxzditlrzpblljgbn/embed?result=1&version=2' width="500px" height="300px"></iframe>
+
+
+<p>Have fun analyzing your data directly in your DB now. And as always if you have feedback/questions/requests please feel free to drop me a line <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Functions for PostgreSQL]]></title>
+    <link href="http://www.craigkerstiens.com/2013/06/25/javascript-functions-for-postgres/"/>
+    <updated>2013-06-25T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/06/25/javascript-functions-for-postgres</id>
+    <content type="html"><![CDATA[<p>Javascript in Postgres has gotten a good bit of love lately, part of that is from <a href="http://postgres.herpku.com">Heroku Postgres</a> recently <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">adding support for Javascript</a> and part from a variety of people championing the power of it such as <a href="http://twitter.com/leinweber">@leinweber</a> (<a href="http://www.youtube.com/watch?v=fRupMAVdmWA">Embracing the web with JSON and PLV8</a>) and <a href="http://twitter.com/selenamarie">@selenamarie</a> (<a href="https://speakerdeck.com/selenamarie/schema-liberation-with-json-and-plv8-and-postgres">schema liberation with JSON and PLV8</a>). In a recent conversation it was pointed out that it seems a bit of headache to have to create your own functions, or at least having an initial collection would make it that much more powerful. While many can look forward to <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">PostgreSQL 9.3</a> which will have a bit more built in support for JSON a few functions can really help make it more useful today.</p>
+
+<!--more-->
+
+
+<p>These are courtesy of <a href="http://bitfission.com">Will Leinweber</a>. For each of the following functions I&rsquo;ll highlight an example of using it as well. To get an idea of the data its being run on:</p>
+
+<pre><code>select * from example;
+                    data
+--------------------------------------------
+ {"name":"Craig Kerstiens",                +
+         "age":27,                         +
+         "siblings":1,                     +
+         "numbers":[                       +
+           {"type":"work",                 +
+            "number":"123-456-7890"},      +
+           {"type":"home",                 +
+            "number":"456-123-7890"}]}
+(1 row)
+</code></pre>
+
+<h3>get_text</h3>
+
+<pre><code>CREATE OR REPLACE FUNCTION
+get_text(key text, data json)
+RETURNS text AS $$
+  return data[key];
+$$ LANGUAGE plv8 IMMUTABLE STRICT;
+</code></pre>
+
+<p>Then using the function:</p>
+
+<pre><code>select get_text('name', data) from example;
+    get_text
+----------------
+ Craig Kerstiens
+(1 row)
+</code></pre>
+
+<h3>get_numeric</h3>
+
+<pre><code>CREATE OR REPLACE FUNCTION
+get_numeric(key text, data json)
+RETURNS numeric AS $$
+  return data[key];
+$$ LANGUAGE plv8 IMMUTABLE STRICT;
+</code></pre>
+
+<p>Then using the function:</p>
+
+<pre><code>select get_numeric('siblings', data) from example;
+    get_text
+----------------
+  1
+(1 row)
+</code></pre>
+
+<h3>json_select</h3>
+
+<pre><code>create or replace function
+json_select(selector text, data json)
+returns json as $$
+  exports = {};
+  (function(a){function z(a){return{sel:q(a)[1],match:function(a){return y(this.sel,a)},forEach:function(a,b){return x(this.sel,a,b)}}}function y(a,b){var c=[];x(a,b,function(a){c.push(a)});return c}function x(a,b,c,d,e,f){var g=a[0]===","?a.slice(1):[a],h=[],i=!1,j=0,k=0,l,m;for(j=0;j&lt;g.length;j++){m=w(b,g[j],d,e,f),m[0]&amp;&amp;(i=!0);for(k=0;k&lt;m[1].length;k++)h.push(m[1][k])}if(h.length&amp;&amp;typeof b=="object"){h.length&gt;=1&amp;&amp;h.unshift(",");if(u(b))for(j=0;j&lt;b.length;j++)x(h,b[j],c,undefined,j,b.length);else for(l in b)b.hasOwnProperty(l)&amp;&amp;x(h,b[l],c,l)}i&amp;&amp;c&amp;&amp;c(b)}function w(a,b,c,d,e){var f=[],g=b[0]==="&gt;"?b[1]:b[0],h=!0,i;g.type&amp;&amp;(h=h&amp;&amp;g.type===v(a)),g.id&amp;&amp;(h=h&amp;&amp;g.id===c),h&amp;&amp;g.pf&amp;&amp;(g.pf===":nth-last-child"?d=e-d:d++,g.a===0?h=g.b===d:(i=(d-g.b)%g.a,h=!i&amp;&amp;d*g.a+g.b&gt;=0));if(h&amp;&amp;g.has){var j=function(){throw 42};for(var k=0;k&lt;g.has.length;k++){try{x(g.has[k],a,j)}catch(l){if(l===42)continue}h=!1;break}}h&amp;&amp;g.expr&amp;&amp;(h=p(g.expr,a)),b[0]!=="&gt;"&amp;&amp;b[0].pc!==":root"&amp;&amp;f.push(b),h&amp;&amp;(b[0]==="&gt;"?b.length&gt;2&amp;&amp;(h=!1,f.push(b.slice(2))):b.length&gt;1&amp;&amp;(h=!1,f.push(b.slice(1))));return[h,f]}function v(a){if(a===null)return"null";var b=typeof a;b==="object"&amp;&amp;u(a)&amp;&amp;(b="array");return b}function u(a){return Array.isArray?Array.isArray(a):b.call(a)==="[object Array]"}function t(a,b,c){var d=b,g={},j=i(a,b);j&amp;&amp;j[1]===" "&amp;&amp;(d=b=j[0],j=i(a,b)),j&amp;&amp;j[1]===f.typ?(g.type=j[2],j=i(a,b=j[0])):j&amp;&amp;j[1]==="*"&amp;&amp;(j=i(a,b=j[0]));for(;;){if(j===undefined)break;if(j[1]===f.ide)g.id&amp;&amp;e("nmi",j[1]),g.id=j[2];else if(j[1]===f.psc)(g.pc||g.pf)&amp;&amp;e("mpc",j[1]),j[2]===":first-child"?(g.pf=":nth-child",g.a=0,g.b=1):j[2]===":last-child"?(g.pf=":nth-last-child",g.a=0,g.b=1):g.pc=j[2];else{if(j[1]!==f.psf)break;if(j[2]===":val"||j[2]===":contains")g.expr=[undefined,j[2]===":val"?"=":"*=",undefined],j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!=="(")&amp;&amp;e("pex",a),j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!==f.str)&amp;&amp;e("sex",a),g.expr[2]=j[2],j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!==")")&amp;&amp;e("epex",a);else if(j[2]===":has"){j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!=="(")&amp;&amp;e("pex",a);var k=q(a,j[0],!0);j[0]=k[0],g.has||(g.has=[]),g.has.push(k[1])}else if(j[2]===":expr"){g.expr&amp;&amp;e("mexp",a);var l=o(a,j[0]);j[0]=l[0],g.expr=l[1]}else{(g.pc||g.pf)&amp;&amp;e("mpc",a),g.pf=j[2];var m=h.exec(a.substr(j[0]));m||e("mepf",a),m[5]?(g.a=2,g.b=m[5]==="odd"?1:0):m[6]?(g.a=0,g.b=parseInt(m[6],10)):(g.a=parseInt((m[1]?m[1]:"+")+(m[2]?m[2]:"1"),10),g.b=m[3]?parseInt(m[3]+m[4],10):0),j[0]+=m[0].length}}j=i(a,b=j[0])}d===b&amp;&amp;e("se",a);return[b,g]}function s(a){if(a[0]===","){var b=[","];for(var c=c;c&lt;a.length;c++){var d=r(d[c]);b=b.concat(d[0]===","?d.slice(1):d)}return b}return r(a)}function r(a){var b=[],c;for(var d=0;d&lt;a.length;d++)if(a[d]==="~"){if(d&lt;2||a[d-2]!="&gt;")c=a.slice(0,d-1),c=c.concat([{has:[[{pc:":root"},"&gt;",a[d-1]]]},"&gt;"]),c=c.concat(a.slice(d+1)),b.push(c);if(d&gt;1){var e=a[d-2]==="&gt;"?d-3:d-2;c=a.slice(0,e);var f={};for(var g in a[e])a[e].hasOwnProperty(g)&amp;&amp;(f[g]=a[e][g]);f.has||(f.has=[]),f.has.push([{pc:":root"},"&gt;",a[d-1]]),c=c.concat(f,"&gt;",a.slice(d+1)),b.push(c)}break}if(d==a.length)return a;return b.length&gt;1?[","].concat(b):b[0]}function q(a,b,c,d){c||(d={});var f=[],g,h;b||(b=0);for(;;){var j=t(a,b,d);f.push(j[1]),j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0]));if(!j)break;if(j[1]==="&gt;"||j[1]==="~")j[1]==="~"&amp;&amp;(d.usesSiblingOp=!0),f.push(j[1]),b=j[0];else if(j[1]===",")g===undefined?g=[",",f]:g.push(f),f=[],b=j[0];else if(j[1]===")"){c||e("ucp",j[1]),h=1,b=j[0];break}}c&amp;&amp;!h&amp;&amp;e("mcp",a),g&amp;&amp;g.push(f);var k;!c&amp;&amp;d.usesSiblingOp?k=s(g?g:f):k=g?g:f;return[b,k]}function p(a,b){if(a===undefined)return b;if(a===null||typeof a!="object")return a;var c=p(a[0],b),d=p(a[2],b);return l[a[1]][1](c,d)}function o(a,b){function c(a){return typeof a!="object"||a===null?a:a[0]==="("?c(a[1]):[c(a[0]),a[1],c(a[2])]}var d=n(a,b?b:0);return[d[0],c(d[1])]}function n(a,b){b||(b=0);var c=m(a,b),d;if(c&amp;&amp;c[1]==="("){d=n(a,c[0]);var f=m(a,d[0]);(!f||f[1]!==")")&amp;&amp;e("epex",a),b=f[0],d=["(",d[1]]}else!c||c[1]&amp;&amp;c[1]!="x"?e("ee",a+" - "+(c[1]&amp;&amp;c[1])):(d=c[1]==="x"?undefined:c[2],b=c[0]);var g=m(a,b);if(!g||g[1]==")")return[b,d];(g[1]=="x"||!g[1])&amp;&amp;e("bop",a+" - "+(g[1]&amp;&amp;g[1]));var h=n(a,g[0]);b=h[0],h=h[1];var i;if(typeof h!="object"||h[0]==="("||l[g[1]][0]&lt;l[h[1]][0])i=[d,g[1],h];else{i=h;while(typeof h[0]=="object"&amp;&amp;h[0][0]!="("&amp;&amp;l[g[1]][0]&gt;=l[h[0][1]][0])h=h[0];h[0]=[d,g[1],h[0]]}return[b,i]}function m(a,b){var d,e=j.exec(a.substr(b));if(e){b+=e[0].length,d=e[1]||e[2]||e[3]||e[5]||e[6];if(e[1]||e[2]||e[3])return[b,0,c(d)];if(e[4])return[b,0,undefined];return[b,d]}}function k(a,b){return typeof a===b}function i(a,b){b||(b=0);var d=g.exec(a.substr(b));if(!d)return undefined;b+=d[0].length;var h;d[1]?h=[b," "]:d[2]?h=[b,d[0]]:d[3]?h=[b,f.typ,d[0]]:d[4]?h=[b,f.psc,d[0]]:d[5]?h=[b,f.psf,d[0]]:d[6]?e("upc",a):d[8]?h=[b,d[7]?f.ide:f.str,c(d[8])]:d[9]?e("ujs",a):d[10]&amp;&amp;(h=[b,f.ide,d[10].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")]);return h}function e(a,b){throw new Error(d[a]+(b&amp;&amp;" in '"+b+"'"))}function c(a){try{if(JSON&amp;&amp;JSON.parse)return JSON.parse(a);return(new Function("return "+a))()}catch(b){e("ijs",b.message)}}var b=Object.prototype.toString,d={bop:"binary operator expected",ee:"expression expected",epex:"closing paren expected ')'",ijs:"invalid json string",mcp:"missing closing paren",mepf:"malformed expression in pseudo-function",mexp:"multiple expressions not allowed",mpc:"multiple pseudo classes (:xxx) not allowed",nmi:"multiple ids not allowed",pex:"opening paren expected '('",se:"selector expected",sex:"string expected",sra:"string required after '.'",uc:"unrecognized char",ucp:"unexpected closing paren",ujs:"unclosed json string",upc:"unrecognized pseudo class"},f={psc:1,psf:2,typ:3,str:4,ide:5},g=new RegExp('^(?:([\\r\\n\\t\\ ]+)|([~*,&gt;\\)\\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has|expr|val|contains))|(:\\w+)|(?:(\\.)?(\\"(?:[^\\\\\\"]|\\\\[^\\"])*\\"))|(\\")|\\.((?:[_a-zA-Z]|[^\\0-\\0177]|\\\\[^\\r\\n\\f0-9a-fA-F])(?:[_a-zA-Z0-9\\-]|[^\\u0000-\\u0177]|(?:\\\\[^\\r\\n\\f0-9a-fA-F]))*))'),h=/^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/,j=new RegExp('^\\s*(?:(true|false|null)|(-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)|("(?:[^\\]|\\[^"])*")|(x)|(&amp;&amp;|\\|\\||[\\$\\^&lt;&gt;!\\*]=|[=+\\-*/%&lt;&gt;])|([\\(\\)]))'),l={"*":[9,function(a,b){return a*b}],"/":[9,function(a,b){return a/b}],"%":[9,function(a,b){return a%b}],"+":[7,function(a,b){return a+b}],"-":[7,function(a,b){return a-b}],"&lt;=":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&lt;=b}],"&gt;=":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&gt;=b}],"$=":[5,function(a,b){return k(a,"string")&amp;&amp;k(b,"string")&amp;&amp;a.lastIndexOf(b)===a.length-b.length}],"^=":[5,function(a,b){return k(a,"string")&amp;&amp;k(b,"string")&amp;&amp;a.indexOf(b)===0}],"*=":[5,function(a,b){return k(a,"string")&amp;&amp;k(b,"string")&amp;&amp;a.indexOf(b)!==-1}],"&gt;":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&gt;b}],"&lt;":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&lt;b}],"=":[3,function(a,b){return a===b}],"!=":[3,function(a,b){return a!==b}],"&amp;&amp;":[2,function(a,b){return a&amp;&amp;b}],"||":[1,function(a,b){return a||b}]};a._lex=i,a._parse=q,a.match=function(a,b){return z(a).match(b)},a.forEach=function(a,b,c){return z(a).forEach(b,c)},a.compile=z})(typeof exports=="undefined"?window.JSONSelect={}:exports)
+  return JSON.stringify(
+    exports.match(selector,
+                  data));
+$$ LANGUAGE plv8 IMMUTABLE STRICT
+</code></pre>
+
+<p>Then using the function:</p>
+
+<pre><code>select json_select('.name nth-child(1)', data) as name, json_select('.numbers', data) as phone 
+from example;
+        name        |                                          phone
+--------------------+------------------------------------------------------------------------------------------
+ ["Craig Kerstiens"] | [[{"type":"work","number":"456-123-7890"},{"type":"home","number":"123-456-7890"}]]
+(1 row)
+</code></pre>
+
+<h3>javascript injection attack</h3>
+
+<pre><code>create or replace function
+js(src text) returns text as $$
+  return eval(
+  "(function() { " + src + "})"
+  )();
+$$ LANGUAGE plv8;
+</code></pre>
+
+<p>Have any others you feel are essential when starting to work with JSON? Let me know <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>. Beyond that give JSON and JavaScript a try inside your database.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Explaining your PostgreSQL data]]></title>
+    <link href="http://www.craigkerstiens.com/2013/06/13/explaining-your-data/"/>
+    <updated>2013-06-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/06/13/explaining-your-data</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve written a bit before about <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">understanding the output</a> from <code>EXPLAIN</code> and <code>EXPLAIN ANALYZE</code> in PostgreSQL. Though understandably getting a grasp on execution plans could probably use some more guidance. Yet, this time around I&rsquo;m taking a bit of a cop out and highlighting a few tools instead of documenting myself, which I&rsquo;ve done in a talk I&rsquo;ve frequently given <a href="https://speakerdeck.com/craigkerstiens/postgres-demystified-1">Postgres Demystified</a>.</p>
+
+<p><img src="http://f.cl.ly/items/2Y0A0H2B2q3C0622261C/Screenshot_6_13_13_9_57_AM.png" alt="Explain explained" /></p>
+
+<!--more-->
+
+
+<h3>Getting at the Data</h3>
+
+<p>The first small thing you can do is actually retrieve the data in JSON form. By adding in <code>(format json)</code> right after your <code>EXPLAIN</code> or <code>EXPLAIN ANALYZE</code> command it&rsquo;ll as you&rsquo;d expect return it in JSON. To give an example:</p>
+
+<pre><code># EXPLAIN SELECT * FROM users LIMIT 1;  
+                    QUERY PLAN                          
+-------------------------------------------------------------- 
+ Limit  (cost=0.00..0.03 rows=1 width=812) 
+   -&gt;  Seq Scan on users  (cost=0.00..1.50 rows=50 width=812)
+ (2 rows)
+</code></pre>
+
+<p>Then in JSON format:</p>
+
+<pre><code>EXPLAIN (format json) SELECT * FROM users LIMIT 1;
+       QUERY PLAN                 
+------------------------------------------------ 
+ [                                        +
+   {                                      +
+     "Plan": {                            +       
+       "Node Type": "Limit",              +       
+       "Startup Cost": 0.00,              +       
+       "Total Cost": 0.03,                +       
+       "Plan Rows": 1,                    +       
+       "Plan Width": 812,                 +
+       "Plans": [                         +
+         {                                +
+           "Node Type": "Seq Scan",       +
+           "Parent Relationship": "Outer",+
+           "Relation Name": "users",      +
+           "Alias": "users",              +
+           "Startup Cost": 0.00,          +
+           "Total Cost": 1.50,            +
+           "Plan Rows": 50,               +
+           "Plan Width": 812              +
+         }                                +
+       ]                                  +
+     }                                    +
+   }                                      +
+ ]
+(1 row)
+</code></pre>
+
+<p>While its on my list to build some interesting apps by pulling in the JSON input, others may be equally as interested in taking advantage of this data in its JSON form. If you take a shot at building something with this output, as always I&rsquo;d love to hear about it &ndash; <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a></p>
+
+<h3>Despez</h3>
+
+<p>Of course if you&rsquo;re itch isn&rsquo;t in better tools for Postgres, you may just want to have a solution that works today. While its not perfect, one of the best ones out there is <a href="http://explain.depesz.com/">Dezpez&rsquo;s explain tool</a>. You can take any execution plan and paste it in and get some better visual representation of the result. You can also <a href="http://explain.depesz.com/s/vL1">share them as well</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

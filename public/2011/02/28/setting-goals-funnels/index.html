@@ -1,0 +1,259 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Setting up Goals and Funnels - Google Analytics  | Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for Google Analytics first &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Setting Up Goals and Funnels - Google Analytics</h2>
+	<div class="entry-content"><p>I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">Google Analytics</a> first check that out. With most websites today there is some portion of the site that is event and not page based, meaning you have some workflow on the page based on Javascript. If this is the case you&rsquo;ll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> instead of an event in order to entirely use it in funnels and goals.</p>
+
+<p>A personal recommendation is actually to use both, goals and funnels. The key a funnel is that you need to have successive steps that occur in some order. With regards to metrics tracking this is absolutely needed, but typically you may have 1-2 total funnels with many steps in your site versus goals where you could have 10-15 single goals. For <a href="http://www.registrystop.com">Registry Stop</a> we&rsquo;ve structured our site so that our earlier stage goals become the same as steps in later stage funnels. For us in almost all cases the first part of the funnel is the visit, the second is registering for an account. We do have independent goals for visits and registrations as well, but we do not have funnels on those goals.</p>
+
+<!--more-->
+
+
+<p>A key to getting the most use out of your funnels is to know that there is a <strong>workflow to follow</strong> to getting to that end goal. To highlight this slightly more visually let me walk through an example:</p>
+
+<ol>
+    <li><em><strong>User visits your site.</strong></em></li>
+Here you&#8217;ll want to create a goal. Likely this is tracking a page view of the homepage.
+    <li><em><strong>User registers for an account.</strong></em></li>
+Here again, you&#8217;ll create a goal and nothing more. If there is a confirmation page that will be your goal, if there is not, then you&#8217;ll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> in order to track that goal.
+    <li><em><strong>User adds a product</strong></em></li>
+This is the first place you want to create both a goal and a funnel.</ol>
+
+
+<p>With regards to the goal, it should be pretty simple, tracking some page view. For the funnel though you will likely have 4 parts.</p>
+
+<p>The parts of your funnel will be:</p>
+
+<ol>
+    <li>User visits your site.</li>
+    <li>User registers for an account.</li>
+    <li>User begins process of adding a product</li>
+    <li>User completes product add</li>
+</ol>
+
+
+<p>For Registry Stop we have a similar funnel for users which includes:</p>
+
+<ol>
+    <li>Registering for an account</li>
+    <li>Visiting the sync page</li>
+    <li>Adding a synced registry</li>
+</ol>
+
+
+<p>Now as for actually setting up a goal or funnel. This is slightly unintuitive as it&rsquo;s not from inside a specific site on Google Analytics. At the home level of google analytics you&rsquo;ll have all of your sites setup. For each site to the right you&rsquo;ll have actions, click the Edit to go to the goal area.</p>
+
+<p><a href="/images/Snapz-Pro-XScreenSnapz011.png"><img class="alignnone size-full wp-image-348" title="Google Analytics Settings - Goals and Funnels" src="/images/Snapz-Pro-XScreenSnapz011.png" alt="Google Analytics Settings - Goals and Funnels" width="125" height="64" /></a></p>
+
+<p>Once here it becomes a bit more intuitive. You can begin by simply adding a goal. Your goal types should seem mostly intuitive, as mentioned in an earlier post you cannot use an Event in a goal. For this reason you can fake a pageview as if it actually occurred and then create your goal against that non-existent page view. If you want a few more details of how to do this check out the previous post . So for an example, we have a goal on <a href="http://www.registrystop.com">Registry Stop</a> that detects when a page view occurs as a result of a registry being synced. Because this workflow is heavily javascript and flow based we fake the page view and track it as if the page was actually visited. The goal itself looks like:</p>
+
+<p><a href="/images/Snapz-Pro-XScreenSnapz012.png"><img class="alignnone size-medium wp-image-350" title="Google Analytics Example Goal" src="/images/Snapz-Pro-XScreenSnapz012.png" alt="Google Analytics Example Goal" width="300" height="75" /></a></p>
+
+<p>For setting up your funnel as we mentioned above its generally a set of page views. A very key item is the check box next to the first item in your funnel. If you check this is means any other steps in the funnel are not counted unless you the first step is completed. If you have a very structured 1, 2, 3 workflow this makes sense. However, if there are various ways for the goal to complete then be very careful about selecting this.</p>
+
+<p>For this same goal above we have a corresponding funnel to track in detail how our conversion flows. The funnel itself looks like this once setup:</p>
+
+<p><a href="/images/Snapz-Pro-XScreenSnapz022.png"><img class="alignnone size-medium wp-image-344" title="Google Analytics Funnel Setup" src="/images/Snapz-Pro-XScreenSnapz022.png" alt="Google Analytics Funnel Setup" width="300" height="127" /></a></p>
+
+<p>This results in a funnel report that looks like:</p>
+
+<p><a href="/images/Snapz-Pro-XScreenSnapz011.png"><img class="alignnone size-medium wp-image-342" title="Synced Registry Funnel" src="/images/Snapz-Pro-XScreenSnapz011.png" alt="Synced Registry Funnel" width="300" height="250" /></a></p>
+
+<p>&nbsp;</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-28T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/analytics/'>Analytics</a>, <a class='category' href='/categories/startup/'>Startup</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Craig Kerstiens
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'craigkerstiens';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels/';
+        var disqus_url = 'http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

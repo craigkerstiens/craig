@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2014-03-01T11:19:11-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Tracking Month over Month Growth in SQL]]></title>
+    <link href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/"/>
+    <updated>2014-02-26T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL</id>
+    <content type="html"><![CDATA[<p>In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
+
+<!--more-->
+
+
+<p>I&rsquo;ll jump write in, first lets assume you have some method of querying your revenue. In this case you may have some basic query similar to:</p>
+
+<pre><code>SELECT date_trunc('month', mydate) as date, 
+       sum(mymoney) as revenue
+FROM foo
+GROUP BY date
+ORDER BY date ASC;
+</code></pre>
+
+<p>This should give you a nice clean result:</p>
+
+<pre><code> date                   | revenue  
+------------------------+----------
+ 2013-10-01 00:00:00+00 | 10000    
+ 2013-11-01 00:00:00+00 | 11000    
+ 2013-12-01 00:00:00+00 | 11500    
+</code></pre>
+
+<p>Now this is great, but the first thing I want to do is start to see what my percentage growth month over month is. Surprise, surprise, I can do this directly in SQL. To do so I&rsquo;ll use a <a href="http://postgresguide.com/tips/window.html">window function</a> and then use the <a href="http://www.postgresql.org/docs/9.3/static/functions-window.html">lag function</a>. According to the Postgres docs</p>
+
+<p><em>lag(value any [, offset integer [, default any ]]) same type as value returns value evaluated at the row that is offset rows before the current row within the partition; if there is no such row, instead return default. Both offset and default are evaluated with respect to the current row. If omitted, offset defaults to 1 and default to null</em></p>
+
+<p>Essentially it orders it based on the <a href="http://www.postgresql.org/docs/9.3/static/tutorial-window.html">window function</a> and then pulls in the value from the row before. So in action it looks something like:</p>
+
+<pre><code>SELECT date_trunc('month', mydate) as date, 
+       sum(mymoney) as revenue,
+       lag(mymoney, 1) over w previous_month_revenue
+FROM foo
+WINDOW w as (order by date)
+GROUP BY date
+ORDER BY date ASC;
+</code></pre>
+
+<p>Combining to actually make it a bit more pretty (with some casting to a numeric and then formatting a bit) in terms of a percentage:</p>
+
+<pre><code>SELECT date_trunc('month', mydate) as date, 
+       sum(mymoney) as revenue,
+       round((1.0 - (cast(mymoney as numeric) / lag(mymoney, 1) over w)) * 100, 1) myVal_growth
+FROM foo
+WINDOW w as (order by date)
+GROUP BY date
+ORDER BY date ASC;
+</code></pre>
+
+<p>And you finally get a nice clean output of your month over month growth directly <a href="http://www.amazon.com/dp/B0043EWUQQ?tag=mypred-20">in SQL</a>:</p>
+
+<pre><code> date                   | revenue  | growth
+------------------------+----------+--------
+ 2013-10-01 00:00:00+00 | 10000    |   null 
+ 2013-11-01 00:00:00+00 | 11000    |   10.0 
+ 2013-12-01 00:00:00+00 | 11500    |   4.5 
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[PostgreSQL 9.4 - What I was hoping for]]></title>
+    <link href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/"/>
+    <updated>2014-02-15T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted</id>
+    <content type="html"><![CDATA[<p>Theres no doubt that the <a href="/2014/02/02/Examining-PostgreSQL-9.4/">9.4 release</a> of PostgreSQL will have some great improvements. However, for all of the improvements it delivering it had the promise of being perhaps the most impactful release of <a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">Postgres</a> yet. Several of the features that would have given it my stamp of best release in at least 5 years are now already not making it and a few others are still on the border. Here&rsquo;s a look at few of the things that were hoped for and not to be at least until another 18 months.</p>
+
+<!--more-->
+
+
+<h3>Upsert</h3>
+
+<p>Upsert, merge, whatever you want to call it, this is been a sore hole for sometime now. Essentially this is insert based on this ID or if that key already exists update other values. This was something being worked on pretty early on in this release, and throughout the process continuing to make progress. Yet as progress was made so were exteneded discussions about syntax, approach, etc. In the end two differing views on how it should be implemented have the patch still sitting there with other thoughts on an implementation but not code ready to commit.</p>
+
+<p>At the same time I&rsquo;ll acknowledge upsert as a hard problem to address. The locking and concurrency issues are non-trivial, but regardless of those having this in there mostly kills the final argument for anyone to chose MySQL.</p>
+
+<h3>Better JSON</h3>
+
+<p>JSON is Postgres is super flexible, powerful, and <strong>generally slow</strong>. Postgres does validation and some parsing of JSON, but without something like <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">PLV8</a>, or <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> you may not get great performance. This is because under the covers the JSON is represented as text and as a result many of the more powerful indexes that could lend benefit, such as GIN or GIST, simply don&rsquo;t apply here.</p>
+
+<p>As a related effort to this <a href="http://postgresguide.com/sexy/hstore.html">hstore</a>, the key/value store, is working on being updated. This new support will add types and nesting making it much more usable overall. However the syntax and matching of how JSON functions isn&rsquo;t guranteed to be part of it. The proposal and actually work is still there and not rejected yet, but looks heavily at risk. Backing a new binary representation of JSON with hstore 2 would deliver so many benefits further building upon the foundation of hstore, JSON, PLV8 that exists today for Postgres.</p>
+
+<h3>apt-get for your extensions</h3>
+
+<p>I&rsquo;m almost not even sure where to start with this one. The notion within a Postgres community is that packaging for distros is super simple and extensions should just be packaged for them. Then there&rsquo;s <a href="http://pgxn.org/">PGXN</a> the Postgres extension network where you can download and compile and muck with annoying settings to get extensions to build. This proposal would have delivered a built in installer much like NPM or rubygems or PyPi and the ability for someone to simply say install extension from this centralized repository. No, it was setting out to solve the issue of having a single repository but would make it much easier for people to run one.</p>
+
+<p>For all the awesome-ness that exists in extensions such as <a href="http://tapoueh.org/blog/2013/02/25-postgresql-hyperloglog">HyperLogLog</a>, <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">foreign data wrappers</a>, <a href="http://madlib.net/">madlib</a> theres hundreds of other extensions that could be written and be valuable. They don&rsquo;t even all require C, they could fully exist in JavaScript with PLV8. Yet I&rsquo;m on the fence encouraging people to write such because if no one uses it then much of the point in the reusability of an extension is lost. Here&rsquo;s hoping that there&rsquo;s a change of opinion in the future that packaging is a solved problem and that creating an ecosystem for others to contribute to the Postgres world without knowing C is a positive thing.</p>
+
+<h3>Logical replication</h3>
+
+<p>When I first heard this might have some shot at making it in 9.4 I was shocked. This is something that while some may not take notice of I&rsquo;ve felt pain of for many years. Logical replication means in short enabling upgrades across PostgreSQL versions without a dump and restore, but even more so laying the ground work for more complicated architectures like perhaps multi-master. Yes, even with logical replication in theres still plenty of work to do, but having the groundwork laid goes a long way. There are options for it today with third party tools, but the management of these is painful at best.</p>
+
+<h3>In conclusion</h3>
+
+<p>The positive of this one is that the building blocks are in and its continuing to make progress. Its just that we&rsquo;ll have to wait about 18 months before the release of PostgreSQL 9.5 before its in our hands.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Examining Postgres 9.4 - A first look]]></title>
+    <link href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/"/>
+    <updated>2014-02-02T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">PostgreSQL</a> is currently entering its final commit fest. While its still going, which means there could still be more great features to come, we can start to take a look at what you can expect from it now. This release seems to bring a lot of minor increments versus some bigger highlights of previous ones. At the same time there&rsquo;s still a lot on the bubble that may or may not make it which could entirely change the shape of this one. For a peek back of some of the past ones:</p>
+
+<!--more-->
+
+
+<h3>Highlights of 9.2</h3>
+
+<ul>
+<li><a href="/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a></li>
+<li><a href="https://wiki.postgresql.org/wiki/Index-only_scans">Index only scans</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/#json_support">JSON Support</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/#range_type_support">Range types</a></li>
+<li>Huge performance improvements</li>
+</ul>
+
+
+<h3>Highlights of 9.3</h3>
+
+<ul>
+<li><a href="/2013/08/05/a-look-at-FDWs/">Postgres foreign data wrapper</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/#materialized_views">Materialized views</a></li>
+<li>Checksums</li>
+</ul>
+
+
+<h2>On to 9.4</h2>
+
+<p>With 9.4 instead of a simply list lets dive into a little deeper to the more noticable one.</p>
+
+<h3>pg_prewarm</h3>
+
+<p>I&rsquo;ll lead with one that those who need it should see huge gains (read larger apps that have a read replica they eventually may fail over to). Pg_prewarm will pre-warm your cache by loading data into memory. You may be interested in running <code>pg_prewarm</code> before bringing up a new Postgres DB or on a replica to keep it fresh.</p>
+
+<p><em>Why it matters</em>  &ndash; If you have a read replica it won&rsquo;t have the same cache as the leader. This can work great as you can send queries to it and it&rsquo;ll optimize its own cache. However, if you&rsquo;re using it as a failover when you do have to failover you&rsquo;ll be running in a degraded mode while your cache warms up. Running <code>pg_pregwarm</code> against it on a periodic basis will make the experience when you do failover a much better one.</p>
+
+<h3>Refresh materialized view concurrently</h3>
+
+<p>Materialized views just came into Postgres in 9.3. The problem with them is they were largely unusable. This was because they 1. Didn&rsquo;t auto-refresh and 2. When you did refresh them it would lock the table while it ran the refresh making it unreadable during that time.</p>
+
+<p>Materialized views are often most helpful on large reporting tables that can take some time to generate. Often such a query can take 10-30 minutes or even more to run. If you&rsquo;re unable to access said view during that time it greatly dampens their usefulness. Now running <code>REFRESH MATERIALIZED VIEW CONCURRENTLY foo</code> will regenerate it in the background so long as you have a unique index for the view.</p>
+
+<h3>Ordered Set Aggregates</h3>
+
+<p>I&rsquo;m almost not really sure where to begin with this, the name itself almost makes me not want to take advantage. That said what this enables is if a few really awesome things you could do before that would require a few extra steps.</p>
+
+<p>While there&rsquo;s plenty of aggregate functions in postgres getting something like percentile 95 or percentile 99 takes a little more effort. First you must order the entire set, then re-iterate over it to find the position you want. This is something I&rsquo;ve commonly done by using a window function coupled with a CTE. Now its much easier:</p>
+
+<pre><code>SELECT percentile_disc(0.95) 
+WITHIN GROUP (ORDER BY response_time) 
+FROM pageviews;
+</code></pre>
+
+<p>In addition to varying percentile functions you can get quite a few others including:</p>
+
+<ul>
+<li>Mode</li>
+<li>percentile_disc</li>
+<li>percentile_cont</li>
+<li>rank</li>
+<li>dense_rank</li>
+</ul>
+
+
+<h3>More to come</h3>
+
+<p>As I mentiend earlier the commit fest is still ongoing this means some things are still in flight. Here&rsquo;s a few that still offer some huge promise but haven&rsquo;t been committed yet:</p>
+
+<ul>
+<li>Insert on duplicate key or better known as Upsert</li>
+<li>HStore 2 &ndash; various improvements to HStore</li>
+<li>JSONB &ndash; Binary format of JSON built on top of HStore</li>
+<li>Logical replication &ndash; this one looks like some pieces will make it, but not a wholey usable implementation.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rethinking the limits on relational databases]]></title>
+    <link href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/"/>
+    <updated>2014-01-24T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational</id>
+    <content type="html"><![CDATA[<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
+
+<h3>Forget migrations</h3>
+
+<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
+
+<!--more-->
+
+
+<p>This is often viewed as a limitation of relational databases. Yet it doesn&rsquo;t really have to. You see even in schema-less database the relationships are still there, its just you&rsquo;re managing it at the application level. There&rsquo;s no reason higher level frameworks or ORMs couldn&rsquo;t handle the migration process. As it is today the process of adding a column to a relational database is quite straightforward in a sense where it doesn&rsquo;t introduce downtime and is capable of letting the developer still move quickly its just not automatically baked in.</p>
+
+<pre><code># Assuming a column thats referenced doesn't exist
+# Automatically execute relevant bits in your ORM
+# This isn't code meant for you to run 
+
+ALTER TABLE foo ADD COLUMN bar varchar(255); # This is near instant
+# Set your default value in your ORM
+UPDATE TABLE foo SET bar = 'DEFAULT VALUE' WHERE bar IS NULL;
+ALTER TABLE foo ALTER COLUMN bar NOT NULL;
+</code></pre>
+
+<p>Having Rails/Django/(Framework of your choice) automatically notice the need for a column to exist and make appropriate modifications you could work with it the same way you would managing a document relation in your code. Sure this is a manual painful process today, but theres no reason this can&rsquo;t be fully handled by PostgreSQL or directly within an ORM .</p>
+
+<h3>Documents</h3>
+
+<p>The other really strong case for the MongoDB/CouchDB camp is document storage. In this case I&rsquo;m going to equate a document directly to a JSON object. JSON itself is a wonderfully simply model that works so well for portability, and having to convert it within your application layer is well just painful. Yes Postgres has a JSON datatype, and the JSON datatype is continuing to be adopted now by many other relational databases. <em>I was shocked to hear that DB2 is getting support for JSON myself, while I expect improvements to come to it JSON was not at the top of my list</em>.</p>
+
+<p>And JSON does absolutely make sense as a data type within a column. But thats still a bit limiting as a full document store, what you want in those cases is any query result as a full JSON object. This is heavily undersold within Postgres that you can simply convert a full row to JSON with a <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">single function</a> &ndash; <code>row_to_json</code>.</p>
+
+<p>Again having higher level frameworks take full advantage so that under the covers you can have your strongly typed tables, but a flexibility to map them to flexible JSON objects makes a great deal of sense here.</p>
+
+<h3>Out of the box interfaces</h3>
+
+<p>This isn&rsquo;t a strict benefit of schema-less databases. Some schema-less databases have this more out of the box such as Couch where others less so. The concept of exposing a rest interface is not something new, and has been tried on top of relational databases a <a href="http://htsql.org/">few times over</a>. This is clearly something that does need to be delivered. The case for it is pretty clear, it reduces the work of people having to recreate admin screens and gives an easy onboarding process for noobs.</p>
+
+<p>Unfortunately there&rsquo;s not clear progress on this today for Postgres or other relational databases. In contrast other databases are delivering on this front often from day one :/</p>
+
+<h3>Where to</h3>
+
+<p>Some of the shifts in schema-less or really in other databases in general are not so large they cannot be subsummed into a broader option. At the same time there are some strong merits such as the ones above which do take an active effort to deliver on expanding what is a &ldquo;relational database&rdquo;.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The best Postgres feature you're not using – CTEs aka WITH clauses]]></title>
+    <link href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/"/>
+    <updated>2013-11-18T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using</id>
+    <content type="html"><![CDATA[<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
+
+<p>The feature itself is known as CTEs or common table expressions, you may also here it referred to as <code>WITH</code> clauses. The general idea is that it allows you to create something somewhat equivilant to a view that only exists during that transaction. You can create multiple of these which then allow for clear building blocks and make it simple to follow what you&rsquo;re doing.</p>
+
+<!--more-->
+
+
+<p>Lets take a look at a nice simple one:</p>
+
+<pre><code>WITH users_tasks AS (
+  SELECT 
+         users.email,
+         array_agg(tasks.name) as task_list,
+         projects.title
+  FROM
+       users,
+       tasks,
+       project
+  WHERE
+        users.id = tasks.user_id
+        projects.title = tasks.project_id
+  GROUP BY
+           users.email,
+           projects.title
+)
+</code></pre>
+
+<p>Using this I could now just append some basic other query on to the end that references this CTE <code>users_tasks</code>. Something akin to:</p>
+
+<pre><code>SELECT *
+FROM users_tasks;
+</code></pre>
+
+<p>But where it becomes more interesting is chaining these together. So while I have all tasks assigned to each user here, perhaps I want to then find which users are responsible for more than 50% of the tasks on a given project, thus being the bottleneck. To oversimplify this we could do it a couple of ways, total up the tasks for each project, and then total up the tasks for each user per project:</p>
+
+<pre><code>total_tasks_per_project AS (
+  SELECT 
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY project_id
+),
+
+tasks_per_project_per_user AS (
+  SELECT 
+         user_id,
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY user_id, project_id
+),
+</code></pre>
+
+<p>Then we would want to combine and find the users that are now over that 50%:</p>
+
+<pre><code>overloaded_users AS (
+  SELECT tasks_per_project_per_user.user_id,
+
+  FROM tasks_per_project_per_user,
+       total_tasks_per_project
+  WHERE tasks_per_project_per_user.task_count &gt; (total_tasks_per_project / 2)
+)
+</code></pre>
+
+<p>Now as a final goal I&rsquo;d want to get a comma separated list of tasks of the overloaded users. So we&rsquo;re simply giong to join against that <code>overloaded_users</code> and our initial list of <code>users_tasks</code>. Putting it all together it looks somewhat long, but becomes much more readable. And as a bonus I layered in some comments.</p>
+
+<pre><code>--- Created by Craig Kerstiens 11/18/2013
+--- Query highlights users that have over 50% of tasks on a given project
+--- Gives comma separated list of their tasks and the project
+
+
+--- Initial query to grab project title and tasks per user
+WITH users_tasks AS (
+  SELECT 
+         users.id as user_id,
+         users.email,
+         array_agg(tasks.name) as task_list,
+         projects.title
+  FROM
+       users,
+       tasks,
+       project
+  WHERE
+        users.id = tasks.user_id
+        projects.title = tasks.project_id
+  GROUP BY
+           users.email,
+           projects.title
+),
+
+--- Calculates the total tasks per each project
+total_tasks_per_project AS (
+  SELECT 
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY project_id
+),
+
+--- Calculates the projects per each user
+tasks_per_project_per_user AS (
+  SELECT 
+         user_id,
+         project_id,
+         count(*) as task_count
+  FROM tasks
+  GROUP BY user_id, project_id
+),
+
+--- Gets user ids that have over 50% of tasks assigned
+overloaded_users AS (
+  SELECT tasks_per_project_per_user.user_id,
+
+  FROM tasks_per_project_per_user,
+       total_tasks_per_project
+  WHERE tasks_per_project_per_user.task_count &gt; (total_tasks_per_project / 2)
+)
+
+SELECT 
+       email,
+       task_list,
+       title
+FROM 
+     users_tasks,
+     overloaded_users
+WHERE
+      users_tasks.user_id = overloaded_users.user_id
+</code></pre>
+
+<p>CTEs won&rsquo;t always be quite as performant as optimizing your SQL to be as concise as possible. In most cases I have seen performance differences smaller than a 2X difference, this tradeoff for readability is a nobrainer as far as I&rsquo;m concerned. And with time the Postgres optimizer should continue to get better about such performance.</p>
+
+<p>As for the verbosity, yes I could have done this query in probably 10-15 lines of very concise SQL. Yet, most may not be able to understand it quickly if at all. Readability is huge when it comes to SQL to ensure its doing the right thing. SQL will almost always tell you an answer, it just may not be to the question you think you&rsquo;re asking. Ensuring your queries can be reasoned about is critical to ensuring accuracy and CTEs are one great way of accomplishing that.</p>
+]]></content>
+  </entry>
+  
+</feed>
