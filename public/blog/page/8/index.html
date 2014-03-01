@@ -9,7 +9,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="So we walked through setting up your virtualenv and installing some packages. The basic workflow for installing packages will work 95% of the time, &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -102,18 +102,24 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/03/moreadvanceddependencies/">
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">
 		
-			More Advanced Dependencies</a>
+			Events With Google Analytics and Tricking Pageviews</a>
 	</h2>
 	<div class="entry-content">
-		<p>So we walked through setting up your <a href="/2011/11/01/installingpythonpackages/">virtualenv and installing some packages</a>. The basic workflow for installing packages will work 95% of the time, however part of the time you will need a little more. Below are several cases that may require extra effort. Its likely worthwhile to skim these and only reference them when needed as they likely wont be part of your everyday workflow (with the exception of using mirrors).</p>
+		<p>Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond this. There are two key items with tracking that you can do that will let you get a bit further. There&rsquo;s also plenty more on the reporting side, but we&rsquo;ll get to some of that later. On the tracking side the first item is event tracking. This is perhaps most commonly used for tracking various Javascript events that occur during a visit, however it can also be a bit more flexible towards tracking values. A very simple example might be:</p>
 
-<p>Most packages you install should be on pip and an actual released version of a package. There are times however when you may need to test out a package that is still being worked on. For these cases there&rsquo;s what developers commonly do and what you should do.</p>
+<pre>_ga._trackEvent(category, action, opt_label, opt_value)</pre>
 
 
+<p>Or a real life example of this, might be on a FAQ screen, clicking the link to an anchored section of the page:</p>
+
+<pre>_ga._trackEvent('faq', 'anchor click', $(this))</pre>
+
+
+<p>But events by their sheer nature give a bit more flexibility with that value field. In the case of a user sending a message 
 		
-		<a href="/2011/11/03/moreadvanceddependencies/" class="more-link">Read on &rarr;</a>
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -130,14 +136,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-03T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-02T16:28:56-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/python/'>Python</a>
-
-</div>
 
 
 	
@@ -147,18 +147,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/02/how-heroku-works-teams-tools/">
+		<a href="/2011/02/02/converting-bookmarklet-to-chrome-extension/">
 		
-			How Heroku Works - Teams and Tools</a>
+			Converting Bookmarklet to Chrome Extension</a>
 	</h2>
 	<div class="entry-content">
-		<p>Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of engineers, even product managers often write code. Heroku as a platform drives many of the features not from top down, but from bottom up based on engineers desires or skunkworks projects. There&rsquo;s many valuable insights into how Heroku runs efficiently for engineering.</p>
-
-<p>I&rsquo;ll be diving into many various practices that enable Heroku to put quality engineering above all else, but first let me highlight the team structure and tools that enable this.</p>
+		<p>Google&rsquo;s documentation is pretty good when it comes to how to create an extension that opens a full page and has large functionality. But if you&rsquo;re more interested in transforming an existing bookmarklet into an extension there&rsquo;s not great quality on it. The steps themselves are really quite simple. The big key that&rsquo;s not heavily documented is creating a background html that creates an event listener. After the jump is a full sample that would then call your javascript to activate the bookmarklet:</p>
 
 
 		
-		<a href="/2011/11/02/how-heroku-works-teams-tools/" class="more-link">Read on &rarr;</a>
+		<a href="/2011/02/02/converting-bookmarklet-to-chrome-extension/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -175,14 +173,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-02T00:34:49-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
 
 
 	
@@ -192,16 +184,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/01/installingpythonpackages/">
+		<a href="/2010/12/27/selling-something-new/">
 		
-			Installing Python Packages</a>
+			Selling Something New</a>
 	</h2>
 	<div class="entry-content">
-		<p>Now that you have you system and project environment all setup you probably want to start developing. But you likely don&rsquo;t want to start writing an entire project fully from scratch, as you dive in you&rsquo;ll quickly realize theres many tools helping you build projects and sites faster. For example making a request to a website there&rsquo;s <a href="http://docs.python-requests.org/en/latest/index.html">Requests</a>, for handling processing images there&rsquo;s <a href="http://www.pythonware.com/products/pil/">Python Imaging   Library</a>, or for a full framework to help you in building a site there&rsquo;s <a href="http://www.djangoproject.com">Django</a>. With all of these there&rsquo;s one simple and common way to install them. But first a little more on how it all works.</p>
+		<p>I have a tendency of really latching onto very simple ideas. Typically these ideas don&rsquo;t require complex engineering to make them happen. This is not to say the engineering is not important, but more so that it is some variation of engineering feats that have been done before. The reason I tend to like these over more complex engineering that really makes something better is that making something better is typically a marginal improvement. When it&rsquo;s a marginal improvement it&rsquo;s a lot harder to sell.</p>
 
 
 		
-		<a href="/2011/11/01/installingpythonpackages/" class="more-link">Read on &rarr;</a>
+		<a href="/2010/12/27/selling-something-new/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -218,14 +210,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-12-27T17:04:50-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/python/'>Python</a>
-
-</div>
 
 
 	
@@ -235,23 +221,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/10/27/gettingsetupwithpython/">
+		<a href="/2010/08/29/interviewing-a-reflection-of-the-company/">
 		
-			Getting Setup With Python</a>
+			Interviewing, a Reflection of the Company</a>
 	</h2>
 	<div class="entry-content">
-		<p>This is the first of a multipart series to getting started with Python. Throughout this guide we&rsquo;ll walk you through a full setup. For starters if you&rsquo;re a mac or linux user you already have <a href="http://python.org">Python</a> on your system. You should be able to confirm you have python my opening up a terminal window and running:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>python --version
-</span><span class='line'>Python 2.7.2
-</span></code></pre></td></tr></table></div></figure>
-
+		<p>The more I&rsquo;ve been exposed to it the more the way a company conducts interviews is a very strong reflection of how the company&rsquo;s current state is. If you experience a very half hazard interview it&rsquo;s likely a result that the person interviewing is half hazard in other aspects of their day to day. If you experience that someone is very set in their mind in what they want, and expecting a very cookie cutter answer, it&rsquo;s a reflection of how they think. There are some cases in which the interviewers simply do not know various methods/styles as such I&rsquo;d like to address what I feel should be appropriate interviewing process. I&rsquo;ve been in situations where more of this process was followed than not, and in those cases bad hires were the exception not the norm. The biggest unknown after that was how long until someone was fully integrated into the culture and not a noob but a veteran in some area that others deferred to.</p>
 
 
 		
-		<a href="/2011/10/27/gettingsetupwithpython/" class="more-link">Read on &rarr;</a>
+		<a href="/2010/08/29/interviewing-a-reflection-of-the-company/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -268,14 +247,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-10-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-08-29T17:39:05-07:00" pubdate data-updated="true">Aug 29<span>th</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/python/'>Python</a>
-
-</div>
 
 
 	
@@ -285,23 +258,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/05/16/environment-structure-django-apps/">
+		<a href="/2010/05/03/selling-seduction-same-difference/">
 		
-			Environment Structure for Django Apps</a>
+			Selling&#8230; Seduction&#8230; Same Difference</a>
 	</h2>
 	<div class="entry-content">
-		<p>I&rsquo;ve been writing applications off and on for nearly 4 years now, since before Django 1.0 was even released. I must say the framework could not be better described than by its own tagline &ldquo;The Web framework for perfectionists with deadlines&rdquo;. Among the things I love about it are:</p>
-
-<ul>
-    <li>Amazing documentation, there&#8217;s not 30 different blog posts with different ways to do things, either read the django project documentation or the app documentation</li>
-    <li>They don&#8217;t consistently break backwards compatibility. While at times they do this, it is not the norm or standard, which isn&#8217;t the case for some other unnamed frameworks</li>
-    <li>DRY, Don&#8217;t Repeat Yourself. If there&#8217;s an app that exists people don&#8217;t have a burning need to recreate the same functionality, resulting in lower number but higher quality pluggable apps.</li>
-</ul>
-
+		<p>On an entirely separate blog I have a full write up on seduction. The other posts contain steps for how a guy would seduce a girl, I think it&rsquo;s actually quite pertinent to selling sighing business. Before you start making to many assumptions about the other post let me explain a little further, but dorm the selling side within business.</p>
 
 
 		
-		<a href="/2011/05/16/environment-structure-django-apps/" class="more-link">Read on &rarr;</a>
+		<a href="/2010/05/03/selling-seduction-same-difference/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -318,14 +284,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-05-16T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-05-03T21:25:01-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
 
 
 	
@@ -335,25 +295,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/03/18/attribution-101/">
+		<a href="/2010/04/05/why-the-cloud-will-finally-work/">
 		
-			Attribution 101</a>
+			Why the Cloud Will Finally Work</a>
 	</h2>
 	<div class="entry-content">
-		<p>Continuing with the recent posts on metrics and marketing. I want to give a quick primer on attribution. To any marketing or analytics people out there, simply skip this it would aim to be a primer recap at best for you.</p>
-
-<p>The very general meaning behind attribution is to give credit. When it comes to web products this can be giving credit for lots of things:</p>
-
-<ul>
-    <li>A visit to your site</li>
-    <li>A purchase to your site</li>
-    <li>Other events, such as sign up, referring friends, etc.</li>
-</ul>
-
+		<p>The cloud has a lot of technical arguments going for it. The problem is consumers don&rsquo;t understand the cloud, they don&rsquo;t understand virtual storage and growth and syncing and the complexities of things. The average consumer is generally pretty dumb, they just want to be able to do things and it just work. If they ask a question they want an answer, not the deduction behind the answer. It&rsquo;s why I loved mint.com so much when it launched. I gave it accounts and it told me everything I wanted to know. If it was wrong I seldom noticed it, such as classifying a purchase into a wrong category. My suspicion is that 98% of the users don&rsquo;t notice much of the mis-classification that happens. They look the first time and it looks pretty good so they trust it, because if you look at 90% of purchases and classify them, why use mint, why not just use excel, or even go back to a paper and notebook?</p>
 
 
 		
-		<a href="/2011/03/18/attribution-101/" class="more-link">Read on &rarr;</a>
+		<a href="/2010/04/05/why-the-cloud-will-finally-work/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -370,14 +321,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-03-18T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-04-05T17:29:35-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/analytics/'>Analytics</a>, <a class='category' href='/categories/startup/'>Startup</a>
-
-</div>
 
 
 	
@@ -387,25 +332,20 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/03/07/startupbootstrapped-marketing-recap/">
+		<a href="/2010/02/27/valuing-employees/">
 		
-			Startup/Bootstrapped Marketing Recap</a>
+			Valuing Employees</a>
 	</h2>
 	<div class="entry-content">
-		<p>If you have an hour to spare its well worth it to look back and look back at my series on startup/bootstrapped marketing. But if you&rsquo;re short on time and want the high level summary here&rsquo;s the quick recap:</p>
+		<p>A coworker and I were recently having conversations over employee compensation. We covered the gambit around employee feedback, evals, and compensation. He mentioned Joel Spolsky, and his format of being very open about where individuals were ranked. He also pointed me to: <a href="http://alumnit.ca/~apenwarr/log/?m=200904#05">http://alumnit.ca/~apenwarr/log/?m=200904#05</a> which provided good insight, though I most like his final point. The end goal with evaluating your employees and compensation for them is to make sure they&rsquo;re happy. Sure the business should make sure they feel like you&rsquo;re worth what you&rsquo;re being paid, but usually there is no question about this, or if there is you&rsquo;re quickly escorted out the door. While this is an interesting model, I think it can be much simpler, but companies usually confine themselves too much in giving credit to employees.</p>
 
-<p><a href="http://www.craigkerstiens.com/2011/02/14/bootstrappedstartup-marketing-part-1/">Part 1 &ndash; Focus on SEO</a></p>
+<p>There was another recent occasion where a statement was made of &lsquo;no more playing stick them up, until next year&rsquo;. When I first thought about this, I knew I didn&rsquo;t like the statement, but was unsure of why. The reason is that there can be several reasons why employees leave. Only one of which is compensation. If you feel you&rsquo;re being adequately compensated for the job you&rsquo;re doing it makes sense.</p>
 
-<ul>
-    <li>Ensure you have a sitemap; <a href="http://www.google.com/support/webmasters/bin/answer.py?answer=183668">http://www.google.com/support/webmasters/bin/answer.py?answer=183668</a>
-<ul>
-    <li>Submit it to google</li>
-    <li>Submit it to yahoo</li>
-    <li>Submit it to bing</li>
-</ul>
+<p>But there&rsquo;s another reason thats very clear in the valley but less clear in other parts of the country. Paul Buchheit at Startup School this weekend in Berkeley said it very well: If you&rsquo;ve been at your job too long, QUIT. Meaning if you&rsquo;re comfortable, you know the people, you know how to do your job, and you&rsquo;re not being challenged, then you should go somewhere where you are challenged.</p>
+
 
 		
-		<a href="/2011/03/07/startupbootstrapped-marketing-recap/" class="more-link">Read on &rarr;</a>
+		<a href="/2010/02/27/valuing-employees/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -422,14 +362,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-02-27T17:10:23-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketing/'>Marketing</a>, <a class='category' href='/categories/startup/'>Startup</a>
-
-</div>
 
 
 	
@@ -439,16 +373,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/03/02/understanding-metrics/">
+		<a href="/2010/01/26/who-will-filter-the-stream-first/">
 		
-			Reading Metrics to Evaluate Marketing</a>
+			Who Will Filter the Stream First?</a>
 	</h2>
 	<div class="entry-content">
-		<p>A short while backed I talked about <a href="http://www.craigekerstiens.com/2011/02/03/tactical-steps-for-startup-metrics/">tactically measuring metrics</a> for your site/company. Recently I talked a bit about <a href="http://www.craigekerstiens.com/2011/02/14/bootstrappedstartup-marketing-part-1/">methods of marketing</a>. A large key to getting the most out of your time and money is to properly report against the intersection of these two items. First I&rsquo;m going to make the assumption you&rsquo;ve read those posts, if you haven&rsquo;t go back and do that. Next this is heavily on the assumption that you&rsquo;re using Google Analytics as your primary tool for measuring metrics and have setup goals appropriately.</p>
+		<p>Facebook is where I have more noise than any other social site, twitter may even tie facebook at amount of sheer content I receive in my feed. With regards to the ratio of what I care about to what I see facebook is a lot better, due to their news feed versus live feed. However, their news feed is still very often off. I wrote some time back about web 3.0, and how essentially showing what I want to see is what the web will become. You&rsquo;ll take the vast amount of content and distill it into what I want to see. People seem to be taking very half-hazard shots at it and its quite a let down.</p>
 
 
 		
-		<a href="/2011/03/02/understanding-metrics/" class="more-link">Read on &rarr;</a>
+		<a href="/2010/01/26/who-will-filter-the-stream-first/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -465,14 +399,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-03-02T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-01-26T17:56:01-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/analytics/'>Analytics</a>, <a class='category' href='/categories/startup/'>Startup</a>
-
-</div>
 
 
 	
@@ -482,18 +410,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/02/28/setting-goals-funnels/">
+		<a href="/2010/01/25/issues-arent-always-bad/">
 		
-			Setting Up Goals and Funnels - Google Analytics</a>
+			Issues Aren&#8217;t Always Bad</a>
 	</h2>
 	<div class="entry-content">
-		<p>I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">Google Analytics</a> first check that out. With most websites today there is some portion of the site that is event and not page based, meaning you have some workflow on the page based on Javascript. If this is the case you&rsquo;ll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> instead of an event in order to entirely use it in funnels and goals.</p>
-
-<p>A personal recommendation is actually to use both, goals and funnels. The key a funnel is that you need to have successive steps that occur in some order. With regards to metrics tracking this is absolutely needed, but typically you may have 1-2 total funnels with many steps in your site versus goals where you could have 10-15 single goals. For <a href="http://www.registrystop.com">Registry Stop</a> we&rsquo;ve structured our site so that our earlier stage goals become the same as steps in later stage funnels. For us in almost all cases the first part of the funnel is the visit, the second is registering for an account. We do have independent goals for visits and registrations as well, but we do not have funnels on those goals.</p>
+		<p>I often encounter people whether at my office or at other places of employment that are distraught after getting an earful from a manager from some problem arising. The problem usually isn&rsquo;t in their control, and therefore they don&rsquo;t understand why they get heat for this. Most managers though do actually understand when issues come up, however what they don&rsquo;t appreciate is late notice, lack of problem solving, and dictating what should be done next.</p>
 
 
 		
-		<a href="/2011/02/28/setting-goals-funnels/" class="more-link">Read on &rarr;</a>
+		<a href="/2010/01/25/issues-arent-always-bad/" class="more-link">Read on &rarr;</a>
 	</div>
 
 
@@ -510,14 +436,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-02-28T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-01-25T17:30:10-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/analytics/'>Analytics</a>, <a class='category' href='/categories/startup/'>Startup</a>
-
-</div>
 
 
 	
@@ -527,42 +447,27 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/02/25/jquery-django-autocomplete/">
+		<a href="/2010/01/21/forget-doing-something-better-do-something-different/">
 		
-			JQuery and Django Autocomplete</a>
+			Forget Doing Something Better, Do Something Different</a>
 	</h2>
 	<div class="entry-content">
-		<p>In a couple of various places I&rsquo;ve seen light requests of how to put autocomplete in for a Django web application. Here&rsquo;s a really light weight version with a view and autocomplete functionality using:</p>
+		<p>I have a tendency of really latching onto very simple ideas. Typically these ideas don&rsquo;t require complex engineering to make them happen. This is not to say the engineering is not important, but more so that it is some variation of engineering feats that have been done before. The reason I tend to like these over more complex engineering that really makes something better is that making something better is typically a marginal improvement. When it&rsquo;s a marginal improvement it&rsquo;s a lot harder to sell.</p>
 
-<ul>
-    <li><a href="http://www.djangoproject.com">Django</a></li>
-    <li><a href="http://www.jquery.com">JQuery</a></li>
-    <li><a href="http://www.jqueryui.com">JQuery UI</a></li>
-</ul>
+<p>With marginal improvements you have to:</p>
 
-
-<p>For a view to search within your django model it would look something like:</p>
-
-<figure class='code'><figcaption><span>models.py </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">simplejson</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">autocompleteModel</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">search_qs</span> <span class="o">=</span> <span class="n">ModelName</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name__startswith</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">[</span><span class="s">&#39;search&#39;</span><span class="p">])</span>
-</span><span class='line'>    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span class='line'>    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">search_qs</span><span class="p">:</span>
-</span><span class='line'>        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">resp</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">[</span><span class="s">&#39;callback&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;);&#39;</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
+<ol>
+    <li>Convince the customer it&#8217;s not good enough today</li>
+    <li>Convince the customer that you&#8217;re better</li>
+    <li>Convince the customer you&#8217;re worth the headache of changing</li>
+</ol>
 
 
-<p>For the jQuery autocomplete and call:</p>
+<p>While a lot of companies focus solely on taking an existing problem and solving it better than someone else has, I have my doubts about how reproducible this model is. If I&rsquo;m a large company with lots of resources I&rsquo;m going to keep iterating and improving myself, which means a smaller company really has to have some magic bullet that will displace me.</p>
+
+<p>In contrast if I address a problem that hasn&rsquo;t been solved my life instantly becomes a lot easier. I no longer have an argument of something not being good enough today, it becomes a question of value and how much its worth to solve the problem. Haggling over price is a conversation I&rsquo;d rather have than trying to justify value and convince a customer they&rsquo;ve been wrong in their choice for so many years.</p>
+
+<p>Over the coming days I&rsquo;m going to be posting a few of these examples/ideas and why I like them. Many of them are still being thought through, and while as I sort them out, I&rsquo;m generally happy to publish high points about them. The even bigger key here is that success is typically in the execution and less so in the idea, though even then I&rsquo;d prefer to execute on something that has less battles than something that from the onset has more. By doing something that is being done today you get no advantages of penetrating the market.</p>
 
 		
 		
@@ -582,14 +487,8 @@ $(document).ready(
   
 
 
-<time datetime="2011-02-25T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-01-21T14:49:33-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time></div>
 	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/jquery/'>JQuery</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
 
 
 	

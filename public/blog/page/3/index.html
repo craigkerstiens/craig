@@ -9,7 +9,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content=" T PostgreSQL, Postgres, SQL "> <meta name="keywords" content="">
+<meta name="description" content="Even from intial reviews of my previous post on expression based indexes I received a lot of questions and feedback around many different parts of &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,190 +97,6 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/28/schema-on-read-the-future/">
-		
-			The Future of Databases - Schema on Read</a>
-	</h2>
-	<div class="entry-content">
-		<p>T</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-28T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/27/Pivoting-in-Postgres/">
-		
-			Pivoting in Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p>Earlier today on an internal Heroku group alias there was a <a href="https://postgres.heroku.com/dataclips">dataclip</a> shared. The dataclip listed off some data grouped by a category, there was a reply a few minutes later with a modification to the query that used the <code>crosstab</code> function to pivot directly in SQL. There were immediately several reactions on the list that went something like this:</p>
-
-<p><img src="http://f.cl.ly/items/1b0G101r0B2W243b2933/Image%202013.06.27%202%3A06%3A23%20PM.gif" alt="mindblown" /></p>
-
-<p>While a mostly simple function in Postgres (there are a few rough edges), it really is all too handy. So here it is in action. Taking some data that looks like</p>
-
-<ul>
-<li>row identifier, in this case date</li>
-<li>category grouping, in this case OS</li>
-<li>value</li>
-</ul>
-
-
-
-		
-		<a href="/2013/06/27/Pivoting-in-Postgres/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/25/javascript-functions-for-postgres/">
-		
-			Javascript Functions for PostgreSQL</a>
-	</h2>
-	<div class="entry-content">
-		<p>Javascript in Postgres has gotten a good bit of love lately, part of that is from <a href="http://postgres.herpku.com">Heroku Postgres</a> recently <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">adding support for Javascript</a> and part from a variety of people championing the power of it such as <a href="http://twitter.com/leinweber">@leinweber</a> (<a href="http://www.youtube.com/watch?v=fRupMAVdmWA">Embracing the web with JSON and PLV8</a>) and <a href="http://twitter.com/selenamarie">@selenamarie</a> (<a href="https://speakerdeck.com/selenamarie/schema-liberation-with-json-and-plv8-and-postgres">schema liberation with JSON and PLV8</a>). In a recent conversation it was pointed out that it seems a bit of headache to have to create your own functions, or at least having an initial collection would make it that much more powerful. While many can look forward to <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">PostgreSQL 9.3</a> which will have a bit more built in support for JSON a few functions can really help make it more useful today.</p>
-
-
-		
-		<a href="/2013/06/25/javascript-functions-for-postgres/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-25T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/13/explaining-your-data/">
-		
-			Explaining Your PostgreSQL Data</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve written a bit before about <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">understanding the output</a> from <code>EXPLAIN</code> and <code>EXPLAIN ANALYZE</code> in PostgreSQL. Though understandably getting a grasp on execution plans could probably use some more guidance. Yet, this time around I&rsquo;m taking a bit of a cop out and highlighting a few tools instead of documenting myself, which I&rsquo;ve done in a talk I&rsquo;ve frequently given <a href="https://speakerdeck.com/craigkerstiens/postgres-demystified-1">Postgres Demystified</a>.</p>
-
-<p><img src="http://f.cl.ly/items/2Y0A0H2B2q3C0622261C/Screenshot_6_13_13_9_57_AM.png" alt="Explain explained" /></p>
-
-
-		
-		<a href="/2013/06/13/explaining-your-data/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
 
 
     <article class="post">
@@ -432,101 +248,6 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/05/02/rack-referral-middleware/">
-		
-			Rack Referral Tracking and Reporting</a>
-	</h2>
-	<div class="entry-content">
-		<p>Recently I had a need to track typical referral data inside my application database. While in 90% of cases google analytics, kissmetrics, or mixpanel would work in some cases I want to simply track referral and campaign data inside my core databse. If you have one single monolithic application this is pretty simple to do, however if you&rsquo;ve got multiple properties and still want to track across all of them I found it a bit more effort. To ease this I&rsquo;ve created a gem</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/ruby/'>Ruby</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/04/29/cx_conference_experience_people/">
-		
-			CX – Conference Experience (People)</a>
-	</h2>
-	<div class="entry-content">
-		<p>Following up on my earlier post about CX or Conference Experience – I&rsquo;m going to dig in a bit on getting the right people there. There&rsquo;s a lot of different ways to approach this from having a good ratio of:</p>
-
-<ul>
-<li>Designers to Developers</li>
-<li>Females to Males</li>
-<li>Noobs to well known community members</li>
-<li>Overall lack of suits</li>
-</ul>
-
-
-<p>While this is by no means a how we can solve all of the above problems, theres some bas</p>
-
-
-		
-		<a href="/2013/04/29/cx_conference_experience_people/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketing/'>Marketing</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
 		<a href="/2013/04/29/cx_conference_experience_communicate/">
 		
 			CX – Conference Experience (Facilitating Communication)</a>
@@ -561,6 +282,278 @@ $(document).ready(
 <div class="tags">
 
 	<a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/27/cx_conference_experience_talks/">
+		
+			CX – Conference Experience (Talks)</a>
+	</h2>
+	<div class="entry-content">
+		<p>A couple of weekends ago I had the great opportunity to attend <a href="http://lessconf.com">lessconf</a>. It was an all around great conference, and as a result of the greatness I ended up having a conversation with a few people around conference experience. I must give much of the credit to <a href="http://twitter.com/swiftalphaone">Swift</a>, as he mentioned he&rsquo;d already been thinking alot about this since <a href="http://waza.heroku.com">Waza</a>. In general it feels like there&rsquo;s a few key themes that any conference should focus on, then a lot of small things that can really push it over the top. Here&rsquo;s a few:</p>
+
+<p>In general the key areas for any great conference are:</p>
+
+<ul>
+<li>Talks</li>
+<li>Great people</li>
+<li>Ensuring communication happens</li>
+<li>Bonus points</li>
+</ul>
+
+
+<p>Digging in deeper on the first area&hellip;</p>
+
+
+		
+		<a href="/2013/04/27/cx_conference_experience_talks/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/17/array-agg/">
+		
+			Using Array_agg in Postgres – Powerful and Flexible</a>
+	</h2>
+	<div class="entry-content">
+		<p>In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do this by running a query to get much of the raw data, looping over the data and pushing it into a set, appending each new value to the appropriate key. Hopefully, it&rsquo;s not a surprise that there&rsquo;s a much better way to do this with PostgreSQL.</p>
+
+<p>Postgres has a flexible and robust <a href="/2012/08/20/arrays-in-postgres/">array datatype</a> that comes with a variety of functions. Even without taking advantage of the array datatype in <a href="/2012/11/06/django-and-arrays/">your application</a>, you can still take advantage of some of the functions to get the functionality you need. Lets take a look at an example schema and use case.</p>
+
+
+		
+		<a href="/2013/04/17/array-agg/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-17T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/16/creating-advocates/">
+		
+			Scaling Evangelism – Creating Advocates</a>
+	</h2>
+	<div class="entry-content">
+		<p>The first area I tend to think about when it comes to developer marketing is around advocates. A simple definition of an advocate is <em>someone that speaks/writes in favor of some thing</em>.</p>
+
+<p>Creating advocates is a means of creating more of myself to go out and talk loudly and ideally effectively. However, they do take time to cultivate and it is a hard item to track. But by cultivating advocates I&rsquo;m able to scale what would otherwise be a bottleneck of my own personal time.</p>
+
+
+		
+		<a href="/2013/04/16/creating-advocates/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-16T07:59:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2013</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/12/perspective-on-developer-marketing/">
+		
+			Doing Marketing (for Developers) Differently</a>
+	</h2>
+	<div class="entry-content">
+		<p>As developers we can tend to be a fickle bunch; especially in certain open source communities. We like to see intelligence and systems applied to things, hope for a better world through making things open, and appreciate when others relate to our world as we often attempt to relate to theirs. Marketing is often a loaded word when it comes to developers – leaving mixed feelings about webinars, email campaigns, and the like.</p>
+
+<p><em>A quick clarification in terms of marketing I&rsquo;m referring to product marketing, but of a technical product. This is based on the idea that <a href="http://thenewkingmakers.com/">developers are the new kingmakers</a> and when marketing a product to them it needs to be done differently.</em></p>
+
+
+		
+		<a href="/2013/04/12/perspective-on-developer-marketing/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketin/'>Marketin</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/31/why-i-blog/">
+		
+			Why I Blog</a>
+	</h2>
+	<div class="entry-content">
+		<p>I blog because I&rsquo;m lazy. There&rsquo;s more too it though: In any given day I may explain something to someone, the first time I do this I make a bit of a mental note. The second time I do this, especially within a short time frame I make a physical note of this in the form of the title of a blog post. Once I&rsquo;m already to a second time of doing this its almost inevitable I&rsquo;ll continue repeating myself – and its valuable to others.</p>
+
+
+		
+		<a href="/2013/03/31/why-i-blog/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/13/planning-and-prioritizing/">
+		
+			Prioritizing and Planning Within Heroku Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>Over a year ago I blogged about Heroku&rsquo;s approach to <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools</a>. Since that time Heroku has grown from around 25 people to over 100, we&rsquo;ve continued to iterate and find new tools that work for how we do things. For many of the <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">product management</a> and software engineering books I&rsquo;ve read I&rsquo;ve yet to find something that helps a team priorize in a fashion I that feels right.</p>
+
+<p>One process emerged nearly a year ago from within the <a href="https://postgres.heroku.com">Heroku Postgres</a> team and is now followed by many others. Within a team this process is now commonly conducted each 6 months. Lets take a look at how this process looks</p>
+
+
+		
+		<a href="/2013/03/13/planning-and-prioritizing/" class="more-link">Read on &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/heroku/'>Heroku</a>
 
 </div>
 

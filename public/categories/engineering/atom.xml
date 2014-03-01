@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Engineering | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/engineering/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-01T12:00:53-08:00</updated>
+  <updated>2014-03-01T12:17:53-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,17 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Why Not Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2012/05/12/why-not-postgres/"/>
-    <updated>2012-05-12T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2012/05/12/why-not-postgres</id>
-    <content type="html"><![CDATA[<p>In hopefully a fair fashion, I hope to call out all the reasons to not use Postgres.</p>
-
-<h2>Setup</h2>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Why PostgreSQL Part 2]]></title>
@@ -371,6 +360,88 @@ $ heroku open
 </code></pre>
 
 <p>```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Securing your Internal Organization with OpenID]]></title>
+    <link href="http://www.craigkerstiens.com/2012/01/23/securing-your-organization/"/>
+    <updated>2012-01-23T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/01/23/securing-your-organization</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
+
+<p>In our personal lives we use email as our keys to the kingdom. In fact I now almost refuse to sign up for any service that doesn&rsquo;t let me use oauth, so why should a work place be much different. So I inquired with a few companies to see if they were fine with securing things like documentation or wiki&rsquo;s being google auth, they indeed were. Yet they still seem to have users keep one more username and password for their VPN to be able to login to access internal docs/tools.</p>
+
+<!-- more -->
+
+
+<p>Most tech centric companies grow their own apps for many things they do within a company. Even the heavier adopters of SaaS still end up building a lot of internal systems. So why not secure them with your email domain just as you commonly would if it were a public service?</p>
+
+<p>The problem comes in that OpenId with google has an initial setup overhead, but after that works unbelievably well.</p>
+
+<h2>The catch</h2>
+
+<p>In some cases you currently have to identify your domain as an OpenId provider. This means that @yourname.com is an OpenId provider. This simply means creating a url route for openid in your base site similar to the below:</p>
+
+<p>``` xml <a href="http://heroku.com/openid">http://heroku.com/openid</a>
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
+&lt;xrds:XRDS xmlns:xrds=&ldquo;xri://$xrds&rdquo; xmlns=&ldquo;xri://$xrd<em>($v</em>2.0)&rdquo;>
+  <XRD></p>
+
+<pre><code>&lt;Service priority="0"&gt;
+  &lt;Type&gt;http://specs.openid.net/auth/2.0/signon&lt;/Type&gt;
+  &lt;URI&gt;https://www.google.com/a/craigkerstiens.com/o8/ud?be=o8&lt;/URI&gt;
+&lt;/Service&gt;
+</code></pre>
+
+<p>  </XRD>
+&lt;/xrds:XRDS>
+```</p>
+
+<p><em>This is due to an issue of OpenID discovery which you can read more on at: <a href="https://groups.google.com/group/google-federated-login-api/browse_thread/thread/4a7dd2312a47a082/9285cec18a30b9d3?lnk=gst&amp;q=apps+discovery&amp;pli=1#9285cec18a30b9d3.">https://groups.google.com/group/google-federated-login-api/browse_thread/thread/4a7dd2312a47a082/9285cec18a30b9d3?lnk=gst&amp;q=apps+discovery&amp;pli=1#9285cec18a30b9d3.</a> In short, setting up the above can save you a lot of time</em></p>
+
+<h2>Setting up in apps</h2>
+
+<p>Most web frameworks have libraries that make it easy to secure your apps with openid/oauth. In particular Django and Rails both make this pretty easy. To make this even simpler for you below is code to actually secure an internal app for both Django and Rails. You can do similar with Flask or Sinatra as well.</p>
+
+<h3>Rails</h3>
+
+<p>In case your admin controller isn&rsquo;t already generated:</p>
+
+<p><code>
+rails g controller admin/users
+</code></p>
+
+<p>Then anything you want to secure:</p>
+
+<p>```
+module Admin
+  class UsersController &lt; ApplicationController</p>
+
+<pre><code>before_filter :admin_required
+
+def index
+  render :text =&gt; 'Hello from the admin panel!'
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h3>Django</h3>
+
+<p>Finally sync your database:</p>
+
+<p><code>
+python yourapp/manage.py syncdb
+</code></p>
+
+<p>Secure any view with the <code>login_required</code> decorator as your typically would with Django.</p>
+
+<h2>Summary</h2>
+
+<p>In short with some very basic app setup you can have an internal workflow thats just as good as what you use in your day to day outside the office.</p>
 ]]></content>
   </entry>
   

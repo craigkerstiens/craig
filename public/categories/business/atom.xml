@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Business | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/business/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-01T12:00:53-08:00</updated>
+  <updated>2014-03-01T12:17:53-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -166,61 +166,38 @@ python yourapp/manage.py syncdb
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[How Heroku Works - Dashboards]]></title>
-    <link href="http://www.craigkerstiens.com/2011/11/06/how-heroku-works-dashboards/"/>
-    <updated>2011-11-06T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2011/11/06/how-heroku-works-dashboards</id>
-    <content type="html"><![CDATA[<p>Commonly these broader metrics are constantly visible. Heroku takes an approach that if a dashboard is visible and something looks bad its likely to get asked about and fixed. These aren&rsquo;t executive level dashboards about user count and revenue, instead its engineering focused like so much else of Heroku.</p>
+    <title type="html"><![CDATA[How Heroku Works - Teams and Tools]]></title>
+    <link href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/"/>
+    <updated>2011-11-02T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools</id>
+    <content type="html"><![CDATA[<p>Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of engineers, even product managers often write code. Heroku as a platform drives many of the features not from top down, but from bottom up based on engineers desires or skunkworks projects. There&rsquo;s many valuable insights into how Heroku runs efficiently for engineering.</p>
 
-<p>Because we love building a product for engineers, displayed publicly are the metrics engineers care about. Near the lunch table you&rsquo;ll find a persistent TV with average response time per request, tests that are passing, and requests per second across the platform.</p>
-
-<p>Additionally individual dashboards exist on a per team basis. For example in The Vault (Heroku&rsquo;s payments and billings team), you&rsquo;ll find a screen constantly displaying recent test results and a quick view of percentages in the top right that relate to success versus failures for certain metrics.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How Heroku Works - Maker Day]]></title>
-    <link href="http://www.craigkerstiens.com/2011/11/05/oldmakersday/"/>
-    <updated>2011-11-05T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2011/11/05/oldmakersday</id>
-    <content type="html"><![CDATA[<p>Heroku has been growing rapidly lately, both in terms of our user base as well as our teams that help make Heroku great. With this growth there&rsquo;s an increasing demand on individuals' time to interview candidates, ramp up new hires, collaborate cross organization&hellip; in short, individuals are putting in more time on procedural things. Many of those items, while very valuable, start to conflict with actually producing the code which at the end of the day is what we want engineers doing. As a result most teams at Heroku observe Maker Day.</p>
+<p>I&rsquo;ll be diving into many various practices that enable Heroku to put quality engineering above all else, but first let me highlight the team structure and tools that enable this.</p>
 
 <!--more-->
 
 
-<p>Maker day is, simply put, for making things. Engineers writing code, UX and designers designing, product managers engaging with customers or defining product needs&mdash;in general each person does their job to improve the platform. Our goal at Heroku is to never encumber employees with so many meetings their unable to be productive (though even short meetings and buckets of productive time are a partial step towards optimizing engineers productivity). Engineering is a task that requires truly focused time and effort. On a common day a schedule may look something like this:</p>
+<p>Heroku is comprised of many small teams internally, each team operates much like an individual entity. The team chooses its own tools and best method for communication, though as a whole some form of Scrum is run throughout teams. Think of the unix philosophy of small sharp tools <a href="http://www.amazon.com/gp/product/0131429019/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0131429019">as in The Art of Unix Programming</a> applied to teams and people.</p>
+
+<p>For most teams this involves a weekly planning meeting earlier in the week. In such a meeting teams may conduct a retrospective, opportunities to improve the process the coming week, and of course plan tasks for the coming week. Its <b>very</b> important to note that planning tasks for the week doesn&rsquo;t necessarily involve planning the deadline for them, but rather simply laying out what people are working on (more on this in a future post). Each team will record and track this in a tool of their own choosing. Several use <a href="http://www.pivotaltracker.com">pivotal tracker</a>, one uses <a href="http://www.scrumy.com">scrumy</a>, some use email to distribute and track against personal to do lists. The method for tracking issues is again entirely up to the individual team. A one person team may choose to use a simple to do list, larger teams commonly use <a href="http://www.github.com">github</a> issues and pull requests. Given the team is the one responsible for their own productivity the team is the one to choose what tools they use.</p>
+
+<p>Meeting loads vary from person to person depending on what is the demands are on their time, though everyone at Heroku participates in some form of standup. Most teams do these daily as quick status stand-ups of what was worked on the day before and whats to be worked on the next day. In addition to the planning meeting and stand-ups, there is often collaborative engineering, and company wide gatherings.</p>
+
+<p>Collaborative engineering once again varies depending on which engineers are working together. Engineers may get in front of a white board or in front of machines and simple collaborate. For engineers together in the office this is often the most productive way. These practices work the same for remote employees, though slightly modified for the high touch interaction. For remote employees this often works as pair programming via Skype. Skype is indispensable for allowing remote workers to feel far less remote. Skype alongside <a href="http://typewith.me/">typewith.me</a> and you have an unbelievable easy to collaborate not just with 1 other, but with multiple parties to work through a document on a given topic. For smaller activities of communication asynchronous is key. This ranges from <a href="http://campfirenow.com/">campfire</a> most commonly during common working hours when someone is likely to be at a machine, to email when the return on a request may take slightly longer.</p>
+
+<p>Finally there is the all common company wide meeting, which occurs weekly. The structure of this varies from status updates to broader ongoings. Its often the perfect time for engineers to hear about what sales is doing or get updates on teams you don&rsquo;t commonly interact with. Along with common status updates there will be broader company updates.</p>
+
+<p>Consistently across all teams you&rsquo;ll find these principles which allow us to ensure the quality of engineering as we continue to grow:</p>
 
 <ul>
-<li>9:00 &ndash; arrive at the office</li>
-<li>10:30 &ndash; team standup</li>
-<li>11:00 &ndash; meeting cross team</li>
-<li>12:30 &ndash; lunch</li>
-<li>1:00 &ndash; all hands meeting</li>
-<li>2:30 &ndash; meeting with another team</li>
-<li>4:00 &ndash; interview candidate</li>
-<li>5:00 &ndash; feedback on candidate</li>
-<li>5:15 &ndash; meeting on product feature</li>
-<li>6:30 &ndash; depart from office</li>
+<li>Small teams that talk across defined API&rsquo;s and data contracts</li>
+<li>Teams using the tool that they believe is best for the job</li>
+<li>Frequent asynchronous communication</li>
+<li>Collaboration (including for remote employees)</li>
 </ul>
 
 
-<p>If you&rsquo;ll notice there are 4-5 one hour slots throughout the day for an engineer to be productive.</p>
-
-<p><em>On maker day the common schedule looks a little more like this:</em></p>
-
-<ul>
-<li>9:00 &ndash; arrive at the office</li>
-<li>10:30 &ndash; team standup</li>
-<li><em>ENGINEERING</em></li>
-<li>12:30 &ndash; lunch</li>
-<li><em>ENGINEERING</em></li>
-<li>6:30 &ndash; depart from office</li>
-</ul>
-
-
-<p>Outside of a short 15 minute stand up,</p>
-
-<p>Maker day ensures that on an organization-wide level, engineers get to do what they came to Heroku to do, which is to write great code and build an awesome platform. Even product managers and marketing people have plenty of things on their to-do list that don&rsquo;t involve meetings. Perhaps there are interesting questions you&rsquo;ve been hoping to answer, or a customer survey you&rsquo;d like to get sent out.</p>
+<p>The key in Heroku running efficiently is primarily allowing each team to run as it chooses. Heroku works because we have talented engineers, the best thing we can do for those engineers is allow them to work productively. Often only they know the best way to accomplish this, so who better to let them accomplish it than themselves.</p>
 ]]></content>
   </entry>
   
