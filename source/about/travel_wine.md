@@ -24,3 +24,5 @@ Among my hobbies include food/wine/travel. Yes, wine is a hobby. As I know frequ
 [Wine reviews](/about/wine.html) - Reviews of various wineries I've attended. Each winery has been attended more than once to have some comparisson between visits. Most are in the Sonoma region, though some outside. 
 
 [Wine routes](/about/wine_route.html) - For many reading through lists and lists of reviews and creating your own trip to wine country can be tiring. Here's a few pre-canned recommendations based on taste preference or location to make a visit to wine country easier.
+
+[My Memberships](/about/memberships.html) - Occasionally I'm asked where I'm a member at and where I frequent.
