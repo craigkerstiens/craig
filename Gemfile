@@ -18,5 +18,6 @@ group :development do
 end
 
 gem 'thin'
+gem 'rack-jekyll'
 gem 'jekyll', '~> 0.12'
 gem 'sinatra', '~> 1.4.2'
