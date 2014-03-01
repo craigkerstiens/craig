@@ -1,0 +1,12 @@
+--- 
+layout: post
+title: iPhone 1.1
+wordpress_id: 27
+wordpress_url: http://craigekerstiens.com/?p=27
+date: 2008-06-11 12:54:32 -07:00
+---
+So this week they announced what many expected was coming the iPhone 3g. However off the shelf it's still not webÂ  2.0, while a great device its not a web 2.0 device yet. Apple without a doubt understands user experience, but they do not fully grasp web 2.0 yet. Microsoft seems to even have a better understanding with the products they are looking to role out with Mesh and their enterprise social/collaboration tools. Lot's of great applications were highlighted at the keynote, but only one of those talking about publishing content (with the exception of mobileme, which is a paid service). While there's no doubt I will be getting the new iPhone when it is released in July, I will not talk about how it is a great web 2.0 device.
+
+If the application store is as open as Apple alludes to it being, then I can see how it will quickly become a web 2.0 device. Loopt is likely the strongest contender for helping to build a location based social network, and when they release for the iPhone can turn it into a web 2.0 device. I'll be most anxious to see how the push based services they announced will help to allow developers to turn it into a web 2.0 device as well. If I had to have my application constantly up it just doesn't work out as a full enabler for web 2.0. BUT if you allow notifications to be regularly pushed it just simplifies and increases the regularity of community and people staying in touch.
+
+The tipping point though for me at least will be if or when Apple finally allows video on the video. No, not playing video, but recording and streaming video. The kind of abilities available on a nokia n95, or available in my apple computer through iChat. When I can pull my phone out of my pocket and display to the world what I'm doing or where I'm at, you will have a device that allows you to communicate and most of all collaborate like any other before. It doesnt require more power than is already there, in fact I can record video on my jailbroken phone right now. The nokia n95 does a great job of streaming live video to qik, which is how I watched much of the Apple Keynote, it simply takes Apple finally understanding web 2.0 and embracing it.

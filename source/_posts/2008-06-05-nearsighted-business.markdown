@@ -1,0 +1,12 @@
+--- 
+layout: post
+title: Nearsighted Business
+wordpress_id: 23
+wordpress_url: http://craigekerstiens.com/?p=23
+date: 2008-06-05 18:26:27 -07:00
+---
+Adobe's former CEO, Bruce Chizen, when asked 'What advice do you have for new/young public companies?', gave a response of 'Go private'. While partially a joke he went on to elaborate something that many businesses seem to miss on. The main idea is that businesses are very nearsighted in their focus, they look at quarterly goals and in some cases yearly, but not where they want to be in 10 years. When companies become worried that head count is high they simply freeze hiring across the board without thinking of its ramifications. Good people, well great people are truly hard to find, and when a company enforces a blanket hiring freeze they miss out on those few great people that they truly need to grow. Meanwhile when they decide they have bandwidth for 1000 new employees they open the flood gates and let the first 1000 that can spell their name correctly in, because they can. This short term focus in the long run greatly limits the ability of what a company can achieve.
+
+In contrast a smaller company that is actually much more at risk of dying seems to have a better understanding of what their approach should be. While they may be understaffed and overworked, they firmly understand that they only have so many funds and therefore make wiser decisions when using them. The characteristics of the larger business and their short sighted focus leads to the cyclical performance that many experience over a few years, rather than a very steady growth they would like to maintain, and often leads to their end. A prime example would be IBM that laid off so many of their more talented people to lower their numbers years ago. As a result they lost their best workers and had many unexperienced individuals in there when they began hiring again. They are still working to catch back up to where they once were in the IT industry...
+
+In part I wonder if being a private entity is really the only way to have the long term focus and not worry about quarterly earnings. Personally I have never been privy to this insight and may not be for some time, but I don't foresee shareholders being patient enough to not punish a company if earnings are not so hot for a year or even a few quarters. So there may be nothing a large business can do about it, but I am surprised that more do not try.

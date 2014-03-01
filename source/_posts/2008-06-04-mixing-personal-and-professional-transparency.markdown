@@ -1,0 +1,12 @@
+--- 
+layout: post
+title: Mixing personal and professional, Transparency
+wordpress_id: 20
+wordpress_url: http://craigekerstiens.com/?p=20
+date: 2008-06-04 02:57:16 -07:00
+---
+Someone recently commented on by tweeting after having given my two weeks notice to my company, that it may not have been the best idea. So as a result I'd like to post my reasoning and thought why I feel it is actually a great idea. Even a month before my giving two weeks notice many knew it was likely going to happen, and I personally hope that this allowed those that may have needed to, to better plan accordingly. This also I believe allows me to be more evaluated on my actual merit in some terms. You see if I made it clear that I might be looking at another opportunity, and was not wanted I believe there may have been good reason hints would have been given that I should look harder and more. Instead in was a reasonable bit of the opposite.
+
+However the larger point of what I'd like to illustrate is that many of those that I work with I view as more than strictly co-workers. It's not uncommon to meet up with them on a Saturday for drinks or to just hang out. Meanwhile I have many friends who I do not talk to on a daily or even weekly basis, yet still like to keep them informed of what I'm up to, just as I look to follow how they are. To me twitter and other social tools are this medium. While some may prefer to keep professional and personal strictly separate entities, I have no problem with the two blurring. In fact I believe it adds to what I bring to the table in both contexts. By no means do I live and breath work, but to me my work is not only a job either. There are times after 5 or 6 o'clock that I will spend reading about business and technology, in short because they interest me. Though there are times between 8 and 5, that I will have an IM conversation un-work related, or post tweets available to the rest of the world.
+
+Hopefully some may value this transparency, though if you do not, dont add me on facebook, dont follow me on twitter. You'll still get the formal good-bye email with the rest of the group, however, I wouldn't expect you to get updates in 5 years, though that may be what you hope for. Personally I like to keep in touch with those that I enjoy working with, but also care to know about how they are doing with regards to their personal life. To me blurring the lines makes the relationships deeper and life more rewarding

@@ -1,0 +1,16 @@
+--- 
+layout: post
+title: The problem with facebook's platform, is the problem isn't the platform
+wordpress_id: 34
+wordpress_url: http://craigekerstiens.com/?p=34
+date: 2008-07-08 15:42:46 -07:00
+---
+Facebook's development platform just over a year ago seemed like a genius idea, with an almost infinite amount of potential. While it's still a very hot topic, and most sites these days when they lauch attempt to have a facebook version of their site or service available at almost at the same time. However, I believe we are already over the peak of this, as more controls are being put in place to slow viral growth, and users are spending less time on the site and engaged in the applications.
+
+My problem though is not with the slowing rate of engagement in applications developed on the facebook platform, but rather on what are the primary applications. Facebook seems to have done a very good job of keeping users to stay within the confines of the site, rather than simply using it as a utility. For most facebook is their personal planner for events, their personal datebook for friends/contacts, their online photo album, their email/messaging system, and more for some. And while it's fine and dandy for some of these things, facebook is not the best endpoint to interact with when getting things to and from facebook.
+
+Take for example the facebook chat. This is a great utility to be able to talk with friends that I may not have spoken with in years, my AIM list has around 200 users, meanwhile my facebook has over 500. No I do not wish to speak to all of these all the time, but in the rare occasion that I do it's convenient. However IM chat within a browser just doesn't do it for me, not on facebook, or meebo for that matter. The nice fact is that there is a solution and more being developed. Personally if I'm at home I use adium (Mac only) for my instant messaging which supports facebook. If I'm on a windows machine I use digsby to chat with my facebook friends and monitor what friends are doing. While digsby isn't a perfect solution, I strongly prefer it to the other option of chatting within the browser.
+
+What about pictures, that's probably the single busiest activity outside of updating status. Here I know of multiple friends that have attempted to use the site's interface for uploading pictures, only to have completed in double the time expected with much much more frustration than anticipated. Meanwhile, I simple select the photos I want to upload in iPhoto (there are options for mac and pc here), select export, click facebook, and off they go. This is the way it should be, I can do likewise for smugmug, flickr, etc.
+
+Facebook has done a reasonable job at giving developers access to to facebook to allow them to build reasonable applications. While there's a lot of junk out there, there is also some reasonable applications to really make facebook a reasonable utility. The problem lies that these seem to be hidden gems, whether its facebook or some third party, someone needs to start bringing these to the attention of others. Unless facebook transitions to themselves as strictly a utility and differentiates themselves on the quality of service the utility gives, and less on their UI and stronghold of data, they will be in for a world of hurt in a few years.

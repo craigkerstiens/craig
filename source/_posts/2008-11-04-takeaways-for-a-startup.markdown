@@ -1,0 +1,22 @@
+--- 
+layout: post
+title: Takeaways for a startup
+wordpress_id: 83
+wordpress_url: http://craigekerstiens.com/?p=83
+date: 2008-11-04 19:19:30 -08:00
+---
+I've learned a great deal since being out in the valley, first, is the confirmation that I do love the atmosphere. Second that I really miss the fall, but more importantly I've learned a lot that I feel is useful in a startup environment. The startup environment and business model is a very unique one, especially in recent years. It seems to not require a business model to get someone just to give you $10 million and hope you come out with one at some point. And in some cases it works, I mean it did for google, but well the failure stories are a lot more abudant than the success ones.
+
+Here's a quick run down of how I think one can build a successful startup in any economy, and why I feel our current state is prime for someone following these steps.
+
+1. Have a business model. Yeah, it's less glamorous that a facebook that has millions of people log on to it each hour. Take for example the guys at 37 signals, they're probably happy to get a million uniques in a month, or perhaps even a year. But per employee, per their cost, their revenues are at least 10x if not 100x of facebook's. And they most likely see that in revenue per employee as well. Why is this the case? Simple put, they have a business model. They have some product they build and people want it, not want it in the sense that they will spend hours of time aimlessly using it if its free and convenient. It accomplishes some actual goal, and saves people time and makes their lives easier. Oh and something I've probably said too many times on here, but ad's isn't a business model, unless your specifically an ad company.
+
+2. Get competent employees, I want to even take this a step further and say to get employees that believe in the technology but also in the business. Its one thing when your at a large company to have someone that's extremely specialized. But at a startup everyone wears a variety of hats. Your secretary could land a big lead on a sale, your intern developer could come up with your future marketing slogan, and because of this everyone you bring on board needs to be fully on board with every aspect of your business. If you're growing slower than you hoped it's fine, and worth it to be short rather than over inflated.
+
+3. Part of the reason you'd rather be short than inflated is you don't want to take on capital. To quote someone else I've recently come into contact with, 'you want to get off the tit as fast as possible'. To give a little more explanation, most startups take sizable investments from VC's or other parties to get going. The problem here is that you then have to answer to them, if you're the one with the idea, with the vision, why would you want to give up any control of that. And the fact is you shouldn't, going back to point 1 and 2, if you have the business model it shouldn't be long before you see revenue, and if all your employees believe in the company, they wont expect a high cushy salary, they'll take ownership in the company as part of their compensation.
+
+4. Keep your employees happy, the easiest way to do this is pizza and beer. It's simple, but works. If you have happy employees enjoying what they do they'll work harder and longer. The smaller you are the more poisonous it is to have employees that don't fit in and embrace your culture. Sure diversity can be a good thing, and you do need some balance of it. But more than that you don't want to ruin the atmosphere and comraderier that comes along with a startup. In addition to keeping your employees happy those small things help, pizza and beer for 20 to get an extra hour of work and the intangibles of helping build relationships that allow them to work better is far cheaper than paying them extra dollars to work late.
+
+5. Don't overspend, this may seem in contrast to 4, and often times poeple go with one extreme or the other. Pizza and beer makes sense, Lobster lunches do not, I don't care if you are google, they still don't make sense. If you are doing extremely well and want to give back to employees give it with cash, they'll appreciate it more. Bsimilar search for John McCain shows a normal pro-McCainut order in lunches every day and pool tables are no necessary expenses.
+
+If there's enough response I'll follow up with some of the more tangible ways of making this happen, but for now, enjoy these big picture take aways.

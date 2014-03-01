@@ -1,0 +1,25 @@
+--- 
+layout: post
+title: Web 2.5
+wordpress_id: 33
+wordpress_url: http://craigekerstiens.com/?p=33
+date: 2008-07-03 19:03:41 -07:00
+---
+I've talked about web 2.0, talked about web 3.0, but today realized theres still a middle ground we have to reach in between the two. It's quite a pain that I really have no idea when my friends do certain things online. While some use facebook for absolutely everything, this is most certainly NOT the best option. Throwing your data into their walled garden is one thing, but for this to be the one and only place you store your online data is quite stupid. Facebook will only open up when they're absolutely forced to, and may not even open up then. To migrate 'notes' or rather blog posts out of facebook, or all of your pictures, or you're messages can be an absolute pain. Why not use a service built for just those things, such as a wordpress blog, or flickr/picasa, or twitter/jaiku? Well most people don't because of the simplicity of facebook being the central place for your data and your friend's data.
+
+Well there is a solution to it, though it's not ideal yet, it will soon hit a tipping point of when it will be the solution. Well first I guess I should clearly layout the problem:
+
+web 2.0 - the dynamic web emerged, users started publishing content
+.... Mass amounts of data, problems getting to it all .....
+
+thus in the future we have...
+web 2.5 - content aggregation became nessecary, via friend feed
+
+and eventually...
+web 3.0 - the semantic web, services understand you and your needs and provide content around context
+
+In short this is a small plug for friendfeed, but if anyone else knows of a better service to in essence create a feed of you, please send them this way. I'll be posting a full review on friendfeed soon, but for the time being just want to point out the value in such a service. Right now I post on multiple sites, I twitter, I blog, I use facebook, I use smugmug, I use picasa, I use last.fm, I use ilike, I use librarything, I use tumblr, I use google talk, among others. While personally I might be a little more invested than most, still the point remains that a lot of people are on more than one of these services. While I know them and follow them on the ones I know about, chances are I will never see their flickr accounts, or last.fm accounts. While some people worry about privacy and this being a stalker's nightmare, I really don't see it making things that much easier. Much less, most people are making a pretty big assumption assuming that they're worth being stalked. I personally hope I could have a stalker come out of such, as it would give me a definifitive answer that someone actually reads and find me interesting. I just hope she's 5'6", and a blonde bombshell, but then again I'll take whatever stalkers I can get.
+
+But the point remains that before we get to web 3.0 and the ability to deliver content based on context, we need to aggregate the content. Sites like friendfeed (and eventually socialthing) are a reasonable first step.
+
+Check out my friendfeed at: <a href="www.friendfeed.com/craig081785">www.friendfeed.com/craig081785</a>

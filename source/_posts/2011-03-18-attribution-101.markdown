@@ -1,0 +1,55 @@
+--- 
+layout: post
+title: Attribution 101
+tags: 
+- Business
+status: publish
+type: post
+published: true
+comments: true
+categories: [Analytics, Startup]
+meta: 
+  _edit_last: "1"
+  _su_rich_snippet_type: none
+  dsq_thread_id: "257473995"
+---
+Continuing with the recent posts on metrics and marketing. I want to give a quick primer on attribution. To any marketing or analytics people out there, simply skip this it would aim to be a primer recap at best for you.
+
+The very general meaning behind attribution is to give credit. When it comes to web products this can be giving credit for lots of things:
+<ul>
+	<li>A visit to your site</li>
+	<li>A purchase to your site</li>
+	<li>Other events, such as sign up, referring friends, etc.</li>
+</ul>
+<!--more-->
+Its really wonderful when there's a direct mapping in correlation. Take for example the case where:
+<ol>
+	<li>User sees your ad on facebook</li>
+	<li>User clicks on ad</li>
+	<li>User signs up for an account</li>
+	<li>User pays you money</li>
+</ol>
+In this case it's clear that its worthwhile to advertise on facebook. The hard part becomes when there's a non-linear path in some form (which is almost always the case). Now take the case:
+<ol>
+	<li>User sees your ad on facebook</li>
+	<li>User clicks on ad, then leaves</li>
+	<li>User comes back a day later directly, and spends 10 minutes on the site reading</li>
+	<li>User comes back a day later after searching via google, and creates an account</li>
+	<li>User sees a re targeting ad 1 month later and visits</li>
+	<li>User pays for account</li>
+</ol>
+In a perfect world you have case 1 and can give the full credit or attribution of the purchase to your facebook ad. However, in a real world you have case 2 and it becomes more complicated. Perhaps its something like this though:
+<ul>
+	<li>Account creation - 100% to facebook ad</li>
+	<li>Paying for account - 50% to facebook ad, 50% to retargetting?</li>
+</ul>
+This is where there is not an exact science to attribution, as it could be justified to give 100% of the credit for paying for an account to the re targeting. So if this has you pondering on attribution here's the downer part.... The tools that allow you to attribute a goal or action to multiple sources:
+<ul>
+	<li>Omniture</li>
+	<li>Web Trends</li>
+</ul>
+Most other tools are the last place the user ever came from, some occasionally are the first place a user came from, but without pony-ing up for a high end product your options on actually getting data don't really exist.
+
+&nbsp;
+
+<em>Disclaimer: I have little to no formal training in stats or analytics, have simply learned through launching products so take this for what its worth, someone that has been there and done it.</em>
