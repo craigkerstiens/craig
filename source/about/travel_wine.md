@@ -25,4 +25,4 @@ Among my hobbies include food/wine/travel. Yes, wine is a hobby. As I know frequ
 
 [Wine routes](/about/wine_route.html) - For many reading through lists and lists of reviews and creating your own trip to wine country can be tiring. Here's a few pre-canned recommendations based on taste preference or location to make a visit to wine country easier.
 
-[My Memberships](/about/memberships.html) - Occasionally I'm asked where I'm a member at and where I frequent.
+[My Memberships](/about/memberships.html) - Occasionally I'm asked where I'm a member at and where I frequent. 
