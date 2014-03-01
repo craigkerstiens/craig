@@ -3,7 +3,6 @@ ruby "1.9.3"
 
 group :development do
   gem 'rake', '~> 0.9'
-  gem 'jekyll', '~> 0.12'
   gem 'rdiscount', '~> 2.0.7'
   gem 'pygments.rb', '~> 0.3.4'
   gem 'RedCloth', '~> 4.2.9'
@@ -19,4 +18,5 @@ group :development do
 end
 
 gem 'thin'
+gem 'jekyll', '~> 0.12'
 gem 'sinatra', '~> 1.4.2'
