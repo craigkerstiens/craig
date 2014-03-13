@@ -9,7 +9,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Update theres a more recent post that expands further on where to start optimizing specific queries, and of course if you want to dig into &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Postgres out of the box has an abundance of datatypes, from standard numeric datatypes to geometric or even network datatypes. With extensions you &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,63 +97,6 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/10/01/understanding-postgres-performance/">
-		
-			Understanding Postgres Performance</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
-
-<p>For many application developers their database is a black box. Data goes in, comes back out and in between there developers hope its a pretty short time span. Without becoming a DBA there&rsquo;s a few pieces of data that most application developers can easily grok which will help them understand if their database is performing adequately. This post will provide some quick tips that allow you to determine whether your database performance is slowing down your app, and if so what you can do about it.</p>
-
-<h3>Understanding your Cache and its Hit Rate</h3>
-
-<p>The typical rule for most applications is that only a fraction of its data is regularly accessed. As with many other things data can tend to follow the 80/20 rule with 20% of your data accounting for 80% of the reads and often times its higher than this. Postgres itself actually tracks access patterns of your data and will on its own keep frequently accessed data in cache. Generally you want your database to have a cache hit rate of about 99%. You can find your cache hit rate with:</p>
-
-<pre><code>SELECT 
-  sum(heap_blks_read) as heap_read,
-  sum(heap_blks_hit)  as heap_hit,
-  sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio
-FROM 
-  pg_statio_user_tables;
-</code></pre>
-
-
-		
-		<a href="/2012/10/01/understanding-postgres-performance/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
 
 
     <article class="post">
@@ -690,6 +633,58 @@ connection.product.insert(django_pony)
 <div class="tags">
 
 	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/01/25/sphinx-buildpack/">
+		
+			Sphinx Build Pack on Heroku</a>
+	</h2>
+	<div class="entry-content">
+		<p>Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via <a href="http://github.com/heroku/">Heroku&rsquo;s github</a>, you can view several of them at:</p>
+
+<ul>
+<li><a href="https://github.com/heroku/heroku-buildpack-python">Python Build Pack</a></li>
+<li><a href="https://github.com/heroku/heroku-buildpack-ruby">Ruby Build Pack</a></li>
+<li><a href="https://github.com/heroku/heroku-buildpack-scala">Scala Build Pack</a></li>
+</ul>
+
+
+<p><em>There have even been some created as fun weekend hacks such as the <a href="http://github.com/hone/heroku-buildpack-jsnes">NES Rom Buildpack</a>.</em></p>
+
+
+		
+		<a href="/2012/01/25/sphinx-buildpack/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-25T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>, <a class='category' href='/categories/python/'>Python</a>
 
 </div>
 

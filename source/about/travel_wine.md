@@ -17,7 +17,7 @@ Among my hobbies include food/wine/travel. Yes, wine is a hobby. As I know frequ
 
 [Paso Robles](/about/pasorobles.html) - A lesser visited wine region, though thats gradually changing with it winning wine region of the year in 2013. Much more relaxed than Napa or even Sonoma, yet great wine.
 
-[San Francisco](/about/sf.html) - Hopefully not much needs to be about the city by the bay. A foodie city with lots of activities, and a woefully out of date list because the pace at which things change around here is exhausting.
+[San Francisco](/about/sf.html) - Hopefully not much needs to be said about the city by the bay. A foodie city with lots of activities, and a woefully out of date list because the pace at which things change around here is exhausting.
 
 ### Wine Guides
 
