@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-12T19:23:10-07:00</updated>
+  <updated>2014-03-24T07:15:46-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[PostgreSQL 9.4 - Looking up]]></title>
+    <link href="http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/"/>
+    <updated>2014-03-24T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up</id>
+    <content type="html"><![CDATA[<p>Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the <a href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">9.4 PostgreSQL release</a>. Since that post a few weeks ago the landscape has already changed, and much more for the positive.</p>
+
+<p><em>The lesson here, is never count Postgres out</em>. As <a href="www.linuxinsider.com/story/Bruce-Momjian-PostrgreSQL-Prefers-the-Scenic-Route-80045.html">Bruce discussed in a recent interview</a>, Postgres is slow and steady, but much like the turtle can win the race.</p>
+
+<p>So onto the actual features:</p>
+
+<h3>JSONB</h3>
+
+<p>JSON has existed for a while in Postgres. Though the JSON that exists today simply validates that your text is valid JSON, then goes on to store it in a text field. This is fine, but not overly performant. If you do need some flexibility of your schema and performance without much effort then hstore may already work for you today, you can of course read more on this in an old post comparing <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore to json</a>.</p>
+
+<p>But let&rsquo;s assume you do want JSON and a full document store, which is perfectly reasonable. Your option today is still best with the JSON datatype. And if you&rsquo;re retrieving full documents this is fine, however if you&rsquo;re searching/filtering on values within those documents then you need to take advantage of some functional indexing. You can do this some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">built-in operators</a> or with full <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JS in Postgres</a>. This is a little more work, but also very possible to get good performance.</p>
+
+<p>Finally, onto the perfect world, where JSON isn&rsquo;t just text in your database. For some time there&rsquo;s been a discussion around hstore and its future progress and of course the future of JSON in Postgres. These two worlds have finally heavily converged for PostgreSQL 9.4 giving you <a href="http://www.postgresql.org/message-id/E1WRpmB-0002et-MT@gemulon.postgresql.org">the best of both worlds</a>. With what was known as hstore2, by <a href="http://obartunov.livejournal.com/177247.html">The Russians</a> under the covers, and collective efforts on JSONB (Binary representation of JSON) which included all the JSON interfaces you&rsquo;d expect we can now have full document storage and awesome performance with little effort.</p>
+
+<p>Digging in a little further, why does it matter that its a binary representation? Well under the covers building on the hstore functionality brings along some of the awesome index types in Postgres. Namely GIN and possibly in the future GIST. These indexes will automatically index all keys and values within a document, meaning you don&rsquo;t have to manually create individual functional indexes. Oh and they&rsquo;re <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">fast and often small</a> on disk as well.</p>
+
+<h3>Logical Decoding</h3>
+
+<p>Logical replication was another feature that I talked about that was likely missing. Here there isn&rsquo;t the same positive news as JSONB, as there&rsquo;s not a 100% usable feature available. Yet there is a big silver lining in it. <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=b89e151054a05f0f6d356ca52e3b725dd0505e53">Committed just over a week ago</a> was logical decoding. This means that we can decode the WAL (Write-Ahead-Log) into logical changes. In layman&rsquo;s terms this means something thats unreadable to anything but Postgres (and version dependent in cases) can be intrepretted to a series of <code>INSERT</code>s, <code>UPDATE</code>s, <code>DELETE</code>s, etc. With logical commands you could then start to get closer to cross version upgrades and eventually multi-master.</p>
+
+<p>With this commit it doesn&rsquo;t mean all the pieces are there in the core of Postgres today. What it does mean is the part thats required of the Postgres core is done. The rest of this, which includes sending the logical replication stream somewhere, and then having something apply it can be developed fully as an extension.</p>
+
+<h3>In Conclusion</h3>
+
+<p>Postgres 9.4 isn&rsquo;t 100% complete yet, as the commitfest is still going on. You can follow along on the <a href="www.postgresql.org/list/pgsql-hackers/2014-03/">postgres hackers mailing list</a> or on the <a href="https://commitfest.postgresql.org/">commitfest app</a> where you can review specific patches or even chip in on reviewing. And of course I&rsquo;ll do my best to continue to highlight useful features here and surface them on <a href="http://www.postgresweekly.com">Postgres Weekly</a> as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Tracking Month over Month Growth in SQL]]></title>
@@ -243,146 +276,6 @@ ALTER TABLE foo ALTER COLUMN bar NOT NULL;
 <h3>Where to</h3>
 
 <p>Some of the shifts in schema-less or really in other databases in general are not so large they cannot be subsummed into a broader option. At the same time there are some strong merits such as the ones above which do take an active effort to deliver on expanding what is a &ldquo;relational database&rdquo;.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The best Postgres feature you're not using – CTEs aka WITH clauses]]></title>
-    <link href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/"/>
-    <updated>2013-11-18T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using</id>
-    <content type="html"><![CDATA[<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
-
-<p>The feature itself is known as CTEs or common table expressions, you may also here it referred to as <code>WITH</code> clauses. The general idea is that it allows you to create something somewhat equivilant to a view that only exists during that transaction. You can create multiple of these which then allow for clear building blocks and make it simple to follow what you&rsquo;re doing.</p>
-
-<!--more-->
-
-
-<p>Lets take a look at a nice simple one:</p>
-
-<pre><code>WITH users_tasks AS (
-  SELECT 
-         users.email,
-         array_agg(tasks.name) as task_list,
-         projects.title
-  FROM
-       users,
-       tasks,
-       project
-  WHERE
-        users.id = tasks.user_id
-        projects.title = tasks.project_id
-  GROUP BY
-           users.email,
-           projects.title
-)
-</code></pre>
-
-<p>Using this I could now just append some basic other query on to the end that references this CTE <code>users_tasks</code>. Something akin to:</p>
-
-<pre><code>SELECT *
-FROM users_tasks;
-</code></pre>
-
-<p>But where it becomes more interesting is chaining these together. So while I have all tasks assigned to each user here, perhaps I want to then find which users are responsible for more than 50% of the tasks on a given project, thus being the bottleneck. To oversimplify this we could do it a couple of ways, total up the tasks for each project, and then total up the tasks for each user per project:</p>
-
-<pre><code>total_tasks_per_project AS (
-  SELECT 
-         project_id,
-         count(*) as task_count
-  FROM tasks
-  GROUP BY project_id
-),
-
-tasks_per_project_per_user AS (
-  SELECT 
-         user_id,
-         project_id,
-         count(*) as task_count
-  FROM tasks
-  GROUP BY user_id, project_id
-),
-</code></pre>
-
-<p>Then we would want to combine and find the users that are now over that 50%:</p>
-
-<pre><code>overloaded_users AS (
-  SELECT tasks_per_project_per_user.user_id,
-
-  FROM tasks_per_project_per_user,
-       total_tasks_per_project
-  WHERE tasks_per_project_per_user.task_count &gt; (total_tasks_per_project / 2)
-)
-</code></pre>
-
-<p>Now as a final goal I&rsquo;d want to get a comma separated list of tasks of the overloaded users. So we&rsquo;re simply giong to join against that <code>overloaded_users</code> and our initial list of <code>users_tasks</code>. Putting it all together it looks somewhat long, but becomes much more readable. And as a bonus I layered in some comments.</p>
-
-<pre><code>--- Created by Craig Kerstiens 11/18/2013
---- Query highlights users that have over 50% of tasks on a given project
---- Gives comma separated list of their tasks and the project
-
-
---- Initial query to grab project title and tasks per user
-WITH users_tasks AS (
-  SELECT 
-         users.id as user_id,
-         users.email,
-         array_agg(tasks.name) as task_list,
-         projects.title
-  FROM
-       users,
-       tasks,
-       project
-  WHERE
-        users.id = tasks.user_id
-        projects.title = tasks.project_id
-  GROUP BY
-           users.email,
-           projects.title
-),
-
---- Calculates the total tasks per each project
-total_tasks_per_project AS (
-  SELECT 
-         project_id,
-         count(*) as task_count
-  FROM tasks
-  GROUP BY project_id
-),
-
---- Calculates the projects per each user
-tasks_per_project_per_user AS (
-  SELECT 
-         user_id,
-         project_id,
-         count(*) as task_count
-  FROM tasks
-  GROUP BY user_id, project_id
-),
-
---- Gets user ids that have over 50% of tasks assigned
-overloaded_users AS (
-  SELECT tasks_per_project_per_user.user_id,
-
-  FROM tasks_per_project_per_user,
-       total_tasks_per_project
-  WHERE tasks_per_project_per_user.task_count &gt; (total_tasks_per_project / 2)
-)
-
-SELECT 
-       email,
-       task_list,
-       title
-FROM 
-     users_tasks,
-     overloaded_users
-WHERE
-      users_tasks.user_id = overloaded_users.user_id
-</code></pre>
-
-<p>CTEs won&rsquo;t always be quite as performant as optimizing your SQL to be as concise as possible. In most cases I have seen performance differences smaller than a 2X difference, this tradeoff for readability is a nobrainer as far as I&rsquo;m concerned. And with time the Postgres optimizer should continue to get better about such performance.</p>
-
-<p>As for the verbosity, yes I could have done this query in probably 10-15 lines of very concise SQL. Yet, most may not be able to understand it quickly if at all. Readability is huge when it comes to SQL to ensure its doing the right thing. SQL will almost always tell you an answer, it just may not be to the question you think you&rsquo;re asking. Ensuring your queries can be reasoned about is critical to ensuring accuracy and CTEs are one great way of accomplishing that.</p>
 ]]></content>
   </entry>
   

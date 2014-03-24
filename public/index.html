@@ -9,7 +9,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the 9.4 PostgreSQL release. Since that post a &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,72 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/03/24/Postgres-9.4-Looking-up/">
+		
+			PostgreSQL 9.4 - Looking Up</a>
+	</h2>
+	<div class="entry-content">
+		<p>Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the <a href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">9.4 PostgreSQL release</a>. Since that post a few weeks ago the landscape has already changed, and much more for the positive.</p>
+
+<p><em>The lesson here, is never count Postgres out</em>. As <a href="www.linuxinsider.com/story/Bruce-Momjian-PostrgreSQL-Prefers-the-Scenic-Route-80045.html">Bruce discussed in a recent interview</a>, Postgres is slow and steady, but much like the turtle can win the race.</p>
+
+<p>So onto the actual features:</p>
+
+<h3>JSONB</h3>
+
+<p>JSON has existed for a while in Postgres. Though the JSON that exists today simply validates that your text is valid JSON, then goes on to store it in a text field. This is fine, but not overly performant. If you do need some flexibility of your schema and performance without much effort then hstore may already work for you today, you can of course read more on this in an old post comparing <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore to json</a>.</p>
+
+<p>But let&rsquo;s assume you do want JSON and a full document store, which is perfectly reasonable. Your option today is still best with the JSON datatype. And if you&rsquo;re retrieving full documents this is fine, however if you&rsquo;re searching/filtering on values within those documents then you need to take advantage of some functional indexing. You can do this some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">built-in operators</a> or with full <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JS in Postgres</a>. This is a little more work, but also very possible to get good performance.</p>
+
+<p>Finally, onto the perfect world, where JSON isn&rsquo;t just text in your database. For some time there&rsquo;s been a discussion around hstore and its future progress and of course the future of JSON in Postgres. These two worlds have finally heavily converged for PostgreSQL 9.4 giving you <a href="http://www.postgresql.org/message-id/E1WRpmB-0002et-MT@gemulon.postgresql.org">the best of both worlds</a>. With what was known as hstore2, by <a href="http://obartunov.livejournal.com/177247.html">The Russians</a> under the covers, and collective efforts on JSONB (Binary representation of JSON) which included all the JSON interfaces you&rsquo;d expect we can now have full document storage and awesome performance with little effort.</p>
+
+<p>Digging in a little further, why does it matter that its a binary representation? Well under the covers building on the hstore functionality brings along some of the awesome index types in Postgres. Namely GIN and possibly in the future GIST. These indexes will automatically index all keys and values within a document, meaning you don&rsquo;t have to manually create individual functional indexes. Oh and they&rsquo;re <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">fast and often small</a> on disk as well.</p>
+
+<h3>Logical Decoding</h3>
+
+<p>Logical replication was another feature that I talked about that was likely missing. Here there isn&rsquo;t the same positive news as JSONB, as there&rsquo;s not a 100% usable feature available. Yet there is a big silver lining in it. <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=b89e151054a05f0f6d356ca52e3b725dd0505e53">Committed just over a week ago</a> was logical decoding. This means that we can decode the WAL (Write-Ahead-Log) into logical changes. In layman&rsquo;s terms this means something thats unreadable to anything but Postgres (and version dependent in cases) can be intrepretted to a series of <code>INSERT</code>s, <code>UPDATE</code>s, <code>DELETE</code>s, etc. With logical commands you could then start to get closer to cross version upgrades and eventually multi-master.</p>
+
+<p>With this commit it doesn&rsquo;t mean all the pieces are there in the core of Postgres today. What it does mean is the part thats required of the Postgres core is done. The rest of this, which includes sending the logical replication stream somewhere, and then having something apply it can be developed fully as an extension.</p>
+
+<h3>In Conclusion</h3>
+
+<p>Postgres 9.4 isn&rsquo;t 100% complete yet, as the commitfest is still going on. You can follow along on the <a href="www.postgresql.org/list/pgsql-hackers/2014-03/">postgres hackers mailing list</a> or on the <a href="https://commitfest.postgresql.org/">commitfest app</a> where you can review specific patches or even chip in on reviewing. And of course I&rsquo;ll do my best to continue to highlight useful features here and surface them on <a href="http://www.postgresweekly.com">Postgres Weekly</a> as well.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-24T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -487,53 +553,6 @@ $(document).ready(
 
 
 <time datetime="2013-10-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/09/12/disabling-muting-while-typing-in-hangouts/">
-		
-			Disabling Muting While Typing in Google Hangouts</a>
-	</h2>
-	<div class="entry-content">
-		<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
-
-<pre><code> defaults write com.google.googletalkplugind exps -string [\"-tm\"]
-</code></pre>
-
-<p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
