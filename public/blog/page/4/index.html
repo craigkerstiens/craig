@@ -9,7 +9,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Over a year ago I blogged about Heroku&rsquo;s approach to Teams and Tools. Since that time Heroku has grown from around 25 people to over 100, we& &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="I blog because I&rsquo;m lazy. There&rsquo;s more too it though: In any given day I may explain something to someone, the first time I do this I &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,43 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/31/why-i-blog/">
+		
+			Why I Blog</a>
+	</h2>
+	<div class="entry-content">
+		<p>I blog because I&rsquo;m lazy. There&rsquo;s more too it though: In any given day I may explain something to someone, the first time I do this I make a bit of a mental note. The second time I do this, especially within a short time frame I make a physical note of this in the form of the title of a blog post. Once I&rsquo;m already to a second time of doing this its almost inevitable I&rsquo;ll continue repeating myself – and its valuable to others.</p>
+
+
+		
+		<a href="/2013/03/31/why-i-blog/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -537,67 +574,6 @@ pip install djorm-ext-expressions
 <div class="tags">
 
 	<a class='category' href='/categories/array/'>Array</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/10/18/connecting_to_redis_from_postgres/">
-		
-			Redis in My Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
-
-<p>SQL is an expressive language, though people are often okay with accessing Mongo data through its own ORM. The real value is that you could actually query the data from within Postgres then join across your data stores, without having to do some ETL process to move data around.  Think&hellip; joining sales data from Postgres with user reviews stored in Mongo or searching for visits to a website (retained in redis) against purchases by user in Postgres.</p>
-
-<p>The mechanism pointed out was a MongoDB Foreign Data Wrapper. A Foreign Data Wrapper or FDW essentially lets you connect to an external datastore from within a Postgres database. In addition to the Mongo FDW released the other day there&rsquo;s  many others. For example Postgres 9.0 and up ships with one called <code>db_link</code>, which lets you query and join across two different Postgres databases. Beyond that there&rsquo;s support for a variety of other data stores including some you may have never expected:</p>
-
-<ul>
-<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
-<li><a href="http://pgxn.org/dist/file_textarray_fdw/">Textfile</a></li>
-<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
-<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
-<li><a href="http://pgxn.org/dist/odbc_fdw/">ODBC</a></li>
-<li><a href="http://pgxn.org/dist/ldap_fdw/">LDAP</a></li>
-<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
-<li><a href="http://pgxn.org/tag/fdw/">More</a></li>
-</ul>
-
-
-<p>Lets look at actually getting the Redis one running then see what some of the power of it really looks like. First we have to get the code then build it:</p>
-
-
-		
-		<a href="/2012/10/18/connecting_to_redis_from_postgres/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-18T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/redis/'>Redis</a>
 
 </div>
 

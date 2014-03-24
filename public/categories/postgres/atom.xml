@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-24T07:15:46-07:00</updated>
+  <updated>2014-03-24T07:19:31-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -31,6 +31,42 @@
 <p>But let&rsquo;s assume you do want JSON and a full document store, which is perfectly reasonable. Your option today is still best with the JSON datatype. And if you&rsquo;re retrieving full documents this is fine, however if you&rsquo;re searching/filtering on values within those documents then you need to take advantage of some functional indexing. You can do this some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">built-in operators</a> or with full <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JS in Postgres</a>. This is a little more work, but also very possible to get good performance.</p>
 
 <p>Finally, onto the perfect world, where JSON isn&rsquo;t just text in your database. For some time there&rsquo;s been a discussion around hstore and its future progress and of course the future of JSON in Postgres. These two worlds have finally heavily converged for PostgreSQL 9.4 giving you <a href="http://www.postgresql.org/message-id/E1WRpmB-0002et-MT@gemulon.postgresql.org">the best of both worlds</a>. With what was known as hstore2, by <a href="http://obartunov.livejournal.com/177247.html">The Russians</a> under the covers, and collective efforts on JSONB (Binary representation of JSON) which included all the JSON interfaces you&rsquo;d expect we can now have full document storage and awesome performance with little effort.</p>
+
+<p>Digging in a little further, why does it matter that its a binary representation? Well under the covers building on the hstore functionality brings along some of the awesome index types in Postgres. Namely GIN and possibly in the future GIST. These indexes will automatically index all keys and values within a document, meaning you don&rsquo;t have to manually create individual functional indexes. Oh and they&rsquo;re <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">fast and often small</a> on disk as well.</p>
+
+<h3>Logical Decoding</h3>
+
+<p>Logical replication was another feature that I talked about that was likely missing. Here there isn&rsquo;t the same positive news as JSONB, as there&rsquo;s not a 100% usable feature available. Yet there is a big silver lining in it. <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=b89e151054a05f0f6d356ca52e3b725dd0505e53">Committed just over a week ago</a> was logical decoding. This means that we can decode the WAL (Write-Ahead-Log) into logical changes. In layman&rsquo;s terms this means something thats unreadable to anything but Postgres (and version dependent in cases) can be intrepretted to a series of <code>INSERT</code>s, <code>UPDATE</code>s, <code>DELETE</code>s, etc. With logical commands you could then start to get closer to cross version upgrades and eventually multi-master.</p>
+
+<p>With this commit it doesn&rsquo;t mean all the pieces are there in the core of Postgres today. What it does mean is the part thats required of the Postgres core is done. The rest of this, which includes sending the logical replication stream somewhere, and then having something apply it can be developed fully as an extension.</p>
+
+<h3>In Conclusion</h3>
+
+<p>Postgres 9.4 isn&rsquo;t 100% complete yet, as the commitfest is still going on. You can follow along on the <a href="www.postgresql.org/list/pgsql-hackers/2014-03/">postgres hackers mailing list</a> or on the <a href="https://commitfest.postgresql.org/">commitfest app</a> where you can review specific patches or even chip in on reviewing. And of course I&rsquo;ll do my best to continue to highlight useful features here and surface them on <a href="http://www.postgresweekly.com">Postgres Weekly</a> as well.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[PostgreSQL 9.4 - Looking up]]></title>
+    <link href="http://www.craigkerstiens.com/2014/03/11/Postgres-9.4-Looking-up/"/>
+    <updated>2014-03-11T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/03/11/Postgres-9.4-Looking-up</id>
+    <content type="html"><![CDATA[<p>Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the <a href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">9.4 PostgreSQL release</a>. Since that post a few weeks ago the landscape has already changed, and much more for the positive.</p>
+
+<p><em>The lesson here, is never count Postgres out</em>. As <a href="www.linuxinsider.com/story/Bruce-Momjian-PostrgreSQL-Prefers-the-Scenic-Route-80045.html">Bruce discussed in a recent interview</a>, Postgres is slow and steady, but much like the turtle can win the race.</p>
+
+<p>So onto the actual features:</p>
+
+<!--more-->
+
+
+<h3>JSONB</h3>
+
+<p>JSON has existed for a while in Postgres. Though the JSON that exists today simply validates that your text is valid JSON, then goes on to store it in a text field. This is fine, but not overly performant. If you do need some flexibility of your schema and performance without much effort then hstore may already work for you today, you can of course read more on this in an old post comparing <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore to json</a>.</p>
+
+<p>But let&rsquo;s assume you do want JSON and a full document store, which is perfectly reasonable. Your option today is still best with the JSON datatype. And if you&rsquo;re retrieving full documents this is fine, however if you&rsquo;re searching/filtering on values within those documents then you need to take advantage of some functional indexing. You can do this some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">built-in operators</a> or with full <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JS in Postgres</a>. This is a little more work, but also very possible to get good performance.</p>
+
+<p>Finally, onto the perfect world, where JSON isn&rsquo;t just text in your database. For some time there&rsquo;s been a discussion around hstore and its future progress and of course the future of JSON in Postgres. These two worlds have finally heavily converged for PostgreSQL 9.4 giving you <a href="http://www.postgresql.org/message-id/E1WRpmB-0002et-MT@gemulon.postgresql.org">the best of both worlds</a>. With what was known as hstore2, by <a href="http://obartunov.livejournal.com/177247.html">The Russians</a> under the covers, and collective efforts on JSONB (Binary representation of JSON) which included all the JSON interfaces you&rsquo;d expect. We now have full document storage and awesome performance with little effort.</p>
 
 <p>Digging in a little further, why does it matter that its a binary representation? Well under the covers building on the hstore functionality brings along some of the awesome index types in Postgres. Namely GIN and possibly in the future GIST. These indexes will automatically index all keys and values within a document, meaning you don&rsquo;t have to manually create individual functional indexes. Oh and they&rsquo;re <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">fast and often small</a> on disk as well.</p>
 
@@ -228,54 +264,6 @@ FROM pageviews;
 <li>Logical replication &ndash; this one looks like some pieces will make it, but not a wholey usable implementation.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rethinking the limits on relational databases]]></title>
-    <link href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/"/>
-    <updated>2014-01-24T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational</id>
-    <content type="html"><![CDATA[<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
-
-<h3>Forget migrations</h3>
-
-<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
-
-<!--more-->
-
-
-<p>This is often viewed as a limitation of relational databases. Yet it doesn&rsquo;t really have to. You see even in schema-less database the relationships are still there, its just you&rsquo;re managing it at the application level. There&rsquo;s no reason higher level frameworks or ORMs couldn&rsquo;t handle the migration process. As it is today the process of adding a column to a relational database is quite straightforward in a sense where it doesn&rsquo;t introduce downtime and is capable of letting the developer still move quickly its just not automatically baked in.</p>
-
-<pre><code># Assuming a column thats referenced doesn't exist
-# Automatically execute relevant bits in your ORM
-# This isn't code meant for you to run 
-
-ALTER TABLE foo ADD COLUMN bar varchar(255); # This is near instant
-# Set your default value in your ORM
-UPDATE TABLE foo SET bar = 'DEFAULT VALUE' WHERE bar IS NULL;
-ALTER TABLE foo ALTER COLUMN bar NOT NULL;
-</code></pre>
-
-<p>Having Rails/Django/(Framework of your choice) automatically notice the need for a column to exist and make appropriate modifications you could work with it the same way you would managing a document relation in your code. Sure this is a manual painful process today, but theres no reason this can&rsquo;t be fully handled by PostgreSQL or directly within an ORM .</p>
-
-<h3>Documents</h3>
-
-<p>The other really strong case for the MongoDB/CouchDB camp is document storage. In this case I&rsquo;m going to equate a document directly to a JSON object. JSON itself is a wonderfully simply model that works so well for portability, and having to convert it within your application layer is well just painful. Yes Postgres has a JSON datatype, and the JSON datatype is continuing to be adopted now by many other relational databases. <em>I was shocked to hear that DB2 is getting support for JSON myself, while I expect improvements to come to it JSON was not at the top of my list</em>.</p>
-
-<p>And JSON does absolutely make sense as a data type within a column. But thats still a bit limiting as a full document store, what you want in those cases is any query result as a full JSON object. This is heavily undersold within Postgres that you can simply convert a full row to JSON with a <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">single function</a> &ndash; <code>row_to_json</code>.</p>
-
-<p>Again having higher level frameworks take full advantage so that under the covers you can have your strongly typed tables, but a flexibility to map them to flexible JSON objects makes a great deal of sense here.</p>
-
-<h3>Out of the box interfaces</h3>
-
-<p>This isn&rsquo;t a strict benefit of schema-less databases. Some schema-less databases have this more out of the box such as Couch where others less so. The concept of exposing a rest interface is not something new, and has been tried on top of relational databases a <a href="http://htsql.org/">few times over</a>. This is clearly something that does need to be delivered. The case for it is pretty clear, it reduces the work of people having to recreate admin screens and gives an easy onboarding process for noobs.</p>
-
-<p>Unfortunately there&rsquo;s not clear progress on this today for Postgres or other relational databases. In contrast other databases are delivering on this front often from day one :/</p>
-
-<h3>Where to</h3>
-
-<p>Some of the shifts in schema-less or really in other databases in general are not so large they cannot be subsummed into a broader option. At the same time there are some strong merits such as the ones above which do take an active effort to deliver on expanding what is a &ldquo;relational database&rdquo;.</p>
 ]]></content>
   </entry>
   
