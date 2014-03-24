@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-24T07:19:31-07:00</updated>
+  <updated>2014-03-24T07:21:25-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -78,7 +78,7 @@
 
 <h3>In Conclusion</h3>
 
-<p>Postgres 9.4 isn&rsquo;t 100% complete yet, as the commitfest is still going on. You can follow along on the <a href="www.postgresql.org/list/pgsql-hackers/2014-03/">postgres hackers mailing list</a> or on the <a href="https://commitfest.postgresql.org/">commitfest app</a> where you can review specific patches or even chip in on reviewing. And of course I&rsquo;ll do my best to continue to highlight useful features here and surface them on <a href="http://www.postgresweekly.com">Postgres Weekly</a> as well.</p>
+<p>Postgres 9.4 isn&rsquo;t 100% complete yet, as the commitfest is still going on. You can follow along on the <a href="www.postgresql.org/list/pgsql-hackers/2014-03/">postgres hackers mailing list</a> or on the <a href="https://commitfest.postgresql.org/">commitfest app</a> where you can follow specific patches or even chip in on reviewing. And of course I&rsquo;ll do my best to continue to highlight useful features here and surface them on <a href="http://www.postgresweekly.com">Postgres Weekly</a> as well.</p>
 ]]></content>
   </entry>
   
