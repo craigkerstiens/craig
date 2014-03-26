@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-24T08:09:10-07:00</updated>
+  <updated>2014-03-26T08:40:27-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A year's look at Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
+    <updated>2014-03-26T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
+    <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, but kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
+
+<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
+
+<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
+
+<h3>The inagural issue</h3>
+
+<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
+
+<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
+
+<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
+
+<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
+
+<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
+
+<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
+
+<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
+
+<h3>A mix of notable entries</h3>
+
+<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
+
+<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
+
+<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
+
+<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
+
+<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
+
+<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
+
+<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
+
+<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
+
+<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
+
+<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
+
+<h3>In conclusion</h3>
+
+<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[PostgreSQL 9.4 - Looking up (with JSONB and logical decoding)]]></title>
@@ -231,54 +286,6 @@ FROM pageviews;
 <li>Logical replication &ndash; this one looks like some pieces will make it, but not a wholey usable implementation.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rethinking the limits on relational databases]]></title>
-    <link href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/"/>
-    <updated>2014-01-24T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational</id>
-    <content type="html"><![CDATA[<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
-
-<h3>Forget migrations</h3>
-
-<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
-
-<!--more-->
-
-
-<p>This is often viewed as a limitation of relational databases. Yet it doesn&rsquo;t really have to. You see even in schema-less database the relationships are still there, its just you&rsquo;re managing it at the application level. There&rsquo;s no reason higher level frameworks or ORMs couldn&rsquo;t handle the migration process. As it is today the process of adding a column to a relational database is quite straightforward in a sense where it doesn&rsquo;t introduce downtime and is capable of letting the developer still move quickly its just not automatically baked in.</p>
-
-<pre><code># Assuming a column thats referenced doesn't exist
-# Automatically execute relevant bits in your ORM
-# This isn't code meant for you to run 
-
-ALTER TABLE foo ADD COLUMN bar varchar(255); # This is near instant
-# Set your default value in your ORM
-UPDATE TABLE foo SET bar = 'DEFAULT VALUE' WHERE bar IS NULL;
-ALTER TABLE foo ALTER COLUMN bar NOT NULL;
-</code></pre>
-
-<p>Having Rails/Django/(Framework of your choice) automatically notice the need for a column to exist and make appropriate modifications you could work with it the same way you would managing a document relation in your code. Sure this is a manual painful process today, but theres no reason this can&rsquo;t be fully handled by PostgreSQL or directly within an ORM .</p>
-
-<h3>Documents</h3>
-
-<p>The other really strong case for the MongoDB/CouchDB camp is document storage. In this case I&rsquo;m going to equate a document directly to a JSON object. JSON itself is a wonderfully simply model that works so well for portability, and having to convert it within your application layer is well just painful. Yes Postgres has a JSON datatype, and the JSON datatype is continuing to be adopted now by many other relational databases. <em>I was shocked to hear that DB2 is getting support for JSON myself, while I expect improvements to come to it JSON was not at the top of my list</em>.</p>
-
-<p>And JSON does absolutely make sense as a data type within a column. But thats still a bit limiting as a full document store, what you want in those cases is any query result as a full JSON object. This is heavily undersold within Postgres that you can simply convert a full row to JSON with a <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">single function</a> &ndash; <code>row_to_json</code>.</p>
-
-<p>Again having higher level frameworks take full advantage so that under the covers you can have your strongly typed tables, but a flexibility to map them to flexible JSON objects makes a great deal of sense here.</p>
-
-<h3>Out of the box interfaces</h3>
-
-<p>This isn&rsquo;t a strict benefit of schema-less databases. Some schema-less databases have this more out of the box such as Couch where others less so. The concept of exposing a rest interface is not something new, and has been tried on top of relational databases a <a href="http://htsql.org/">few times over</a>. This is clearly something that does need to be delivered. The case for it is pretty clear, it reduces the work of people having to recreate admin screens and gives an easy onboarding process for noobs.</p>
-
-<p>Unfortunately there&rsquo;s not clear progress on this today for Postgres or other relational databases. In contrast other databases are delivering on this front often from day one :/</p>
-
-<h3>Where to</h3>
-
-<p>Some of the shifts in schema-less or really in other databases in general are not so large they cannot be subsummed into a broader option. At the same time there are some strong merits such as the ones above which do take an active effort to deliver on expanding what is a &ldquo;relational database&rdquo;.</p>
 ]]></content>
   </entry>
   

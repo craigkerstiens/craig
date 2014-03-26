@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-24T08:09:10-07:00</updated>
+  <updated>2014-03-26T08:40:27-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A year's look at Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
+    <updated>2014-03-26T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
+    <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, but kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
+
+<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
+
+<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
+
+<h3>The inagural issue</h3>
+
+<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
+
+<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
+
+<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
+
+<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
+
+<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
+
+<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
+
+<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
+
+<h3>A mix of notable entries</h3>
+
+<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
+
+<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
+
+<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
+
+<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
+
+<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
+
+<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
+
+<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
+
+<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
+
+<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
+
+<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
+
+<h3>In conclusion</h3>
+
+<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[PostgreSQL 9.4 - Looking up (with JSONB and logical decoding)]]></title>
@@ -168,7 +223,7 @@ ORDER BY date ASC;
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x61;&#x6c;&#x6c;&#x40;&#121;&#111;&#117;&#114;&#x63;&#111;&#109;&#x70;&#97;&#110;&#x79;&#46;&#99;&#x6f;&#x6d;">&#97;&#108;&#108;&#64;&#121;&#x6f;&#x75;&#114;&#99;&#111;&#109;&#112;&#x61;&#x6e;&#x79;&#46;&#x63;&#x6f;&#109;</a> or <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#111;&#x75;&#114;&#x67;&#114;&#111;&#x75;&#x70;&#64;&#109;&#121;&#99;&#111;&#109;&#112;&#97;&#110;&#x79;&#x2e;&#x63;&#x6f;&#x6d;&#46;">&#x6f;&#117;&#114;&#103;&#114;&#111;&#x75;&#112;&#64;&#109;&#121;&#99;&#111;&#109;&#x70;&#x61;&#x6e;&#x79;&#x2e;&#x63;&#111;&#x6d;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x61;&#x6c;&#108;&#x40;&#x79;&#x6f;&#117;&#x72;&#99;&#111;&#x6d;&#112;&#x61;&#x6e;&#121;&#x2e;&#x63;&#111;&#x6d;">&#x61;&#x6c;&#108;&#x40;&#121;&#111;&#117;&#x72;&#x63;&#x6f;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#99;&#x6f;&#109;</a> or <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#111;&#117;&#x72;&#x67;&#114;&#111;&#117;&#112;&#x40;&#109;&#x79;&#x63;&#x6f;&#109;&#x70;&#x61;&#x6e;&#x79;&#46;&#x63;&#x6f;&#x6d;&#x2e;">&#x6f;&#x75;&#114;&#x67;&#114;&#111;&#x75;&#112;&#x40;&#x6d;&#x79;&#99;&#x6f;&#109;&#112;&#97;&#x6e;&#121;&#x2e;&#x63;&#111;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -1201,105 +1256,6 @@ AS ct(date date, OSX int, Windows int, Linux int);
 
 
 <p>Have fun analyzing your data directly in your DB now. And as always if you have feedback/questions/requests please feel free to drop me a line <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Javascript Functions for PostgreSQL]]></title>
-    <link href="http://www.craigkerstiens.com/2013/06/25/javascript-functions-for-postgres/"/>
-    <updated>2013-06-25T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/06/25/javascript-functions-for-postgres</id>
-    <content type="html"><![CDATA[<p>Javascript in Postgres has gotten a good bit of love lately, part of that is from <a href="http://postgres.herpku.com">Heroku Postgres</a> recently <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">adding support for Javascript</a> and part from a variety of people championing the power of it such as <a href="http://twitter.com/leinweber">@leinweber</a> (<a href="http://www.youtube.com/watch?v=fRupMAVdmWA">Embracing the web with JSON and PLV8</a>) and <a href="http://twitter.com/selenamarie">@selenamarie</a> (<a href="https://speakerdeck.com/selenamarie/schema-liberation-with-json-and-plv8-and-postgres">schema liberation with JSON and PLV8</a>). In a recent conversation it was pointed out that it seems a bit of headache to have to create your own functions, or at least having an initial collection would make it that much more powerful. While many can look forward to <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">PostgreSQL 9.3</a> which will have a bit more built in support for JSON a few functions can really help make it more useful today.</p>
-
-<!--more-->
-
-
-<p>These are courtesy of <a href="http://bitfission.com">Will Leinweber</a>. For each of the following functions I&rsquo;ll highlight an example of using it as well. To get an idea of the data its being run on:</p>
-
-<pre><code>select * from example;
-                    data
---------------------------------------------
- {"name":"Craig Kerstiens",                +
-         "age":27,                         +
-         "siblings":1,                     +
-         "numbers":[                       +
-           {"type":"work",                 +
-            "number":"123-456-7890"},      +
-           {"type":"home",                 +
-            "number":"456-123-7890"}]}
-(1 row)
-</code></pre>
-
-<h3>get_text</h3>
-
-<pre><code>CREATE OR REPLACE FUNCTION
-get_text(key text, data json)
-RETURNS text AS $$
-  return data[key];
-$$ LANGUAGE plv8 IMMUTABLE STRICT;
-</code></pre>
-
-<p>Then using the function:</p>
-
-<pre><code>select get_text('name', data) from example;
-    get_text
-----------------
- Craig Kerstiens
-(1 row)
-</code></pre>
-
-<h3>get_numeric</h3>
-
-<pre><code>CREATE OR REPLACE FUNCTION
-get_numeric(key text, data json)
-RETURNS numeric AS $$
-  return data[key];
-$$ LANGUAGE plv8 IMMUTABLE STRICT;
-</code></pre>
-
-<p>Then using the function:</p>
-
-<pre><code>select get_numeric('siblings', data) from example;
-    get_text
-----------------
-  1
-(1 row)
-</code></pre>
-
-<h3>json_select</h3>
-
-<pre><code>create or replace function
-json_select(selector text, data json)
-returns json as $$
-  exports = {};
-  (function(a){function z(a){return{sel:q(a)[1],match:function(a){return y(this.sel,a)},forEach:function(a,b){return x(this.sel,a,b)}}}function y(a,b){var c=[];x(a,b,function(a){c.push(a)});return c}function x(a,b,c,d,e,f){var g=a[0]===","?a.slice(1):[a],h=[],i=!1,j=0,k=0,l,m;for(j=0;j&lt;g.length;j++){m=w(b,g[j],d,e,f),m[0]&amp;&amp;(i=!0);for(k=0;k&lt;m[1].length;k++)h.push(m[1][k])}if(h.length&amp;&amp;typeof b=="object"){h.length&gt;=1&amp;&amp;h.unshift(",");if(u(b))for(j=0;j&lt;b.length;j++)x(h,b[j],c,undefined,j,b.length);else for(l in b)b.hasOwnProperty(l)&amp;&amp;x(h,b[l],c,l)}i&amp;&amp;c&amp;&amp;c(b)}function w(a,b,c,d,e){var f=[],g=b[0]==="&gt;"?b[1]:b[0],h=!0,i;g.type&amp;&amp;(h=h&amp;&amp;g.type===v(a)),g.id&amp;&amp;(h=h&amp;&amp;g.id===c),h&amp;&amp;g.pf&amp;&amp;(g.pf===":nth-last-child"?d=e-d:d++,g.a===0?h=g.b===d:(i=(d-g.b)%g.a,h=!i&amp;&amp;d*g.a+g.b&gt;=0));if(h&amp;&amp;g.has){var j=function(){throw 42};for(var k=0;k&lt;g.has.length;k++){try{x(g.has[k],a,j)}catch(l){if(l===42)continue}h=!1;break}}h&amp;&amp;g.expr&amp;&amp;(h=p(g.expr,a)),b[0]!=="&gt;"&amp;&amp;b[0].pc!==":root"&amp;&amp;f.push(b),h&amp;&amp;(b[0]==="&gt;"?b.length&gt;2&amp;&amp;(h=!1,f.push(b.slice(2))):b.length&gt;1&amp;&amp;(h=!1,f.push(b.slice(1))));return[h,f]}function v(a){if(a===null)return"null";var b=typeof a;b==="object"&amp;&amp;u(a)&amp;&amp;(b="array");return b}function u(a){return Array.isArray?Array.isArray(a):b.call(a)==="[object Array]"}function t(a,b,c){var d=b,g={},j=i(a,b);j&amp;&amp;j[1]===" "&amp;&amp;(d=b=j[0],j=i(a,b)),j&amp;&amp;j[1]===f.typ?(g.type=j[2],j=i(a,b=j[0])):j&amp;&amp;j[1]==="*"&amp;&amp;(j=i(a,b=j[0]));for(;;){if(j===undefined)break;if(j[1]===f.ide)g.id&amp;&amp;e("nmi",j[1]),g.id=j[2];else if(j[1]===f.psc)(g.pc||g.pf)&amp;&amp;e("mpc",j[1]),j[2]===":first-child"?(g.pf=":nth-child",g.a=0,g.b=1):j[2]===":last-child"?(g.pf=":nth-last-child",g.a=0,g.b=1):g.pc=j[2];else{if(j[1]!==f.psf)break;if(j[2]===":val"||j[2]===":contains")g.expr=[undefined,j[2]===":val"?"=":"*=",undefined],j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!=="(")&amp;&amp;e("pex",a),j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!==f.str)&amp;&amp;e("sex",a),g.expr[2]=j[2],j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!==")")&amp;&amp;e("epex",a);else if(j[2]===":has"){j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0])),(!j||j[1]!=="(")&amp;&amp;e("pex",a);var k=q(a,j[0],!0);j[0]=k[0],g.has||(g.has=[]),g.has.push(k[1])}else if(j[2]===":expr"){g.expr&amp;&amp;e("mexp",a);var l=o(a,j[0]);j[0]=l[0],g.expr=l[1]}else{(g.pc||g.pf)&amp;&amp;e("mpc",a),g.pf=j[2];var m=h.exec(a.substr(j[0]));m||e("mepf",a),m[5]?(g.a=2,g.b=m[5]==="odd"?1:0):m[6]?(g.a=0,g.b=parseInt(m[6],10)):(g.a=parseInt((m[1]?m[1]:"+")+(m[2]?m[2]:"1"),10),g.b=m[3]?parseInt(m[3]+m[4],10):0),j[0]+=m[0].length}}j=i(a,b=j[0])}d===b&amp;&amp;e("se",a);return[b,g]}function s(a){if(a[0]===","){var b=[","];for(var c=c;c&lt;a.length;c++){var d=r(d[c]);b=b.concat(d[0]===","?d.slice(1):d)}return b}return r(a)}function r(a){var b=[],c;for(var d=0;d&lt;a.length;d++)if(a[d]==="~"){if(d&lt;2||a[d-2]!="&gt;")c=a.slice(0,d-1),c=c.concat([{has:[[{pc:":root"},"&gt;",a[d-1]]]},"&gt;"]),c=c.concat(a.slice(d+1)),b.push(c);if(d&gt;1){var e=a[d-2]==="&gt;"?d-3:d-2;c=a.slice(0,e);var f={};for(var g in a[e])a[e].hasOwnProperty(g)&amp;&amp;(f[g]=a[e][g]);f.has||(f.has=[]),f.has.push([{pc:":root"},"&gt;",a[d-1]]),c=c.concat(f,"&gt;",a.slice(d+1)),b.push(c)}break}if(d==a.length)return a;return b.length&gt;1?[","].concat(b):b[0]}function q(a,b,c,d){c||(d={});var f=[],g,h;b||(b=0);for(;;){var j=t(a,b,d);f.push(j[1]),j=i(a,b=j[0]),j&amp;&amp;j[1]===" "&amp;&amp;(j=i(a,b=j[0]));if(!j)break;if(j[1]==="&gt;"||j[1]==="~")j[1]==="~"&amp;&amp;(d.usesSiblingOp=!0),f.push(j[1]),b=j[0];else if(j[1]===",")g===undefined?g=[",",f]:g.push(f),f=[],b=j[0];else if(j[1]===")"){c||e("ucp",j[1]),h=1,b=j[0];break}}c&amp;&amp;!h&amp;&amp;e("mcp",a),g&amp;&amp;g.push(f);var k;!c&amp;&amp;d.usesSiblingOp?k=s(g?g:f):k=g?g:f;return[b,k]}function p(a,b){if(a===undefined)return b;if(a===null||typeof a!="object")return a;var c=p(a[0],b),d=p(a[2],b);return l[a[1]][1](c,d)}function o(a,b){function c(a){return typeof a!="object"||a===null?a:a[0]==="("?c(a[1]):[c(a[0]),a[1],c(a[2])]}var d=n(a,b?b:0);return[d[0],c(d[1])]}function n(a,b){b||(b=0);var c=m(a,b),d;if(c&amp;&amp;c[1]==="("){d=n(a,c[0]);var f=m(a,d[0]);(!f||f[1]!==")")&amp;&amp;e("epex",a),b=f[0],d=["(",d[1]]}else!c||c[1]&amp;&amp;c[1]!="x"?e("ee",a+" - "+(c[1]&amp;&amp;c[1])):(d=c[1]==="x"?undefined:c[2],b=c[0]);var g=m(a,b);if(!g||g[1]==")")return[b,d];(g[1]=="x"||!g[1])&amp;&amp;e("bop",a+" - "+(g[1]&amp;&amp;g[1]));var h=n(a,g[0]);b=h[0],h=h[1];var i;if(typeof h!="object"||h[0]==="("||l[g[1]][0]&lt;l[h[1]][0])i=[d,g[1],h];else{i=h;while(typeof h[0]=="object"&amp;&amp;h[0][0]!="("&amp;&amp;l[g[1]][0]&gt;=l[h[0][1]][0])h=h[0];h[0]=[d,g[1],h[0]]}return[b,i]}function m(a,b){var d,e=j.exec(a.substr(b));if(e){b+=e[0].length,d=e[1]||e[2]||e[3]||e[5]||e[6];if(e[1]||e[2]||e[3])return[b,0,c(d)];if(e[4])return[b,0,undefined];return[b,d]}}function k(a,b){return typeof a===b}function i(a,b){b||(b=0);var d=g.exec(a.substr(b));if(!d)return undefined;b+=d[0].length;var h;d[1]?h=[b," "]:d[2]?h=[b,d[0]]:d[3]?h=[b,f.typ,d[0]]:d[4]?h=[b,f.psc,d[0]]:d[5]?h=[b,f.psf,d[0]]:d[6]?e("upc",a):d[8]?h=[b,d[7]?f.ide:f.str,c(d[8])]:d[9]?e("ujs",a):d[10]&amp;&amp;(h=[b,f.ide,d[10].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")]);return h}function e(a,b){throw new Error(d[a]+(b&amp;&amp;" in '"+b+"'"))}function c(a){try{if(JSON&amp;&amp;JSON.parse)return JSON.parse(a);return(new Function("return "+a))()}catch(b){e("ijs",b.message)}}var b=Object.prototype.toString,d={bop:"binary operator expected",ee:"expression expected",epex:"closing paren expected ')'",ijs:"invalid json string",mcp:"missing closing paren",mepf:"malformed expression in pseudo-function",mexp:"multiple expressions not allowed",mpc:"multiple pseudo classes (:xxx) not allowed",nmi:"multiple ids not allowed",pex:"opening paren expected '('",se:"selector expected",sex:"string expected",sra:"string required after '.'",uc:"unrecognized char",ucp:"unexpected closing paren",ujs:"unclosed json string",upc:"unrecognized pseudo class"},f={psc:1,psf:2,typ:3,str:4,ide:5},g=new RegExp('^(?:([\\r\\n\\t\\ ]+)|([~*,&gt;\\)\\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has|expr|val|contains))|(:\\w+)|(?:(\\.)?(\\"(?:[^\\\\\\"]|\\\\[^\\"])*\\"))|(\\")|\\.((?:[_a-zA-Z]|[^\\0-\\0177]|\\\\[^\\r\\n\\f0-9a-fA-F])(?:[_a-zA-Z0-9\\-]|[^\\u0000-\\u0177]|(?:\\\\[^\\r\\n\\f0-9a-fA-F]))*))'),h=/^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/,j=new RegExp('^\\s*(?:(true|false|null)|(-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)|("(?:[^\\]|\\[^"])*")|(x)|(&amp;&amp;|\\|\\||[\\$\\^&lt;&gt;!\\*]=|[=+\\-*/%&lt;&gt;])|([\\(\\)]))'),l={"*":[9,function(a,b){return a*b}],"/":[9,function(a,b){return a/b}],"%":[9,function(a,b){return a%b}],"+":[7,function(a,b){return a+b}],"-":[7,function(a,b){return a-b}],"&lt;=":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&lt;=b}],"&gt;=":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&gt;=b}],"$=":[5,function(a,b){return k(a,"string")&amp;&amp;k(b,"string")&amp;&amp;a.lastIndexOf(b)===a.length-b.length}],"^=":[5,function(a,b){return k(a,"string")&amp;&amp;k(b,"string")&amp;&amp;a.indexOf(b)===0}],"*=":[5,function(a,b){return k(a,"string")&amp;&amp;k(b,"string")&amp;&amp;a.indexOf(b)!==-1}],"&gt;":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&gt;b}],"&lt;":[5,function(a,b){return k(a,"number")&amp;&amp;k(b,"number")&amp;&amp;a&lt;b}],"=":[3,function(a,b){return a===b}],"!=":[3,function(a,b){return a!==b}],"&amp;&amp;":[2,function(a,b){return a&amp;&amp;b}],"||":[1,function(a,b){return a||b}]};a._lex=i,a._parse=q,a.match=function(a,b){return z(a).match(b)},a.forEach=function(a,b,c){return z(a).forEach(b,c)},a.compile=z})(typeof exports=="undefined"?window.JSONSelect={}:exports)
-  return JSON.stringify(
-    exports.match(selector,
-                  data));
-$$ LANGUAGE plv8 IMMUTABLE STRICT
-</code></pre>
-
-<p>Then using the function:</p>
-
-<pre><code>select json_select('.name nth-child(1)', data) as name, json_select('.numbers', data) as phone 
-from example;
-        name        |                                          phone
---------------------+------------------------------------------------------------------------------------------
- ["Craig Kerstiens"] | [[{"type":"work","number":"456-123-7890"},{"type":"home","number":"123-456-7890"}]]
-(1 row)
-</code></pre>
-
-<h3>javascript injection attack</h3>
-
-<pre><code>create or replace function
-js(src text) returns text as $$
-  return eval(
-  "(function() { " + src + "})"
-  )();
-$$ LANGUAGE plv8;
-</code></pre>
-
-<p>Have any others you feel are essential when starting to work with JSON? Let me know <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>. Beyond that give JSON and JavaScript a try inside your database.</p>
 ]]></content>
   </entry>
   

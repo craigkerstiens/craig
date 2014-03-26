@@ -9,7 +9,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Update theres a more recent post that expands further on where to start optimizing specific queries, and of course if you want to dig into &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Yesterday there was a post which hit Hacker News that talked about using SQL to access Mongo. While this is powerful I think much of the true value &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,67 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/10/18/connecting_to_redis_from_postgres/">
+		
+			Redis in My Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
+
+<p>SQL is an expressive language, though people are often okay with accessing Mongo data through its own ORM. The real value is that you could actually query the data from within Postgres then join across your data stores, without having to do some ETL process to move data around.  Think&hellip; joining sales data from Postgres with user reviews stored in Mongo or searching for visits to a website (retained in redis) against purchases by user in Postgres.</p>
+
+<p>The mechanism pointed out was a MongoDB Foreign Data Wrapper. A Foreign Data Wrapper or FDW essentially lets you connect to an external datastore from within a Postgres database. In addition to the Mongo FDW released the other day there&rsquo;s  many others. For example Postgres 9.0 and up ships with one called <code>db_link</code>, which lets you query and join across two different Postgres databases. Beyond that there&rsquo;s support for a variety of other data stores including some you may have never expected:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/file_textarray_fdw/">Textfile</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/odbc_fdw/">ODBC</a></li>
+<li><a href="http://pgxn.org/dist/ldap_fdw/">LDAP</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+<li><a href="http://pgxn.org/tag/fdw/">More</a></li>
+</ul>
+
+
+<p>Lets look at actually getting the Redis one running then see what some of the power of it really looks like. First we have to get the code then build it:</p>
+
+
+		
+		<a href="/2012/10/18/connecting_to_redis_from_postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-18T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/redis/'>Redis</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -634,62 +695,6 @@ connection.product.insert(django_pony)
 <div class="tags">
 
 	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/04/13/apps_to_services/">
-		
-			Apps to Services</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>Update the talk for this is now viewable on YouTube <a href="http://www.youtube.com/watch?v=ztGpK-v2Oow">here</a></em></p>
-
-<p>When I first came across Django I was an immediate fan. It featured:</p>
-
-<ul>
-<li>Good documentation</li>
-<li>Steady but stable progress</li>
-<li>Community around apps which encouraged <em>DRY</em></li>
-</ul>
-
-
-<p>I&rsquo;ve been a user off and on depending on my needs for nearly four years since discovering it, and throughout that time all of the above have remained true. However, as I&rsquo;ve worked on and encountered more complex applications there&rsquo;s one thing that has time and again broke down for me, which is the Django apps model. It hasn&rsquo;t broken down due to Django only though, I&rsquo;ve seen it break down in Ruby (Rails), Java, .Net, take you&rsquo;re pick of language or framework.</p>
-
-<p>The breakdown of this model is due to several things:</p>
-
-
-		
-		<a href="/2012/04/13/apps_to_services/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/python/'>Python</a>
 
 </div>
 
