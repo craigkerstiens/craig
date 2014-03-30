@@ -5,7 +5,7 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title>Arrays in Postgres  | Craig Kerstiens</title>
+	<title>Arrays in Postgres Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
@@ -98,6 +98,24 @@ $(document).ready(
 
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">Arrays in Postgres</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
 	<div class="entry-content"><p>Postgres out of the box has an abundance of datatypes, from standard <a href="http://www.postgresql.org/docs/9.1/static/datatype.html#DATATYPE-NUMERIC">numeric datatypes</a> to <a href="http://www.postgresql.org/docs/9.1/static/datatype-geometric.html">geometric</a> or even <a href="http://www.postgresql.org/docs/9.1/static/datatype-net-types.html">network datatypes</a>. With extensions you can get even more out of it as earlier discussed with <a href="http://craigkerstiens.com/2012/06/11/schemaless-django/">hStore</a>. Though with all of the datatypes its easy to miss out on some of them that are there, in fact one of my favorites is often missed entirely. The <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> datatype lets you do just as you&rsquo;d expect, store an array inside Postgres. With this you can often get some of the functionality you&rsquo;d want in a single table when you might traditionally have expanded to multiple tables.</p>
 
 <p>The broader question may be why you&rsquo;d actually want to use an array. One good reason may be if you&rsquo;re an application developer its how you think of your data, so why not model it the same way. As you&rsquo;ll see below it can be easier than joining and aggregating across a set of rows. Also depending on your case you performance could be improved, though mileage may vary here as it does depend on the data you&rsquo;re storing.</p>
@@ -206,6 +224,8 @@ WHERE   tags &amp;&amp; ARRAY[1, 2]
 	
 	<a class="addthis_button_tweet"></a>
 	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
 	
 <!---	<a class="addthis_counter addthis_pill_style"></a> --->
 	</div>

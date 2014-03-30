@@ -5,7 +5,7 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title>Using Postgres Arrays in Django  | Craig Kerstiens</title>
+	<title>Using Postgres Arrays in Django Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
@@ -98,6 +98,24 @@ $(document).ready(
 
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">Using Postgres Arrays in Django</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
 	<div class="entry-content"><p>A few weeks back I did a brief <a href="/2012/08/20/arrays-in-postgres/">feature highlight on Postgres arrays</a>. Since that time I&rsquo;ve found myself using them with increasing regularity on small side projects. Much of this time I&rsquo;m using Django and of course not opting to write raw SQL to be able to use arrays. Django actually makes it quite simple to work with Arrays in Postgres with a package by <a href="http://www.niwi.be/about.html">Andrey Antukh</a>. Lets get started by installing two libraries:</p>
 
 <pre><code>pip install djorm-ext-pgarray
@@ -201,6 +219,8 @@ class Post(models.Model):
 	
 	<a class="addthis_button_tweet"></a>
 	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
 	
 <!---	<a class="addthis_counter addthis_pill_style"></a> --->
 	</div>
