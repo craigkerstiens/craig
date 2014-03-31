@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Marketing | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/marketing/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-30T20:11:50-07:00</updated>
+  <updated>2014-03-30T21:45:55-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Some non-traditional marketing tips]]></title>
+    <link href="http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips/"/>
+    <updated>2014-03-31T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips</id>
+    <content type="html"><![CDATA[<h3>Market in transactional emails</h3>
+
+<p>Have emails that include receipts? Account confirmations? General notices? No not a monthly newsletter! Transactional emails are obviously valuable to your users. Why not include a small call out to your latest announcement? Have a central hook that your emails can check from and simply include a small call to action within there.</p>
+
+<p><em>Credit to <a href="http://www.twitter.com/stevenbristol">@stevenbristol</a> on <a href="http://strongbusinessespodcast.com/16571/149964-episode-17-security-authy-and-disney">strong business podcast</a> for this one</em></p>
+
+<h3>Retarget to your existing users</h3>
+
+<p>In a similar vein of notifying your existing customers in transactional emails about news, you should be doing this all over the web. Retargeting is great to convert people once you&rsquo;ve already got them on a landing page, but its also incredibly useful to get existing users to use a specific feature. If you track if they&rsquo;ve never used a feature retargeting is a great way to make them aware of it, and once they&rsquo;ve used it just count it as a conversion.</p>
+
+<p><em>My favorite retargeting provider <a href="http://www.perfectaudience.com/">perfect audience</a> makes this quite convenient as they allow a bit more control than most retargeting services</em></p>
+
+<h3>Email subscriptions to your blog</h3>
+
+<p>RSS is pretty dead, google went and killed it with google reader. Sure there&rsquo;s some decent replacements if you&rsquo;re really tied to it. In particular <a href="http://newsblur.com/">newsblur</a> by <a href="http://www.twitter.com/samuelclay">@samuelclay</a> is a great reader. But now days content emerges on twitter, fb, and ranking services, then later is discovered via search. Both of these work pretty well, but twitter is ephemeral for so many. Email still converts incredibly well, if people are abandoning rss but still care about your content give them the ability for it to be put right in front of their face via email.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Where to go with developer content]]></title>
@@ -191,58 +214,6 @@ One pattern thats a bit more unique is to schedule talks so that you cannot catc
 <h2>Choosing</h2>
 
 <p>There&rsquo;s definitely not a one size fits all. If you&rsquo;re goal is to provide a good list of talks then you should keep that in mind in how you decide your talks. If you&rsquo;re goal is to pull others in then it should be shaped differently. Zach Holman recently talked a bit about this and had some interesting ideas to <a href="http://zachholman.com/posts/the-conference-circuit/">minimize risk for new speakers</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scaling Evangelism – Creating Advocates]]></title>
-    <link href="http://www.craigkerstiens.com/2013/04/16/creating-advocates/"/>
-    <updated>2013-04-16T07:59:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/04/16/creating-advocates</id>
-    <content type="html"><![CDATA[<p>The first area I tend to think about when it comes to developer marketing is around advocates. A simple definition of an advocate is <em>someone that speaks/writes in favor of some thing</em>.</p>
-
-<p>Creating advocates is a means of creating more of myself to go out and talk loudly and ideally effectively. However, they do take time to cultivate and it is a hard item to track. But by cultivating advocates I&rsquo;m able to scale what would otherwise be a bottleneck of my own personal time.</p>
-
-<!--more-->
-
-
-<h3>Mentorship</h3>
-
-<p><img src="http://f.cl.ly/items/3H2y400S2n1M3A2v0F18/Blank.png" style="height:200px; float:right; margin-left:12px;" />
-At a team offsite nearly a year ago <a href="http://twitter.com/_JamesWard">James Ward</a> talked about his Pyramid of mentorship. His process was essentially having three levels of which you&rsquo;re working to grow and cultivate these people or in some sense your general network. These three levels drop off with the frequency and depth of engagement more at each level. At any given time there would be 3 people he was heavily mentoring, 12 he would frequently work to cultivate heavily, and then an outer 72 that he&rsquo;d still consider in his circle.</p>
-
-<p>The people in your group of 3 you&rsquo;ll have nearly daily communications with, even if quick. These are the first people you think to work and collaborate with. It&rsquo;s the case with all, but especially so here that there may be some strong mutual benefit. With both the groups of 3 and 12 you&rsquo;ll be looking to:</p>
-
-<ul>
-<li>Co-author content with</li>
-<li>Collaborate on projects</li>
-<li>Help amplify their content</li>
-</ul>
-
-
-<h3>Helping them Succeed</h3>
-
-<p>For a few years I&rsquo;ve followed a similar process to this. Essentially creating advocates is done through first <strong>making them successful</strong>, then empowering to talk about their success. I&rsquo;ve often done this by giving people a private channel to me – through IM, SMS, Phone, Skype, or even in person. Sure its easy enough to get my work email address, its a pretty easy one to guess, and even at that address I do aim to respond to every request. These channels in reality don&rsquo;t make me more available; but they do allow a different type of communication to happen.</p>
-
-<p>My personal approach has found it more out of place to ask how someones weekend was over email – IM or Skype make this easy. Broader questions of how someones actually doing in life generally are much easier to do over a coffee or a beer. This allows for a deeper relationship; at the same time I can ensure everyone I interact with is successful. It&rsquo;s easier to ensure someones successful if they&rsquo;re willing to talk to you, actually connecting with people enables this.</p>
-
-<h3>Communicate</h3>
-
-<p>Once someones been successful theres usually some value in their story. This doesn&rsquo;t need to come in a marketing-ese approach though. Instead contribute back the value of what you did to the broader community with <a href="http://blog.mailgun.net/post/how-tealeaf-academy-increased-student-engagement-3x/">clear steps how they can get the same benefit</a>. For many developers they feel talking about their own success is a bit of imposter syndrome. While this isn&rsquo;t always the case; if it is you can help to work with someone to highlight the value in what they&rsquo;ve done. This could be as simple as some encouragement to actually helping review drafts of blog posts.</p>
-
-<p>Of course once someones started talking about what they were able to accomplish help them celebrate the success. Yelling from the rooftops only helps to further their efforts and give them the confidence to do it all over again.</p>
-
-<h3>Conclusion</h3>
-
-<p>To create advocates you don&rsquo;t have to write a list of people you wish to shoot for, but realizing there are limiitations on your time can help you be more intentional. Knowing that where you spend your time and who you spend it with has a cost can allow you to be more explicit about ensuring you&rsquo;re providing value to them, from there it should naturally run its course. Want to discuss this more? Email me at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a>.</p>
-
-<!-- Perfect Audience - Developer Marketing - DO NOT MODIFY -->
-
-
-<p><img src="http://ads.perfectaudience.com/seg?add=711656&t=2" width="1" height="1" border="0" /></p>
-
-<!-- End of Audience Pixel -->
-
 ]]></content>
   </entry>
   

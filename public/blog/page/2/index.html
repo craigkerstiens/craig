@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some-> &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,51 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/11/18/best-postgres-feature-youre-not-using/">
+		
+			The Best Postgres Feature You&#8217;re Not Using – CTEs Aka WITH Clauses</a>
+	</h2>
+	<div class="entry-content">
+		<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
+
+<p>The feature itself is known as CTEs or common table expressions, you may also here it referred to as <code>WITH</code> clauses. The general idea is that it allows you to create something somewhat equivilant to a view that only exists during that transaction. You can create multiple of these which then allow for clear building blocks and make it simple to follow what you&rsquo;re doing.</p>
+
+
+		
+		<a href="/2013/11/18/best-postgres-feature-youre-not-using/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-18T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -517,60 +562,6 @@ mymodel.results = result.to_json
 
 
 <time datetime="2013-07-03T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/27/Pivoting-in-Postgres/">
-		
-			Pivoting in Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p>Earlier today on an internal Heroku group alias there was a <a href="https://postgres.heroku.com/dataclips">dataclip</a> shared. The dataclip listed off some data grouped by a category, there was a reply a few minutes later with a modification to the query that used the <code>crosstab</code> function to pivot directly in SQL. There were immediately several reactions on the list that went something like this:</p>
-
-<p><img src="http://f.cl.ly/items/1b0G101r0B2W243b2933/Image%202013.06.27%202%3A06%3A23%20PM.gif" alt="mindblown" /></p>
-
-<p>While a mostly simple function in Postgres (there are a few rough edges), it really is all too handy. So here it is in action. Taking some data that looks like</p>
-
-<ul>
-<li>row identifier, in this case date</li>
-<li>category grouping, in this case OS</li>
-<li>value</li>
-</ul>
-
-
-
-		
-		<a href="/2013/06/27/Pivoting-in-Postgres/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

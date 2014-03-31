@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-03-30T20:11:50-07:00</updated>
+  <updated>2014-03-30T21:45:55-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Some non-traditional marketing tips]]></title>
+    <link href="http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips/"/>
+    <updated>2014-03-31T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips</id>
+    <content type="html"><![CDATA[<h3>Market in transactional emails</h3>
+
+<p>Have emails that include receipts? Account confirmations? General notices? No not a monthly newsletter! Transactional emails are obviously valuable to your users. Why not include a small call out to your latest announcement? Have a central hook that your emails can check from and simply include a small call to action within there.</p>
+
+<p><em>Credit to <a href="http://www.twitter.com/stevenbristol">@stevenbristol</a> on <a href="http://strongbusinessespodcast.com/16571/149964-episode-17-security-authy-and-disney">strong business podcast</a> for this one</em></p>
+
+<h3>Retarget to your existing users</h3>
+
+<p>In a similar vein of notifying your existing customers in transactional emails about news, you should be doing this all over the web. Retargeting is great to convert people once you&rsquo;ve already got them on a landing page, but its also incredibly useful to get existing users to use a specific feature. If you track if they&rsquo;ve never used a feature retargeting is a great way to make them aware of it, and once they&rsquo;ve used it just count it as a conversion.</p>
+
+<p><em>My favorite retargeting provider <a href="http://www.perfectaudience.com/">perfect audience</a> makes this quite convenient as they allow a bit more control than most retargeting services</em></p>
+
+<h3>Email subscriptions to your blog</h3>
+
+<p>RSS is pretty dead, google went and killed it with google reader. Sure there&rsquo;s some decent replacements if you&rsquo;re really tied to it. In particular <a href="http://newsblur.com/">newsblur</a> by <a href="http://www.twitter.com/samuelclay">@samuelclay</a> is a great reader. But now days content emerges on twitter, fb, and ranking services, then later is discovered via search. Both of these work pretty well, but twitter is ephemeral for so many. Email still converts incredibly well, if people are abandoning rss but still care about your content give them the ability for it to be put right in front of their face via email.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A year's look at Postgres]]></title>
@@ -226,7 +249,7 @@ ORDER BY date ASC;
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x61;&#x6c;&#x6c;&#x40;&#121;&#x6f;&#117;&#x72;&#99;&#111;&#109;&#112;&#x61;&#x6e;&#x79;&#x2e;&#x63;&#x6f;&#109;">&#x61;&#x6c;&#108;&#x40;&#x79;&#x6f;&#117;&#114;&#99;&#x6f;&#x6d;&#112;&#x61;&#x6e;&#x79;&#46;&#x63;&#x6f;&#109;</a> or <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#111;&#x75;&#114;&#103;&#x72;&#x6f;&#x75;&#x70;&#64;&#109;&#121;&#x63;&#111;&#109;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#109;&#x2e;">&#111;&#x75;&#x72;&#103;&#114;&#111;&#117;&#x70;&#x40;&#x6d;&#x79;&#x63;&#111;&#109;&#112;&#97;&#x6e;&#121;&#46;&#99;&#x6f;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#97;&#108;&#108;&#x40;&#x79;&#111;&#x75;&#x72;&#99;&#x6f;&#109;&#112;&#97;&#110;&#x79;&#46;&#x63;&#x6f;&#x6d;">&#97;&#108;&#x6c;&#64;&#x79;&#111;&#117;&#114;&#x63;&#x6f;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#99;&#111;&#109;</a> or <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#111;&#117;&#x72;&#x67;&#x72;&#x6f;&#x75;&#112;&#x40;&#109;&#121;&#x63;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#46;&#x63;&#111;&#x6d;&#x2e;">&#111;&#117;&#x72;&#x67;&#114;&#111;&#x75;&#x70;&#64;&#x6d;&#121;&#x63;&#111;&#x6d;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -1185,80 +1208,6 @@ GROUP BY
 <h3>Which to Use</h3>
 
 <p>So which do you actually want to use in your application? If you&rsquo;re already using JSON and simply want to store it in your database then the JSON datatype is often the correct pick. However, if you&rsquo;re just looking for flexibility with your data model then hstore is likely the path you want to take. hstore will give you much of the flexibility you want as well as a good ability to query your data in a performant manner. Of course much of this starts to change in Postgres 9.3.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pivoting in Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres/"/>
-    <updated>2013-06-27T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres</id>
-    <content type="html"><![CDATA[<p>Earlier today on an internal Heroku group alias there was a <a href="https://postgres.heroku.com/dataclips">dataclip</a> shared. The dataclip listed off some data grouped by a category, there was a reply a few minutes later with a modification to the query that used the <code>crosstab</code> function to pivot directly in SQL. There were immediately several reactions on the list that went something like this:</p>
-
-<p><img src="http://f.cl.ly/items/1b0G101r0B2W243b2933/Image%202013.06.27%202%3A06%3A23%20PM.gif" alt="mindblown" /></p>
-
-<p>While a mostly simple function in Postgres (there are a few rough edges), it really is all too handy. So here it is in action. Taking some data that looks like</p>
-
-<ul>
-<li>row identifier, in this case date</li>
-<li>category grouping, in this case OS</li>
-<li>value</li>
-</ul>
-
-
-<!--more-->
-
-
-<p>Given a really basic query that generates some sample data it may look something like this:</p>
-
-<pre><code>SELECT generate_series AS date,
-       b.desc AS TYPE,
-       (random() * 10000 + 1)::int AS val
-FROM generate_series((now() - '100 days'::interval)::date, now()::date, '1 day'::interval),
-  (SELECT unnest(ARRAY['OSX', 'Windows', 'Linux']) AS DESC) b;
-</code></pre>
-
-<p>  You get results that look like:</p>
-
-<iframe _tmplitem="2"  src='https://dataclips.heroku.com/cwtnbdhfkpgjhegzktolakjkkpyj/embed?result=1&version=1' width="500px" height="300px"></iframe>
-
-
-<p>But of course this isn&rsquo;t overly helpful in comparing day to day overall. You can do so on a OS by OS basis, but its annoying enough as is. The easy solution is to simply use a pivot table on your data. Most people at this point would pull it up into Excel or Google Docs, or you can do it directly in Postgres. To do so you&rsquo;ll first enable the extension <code>tablefunc</code>:</p>
-
-<pre><code>CREATE EXTENSION tablefunc
-</code></pre>
-
-<p>Then you&rsquo;ll use the crosstab function. The function looks something like:</p>
-
-<pre><code>SELECT * 
-FROM crosstab(
-  'SELECT row_name, category_grouping, value FROM foo',
-  'SELECT category_names FROM bar')
-AS
-  ct_result (category_name text, category1 text, category2 text, etc.)
-</code></pre>
-
-<p>Lets see it an actual action. Given the same query we used to generate fake data we can actually pivot on it now directly in PostgreSQL:</p>
-
-<pre><code>SELECT *
-FROM crosstab(
-  'SELECT
-    a date,
-    b.desc AS os,
-    (random() * 10000 + 1)::int AS value
-     FROM generate_series((now() - ''100 days''::interval)::date, now()::date, ''1 DAY''::interval) a,
-          (SELECT unnest(ARRAY[''OSX'', ''Windows'', ''Linux'']) AS DESC) b ORDER BY 1,2
-  ','SELECT unnest(ARRAY[''OSX'', ''Windows'', ''Linux''])'
-) 
-AS ct(date date, OSX int, Windows int, Linux int);
-</code></pre>
-
-<p>And see some results:</p>
-
-<iframe _tmplitem="1"  src='https://dataclips.heroku.com/dgzcrjoqqjzsxzditlrzpblljgbn/embed?result=1&version=2' width="500px" height="300px"></iframe>
-
-
-<p>Have fun analyzing your data directly in your DB now. And as always if you have feedback/questions/requests please feel free to drop me a line <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a></p>
 ]]></content>
   </entry>
   
