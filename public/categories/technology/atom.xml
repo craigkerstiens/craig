@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Technology | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/technology/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-04-08T20:40:59-07:00</updated>
+  <updated>2014-04-08T20:49:26-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -30,7 +30,7 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
 </ul>
 
 
-<p>If you&rsquo;re interested in more technical details you can <a href="http://www.heartbleed.com">follow along</a>.</p>
+<p>If you&rsquo;re interested in more technical details you can <a href="http://www.heartbleed.com">follow along</a> or on the <a href="https://blog.heroku.com/archives/2014/4/8/openssl_heartbleed_security_update">Heroku blog</a>.</p>
 
 <p>The short of it is you, yes you as in everyone, should rotate your passwords once all websites are safe. For further details please continue reading.</p>
 
