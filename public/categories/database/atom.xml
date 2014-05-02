@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Database | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/database/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-01T20:37:33-07:00</updated>
+  <updated>2014-05-02T11:33:05-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -554,6 +554,8 @@ FROM
 </code></pre>
 
 <p>Generally, you should also expect this to be in the 99% similar to your regular cache hit rate.</p>
+
+<p>If you want help with optimizing your DB for performance or getting insights into your data please reach out <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
 
 <!-- Perfect Audience - why postgres - DO NOT MODIFY -->
 

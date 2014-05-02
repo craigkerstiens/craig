@@ -352,11 +352,11 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2011/11/07/how-heroku-works-maker-day/</loc>
-        <lastmod>2014-03-30T12:48:01-07:00</lastmod>
+        <lastmod>2014-05-02T07:41:56-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2011/12/02/how-heroku-works-hiring/</loc>
-        <lastmod>2014-03-30T12:48:01-07:00</lastmod>
+        <lastmod>2014-05-02T07:42:07-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/01/23/securing-your-organization/</loc>
@@ -404,7 +404,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/</loc>
-        <lastmod>2014-03-30T12:48:01-07:00</lastmod>
+        <lastmod>2014-05-02T11:32:52-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/</loc>
@@ -424,7 +424,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/</loc>
-        <lastmod>2014-03-30T12:48:01-07:00</lastmod>
+        <lastmod>2014-05-02T11:32:44-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/02/08/django-read-only-mode/</loc>
@@ -596,7 +596,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/</loc>
-        <lastmod>2014-03-30T12:48:46-07:00</lastmod>
+        <lastmod>2014-05-02T11:31:50-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/mayhem.html</loc>
@@ -640,15 +640,15 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/archives/</loc>
-        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
+        <lastmod>2014-05-02T11:32:52-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/archives/</loc>
-        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
+        <lastmod>2014-05-02T11:32:52-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/</loc>
-        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
+        <lastmod>2014-05-02T11:32:52-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/books/</loc>
@@ -660,7 +660,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/</loc>
-        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
+        <lastmod>2014-05-02T11:32:52-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/recommendations/books.html</loc>
