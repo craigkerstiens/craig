@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Just a few days ago I was surprised by what someone was doing with their database, and not in the typical horrifying travesty against mankind. &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="If you&rsquo;re deciding what to put in Postgres and what not to, consider that Postgres can be a perfectly good schema-less database. Of course as &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,60 +98,6 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/07/29/documenting-your-postgres-database/">
-		
-			Documenting Your PostgreSQL Database</a>
-	</h2>
-	<div class="entry-content">
-		<p>Just a few days ago I was surprised by what someone was doing with their database, and not in the typical horrifying travesty against mankind. Rather, it was a feature that while familiar with I&rsquo;d never seen anyone fully take proper advantage of &ndash; <code>COMMENT</code> or describing tables. Postgres has a nice facility for you to provide a description for just about anything:</p>
-
-<ul>
-<li>Table</li>
-<li>Column</li>
-<li>Function</li>
-<li>Schema</li>
-<li>View</li>
-<li>Index</li>
-<li>Etc.</li>
-</ul>
-
-
-
-		
-		<a href="/2013/07/29/documenting-your-postgres-database/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
 
 
     <article class="post">
@@ -588,6 +534,51 @@ $(document).ready(
 <div class="tags">
 
 	<a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/17/array-agg/">
+		
+			Using Array_agg in Postgres – Powerful and Flexible</a>
+	</h2>
+	<div class="entry-content">
+		<p>In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do this by running a query to get much of the raw data, looping over the data and pushing it into a set, appending each new value to the appropriate key. Hopefully, it&rsquo;s not a surprise that there&rsquo;s a much better way to do this with PostgreSQL.</p>
+
+<p>Postgres has a flexible and robust <a href="/2012/08/20/arrays-in-postgres/">array datatype</a> that comes with a variety of functions. Even without taking advantage of the array datatype in <a href="/2012/11/06/django-and-arrays/">your application</a>, you can still take advantage of some of the functions to get the functionality you need. Lets take a look at an example schema and use case.</p>
+
+
+		
+		<a href="/2013/04/17/array-agg/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-17T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 

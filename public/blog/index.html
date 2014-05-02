@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s some words on it: The basics For those unfamiliar &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,54 +98,6 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/04/15/on-connection-pooling/">
-		
-			On Connection Pooling</a>
-	</h2>
-	<div class="entry-content">
-		<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s some words on it:</p>
-
-<h3>The basics</h3>
-
-<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres some overhead here. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
-
-<h3>The options</h3>
-
-<p>There&rsquo;s really two major options when it comes to connection pooling:</p>
-
-<h4>Framework pooling</h4>
-
-<p>Today many modern application frameworks have at least some basic level of connection pooling. This means as your application server starts up it will create a pool of connections to use.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-15T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-
-	
-</div></article>
 
 
     <article class="post">
@@ -553,6 +505,53 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
 <div class="tags">
 
 	<a class='category' href='/categories/developers/'>Developers</a>, <a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/01/24/rethinking-limits-on-relational/">
+		
+			Rethinking the Limits on Relational Databases</a>
+	</h2>
+	<div class="entry-content">
+		<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
+
+<h3>Forget migrations</h3>
+
+<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
+
+
+		
+		<a href="/2014/01/24/rethinking-limits-on-relational/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-24T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
