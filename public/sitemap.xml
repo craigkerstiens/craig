@@ -566,7 +566,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/</loc>
-        <lastmod>2014-03-30T12:48:01-07:00</lastmod>
+        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/</loc>
@@ -584,7 +584,11 @@
         <loc>
             http://www.craigkerstiens.com/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/
         </loc>
-        <lastmod>2014-04-08T20:51:16-07:00</lastmod>
+        <lastmod>2014-04-08T21:55:37-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2014/04/15/on-connection-pooling/</loc>
+        <lastmod>2014-04-13T07:31:58-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/disneyland.html</loc>
@@ -632,7 +636,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/wine.html</loc>
-        <lastmod>2014-03-30T12:48:46-07:00</lastmod>
+        <lastmod>2014-04-27T14:55:59-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/wine_route.html</loc>
@@ -640,15 +644,15 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/archives/</loc>
-        <lastmod>2014-04-08T20:51:16-07:00</lastmod>
+        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/archives/</loc>
-        <lastmod>2014-04-08T20:51:16-07:00</lastmod>
+        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/</loc>
-        <lastmod>2014-04-08T20:51:16-07:00</lastmod>
+        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/books/</loc>
@@ -660,7 +664,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/</loc>
-        <lastmod>2014-04-08T20:51:16-07:00</lastmod>
+        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/recommendations/books.html</loc>

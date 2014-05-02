@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-04-08T20:51:25-07:00</updated>
+  <updated>2014-05-01T20:25:31-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[On Connection Pooling]]></title>
+    <link href="http://www.craigkerstiens.com/2014/04/15/on-connection-pooling/"/>
+    <updated>2014-04-15T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/04/15/on-connection-pooling</id>
+    <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s some words on it:</p>
+
+<h3>The basics</h3>
+
+<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres some overhead here. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
+
+<h3>The options</h3>
+
+<p>There&rsquo;s really two major options when it comes to connection pooling:</p>
+
+<h4>Framework pooling</h4>
+
+<p>Today many modern application frameworks have at least some basic level of connection pooling. This means as your application server starts up it will create a pool of connections to use.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[What you need to know about April 7 and your security on the web.]]></title>
@@ -47,7 +68,7 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
 
 <h3>Still area for concern</h3>
 
-<p>With security vulnerabilities there are two key things to consider. First is the vulnerability itself, second is whether its therotical or can be simply acted upon. Yes, theres a range here. One of the most unfortunate pieces from talking to those that know about security is this was extremely trivial to act upon.</p>
+<p>With security vulnerabilities there are two key things to consider. First is the vulnerability itself, second is whether its therotical or can be simply acted upon. Yes, there&rsquo;s a range here. One of the most unfortunate pieces from talking to those that know about security is this was extremely trivial to act upon.</p>
 
 <p><em>This is made even worse in that this vulnerability has existed for 2 years without many knowing about it, meaning people have had an ability to snoop and collect parts of your data for two years</em></p>
 
@@ -192,7 +213,7 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
     <link href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/"/>
     <updated>2014-02-26T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL</id>
-    <content type="html"><![CDATA[<p>In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
+    <content type="html"><![CDATA[<p><img src="http://f.cl.ly/items/3f1q2N2s2V0d0G2s1T01/Blank.jpg" style="float:right;margin-left:20px;"/> In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
 
 <!--more-->
 
@@ -306,7 +327,7 @@ ORDER BY date ASC;
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#97;&#x6c;&#x6c;&#64;&#121;&#111;&#117;&#114;&#x63;&#x6f;&#109;&#x70;&#x61;&#110;&#x79;&#x2e;&#x63;&#x6f;&#x6d;">&#97;&#x6c;&#x6c;&#x40;&#121;&#x6f;&#117;&#x72;&#x63;&#111;&#109;&#x70;&#x61;&#x6e;&#121;&#x2e;&#x63;&#111;&#x6d;</a> or <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#111;&#x75;&#114;&#x67;&#114;&#111;&#117;&#112;&#64;&#x6d;&#x79;&#99;&#111;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#x6d;&#x2e;">&#111;&#x75;&#114;&#103;&#x72;&#111;&#117;&#112;&#64;&#x6d;&#121;&#99;&#111;&#x6d;&#112;&#97;&#x6e;&#x79;&#x2e;&#x63;&#111;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#97;&#x6c;&#108;&#x40;&#121;&#x6f;&#117;&#x72;&#99;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#x6d;">&#x61;&#x6c;&#x6c;&#x40;&#x79;&#111;&#117;&#x72;&#99;&#111;&#x6d;&#112;&#97;&#x6e;&#x79;&#46;&#x63;&#111;&#109;</a> or <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6f;&#117;&#x72;&#103;&#x72;&#111;&#x75;&#112;&#64;&#x6d;&#121;&#99;&#111;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#46;&#99;&#x6f;&#x6d;&#46;">&#111;&#x75;&#114;&#103;&#114;&#111;&#x75;&#x70;&#x40;&#x6d;&#121;&#x63;&#111;&#109;&#x70;&#x61;&#110;&#121;&#x2e;&#x63;&#111;&#109;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -1139,78 +1160,6 @@ read.</p>
 <p>Daniel Farina is a long time colleague and friend, having worked together at 5 different companies. He&rsquo;s part of the <a href="https://twitter.com/danfarina/status/362007008079126528">Heroku Postgres</a> team as the resident tuple groomer, and the creator of <a href="https://github.com/wal-e/wal-e">WAL-E</a>.</p>
 
 <p><em>As is always the case if you have articles you&rsquo;d like to see created or if you&rsquo;re interested in doing a guest post  please feel free to drop me a line <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a>. And if you have articles you feel are helpful to others in the Postgres world drop me a note as well for including them in <a href="http://www.postgresweekly.com">Postgres Weekly</a>.</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Documenting your PostgreSQL database]]></title>
-    <link href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/"/>
-    <updated>2013-07-29T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database</id>
-    <content type="html"><![CDATA[<p>Just a few days ago I was surprised by what someone was doing with their database, and not in the typical horrifying travesty against mankind. Rather, it was a feature that while familiar with I&rsquo;d never seen anyone fully take proper advantage of &ndash; <code>COMMENT</code> or describing tables. Postgres has a nice facility for you to provide a description for just about anything:</p>
-
-<ul>
-<li>Table</li>
-<li>Column</li>
-<li>Function</li>
-<li>Schema</li>
-<li>View</li>
-<li>Index</li>
-<li>Etc.</li>
-</ul>
-
-
-<!--more-->
-
-
-<p>The specific use case was a database acting as a datamart pulling in data from multiple sources to be able to report against disparate data. Over the years I&rsquo;ve seen this occur really one three ways, the first is that a limited set of people, typically one person, have knowledge over all the datasources and thus far the sole individual responsible for creating reports and answering questions of the data. The second, is wide open access to anyone that wishes for it. In this case you often have people asking questions of the data, and because they don&rsquo;t understand the relationships coming up to entirely wrong conclusions. The final approach is to create some external documentation, entity relationship diagrams, data dictionaries, etc. This last one often works okay enough, but often suffers from lack of updates and being too heavyweight.</p>
-
-<p>A better solution, and all around good process is simply documenting clearly within the database itself. Simply comment each table and column, just as you would outside of your DB then it can be quite clear when inside the database working interactivly:</p>
-
-<pre><code>COMMENT ON TABLE products IS 'Products catalog';
-COMMENT ON COLUMN products.price is 'Current price of a single item purchased';
-</code></pre>
-
-<p>While an obvious example above naming even the most mundance columns can help create more accurate reports. Then of course when you want to inspect your DB its quite clear:</p>
-
-<pre><code>\d+ users
-# \d+ users
-                                     Table "public.users"
-   Column   |            Type             | ... | Description
-------------+-----------------------------+-...-+-----------------------------------------
- id         | integer                     | ... | auto serial pk
- first_name | character varying(50)       | ... | required first name of user
- last_name  | character varying(50)       | ... | required first name of user
- email      | character varying(255)      | ... | email address of account
- data       | hstore                      | ... | mix of data, city, state, gender
- created_at | timestamp without time zone | ... | when account was created, not confirmed
- updated_at | timestamp without time zone | ... | time any details were last updated
-Indexes:
-    "idx_user_created" btree (date_trunc('day'::text, created_at))
-Has OIDs: no
-</code></pre>
-
-<p>But it doesn&rsquo;t necessarily have to stop there. Which actually brings me to one other item, you should be commenting your SQL just the same. SQL comments can be done easily by just starting a line with <code>--</code>, or you can have it at the end of the line with further info. Here&rsquo;s a nice example:</p>
-
-<pre><code>-- Query aggregates all project names that have open past due tasks grouped by email
-SELECT 
-  users.email,
-  array_to_string(array_agg(projects.name), ',')) as projects # Aggregate all projects and separate by comma
-FROM
-  projects,
-  tasks,
-  users
--- A user has a project, which has tasks
-WHERE projects.id = tasks.project_id
-  -- Check for tasks that are due before now and not done yet
-  AND tasks.due_at &gt; tasks.completed_at
-  AND tasks.due_at &lt; now()
-  AND users.id = projects.user_id
-GROUP BY 
-  users.email
-</code></pre>
-
-<p>You comment your code, why shouldn&rsquo;t you comment your database?</p>
 ]]></content>
   </entry>
   

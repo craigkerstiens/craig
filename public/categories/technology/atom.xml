@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Technology | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/technology/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-04-08T20:51:25-07:00</updated>
+  <updated>2014-05-01T20:25:31-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -47,7 +47,7 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
 
 <h3>Still area for concern</h3>
 
-<p>With security vulnerabilities there are two key things to consider. First is the vulnerability itself, second is whether its therotical or can be simply acted upon. Yes, theres a range here. One of the most unfortunate pieces from talking to those that know about security is this was extremely trivial to act upon.</p>
+<p>With security vulnerabilities there are two key things to consider. First is the vulnerability itself, second is whether its therotical or can be simply acted upon. Yes, there&rsquo;s a range here. One of the most unfortunate pieces from talking to those that know about security is this was extremely trivial to act upon.</p>
 
 <p><em>This is made even worse in that this vulnerability has existed for 2 years without many knowing about it, meaning people have had an ability to snoop and collect parts of your data for two years</em></p>
 

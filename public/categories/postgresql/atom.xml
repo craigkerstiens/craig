@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-04-08T20:51:25-07:00</updated>
+  <updated>2014-05-01T20:25:31-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -112,7 +112,7 @@
     <link href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/"/>
     <updated>2014-02-26T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL</id>
-    <content type="html"><![CDATA[<p>In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
+    <content type="html"><![CDATA[<p><img src="http://f.cl.ly/items/3f1q2N2s2V0d0G2s1T01/Blank.jpg" style="float:right;margin-left:20px;"/> In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
 
 <!--more-->
 
