@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Earlier this week while I was at DjangoCon EU there seemed to be a surprising amount of talk about MongoDB. My problem with this isn&rsquo;t with &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,71 +98,6 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/06/11/schemaless-django/">
-		
-			Schemaless Postgres in Django</a>
-	</h2>
-	<div class="entry-content">
-		<p>Earlier this week while I was at <a href="http://lanyrd.com/2012/djangocon-europe/">DjangoCon EU</a> there seemed to be a surprising amount of talk about MongoDB. My problem with this isn&rsquo;t with MongoDB, but in  the assumption that only Mongo can solve what you&rsquo;re looking for. By and far the most common feature is people want schemaless. It gives them flexibility in their data model and lets them iterate quickly. While I still opt for relational models that map cleanly to a relational database, there are cases where developers may want schemaless. I gave a quick lightning talk on this with slides <a href="https://speakerdeck.com/u/craigkerstiens/p/django-and-hstore">here</a>, but it is worth recapping.</p>
-
-<p>The example given by <a href="http://www.twitter.com/pydanny">pydanny</a> was a product catalog. You may have different items you want to store for a catalog. Lets take an example below:</p>
-
-<pre><code>django_pony = {'name': 'Django Pony', 'rating': '5'}
-pink_pony = {'name': 'Pink Pony', 'rating': '4', 'color': 'pink'}
-</code></pre>
-
-<p>In the case of a product catalog it could be understandable you don&rsquo;t want to normalize every possible spec for the product. The argument for Mongo is so commonly that you can easily work with this data model. Admittedly it is quite simple:</p>
-
-<pre><code>from pymongo import Connection
-connection = Connection()
-django_pony = {'name': 'Django Pony', 'rating': '5'}
-connection.product.insert(django_pony)
-</code></pre>
-
-<p>The problem is that this assumes other schemaless options don&rsquo;t exist or are inferior.</p>
-
-<h2>Enter hStore</h2>
-
-<p><a href="http://www.postgresql.org/docs/8.4/static/hstore.html">hStore</a> is a column type within Postgres. It is a key value store that allows you to store a dictionary, with text values. It alone is not a full document store replacement, but allows for flexibility in your data model where you need it while letting you use relational models elsewhere. Its not exactly new within Postgres either, as its been available since 8.4, however its recently become easier to work with and is supported in some form or another by more frameworks.</p>
-
-<p>To do the same as above we only need to do a few steps:</p>
-
-
-		
-		<a href="/2012/06/11/schemaless-django/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
 
 
     <article class="post">
@@ -639,6 +574,51 @@ connection.product.insert(django_pony)
 <div class="tags">
 
 	<a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/11/02/how-heroku-works-teams-tools/">
+		
+			How Heroku Works - Teams and Tools</a>
+	</h2>
+	<div class="entry-content">
+		<p>Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of engineers, even product managers often write code. Heroku as a platform drives many of the features not from top down, but from bottom up based on engineers desires or skunkworks projects. There&rsquo;s many valuable insights into how Heroku runs efficiently for engineering.</p>
+
+<p>I&rsquo;ll be diving into many various practices that enable Heroku to put quality engineering above all else, but first let me highlight the team structure and tools that enable this.</p>
+
+
+		
+		<a href="/2011/11/02/how-heroku-works-teams-tools/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
 
 </div>
 
