@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="A couple of weekends ago I had the great opportunity to attend lessconf. It was an all around great conference, and as a result of the greatness I &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,61 +98,6 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/04/27/cx_conference_experience_talks/">
-		
-			CX – Conference Experience (Talks)</a>
-	</h2>
-	<div class="entry-content">
-		<p>A couple of weekends ago I had the great opportunity to attend <a href="http://lessconf.com">lessconf</a>. It was an all around great conference, and as a result of the greatness I ended up having a conversation with a few people around conference experience. I must give much of the credit to <a href="http://twitter.com/swiftalphaone">Swift</a>, as he mentioned he&rsquo;d already been thinking alot about this since <a href="http://waza.heroku.com">Waza</a>. In general it feels like there&rsquo;s a few key themes that any conference should focus on, then a lot of small things that can really push it over the top. Here&rsquo;s a few:</p>
-
-<p>In general the key areas for any great conference are:</p>
-
-<ul>
-<li>Talks</li>
-<li>Great people</li>
-<li>Ensuring communication happens</li>
-<li>Bonus points</li>
-</ul>
-
-
-<p>Digging in deeper on the first area&hellip;</p>
-
-
-		
-		<a href="/2013/04/27/cx_conference_experience_talks/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketing/'>Marketing</a>
-
-</div>
-
-
-	
-</div></article>
 
 
     <article class="post">
@@ -590,6 +535,53 @@ $(document).ready(
 	
 </div></article>
 
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/01/10/more-on-postgres-performance/">
+		
+			More on Postgres Performance</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you missed my previous post on <a href="/2012/10/01/understanding-postgres-performance/">Understanding Postgres Performance</a> its a great starting point. On this particular post I&rsquo;m going to dig in to some real life examples of optimizing queries and indexes.</p>
+
+<h3>It all starts with stats</h3>
+
+<p>I wrote about some of the <a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/">great new features in Postgres 9.2</a> in the recent announcement on support of Postgres 9.2 on <a href="https://www.heroku.com">Heroku</a>. One of those awesome features, is <a href="http://www.postgresql.org/docs/9.2/static/pgstatstatements.html">pg_stat_statements</a>. Its not commonly known how much information Postgres keeps about your database (beyond the data of course), but in reality it keeps a great deal. Ranging from basic stuff like table size to cardinality of joins to distribution of indexes, and with pg_stat_statments it keeps a normalized record of when queries are run.</p>
+
+
+		
+		<a href="/2013/01/10/more-on-postgres-performance/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
 <nav id="pagenavi">
     
         <a href="/blog/page/3/" class="prev">Prev</a>
@@ -605,12 +597,12 @@ $(document).ready(
 
 </footer>
 	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 (function($){
 	$('.fancybox').fancybox();
 })(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
+</script>  Delete or comment this line to disable Fancybox -->
 
 
 <script type="text/javascript">

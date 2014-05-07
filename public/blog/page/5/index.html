@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="If you missed my previous post on Understanding Postgres Performance its a great starting point. On this particular post I&rsquo;m going to dig in &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="I&rsquo;m increasingly encountering users on Heroku that are encountering the need to shard their data. For most users this is something you delay &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,53 +98,6 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/01/10/more-on-postgres-performance/">
-		
-			More on Postgres Performance</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you missed my previous post on <a href="/2012/10/01/understanding-postgres-performance/">Understanding Postgres Performance</a> its a great starting point. On this particular post I&rsquo;m going to dig in to some real life examples of optimizing queries and indexes.</p>
-
-<h3>It all starts with stats</h3>
-
-<p>I wrote about some of the <a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/">great new features in Postgres 9.2</a> in the recent announcement on support of Postgres 9.2 on <a href="https://www.heroku.com">Heroku</a>. One of those awesome features, is <a href="http://www.postgresql.org/docs/9.2/static/pgstatstatements.html">pg_stat_statements</a>. Its not commonly known how much information Postgres keeps about your database (beyond the data of course), but in reality it keeps a great deal. Ranging from basic stuff like table size to cardinality of joins to distribution of indexes, and with pg_stat_statments it keeps a normalized record of when queries are run.</p>
-
-
-		
-		<a href="/2013/01/10/more-on-postgres-performance/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-10T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
 
 
     <article class="post">
@@ -624,6 +577,71 @@ FROM
 	
 </div></article>
 
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/06/11/schemaless-django/">
+		
+			Schemaless Postgres in Django</a>
+	</h2>
+	<div class="entry-content">
+		<p>Earlier this week while I was at <a href="http://lanyrd.com/2012/djangocon-europe/">DjangoCon EU</a> there seemed to be a surprising amount of talk about MongoDB. My problem with this isn&rsquo;t with MongoDB, but in  the assumption that only Mongo can solve what you&rsquo;re looking for. By and far the most common feature is people want schemaless. It gives them flexibility in their data model and lets them iterate quickly. While I still opt for relational models that map cleanly to a relational database, there are cases where developers may want schemaless. I gave a quick lightning talk on this with slides <a href="https://speakerdeck.com/u/craigkerstiens/p/django-and-hstore">here</a>, but it is worth recapping.</p>
+
+<p>The example given by <a href="http://www.twitter.com/pydanny">pydanny</a> was a product catalog. You may have different items you want to store for a catalog. Lets take an example below:</p>
+
+<pre><code>django_pony = {'name': 'Django Pony', 'rating': '5'}
+pink_pony = {'name': 'Pink Pony', 'rating': '4', 'color': 'pink'}
+</code></pre>
+
+<p>In the case of a product catalog it could be understandable you don&rsquo;t want to normalize every possible spec for the product. The argument for Mongo is so commonly that you can easily work with this data model. Admittedly it is quite simple:</p>
+
+<pre><code>from pymongo import Connection
+connection = Connection()
+django_pony = {'name': 'Django Pony', 'rating': '5'}
+connection.product.insert(django_pony)
+</code></pre>
+
+<p>The problem is that this assumes other schemaless options don&rsquo;t exist or are inferior.</p>
+
+<h2>Enter hStore</h2>
+
+<p><a href="http://www.postgresql.org/docs/8.4/static/hstore.html">hStore</a> is a column type within Postgres. It is a key value store that allows you to store a dictionary, with text values. It alone is not a full document store replacement, but allows for flexibility in your data model where you need it while letting you use relational models elsewhere. Its not exactly new within Postgres either, as its been available since 8.4, however its recently become easier to work with and is supported in some form or another by more frameworks.</p>
+
+<p>To do the same as above we only need to do a few steps:</p>
+
+
+		
+		<a href="/2012/06/11/schemaless-django/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
 <nav id="pagenavi">
     
         <a href="/blog/page/4/" class="prev">Prev</a>
@@ -639,12 +657,12 @@ FROM
 
 </footer>
 	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 (function($){
 	$('.fancybox').fancybox();
 })(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
+</script>  Delete or comment this line to disable Fancybox -->
 
 
 <script type="text/javascript">
