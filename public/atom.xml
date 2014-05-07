@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-07T13:42:13-07:00</updated>
+  <updated>2014-05-07T13:47:43-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means/"/>
     <updated>2014-05-08T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means</id>
-    <content type="html"><![CDATA[<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective. First let me try to dumb down so much of this, yes I&rsquo;ll be wrong. Go on, rant about what data science is or isn&rsquo;t. My goal here is to simply set a context for the rest of the meat which talks about how you can simply look at your data and let it surface things you may not have known.</p>
+    <content type="html"><![CDATA[<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;margin-left:20px;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective. First let me try to dumb down so much of this, yes I&rsquo;ll be wrong. Go on, rant about what data science is or isn&rsquo;t. My goal here is to simply set a context for the rest of the meat which talks about how you can simply look at your data and let it surface things you may not have known.</p>
 
 <h3>Personas</h3>
 
@@ -1291,7 +1291,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#97;&#108;&#x6c;&#64;&#121;&#111;&#x75;&#x72;&#99;&#111;&#109;&#x70;&#x61;&#110;&#121;&#x2e;&#x63;&#x6f;&#x6d;">&#x61;&#108;&#x6c;&#x40;&#121;&#111;&#117;&#x72;&#x63;&#x6f;&#109;&#112;&#x61;&#110;&#121;&#x2e;&#99;&#111;&#109;</a> or <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x6f;&#x75;&#114;&#103;&#x72;&#x6f;&#x75;&#112;&#64;&#x6d;&#121;&#x63;&#111;&#x6d;&#112;&#97;&#110;&#121;&#46;&#99;&#x6f;&#109;&#46;">&#111;&#x75;&#x72;&#x67;&#114;&#111;&#x75;&#x70;&#x40;&#109;&#x79;&#x63;&#x6f;&#x6d;&#112;&#x61;&#x6e;&#x79;&#x2e;&#99;&#111;&#x6d;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#97;&#108;&#x6c;&#x40;&#x79;&#x6f;&#117;&#x72;&#x63;&#111;&#109;&#x70;&#x61;&#110;&#x79;&#46;&#x63;&#111;&#x6d;">&#x61;&#108;&#108;&#64;&#121;&#x6f;&#x75;&#x72;&#99;&#111;&#109;&#x70;&#97;&#110;&#121;&#46;&#x63;&#x6f;&#109;</a> or <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#x6f;&#117;&#114;&#x67;&#114;&#x6f;&#x75;&#112;&#x40;&#x6d;&#x79;&#99;&#111;&#109;&#112;&#97;&#x6e;&#121;&#46;&#x63;&#111;&#x6d;&#46;">&#111;&#117;&#x72;&#x67;&#114;&#x6f;&#x75;&#x70;&#64;&#x6d;&#x79;&#x63;&#x6f;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#x6d;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
