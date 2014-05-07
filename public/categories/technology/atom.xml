@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Technology | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/technology/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-07T11:32:17-07:00</updated>
+  <updated>2014-05-07T11:34:41-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -22,7 +22,7 @@
 
 <h3>hstore</h3>
 
-<p>Yes, I&rsquo;ve talked about this one before, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. Hstore is a key-value store directly within Postgres. This means you can easily add new keys and values <em>(optionally)</em>, without haveing to run a migration to setup new columns. Further you can still get great performance by using Gin and GiST indexes with them, which automatically index all keys and values for hstore.</p>
+<p>Yes, I&rsquo;ve talked about <a href="/2013/07/03/hstore-vs-json/">this one before</a>, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. <!--more-->Hstore is a key-value store directly within Postgres. This means you can easily add new keys and values <em>(optionally)</em>, without haveing to run a migration to setup new columns. Further you can still get great performance by using Gin and GiST indexes with them, which automatically index all keys and values for hstore.</p>
 
 <h3>Range types</h3>
 
