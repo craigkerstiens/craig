@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-07T12:30:05-07:00</updated>
+  <updated>2014-05-07T12:44:36-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -24,6 +24,8 @@
 
 <p>Yes, I&rsquo;ve talked about <a href="/2013/07/03/hstore-vs-json/">this one before</a>, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. <!--more-->Hstore is a key-value store directly within Postgres. This means you can easily add new keys and values <em>(optionally)</em>, without haveing to run a migration to setup new columns. Further you can still get great performance by using Gin and GiST indexes with them, which automatically index all keys and values for hstore.</p>
 
+<p><em>It&rsquo;s of note that hstore is an extension and not enabled by default. If you want the ins and outs of getting hands on with it, give the article on <a href="http://postgresguide.com/sexy/hstore.html">Postgres Guide</a> a read.</em></p>
+
 <h3>Range types</h3>
 
 <p>If there is ever a time where you have two columns in your database with one being a from, another being a to, you probably want to be using <a href="http://www.postgresql.org/docs/9.2/static/rangetypes.html">range types</a>. Range types are just that a set of ranges. A super common use of them is when doing anything with calendaring. The place where they really become useful is in their ability to apply constraints on those ranges. This means you can make sure you don&rsquo;t have overlapping time issues, and don&rsquo;t have to rebuild heavy application logic to accomplish it.</p>
@@ -36,9 +38,11 @@
 
 <p>Integers are primary keys aren&rsquo;t great. Sure if you&rsquo;re running a small blog they work fine, but if you&rsquo;re application has to scale to a large size integers can create problems. First you can run out of them, second it can make other details such as sharding a little more annoying. At the same time they are super readable. However, using the actual UUID datatype and extension to automatically generate them can be incredibly handy if you have to scale an application.</p>
 
+<p><em>Similar to hstore, there&rsquo;s an <a href="http://www.postgresql.org/docs/9.3/static/uuid-ossp.html">extension</a> that makes the UUID much more useful.</em></p>
+
 <h3>Binary JSON</h3>
 
-<p>This isn&rsquo;t available yet, but will be in Postgres 9.4. Binary JSON is of course JSON directly within your database, but also lets you add Gin indexes directly onto JSON. This means a much simpler setup in not only inserting JSON, but having fast reads. If you want to learn a bit more about this, <a href="/training/index.html">sign up</a> to <a href="/training/index.html">get notified</a> of training regarding the upcoming PostgreSQL 9.4 release.</p>
+<p>This isn&rsquo;t available yet, but will be in Postgres 9.4. <a href="/2014/03/24/Postgres-9.4-Looking-up/">Binary JSON</a> is of course JSON directly within your database, but also lets you add Gin indexes directly onto JSON. This means a much simpler setup in not only inserting JSON, but having fast reads. If you want to learn a bit more about this, <a href="/training/index.html">sign up</a> to <a href="/training/index.html">get notified</a> of training regarding the upcoming PostgreSQL 9.4 release.</p>
 
 <h3>Money</h3>
 
