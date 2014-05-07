@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="First a huge thanks to all organizers of conferences, but especially for those that organize not-for-profit conferences. I do understand its a great &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,83 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/05/07/why-postgres-part-2/">
+		
+			Why PostgreSQL Part 2</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
+
+<p>Last week I did a post on the <a href="/2012/04/30/why-postgres/">many reasons to use Postgres</a>. My goal with the post was two fold:</p>
+
+<ul>
+<li>Call out some of the historical arguments against it that don&rsquo;t hold any more</li>
+<li>Highlight some of the awesome but more unique features that are less commonly found in databases.</li>
+</ul>
+
+
+<p>Once I published the post it was clear and was immediately pointed out in the comments and on <a href="http://news.ycombinator.com/item?id=3910743">hacker news</a> that I missed quite a few features that I&rsquo;d mostly come to take for granted. <em>Perhaps this is due to so much awesomeness existing within Postgres.</em> A large thanks to everyone for calling these out. To help consolidate many of these, here&rsquo;s a second list of the many reasons to use PostgreSQL:</p>
+
+<h2>Create Index Concurrently</h2>
+
+<p>On most traditional databases when you create an index it holds a lock on the table while it creates the index. This means that the table is more or less useless during that time. When you&rsquo;re starting out this isn&rsquo;t a problem, but as your data grows and you then add indexes later to improve performance it could mean downtime just to add an index. Not surprisingly Postgres has a great means of adding an index without holding that lock. Simply doing <a href="http://www.postgresql.org/docs/9.1/static/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY"><code>CREATE INDEX CONCURRENTLY</code></a> instead of <code>CREATE INDEX</code> will create your index without holding the lock.</p>
+
+<p><em>Of course with many features there are caveats, in the case of creating your index concurrently it does take somewhere on the order of 2-3 times longer, and cannot be done within a transaction</em></p>
+
+<h2>Transactional DDL</h2>
+
+<p>If you&rsquo;ve ever run a migration had something break mid-way, either due to a constraint or some other means you understand what pain can come of quickly untangling such. Typically migrations on a schema are intended to be run holistically and if they fail you want to fully rollback. Some other databases such as Oracle in recent versions and SQL server do support, this. And of course Postgres supports wrapping your DDL inside a transaction. This means if an error does occur you can simply rollback and have the previous DDL statements rolled back with it, leaving your schema migrations as safe as your data, and your application in a consistent state.</p>
+
+<h2>Foreign Data Wrappers</h2>
+
+<p>I talked before about other languages within your database such as Ruby or Python, but what if you wanted to talk to other databases from your database. Postgres&rsquo;s Foreign Data Wrapper allows you to fully wrap external data systems and join on them in a similar fashion to as if they existed locally within the database. Here&rsquo;s a sampling of just a few of the foreign data wrappers that exist:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+</ul>
+
+
+<p>In fact you can even use <a href="http://multicorn.org/">Multicorn</a> to allow you to write other foreign data wrappers in Python. An example of how this can be done, in this case with Database.com/Force.com can be found <a href="http://blog.database.com/blog/2011/11/21/a-database-comforce-com-foreign-data-wrapper-for-postgresql/">here</a></p>
+
+
+		
+		<a href="/2012/05/07/why-postgres-part-2/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -549,49 +626,6 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/11/01/installingpythonpackages/">
-		
-			Installing Python Packages</a>
-	</h2>
-	<div class="entry-content">
-		<p>Now that you have you system and project environment all setup you probably want to start developing. But you likely don&rsquo;t want to start writing an entire project fully from scratch, as you dive in you&rsquo;ll quickly realize theres many tools helping you build projects and sites faster. For example making a request to a website there&rsquo;s <a href="http://docs.python-requests.org/en/latest/index.html">Requests</a>, for handling processing images there&rsquo;s <a href="http://www.pythonware.com/products/pil/">Python Imaging   Library</a>, or for a full framework to help you in building a site there&rsquo;s <a href="http://www.djangoproject.com">Django</a>. With all of these there&rsquo;s one simple and common way to install them. But first a little more on how it all works.</p>
-
-
-		
-		<a href="/2011/11/01/installingpythonpackages/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/5/" class="prev">Prev</a>
@@ -605,8 +639,6 @@ $(document).ready(
 
     Craig Kerstiens
 
-<br>
-Powered by Octopress.
 </footer>
 	<script src="/javascripts/slash.js"></script>
 <script src="/javascripts/jquery.fancybox.pack.js"></script>

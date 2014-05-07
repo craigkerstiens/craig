@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-02T11:33:05-07:00</updated>
+  <updated>2014-05-07T11:27:21-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -104,6 +104,37 @@
 <h3>In Conclusion</h3>
 
 <p>Postgres 9.4 isn&rsquo;t 100% complete yet, as the commitfest is still going on. You can follow along on the <a href="www.postgresql.org/list/pgsql-hackers/2014-03/">postgres hackers mailing list</a> or on the <a href="https://commitfest.postgresql.org/">commitfest app</a> where you can follow specific patches or even chip in on reviewing. And of course I&rsquo;ll do my best to continue to highlight useful features here and surface them on <a href="http://www.postgresweekly.com">Postgres Weekly</a> as well.</p>
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://postgresweekly.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+
+
+<!--End mc_embed_signup-->
+
 ]]></content>
   </entry>
   
@@ -207,6 +238,37 @@ ORDER BY date ASC;
 <h3>In conclusion</h3>
 
 <p>The positive of this one is that the building blocks are in and its continuing to make progress. Its just that we&rsquo;ll have to wait about 18 months before the release of PostgreSQL 9.5 before its in our hands.</p>
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://postgresweekly.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+
+
+<!--End mc_embed_signup-->
+
 ]]></content>
   </entry>
   
@@ -288,6 +350,37 @@ FROM pageviews;
 <li>JSONB &ndash; Binary format of JSON built on top of HStore</li>
 <li>Logical replication &ndash; this one looks like some pieces will make it, but not a wholey usable implementation.</li>
 </ul>
+
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://postgresweekly.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+
+
+<!--End mc_embed_signup-->
 
 ]]></content>
   </entry>
