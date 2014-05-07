@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-07T12:27:24-07:00</updated>
+  <updated>2014-05-07T12:30:05-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
-    <link href="http://www.craigkerstiens.com/2014/05/08/Postgres-datatypes-the-ones-youre-not-using/"/>
-    <updated>2014-05-08T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/05/08/Postgres-datatypes-the-ones-youre-not-using</id>
+    <link href="http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/"/>
+    <updated>2014-05-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using</id>
     <content type="html"><![CDATA[<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further adieu let&rsquo;s look at some of these rarer but awesome types.</p>
 
 <h3>hstore</h3>
