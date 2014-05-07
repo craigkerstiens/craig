@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-07T12:44:36-07:00</updated>
+  <updated>2014-05-07T13:42:13-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Personas, data science, k-means]]></title>
+    <link href="http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means/"/>
+    <updated>2014-05-08T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means</id>
+    <content type="html"><![CDATA[<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective. First let me try to dumb down so much of this, yes I&rsquo;ll be wrong. Go on, rant about what data science is or isn&rsquo;t. My goal here is to simply set a context for the rest of the meat which talks about how you can simply look at your data and let it surface things you may not have known.</p>
+
+<h3>Personas</h3>
+
+<p>I most commonly here this term from &ldquo;business people&rdquo;. In fact not too long ago I recall interacting with someone that wanted to define personas for a company. They wanted to give them names, Joe and Mary. Joe is a father of 2, he works between 8 and 5, because he has to pick kids up from school, he&rsquo;s always worked at fortune 100 companies. Mary is single, she&rsquo;s a small business owner, she likes using tools instead of building things herself. If you think this is overly exaggerated on what you might expect that&rsquo;s fair. Lets take a company I&rsquo;m fond of [Travis CI], if someone were to do this for them it might look like:</p>
+
+<ul>
+<li>Enterprise QA developer</li>
+<li>Startup full stack engineer</li>
+<li>Open source contributor</li>
+</ul>
+
+
+<p><em>While this is all fine and good, a name and what they do doesn&rsquo;t help in the substantial way I&rsquo;d like.</em> Sure use personas if it helps you think about who you&rsquo;re building the product for, but don&rsquo;t expect customers to say yes I fit into only this bucket by trying to create classifications like this.</p>
+
+<p><strong>Let&rsquo;s rephrase this to be super simple, groupings of people, no groupings of something that have a likely outcome based on some various inputs. Perhaps a better term for it is archtype</strong></p>
+
+<h3>Data science</h3>
+
+<p>The application of math or statistics to learn something about your business. It doesn&rsquo;t have to be big data, or NoSQL, simply the application of an algorithm to learn something. Extending it a bit, let&rsquo;s assume it&rsquo;s to do something actionable. This is a bit of a chicken and egg, because you can&rsquo;t look at different data the same way everytime and have a valuable intrepretation, but we can apply a little more clarity to ease this process.</p>
+
+<h3>k-means</h3>
+
+<p>Alright onto the meat of what I was hoping to dig into here, well actually first a little more of a detour. Tracking key data for your business should be extremely clear. Hopefully you&rsquo;re already doing this, if you&rsquo;re not already tracking <a href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/">month over month growth</a> then go implement it today. If you don&rsquo;t know your lifetime value or attrition rate then get on those too. But if you do have that and still are unclear how to move the needle on some goal, maybe that goal is increasing lifetime value then we&rsquo;re at the right place.</p>
+
+<p>An extremely old algorithm for grouping things together and fairly commonly known in stats communities is <a href="http://en.wikipedia.org/wiki/K-means_clustering">k-means</a>. It will group things together based on their likeness into some set, thats where the k comes from, of groups. It&rsquo;s also known as an unsupervised clustering method, because you simply put the data in, and let it create these groupings for you. But why or how is it useful, you know you want to influence lifetime value so you should just find what makes people increase it and move that, well&hellip; we may be able to get there with k-means.</p>
+
+<h3>Practicality</h3>
+
+<p>Most commonly when you search for k-means you&rsquo;ll find some image similar to the one at the top of the post. This image graphically represents the clustering and the center of those clusters. And while visually interesting doesn&rsquo;t actually tell you how to act upon it. A clearer way is actually often by examing the clusters and whats common, this tells you how to actually treat that archtype differently.</p>
+
+<p>In his book <a href="http://www.amazon.com/dp/B00F0WRXI0?tag=mypred-20">Data Smart</a> John Foreman actually does a great job of laying this out in a pratical way. I&rsquo;m particularly partial to his example also because it uses wine as an example. His example generates a variety of groupings, looking at the surrouding meta data its then possible to discover that:</p>
+
+<ul>
+<li>Grouping 1 likes Pinot</li>
+<li>Grouping 2 likes buying in bulk</li>
+<li>Grouping 3 likes buying small volume</li>
+<li>Grouping 4 likes bubbly</li>
+</ul>
+
+
+<p>From here you can then start to get some idea of what you&rsquo;d do with this. Perhaps you&rsquo;d create a deal each month so that it appeals to all groups, or target them with different deals. Or maybe you&rsquo;d simply not send an email to them if you didn&rsquo;t have a deal that month. If course you could go more granular down into a recommendation engine to get a personalized recommendation for each customer, but for a lot of smaller apps/sites that&rsquo;s simply not feasible.</p>
+
+<p>So in this case the output would look less like the image at the top and more like a set of 4 groups, then a CSV of every user and which grouping they fall in. Yes, its a less sexy graph, but a much more applicable CSV or excel output.</p>
+
+<h3>Whats next</h3>
+
+<p>Up next I&rsquo;ll actually dig in on a real world example here. Alex over at HackDesign was kind enough to give me access to their data to create a more practical example of this. While I&rsquo;m just now digging in, there should be a tangible example of this to follow.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
@@ -1235,7 +1291,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#97;&#x6c;&#108;&#x40;&#121;&#111;&#117;&#114;&#x63;&#x6f;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#99;&#111;&#109;">&#x61;&#108;&#108;&#x40;&#x79;&#x6f;&#x75;&#x72;&#99;&#x6f;&#x6d;&#x70;&#x61;&#110;&#x79;&#x2e;&#99;&#x6f;&#x6d;</a> or <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#111;&#117;&#114;&#x67;&#114;&#111;&#x75;&#112;&#x40;&#109;&#x79;&#99;&#x6f;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#x6d;&#46;">&#x6f;&#117;&#114;&#x67;&#x72;&#111;&#117;&#x70;&#x40;&#109;&#x79;&#99;&#111;&#x6d;&#x70;&#97;&#110;&#x79;&#46;&#x63;&#111;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#97;&#108;&#x6c;&#64;&#121;&#111;&#x75;&#x72;&#99;&#111;&#109;&#x70;&#x61;&#110;&#121;&#x2e;&#x63;&#x6f;&#x6d;">&#x61;&#108;&#x6c;&#x40;&#121;&#111;&#117;&#x72;&#x63;&#x6f;&#109;&#112;&#x61;&#110;&#121;&#x2e;&#99;&#111;&#109;</a> or <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x6f;&#x75;&#114;&#103;&#x72;&#x6f;&#x75;&#112;&#64;&#x6d;&#121;&#x63;&#111;&#x6d;&#112;&#97;&#110;&#121;&#46;&#99;&#x6f;&#109;&#46;">&#111;&#x75;&#x72;&#x67;&#114;&#111;&#x75;&#x70;&#x40;&#109;&#x79;&#x63;&#x6f;&#x6d;&#112;&#x61;&#x6e;&#x79;&#x2e;&#99;&#111;&#x6d;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -2424,94 +2480,6 @@ LIMIT 1;
 <p>While we&rsquo;re waiting for more FDWs to be ready to use in production situations the Postgres FDW is a great start, <em>though the Redis one is on its way</em>. Even better is that it ships with standard installs of Postgres, meaning it will see more usage and help push them to advance further.</p>
 
 <p><em>One final nicety, you&rsquo;re not required to have ALL Postgres 9.3 DBs, just one that can then connect to the others, so go ahead and give it try :)</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Dollar Quoting]]></title>
-    <link href="http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere/"/>
-    <updated>2013-08-02T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere</id>
-    <content type="html"><![CDATA[<p>After my most recent post on <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">documenting your database</a> I had a colleague and friend chime in:</p>
-
-<blockquote><p>@craigkerstiens You may want to mention for another post the generality of dollar quoting: it&#8217;s not just for CREATE FUNCTION.</p><footer><strong>@danfarina</strong> <cite><a href='https://twitter.com/danfarina/status/362007008079126528'>twitter.com/danfarina/status/&hellip;</a></cite></footer></blockquote>
-
-
-<p>Luckily I was able to convince him to create the post. You can read a bit more on him below, but without further adieu here&rsquo;s a bit on dollar quoting within Postgres:</p>
-
-<!--more-->
-
-
-<p>Postgres supports two forms of entry of data literals into the system.
-One is the familiar single-quote:</p>
-
-<pre><code>=&gt; SELECT 'hello';
- ?column?
-----------
- hello
-(1 row)
-</code></pre>
-
-<p>This format is problematic when one might be using single quotes in
-the textual string.</p>
-
-<p>Postgres also supports another way to enter data
-literals, most often seen in <code>CREATE FUNCTION</code>, but can be profitably
-used anywhere.  This is called &ldquo;dollar quoting,&rdquo; and it looks like
-this:</p>
-
-<pre><code>=&gt; SELECT $$hello's the name of the game$$;
-           ?column?
-------------------------------
- hello's the name of the game
-(1 row)
-</code></pre>
-
-<p>If one needs nested dollar quoting, one can specify a string, much
-like the &lsquo;heredoc&rsquo; feature seen in some programming languages:</p>
-
-<pre><code>=&gt; SELECT $goodbye$hello's the name of the $$ game$goodbye$;
-            ?column?
----------------------------------
- hello's the name of the $$ game
-(1 row)
-</code></pre>
-
-<p>This can appear anywhere where single quotes would otherwise be,
-simplifying tasks like using contractions in database object comments,
-for example:</p>
-
-<pre><code>=&gt; CREATE TABLE described(a int);
-=&gt; COMMENT ON TABLE described IS $$I'm describing this,
-including newlines and an apostrophe in the contraction "I'm."$$;
-</code></pre>
-
-<p>Or, alternatively, entry of literals for types that may include
-apostrophes in their serialization, such as &lsquo;text&rsquo; or &lsquo;json&rsquo;:</p>
-
-<pre><code>=&gt; CREATE TABLE json(data json);
-=&gt; INSERT INTO json(data) VALUES
-       ($${"quotation": "'there is no time like the present'"}$$);
-</code></pre>
-
-<h3>Security</h3>
-
-<p>Even though dollar quotes can be used to reduce the pain of many
-quoting problems, don&rsquo;t be tempted to use them to avoid SQL injection:
-an adversary that knows one is using dollar quoting can still mount
-exactly the same kind of attacks as if one were using single quotes.</p>
-
-<p>There is also no need, because any place a data literal can appear can
-also be used with parameter binding (e.g. <code>$1</code>, <code>$2</code>, <code>$3</code>&hellip;), which one&rsquo;s
-Postgres driver should support.  Nevertheless, for data or scripts one
-is working with by hand, dollar quoting can make things much easier to
-read.</p>
-
-<h3>About the Author</h3>
-
-<p>Daniel Farina is a long time colleague and friend, having worked together at 5 different companies. He&rsquo;s part of the <a href="https://twitter.com/danfarina/status/362007008079126528">Heroku Postgres</a> team as the resident tuple groomer, and the creator of <a href="https://github.com/wal-e/wal-e">WAL-E</a>.</p>
-
-<p><em>As is always the case if you have articles you&rsquo;d like to see created or if you&rsquo;re interested in doing a guest post  please feel free to drop me a line <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a>. And if you have articles you feel are helpful to others in the Postgres world drop me a note as well for including them in <a href="http://www.postgresweekly.com">Postgres Weekly</a>.</em></p>
 ]]></content>
   </entry>
   
