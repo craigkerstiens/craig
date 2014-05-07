@@ -372,7 +372,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/04/30/why-postgres/</loc>
-        <lastmod>2014-05-07T11:25:18-07:00</lastmod>
+        <lastmod>2014-05-07T12:22:32-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/05/04/feedback-for-conference-organizers/</loc>
@@ -380,7 +380,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/</loc>
-        <lastmod>2014-05-07T11:25:01-07:00</lastmod>
+        <lastmod>2014-05-07T12:22:39-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/06/11/schemaless-django/</loc>
@@ -400,11 +400,11 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres/</loc>
-        <lastmod>2014-03-30T12:48:01-07:00</lastmod>
+        <lastmod>2014-05-07T12:22:46-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/</loc>
-        <lastmod>2014-05-07T11:25:24-07:00</lastmod>
+        <lastmod>2014-05-07T12:23:09-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/</loc>
@@ -424,7 +424,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/</loc>
-        <lastmod>2014-05-07T11:25:31-07:00</lastmod>
+        <lastmod>2014-05-07T12:23:21-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/02/08/django-read-only-mode/</loc>
@@ -432,11 +432,11 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/</loc>
-        <lastmod>2014-05-07T11:26:58-07:00</lastmod>
+        <lastmod>2014-05-07T12:23:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/02/21/more-out-of-psql/</loc>
-        <lastmod>2014-05-07T11:26:55-07:00</lastmod>
+        <lastmod>2014-05-07T12:23:33-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/03/07/Fixing-django-db-connections/</loc>
@@ -460,7 +460,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/04/17/array-agg/</loc>
-        <lastmod>2014-05-07T11:26:15-07:00</lastmod>
+        <lastmod>2014-05-07T12:23:59-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/04/27/cx_conference_experience_talks/</loc>
@@ -494,7 +494,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres/</loc>
-        <lastmod>2014-05-07T09:46:43-07:00</lastmod>
+        <lastmod>2014-05-07T12:24:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/</loc>
@@ -536,7 +536,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/</loc>
-        <lastmod>2014-05-07T09:46:25-07:00</lastmod>
+        <lastmod>2014-05-07T12:24:32-07:00</lastmod>
     </url>
     <url>
         <loc>
@@ -554,7 +554,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/</loc>
-        <lastmod>2014-05-07T09:45:58-07:00</lastmod>
+        <lastmod>2014-05-07T12:21:57-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/02/07/my-email-hacks/</loc>
@@ -562,19 +562,19 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/</loc>
-        <lastmod>2014-05-07T09:45:52-07:00</lastmod>
+        <lastmod>2014-05-07T12:21:00-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/</loc>
-        <lastmod>2014-05-01T20:25:04-07:00</lastmod>
+        <lastmod>2014-05-07T12:21:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/</loc>
-        <lastmod>2014-05-07T09:45:47-07:00</lastmod>
+        <lastmod>2014-05-07T12:20:55-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/</loc>
-        <lastmod>2014-03-30T12:48:01-07:00</lastmod>
+        <lastmod>2014-05-07T12:24:59-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips/</loc>
@@ -590,7 +590,7 @@
         <loc>
             http://www.craigkerstiens.com/2014/05/08/Postgres-datatypes-the-ones-youre-not-using/
         </loc>
-        <lastmod>2014-05-07T11:34:34-07:00</lastmod>
+        <lastmod>2014-05-07T12:20:48-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/disneyland.html</loc>
@@ -646,15 +646,15 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/archives/</loc>
-        <lastmod>2014-05-07T11:34:34-07:00</lastmod>
+        <lastmod>2014-05-07T12:24:59-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/archives/</loc>
-        <lastmod>2014-05-07T11:34:34-07:00</lastmod>
+        <lastmod>2014-05-07T12:24:59-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/</loc>
-        <lastmod>2014-05-07T11:34:34-07:00</lastmod>
+        <lastmod>2014-05-07T12:24:59-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/books/</loc>
@@ -666,7 +666,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/</loc>
-        <lastmod>2014-05-07T11:34:34-07:00</lastmod>
+        <lastmod>2014-05-07T12:24:59-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/recommendations/books.html</loc>
@@ -686,6 +686,6 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/training/</loc>
-        <lastmod>2014-05-07T10:22:42-07:00</lastmod>
+        <lastmod>2014-05-07T12:20:43-07:00</lastmod>
     </url>
 </urlset>
