@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Technology | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/technology/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-08T08:09:46-07:00</updated>
+  <updated>2014-05-08T08:13:21-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -24,7 +24,7 @@
 
 <h3>Personas</h3>
 
-<p>I most commonly hear this term from &ldquo;business people&rdquo;. In fact not too long ago I recall interacting with someone that wanted to define personas for a company. They wanted to give them names, Joe and Mary. Joe is a father of 2, he works between 8 and 5, because he has to pick kids up from school, he&rsquo;s always worked at fortune 100 companies. Mary is single, she&rsquo;s a small business owner, she likes using tools instead of building things herself. If you think this is overly exaggerated on what you might expect that&rsquo;s fair. Lets take a company I&rsquo;m fond of [Travis CI], if someone were to do this for them it might look like:</p>
+<p>I most commonly hear this term from &ldquo;business people&rdquo;. In fact not too long ago I recall interacting with someone that wanted to define personas for a company. They wanted to give them names, Joe and Mary. Joe is a father of 2, he works between 8 and 5, because he has to pick kids up from school, he&rsquo;s always worked at fortune 100 companies. Mary is single, she&rsquo;s a small business owner, she likes using tools instead of building things herself. If you think this is overly exaggerated on what you might expect that&rsquo;s fair. Lets take a company I&rsquo;m fond of <a href="http://www.travisci.com">Travis CI</a>, if someone were to do this for them it might look like:</p>
 
 <ul>
 <li>Enterprise QA developer</li>
@@ -39,7 +39,7 @@
 
 <h3>Data science</h3>
 
-<p>The application of math or statistics to learn something about your business. It doesn&rsquo;t have to be big data, or NoSQL, simply the application of an algorithm to learn something. Extending it a bit, let&rsquo;s assume it&rsquo;s to do something actionable. This is a bit of a chicken and egg, because you can&rsquo;t look at different data the same way everytime and have a valuable intrepretation, but we can apply a little more clarity to ease this process.</p>
+<p>The application of math or statistics to learn something about your business. It doesn&rsquo;t have to be big data, or NoSQL, simply the application of an algorithm to learn something. Extending it a bit, let&rsquo;s assume it&rsquo;s to do something actionable. This is a bit of a chicken and egg, because you can&rsquo;t look at different data the same way everytime and have a valuable intrepretation. Sometimes it requires using several methods and examining the quality of the results. We can apply a little more clarity and judgement to ease this process though.</p>
 
 <h3>k-means</h3>
 
