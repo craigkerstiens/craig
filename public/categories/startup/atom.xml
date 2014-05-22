@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Startup | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/startup/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T10:11:37-05:00</updated>
+  <updated>2014-05-22T08:14:55-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Securing your Internal Organization with OpenID]]></title>
     <link href="http://www.craigkerstiens.com/2012/01/23/securing-your-organization/"/>
-    <updated>2012-01-23T00:00:00-06:00</updated>
+    <updated>2012-01-23T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2012/01/23/securing-your-organization</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
 
@@ -98,7 +98,7 @@ python yourapp/manage.py syncdb
   <entry>
     <title type="html"><![CDATA[Attribution 101]]></title>
     <link href="http://www.craigkerstiens.com/2011/03/18/attribution-101/"/>
-    <updated>2011-03-18T00:00:00-05:00</updated>
+    <updated>2011-03-18T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2011/03/18/attribution-101</id>
     <content type="html"><![CDATA[<p>Continuing with the recent posts on metrics and marketing. I want to give a quick primer on attribution. To any marketing or analytics people out there, simply skip this it would aim to be a primer recap at best for you.</p>
 
@@ -163,7 +163,7 @@ python yourapp/manage.py syncdb
   <entry>
     <title type="html"><![CDATA[Startup/Bootstrapped Marketing Recap]]></title>
     <link href="http://www.craigkerstiens.com/2011/03/07/startupbootstrapped-marketing-recap/"/>
-    <updated>2011-03-07T00:00:00-06:00</updated>
+    <updated>2011-03-07T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2011/03/07/startupbootstrapped-marketing-recap</id>
     <content type="html"><![CDATA[<p>If you have an hour to spare its well worth it to look back and look back at my series on startup/bootstrapped marketing. But if you&rsquo;re short on time and want the high level summary here&rsquo;s the quick recap:</p>
 
@@ -216,7 +216,7 @@ python yourapp/manage.py syncdb
   <entry>
     <title type="html"><![CDATA[Reading Metrics to Evaluate Marketing]]></title>
     <link href="http://www.craigkerstiens.com/2011/03/02/understanding-metrics/"/>
-    <updated>2011-03-02T00:00:00-06:00</updated>
+    <updated>2011-03-02T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2011/03/02/understanding-metrics</id>
     <content type="html"><![CDATA[<p>A short while backed I talked about <a href="http://www.craigekerstiens.com/2011/02/03/tactical-steps-for-startup-metrics/">tactically measuring metrics</a> for your site/company. Recently I talked a bit about <a href="http://www.craigekerstiens.com/2011/02/14/bootstrappedstartup-marketing-part-1/">methods of marketing</a>. A large key to getting the most out of your time and money is to properly report against the intersection of these two items. First I&rsquo;m going to make the assumption you&rsquo;ve read those posts, if you haven&rsquo;t go back and do that. Next this is heavily on the assumption that you&rsquo;re using Google Analytics as your primary tool for measuring metrics and have setup goals appropriately.</p>
 
@@ -246,7 +246,7 @@ python yourapp/manage.py syncdb
   <entry>
     <title type="html"><![CDATA[Setting up Goals and Funnels - Google Analytics]]></title>
     <link href="http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels/"/>
-    <updated>2011-02-28T00:00:00-06:00</updated>
+    <updated>2011-02-28T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels</id>
     <content type="html"><![CDATA[<p>I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">Google Analytics</a> first check that out. With most websites today there is some portion of the site that is event and not page based, meaning you have some workflow on the page based on Javascript. If this is the case you&rsquo;ll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> instead of an event in order to entirely use it in funnels and goals.</p>
 

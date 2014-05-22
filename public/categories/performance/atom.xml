@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Performance | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/performance/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T10:11:37-05:00</updated>
+  <updated>2014-05-22T08:14:55-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[More on Postgres Performance]]></title>
     <link href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/"/>
-    <updated>2013-01-10T00:00:00-06:00</updated>
+    <updated>2013-01-10T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance</id>
     <content type="html"><![CDATA[<p>If you missed my previous post on <a href="/2012/10/01/understanding-postgres-performance/">Understanding Postgres Performance</a> its a great starting point. On this particular post I&rsquo;m going to dig in to some real life examples of optimizing queries and indexes.</p>
 
@@ -385,7 +385,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Understanding Postgres Performance]]></title>
     <link href="http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/"/>
-    <updated>2012-10-01T00:00:00-05:00</updated>
+    <updated>2012-10-01T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance</id>
     <content type="html"><![CDATA[<p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
 

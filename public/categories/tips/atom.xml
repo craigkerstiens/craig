@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tips | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/tips/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T10:11:37-05:00</updated>
+  <updated>2014-05-22T08:14:55-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Tooling for Simple but Informative Emails]]></title>
     <link href="http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails/"/>
-    <updated>2013-10-13T00:00:00-05:00</updated>
+    <updated>2013-10-13T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails</id>
     <content type="html"><![CDATA[<p>Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some->many-> all. Its still highly effective even as much noise as we receive in our inboxes. Over the years I&rsquo;ve tried a lot of email tools from custom built solutions, to newer entrants that help around drip actions (<a href="http://www.intercom.io">intercom.io</a> and <a href="http://www.customer.io">customer.io</a>), to more &ldquo;enterprise&rdquo; tools such as Marketo. While I have varying opinions on all of those, I still find myself coming back to a simple one off script setup to deliver clear concise emails.</p>
 
@@ -124,7 +124,7 @@ end
   <entry>
     <title type="html"><![CDATA[Disabling muting while typing in Google hangouts]]></title>
     <link href="http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts/"/>
-    <updated>2013-09-12T00:00:00-05:00</updated>
+    <updated>2013-09-12T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts</id>
     <content type="html"><![CDATA[<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
 
