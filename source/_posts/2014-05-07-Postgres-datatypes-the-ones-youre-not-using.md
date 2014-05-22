@@ -9,7 +9,7 @@ published: true
 comments: false
 ---
 
-<img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further adieu let's look at some of these rarer but awesome types.
+<img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let's look at some of these rarer but awesome types.
 
 ### hstore
 
@@ -27,7 +27,7 @@ Timestamps are annoying, plain and simple. If you've re-invented handling differ
 
 ### UUID
 
-Integers are primary keys aren't great. Sure if you're running a small blog they work fine, but if you're application has to scale to a large size integers can create problems. First you can run out of them, second it can make other details such as sharding a little more annoying. At the same time they are super readable. However, using the actual UUID datatype and extension to automatically generate them can be incredibly handy if you have to scale an application.
+Integers as primary keys aren't great. Sure if you're running a small blog they work fine, but if you're application has to scale to a large size then integers can create problems. First you can run out of them, second it can make other details such as sharding a little more annoying. At the same time they are super readable. However, using the actual UUID datatype and extension to automatically generate them can be incredibly handy if you have to scale an application.
 
 *Similar to hstore, there's an [extension](http://www.postgresql.org/docs/9.3/static/uuid-ossp.html) that makes the UUID much more useful.*
 
@@ -38,6 +38,15 @@ This isn't available yet, but will be in Postgres 9.4. [Binary JSON](/2014/03/24
 ### Money
 
 Please don't use this... The money datatype assumes a single currency type, and generally brings with it more caveats than simply using a numeric type. 
+
+### More
+
+It's already been pointed out on twitter that I missed a few. To give a quick highlight of some others:
+
+* [Arrays](http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres/)
+* Interval – time intervals, such as '1 hour', '1 day'
+* ISN - should help for anything with products
+* Inet - Tracking IPs
 
 ### In conclusion
 

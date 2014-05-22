@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="If you missed my previous post on Understanding Postgres Performance its a great starting point. On this particular post I&rsquo;m going to dig in &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,53 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/02/08/django-read-only-mode/">
+		
+			Introducing Django-db-tools</a>
+	</h2>
+	<div class="entry-content">
+		<p>For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple add a <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">column here or add an index there</a>, but rather truly sizeable migrations&hellip; Going from <a href="http://lanyrd.com/blog/2012/lanyrds-big-move/">MySQL to Postgres</a> or migrating from an older version of Postgres such as a <a href="http://blog.sendhub.com/post/30041247598/how-to-upgrade-a-legacy-heroku-database">32 bit instance</a> to a newer 64 bit instance. In these cases the default approach is to just schedule downtime often throwing up a splash screen saying so.</p>
+
+<p>For many sites this approach is simply wrong and lazy, with little effort you can improve the experience and there by ease the burden in conducting these types of migrations. By having the ability to turn your site into a read only mode which <a href="http://twitter.com/simonw">Simon Wilson</a> talked about in his post on Lanyrd you can still continue to operate just in a limited capacity. <a href="http://www.aeracode.org/2012/11/13/one-change-not-enough/">Andrew Godwin</a> further talks about some of this as well in regards to the Lanyrd move and even includes  the script they used to <a href="https://github.com/lanyrd/mysql-postgresql-converter/">migrate data from MySQL to Postgres</a>. Though just in talking with Simon about this a week ago it occurred to me they had not released the code for their read-only mode.</p>
+
+<p>Finally onto the announcing, today I&rsquo;m releasing <a href="https://github.com/craigkerstiens/django-db-tools">django-db-tools</a>. This is currently a very lightweight utility that allows you to flip your site into two modes.</p>
+
+
+		
+		<a href="/2013/02/08/django-read-only-mode/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -566,57 +613,6 @@ FROM
 <div class="tags">
 
 	<a class='category' href='/categories/api/'>API</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/heroku/'>Heroku</a>, <a class='category' href='/categories/mobile/'>Mobile</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/prototype/'>Prototype</a>, <a class='category' href='/categories/ios/'>iOS</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/06/19/pro-tips-for-conference-talks/">
-		
-			Protips for Conference Talks</a>
-	</h2>
-	<div class="entry-content">
-		<p>A few weeks ago I was sitting at the hotel in Zurich with <a href="http://www.twitter.com/jacobian">Jacob Kaplan Moss</a> prior to <a href="http://klewel.com/conferences/djangocon-2012/">DjangoCon EU</a> enjoying a beer, talking about Django, and discussing a bit about our upcoming talks for the conference. He talked briefly about his upcoming <a href="http://klewel.com/conferences/djangocon-2012/index.php?talkID=2">keynote</a> and how he was doing something different, including essentially 5 mini-talks. This seemed interesting enough, but the part that surprised me was when Jacob said, &ldquo;I&rsquo;m among friends here so it&rsquo;ll be a good place to test this format.&rdquo; Many if not all in the community know who Jacob is as one of the creators of Django, though still to be &ldquo;among friends&rdquo; at a roughly 300 person conference surprised me. However, as someone thats keynoted several times, spoken at conferences for many years, and familiar with many people in the community; for the 150-200 people there he had not met before, he was still truly among friends. While giving a keynote is never an easy feat, it seems to ease the worry ahead of time of doing such.</p>
-
-<p>Saturday night there was a bit of conversation on twitter that had some related discussion. In the last minute rush for DjangoCon US talk submissions a few that have been involved in the community for some time discussed submitting their first talk proposals. In parallel to that was some discussion around diversity, I volunteered the idea of not including presenters name&rsquo;s in the list when reviewing and voting on talks. While both of the above are controversial topics alone, I hope that can be left to another later time. The key idea that emerged that can be helpful to anyone looking to submit a talk to a conference is how the &ldquo;pro&rsquo;s do it&rdquo;, as <a href="http://www.twitter.com/jdunck">Jeremy Dunck</a> put it.</p>
-
-<p>So without further adieu, hopefully without speaking too much for him here&rsquo;s likely why Jacob viewed his 300 person keynote as being among friends:</p>
-
-<h2>1. Start small</h2>
-
-<p>Whether its practicing the talk itself or writing the abstract for a proposal practicing each step lets you refine this well ahead of time. In my experience, providing a talk description for a meetup can often be far harder than for a conference. For a meetup I feel confined to 2-3 sentences, versus an abstract a solid paragraph or two. Yet, I still have to make it as exciting, because of course I don&rsquo;t want 4 people to show up to the meetup because it sounds uninteresting. In the case I&rsquo;m most familiar with <a href="http://www.djangocon.us/">DjangoCon</a> and DjangoCon.eu both happen once a year, though many smaller regional conferences related to Python exist and especially meetup groups:</p>
-
-
-		
-		<a href="/2012/06/19/pro-tips-for-conference-talks/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-19T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/conference/'>Conference</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>, <a class='category' href='/categories/speaking/'>Speaking</a>
 
 </div>
 

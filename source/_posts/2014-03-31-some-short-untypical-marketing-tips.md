@@ -9,7 +9,7 @@ published: true
 comments: false
 ---
 
-Marketing is generally unexciting to a ton of engineers, until it brings eyeballs which bring feedback and dollars. Marketing doesn't have to always be cheesy campaigns or ads, it can often just be surfacing the things your customers actually do want to care about. Here's a few short tips on some non-traditional marketing that won't seem sleezy but still can work quite well.
+Marketing is generally unexciting to a ton of engineers, until it brings eyeballs which bring feedback and dollars. Marketing doesn't have to always be cheesy campaigns or ads, it can often just be surfacing the things your customers actually do want to care about. My favorite type of marketing is when a service sells me on something at the exact time I want it. Here's a few short tips on some non-traditional marketing that won't seem sleezy but still can work quite well. 
 
 <!--more-->
 
@@ -26,6 +26,10 @@ Have emails that include receipts? Account confirmations? General notices? No no
 
 ### Retarget to your existing users
 
-In a similar vein of notifying your existing customers in transactional emails about news, you should be doing this all over the web. Retargeting is great to convert people once you've already got them on a landing page, but its also incredibly useful to get existing users to use a specific feature. If you track if they've never used a feature retargeting is a great way to make them aware of it, and once they've used it just count it as a conversion.
+In a similar vein of notifying your existing customers in transactional emails about news, you should be doing this all over the web. Retargeting is great to convert people once you've already got them on a landing page, but its also incredibly useful to get existing users to [use a specific feature](http://insideintercom.io/talk-product-strategy-saying/). If you track if they've never used a feature retargeting is a great way to make them aware of it, and once they've used it just count it as a conversion.
 
 *My favorite retargeting provider [perfect audience](http://www.perfectaudience.com/) makes this quite convenient as they allow a bit more control than most retargeting services*
+
+### In conclusion
+
+Marketing doesn't have to be throwing your product and messaging in someones face, but you should make your users aware of it. The more engaged they are they more they'll stick around and be happy about using you're product, assuming you've built a good one. What are some of your favorite tips?

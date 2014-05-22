@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-08T08:13:21-07:00</updated>
+  <updated>2014-05-22T07:40:17-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and Connection Pooling]]></title>
+    <link href="http://www.craigkerstiens.com/2014/05/22/on-connection-pooling/"/>
+    <updated>2014-05-22T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/05/22/on-connection-pooling</id>
+    <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
+
+<h3>The basics</h3>
+
+<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres <a href="/2013/03/07/Fixing-django-db-connections/">some overhead here</a>. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
+
+<!--more-->
+
+
+<h3>The options</h3>
+
+<p>There&rsquo;s really two major options when it comes to connection pooling:</p>
+
+<ul>
+<li>Framework pooling</li>
+<li>Standalone pooler</li>
+<li><em>Persistent connections</em></li>
+</ul>
+
+
+<h4>Framework pooling</h4>
+
+<p>Today many modern application frameworks have at least some basic level of connection pooling. This means as your application server starts up it will create a pool of connections to use. It&rsquo;s worth noting that while most modern frameworks have pooling, not all do, and further it may not be enabled by default.</p>
+
+<p>If you&rsquo;re using the Sequel ORM for Ruby or SQLAlchemy for Python you&rsquo;re well covered here. Further <a href="https://devcenter.heroku.com/articles/concurrency-and-database-connections">Rails</a> is in pretty good shape also, though you may want to configure the pool size. For Django it&rsquo;s a bit of a mixed story. For some time <a href="/2013/03/07/Fixing-django-db-connections/">Django</a> did not have pooling at all. As of Django 1.6 you now have persistent connections by default and the ability to enable a pool.</p>
+
+<h4>Persistent connections</h4>
+
+<p>Persistent connections don&rsquo;t offer all of the benefits of pooling, but can often work well enough. Persistent connections is the act of maintaining a connection to your database once it&rsquo;s connected. In the case where you have overhead of 30-50 ms each time you connect this can be quite helpful. At the same time you&rsquo;re limited to the number of things that can be interacting with your databases as you&rsquo;re limited to 1 connection per entry point to your webserver.</p>
+
+<h4>Standalone pooling</h4>
+
+<p>Postgres can be a bit of a sore spot when it comes to handling a ton of connections. For Postgres each connection you have to your database assumes some overhead of memory. Casual observations have seen it be between 5 and 10 MB assuming some basic query workload. And even if you have the memory overhead on your Postgres instance there becomes a point where management of connections becomes a limiting factor, we&rsquo;ve seen this somewhere in the hundreds. While framework level connection poolers can give soem better performance and lenthen the time before you have to deal with something more complex if you&rsquo;re successful that time may come.</p>
+
+<p><em>A rule of thumb I&rsquo;d use is if you have over 100 connections you want to look at something more robust</em></p>
+
+<p>In this case that something more robust is a standalone pooler specifically for Postgres. A standalone pooler can be much more configurable overall letting you specify how it works for Postgres sessions, transactions, or statements. Further these are very specifically designed to work with Postgres handling a very large pool of connections without adding too much overhead. In contrast to the 5MB-ish standard connection to Postgres PG Bouncer has a 2kb per connection.</p>
+
+<p>So once you&rsquo;re at the point of needing one there&rsquo;s really two options.</p>
+
+<ol>
+<li><a href="">PG Bouncer</a></li>
+<li><a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">PG Pool</a></li>
+</ol>
+
+
+<h3>PG Bouncer</h3>
+
+<p>My short and sweet recomendation is towards PG Bouncer. Contrary to how it&rsquo;s named PG Pool is a multi purpose tool that does a lot of things (pooling, load balancing, replication, more). PG Bouncer takes the philosophy of doing one thing and doing it extremely well. I tend to favor these types of tools, which is the same reason I lean towards <a href="https://github.com/wal-e/wal-e">WAL-E</a> to help with Postgres replication.</p>
+
+<h3>Need more?</h3>
+
+<p>Need more guidance with setting up and running PGBouncer? Give this <a href="http://datachomp.com/archives/getting-started-with-pgbouncer/">guide</a> a look or try the <a href="https://github.com/gregburek/heroku-buildpack-pgbouncer">pgbouncer buildpack</a> if running on Heroku. If you&rsquo;re still interested in a deeper guide let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> and I&rsquo;ll work on getting it into the queue.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
@@ -666,266 +727,6 @@ ORDER BY date ASC;
  2013-11-01 00:00:00+00 | 11000    |   10.0 
  2013-12-01 00:00:00+00 | 11500    |   4.5 
 </code></pre>
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <h2>Sign up to get weekly advice and content on Postgres</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[PostgreSQL 9.4 - What I was hoping for]]></title>
-    <link href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/"/>
-    <updated>2014-02-15T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted</id>
-    <content type="html"><![CDATA[<p>Theres no doubt that the <a href="/2014/02/02/Examining-PostgreSQL-9.4/">9.4 release</a> of PostgreSQL will have some great improvements. However, for all of the improvements it delivering it had the promise of being perhaps the most impactful release of <a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">Postgres</a> yet. Several of the features that would have given it my stamp of best release in at least 5 years are now already not making it and a few others are still on the border. Here&rsquo;s a look at few of the things that were hoped for and not to be at least until another 18 months.</p>
-
-<!--more-->
-
-
-<h3>Upsert</h3>
-
-<p>Upsert, merge, whatever you want to call it, this is been a sore hole for sometime now. Essentially this is insert based on this ID or if that key already exists update other values. This was something being worked on pretty early on in this release, and throughout the process continuing to make progress. Yet as progress was made so were exteneded discussions about syntax, approach, etc. In the end two differing views on how it should be implemented have the patch still sitting there with other thoughts on an implementation but not code ready to commit.</p>
-
-<p>At the same time I&rsquo;ll acknowledge upsert as a hard problem to address. The locking and concurrency issues are non-trivial, but regardless of those having this in there mostly kills the final argument for anyone to chose MySQL.</p>
-
-<h3>Better JSON</h3>
-
-<p>JSON is Postgres is super flexible, powerful, and <strong>generally slow</strong>. Postgres does validation and some parsing of JSON, but without something like <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">PLV8</a>, or <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> you may not get great performance. This is because under the covers the JSON is represented as text and as a result many of the more powerful indexes that could lend benefit, such as GIN or GIST, simply don&rsquo;t apply here.</p>
-
-<p>As a related effort to this <a href="http://postgresguide.com/sexy/hstore.html">hstore</a>, the key/value store, is working on being updated. This new support will add types and nesting making it much more usable overall. However the syntax and matching of how JSON functions isn&rsquo;t guranteed to be part of it. The proposal and actually work is still there and not rejected yet, but looks heavily at risk. Backing a new binary representation of JSON with hstore 2 would deliver so many benefits further building upon the foundation of hstore, JSON, PLV8 that exists today for Postgres.</p>
-
-<h3>apt-get for your extensions</h3>
-
-<p>I&rsquo;m almost not even sure where to start with this one. The notion within a Postgres community is that packaging for distros is super simple and extensions should just be packaged for them. Then there&rsquo;s <a href="http://pgxn.org/">PGXN</a> the Postgres extension network where you can download and compile and muck with annoying settings to get extensions to build. This proposal would have delivered a built in installer much like NPM or rubygems or PyPi and the ability for someone to simply say install extension from this centralized repository. No, it was setting out to solve the issue of having a single repository but would make it much easier for people to run one.</p>
-
-<p>For all the awesome-ness that exists in extensions such as <a href="http://tapoueh.org/blog/2013/02/25-postgresql-hyperloglog">HyperLogLog</a>, <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">foreign data wrappers</a>, <a href="http://madlib.net/">madlib</a> theres hundreds of other extensions that could be written and be valuable. They don&rsquo;t even all require C, they could fully exist in JavaScript with PLV8. Yet I&rsquo;m on the fence encouraging people to write such because if no one uses it then much of the point in the reusability of an extension is lost. Here&rsquo;s hoping that there&rsquo;s a change of opinion in the future that packaging is a solved problem and that creating an ecosystem for others to contribute to the Postgres world without knowing C is a positive thing.</p>
-
-<h3>Logical replication</h3>
-
-<p>When I first heard this might have some shot at making it in 9.4 I was shocked. This is something that while some may not take notice of I&rsquo;ve felt pain of for many years. Logical replication means in short enabling upgrades across PostgreSQL versions without a dump and restore, but even more so laying the ground work for more complicated architectures like perhaps multi-master. Yes, even with logical replication in theres still plenty of work to do, but having the groundwork laid goes a long way. There are options for it today with third party tools, but the management of these is painful at best.</p>
-
-<h3>In conclusion</h3>
-
-<p>The positive of this one is that the building blocks are in and its continuing to make progress. Its just that we&rsquo;ll have to wait about 18 months before the release of PostgreSQL 9.5 before its in our hands.</p>
 
 <!-- Begin MailChimp Signup Form -->
 

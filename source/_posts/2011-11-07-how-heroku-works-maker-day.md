@@ -6,7 +6,7 @@ tags:
 categories: [Heroku, Engineering, Business]
 type: post
 published: true
-comments: true
+comments: false
 ---
 
 In my earlier post on [Teams and Tools at Heroku](/2011/11/02/how-heroku-works-teams-tools/), I mentioned how we value engineers' time; their work has enabled us to build a great platform. As a result of what we've built, we've had great growth both of our platform and of our teams internally. With that growth inevitably comes different distractions on engineers' time. Despite how a manager may plan things, engineering work needs long periods of uninterrupted time. To ensure that no matter what, an engineer has plenty of opportunity to do the work he or she was hired to do, Heroku has Maker's Day.

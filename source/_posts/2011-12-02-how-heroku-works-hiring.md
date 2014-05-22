@@ -6,7 +6,7 @@ tags:
 categories: [Heroku, Engineering, Business]
 type: post
 published: true
-comments: true
+comments: false
 ---
 
 I alluded in earlier posts of [How Heroku Works](http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/) that we have talented engineers. In fact I would venture to say that there is not a weak link when it comes to our engineers at Heroku. Ensuring we have talented engineers makes it easier for us to find other talented engineers and maintains a level of quality in our product. This means we must be very careful about not diluting our pool of engineering talent, which is where our hiring process becomes especially key. By the time we hire a new employee, we know without a doubt they're a fit within our organization. 

@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-08T08:13:21-07:00</updated>
+  <updated>2014-05-22T07:40:17-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and Connection Pooling]]></title>
+    <link href="http://www.craigkerstiens.com/2014/05/22/on-connection-pooling/"/>
+    <updated>2014-05-22T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/05/22/on-connection-pooling</id>
+    <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
+
+<h3>The basics</h3>
+
+<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres <a href="http://www.craigkerstiens.com/2013/03/07/Fixing-django-db-connections/">some overhead here</a>. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
+
+<!--more-->
+
+
+<h3>The options</h3>
+
+<p>There&rsquo;s really two major options when it comes to connection pooling:</p>
+
+<ul>
+<li>Framework pooling</li>
+<li>Standalone pooler</li>
+<li><em>Persistent connections</em></li>
+</ul>
+
+
+<h4>Framework pooling</h4>
+
+<p>Today many modern application frameworks have at least some basic level of connection pooling. This means as your application server starts up it will create a pool of connections to use. It&rsquo;s worth noting that while most modern frameworks have pooling, not all do, and further it may not be enabled by default.</p>
+
+<p>If you&rsquo;re using the Sequel ORM for Ruby or SQLAlchemy for Python you&rsquo;re well covered here. Further <a href="https://devcenter.heroku.com/articles/concurrency-and-database-connections">Rails</a> is in pretty good shape also, though you may want to configure the pool size. For Django it&rsquo;s a bit of a mixed story. For some time <a href="http://www.craigkerstiens.com/2013/03/07/Fixing-django-db-connections/">Django</a> did not have pooling at all. As of Django 1.6 you now have persistent connections by default and the ability to enable a pool.</p>
+
+<h4>Persistent connections</h4>
+
+<p>Persistent connections don&rsquo;t offer all of the benefits of pooling, but can often work well enough. Persistent connections is the act of maintaining a connection to your database once it&rsquo;s connected. In the case where you have overhead of 30-50 ms each time you connect this can be quite helpful. At the same time you&rsquo;re limited to the number of things that can be interacting with your databases as you&rsquo;re limited to 1 connection per entry point to your webserver.</p>
+
+<h4>Standalone pooling</h4>
+
+<p>Postgres can be a bit of a sore spot when it comes to handling a ton of connections. For Postgres each connection you have to your database assumes some overhead of memory. Casual observations have seen it be between 5 and 10 MB assuming some basic query workload. And even if you have the memory overhead on your Postgres instance there becomes a point where management of connections becomes a limiting factor, we&rsquo;ve seen this somewhere in the hundreds. While framework level connection poolers can give soem better performance and lenthen the time before you have to deal with something more complex if you&rsquo;re successful that time may come.</p>
+
+<p><em>A rule of thumb I&rsquo;d use is if you have over 100 connections you want to look at something more robust</em></p>
+
+<p>In this case that something more robust is a standalone pooler specifically for Postgres. A standalone pooler can be much more configurable overall letting you specify how it works for Postgres sessions, transactions, or statements. Further these are very specifically designed to work with Postgres handling a very large pool of connections without adding too much overhead. In contrast to the 5MB-ish standard connection to Postgres PG Bouncer has a 2kb per connection.</p>
+
+<p>So once you&rsquo;re at the point of needing one there&rsquo;s really two options.</p>
+
+<ol>
+<li><a href="">PG Bouncer</a></li>
+<li><a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">PG Pool</a></li>
+</ol>
+
+
+<h3>PG Bouncer</h3>
+
+<p>My short and sweet recomendation is towards PG Bouncer. Contrary to how it&rsquo;s named PG Pool is a multi purpose tool that does a lot of things (pooling, load balancing, replication, more). PG Bouncer takes the philosophy of doing one thing and doing it extremely well. I tend to favor these types of tools, which is the same reason I lean towards <a href="https://github.com/wal-e/wal-e">WAL-E</a> to help with Postgres replication.</p>
+
+<h3>Need more?</h3>
+
+<p>Need more guidance with setting up and running PGBouncer? Give this <a href="http://datachomp.com/archives/getting-started-with-pgbouncer/">guide</a> a look or try the <a href="https://github.com/gregburek/heroku-buildpack-pgbouncer">pgbouncer buildpack</a> if running on Heroku. If you&rsquo;re still interested in a deeper guide let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> and I&rsquo;ll work on getting it into the queue.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Personas, data science, k-means]]></title>
@@ -1307,7 +1368,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#97;&#108;&#x6c;&#x40;&#x79;&#111;&#x75;&#114;&#x63;&#x6f;&#109;&#x70;&#x61;&#x6e;&#121;&#46;&#x63;&#x6f;&#109;">&#x61;&#x6c;&#x6c;&#64;&#x79;&#x6f;&#117;&#114;&#99;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#109;</a> or <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#x6f;&#x75;&#x72;&#x67;&#x72;&#x6f;&#117;&#112;&#x40;&#109;&#121;&#x63;&#111;&#109;&#x70;&#x61;&#110;&#121;&#46;&#x63;&#x6f;&#109;&#46;">&#x6f;&#x75;&#x72;&#x67;&#x72;&#111;&#x75;&#x70;&#64;&#109;&#x79;&#x63;&#x6f;&#109;&#x70;&#97;&#x6e;&#x79;&#46;&#99;&#111;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#x61;&#108;&#x6c;&#x40;&#x79;&#111;&#117;&#x72;&#99;&#x6f;&#x6d;&#x70;&#97;&#110;&#121;&#46;&#99;&#111;&#x6d;">&#97;&#x6c;&#x6c;&#64;&#x79;&#x6f;&#x75;&#x72;&#x63;&#x6f;&#x6d;&#112;&#97;&#x6e;&#121;&#x2e;&#99;&#111;&#x6d;</a> or <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#111;&#117;&#114;&#103;&#x72;&#x6f;&#x75;&#112;&#x40;&#109;&#x79;&#x63;&#111;&#109;&#112;&#x61;&#x6e;&#121;&#46;&#x63;&#x6f;&#x6d;&#x2e;">&#111;&#x75;&#114;&#103;&#114;&#111;&#117;&#112;&#64;&#109;&#x79;&#99;&#111;&#109;&#x70;&#97;&#x6e;&#121;&#46;&#99;&#111;&#109;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -2424,78 +2485,6 @@ LIMIT 1;
 
 
 <p>If jumping in and contributing to fixing the core tutorial isn&rsquo;t your cup of tea because you don&rsquo;t want to learn and write in <a href="http://www-sul.stanford.edu/tools/tutorials/html2.0/gentle.html">SGML</a>, send a pull request to <a href="http://postgresguide.com">postgresguide.com</a> or do a <a href="mailto:craig.kerstiens@gmail.com].%20If%20thats%20too%20much%20effort%20please%20just%20let%20us%20know,%20what%20do%20you%20want%20to%20see%20-%20[craig.kerstiens%20at%20gmail.com](mailto:craig.kerstiens@gmail.com">guest post on my blog</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A look at Foreign Data Wrappers]]></title>
-    <link href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/"/>
-    <updated>2013-08-05T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs</id>
-    <content type="html"><![CDATA[<p>There are two particular sets of features that continue to keep me very excited about the momentum of Postgres. And while PostgreSQL has had some great momentum in the past few years these features may give it an entirely new pace all together. One is extensions, which is really its own category. Dimitri Fontaine was talking about doing a full series just on extensions, so here&rsquo;s hoping he does so I dont have to :)</p>
-
-<p>One subset of extensions which I consider entirely separate is the other thing, which is foreign data wrappers or FDWs. FDWs allow you to connect to other data sources from within Postgres. From there you can query them with SQL, join across disparate data sets, or join across different systems. Recently I had a good excuse to give the <code>postgres_fdw</code> a try. And while I&rsquo;ve blogged about the Redis FDW previously, the Postgres one is particularly exciting because with PostgreSQL 9.3 it will ship as a contrib module, which means all Postgres installers should have it&hellip; you just have to turn it on.</p>
-
-<!--more-->
-
-
-<p>Let&rsquo;s take a look at getting it setup and then dig into it a bit. First, because I don&rsquo;t have Postgres 9.3 sitting around on my system I&rsquo;m going to provision one from Heroku Postgres:</p>
-
-<pre><code>$ heroku addons:add heroku-postgresql:crane --version 9.3
-</code></pre>
-
-<p>Once it becomes available I&rsquo;m going to connect to it then enable the extension:</p>
-
-<pre><code>$ heroku pg:psql BLACK -acraig
-# CREATE EXTENSION postgres_fdw;
-</code></pre>
-
-<p>Now its there, so we can actually start using it. To use the FDW there&rsquo;s four basic things you&rsquo;ll want to do:</p>
-
-<ol>
-<li>Create the remote server</li>
-<li>Create a user mapping for the remote server</li>
-<li>Create your foreign tables</li>
-<li>Start querying some things</li>
-</ol>
-
-
-<h3>The setup</h3>
-
-<p>You&rsquo;ll only need to do each of the following once, once you&rsquo;re server, user and foreign table are all setup you can simply query away. This is a nice advantage over db_link which only exists for the set session. <em>One downside I did find was that you can&rsquo;t use a full Postgres connection string, which would make setting it up much simpler</em>. So onto setting up our server:</p>
-
-<pre><code># CREATE SERVER app_db 
-  FOREIGN DATA WRAPPER postgres_fdw 
-  OPTIONS (dbname 'dbnamehere', host 'hostname-here);
-</code></pre>
-
-<p>Next we&rsquo;ll actually create our user mapping. In this case we&rsquo;ll take the remote username and password and map it to our current user we&rsquo;re already connected with.</p>
-
-<pre><code># CREATE USER MAPPING for user_current 
-  SERVER app_db 
-  OPTIONS (user 'remote_user', password 'remote_password');
-</code></pre>
-
-<p>And finally we&rsquo;re going to configure our tables. <em>There were some additional pains here as there wasn&rsquo;t a perfectly clean way to generate the <code>CREATE TABLE</code>. Sure you could pg_dump just that table, but overall it felt a bit cludgey.</em></p>
-
-<pre><code># CREATE FOREIGN TABLE users
-  (
-    id integer,
-    email text,
-      created_at timestamp,
-      first_name text,
-      last_name text
-  )
-  SERVER app_db OPTIONS (table_name 'users')
-</code></pre>
-
-<p>Now we&rsquo;ve got all of our local data, as well as remote data. For that report against two databases where you previously wrote a ruby or python script, ran a query, constructed another query, then executed it you can directly do in your database. We can simply query our new table &ndash; <code>SELECT * FROM users LIMIT 5;</code></p>
-
-<p>But the real power of foreign data wrappers goes well beyond just Postgres to Postgres. Having a defined contract in translating from one system to another, will really allow reinventing the way we work with data. This is especially true in large datasets where doing ETL on terrabytes of data takes longer than asking the questions of it.</p>
-
-<p>While we&rsquo;re waiting for more FDWs to be ready to use in production situations the Postgres FDW is a great start, <em>though the Redis one is on its way</em>. Even better is that it ships with standard installs of Postgres, meaning it will see more usage and help push them to advance further.</p>
-
-<p><em>One final nicety, you&rsquo;re not required to have ALL Postgres 9.3 DBs, just one that can then connect to the others, so go ahead and give it try :)</em></p>
 ]]></content>
   </entry>
   
