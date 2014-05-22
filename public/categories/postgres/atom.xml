@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T07:49:37-07:00</updated>
+  <updated>2014-05-22T10:11:37-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Postgres and Connection Pooling]]></title>
     <link href="http://www.craigkerstiens.com/2014/05/22/on-connection-pooling/"/>
-    <updated>2014-05-22T00:00:00-07:00</updated>
+    <updated>2014-05-22T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/05/22/on-connection-pooling</id>
     <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
 
@@ -59,7 +59,7 @@
 <p>So once you&rsquo;re at the point of needing one there&rsquo;s really two options.</p>
 
 <ol>
-<li><a href="">PG Bouncer</a></li>
+<li><a href="http://pgfoundry.org/projects/pgbouncer">PG Bouncer</a></li>
 <li><a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">PG Pool</a></li>
 </ol>
 
@@ -300,7 +300,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
     <link href="http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/"/>
-    <updated>2014-05-07T00:00:00-07:00</updated>
+    <updated>2014-05-07T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using</id>
     <content type="html"><![CDATA[<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let&rsquo;s look at some of these rarer but awesome types.</p>
 
@@ -575,7 +575,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[A year's look at Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
-    <updated>2014-03-26T00:00:00-07:00</updated>
+    <updated>2014-03-26T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
     <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
 
@@ -633,7 +633,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[PostgreSQL 9.4 - Looking up (with JSONB and logical decoding)]]></title>
     <link href="http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/"/>
-    <updated>2014-03-24T00:00:00-07:00</updated>
+    <updated>2014-03-24T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up</id>
     <content type="html"><![CDATA[<p>Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the <a href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">9.4 PostgreSQL release</a>. Since that post a few weeks ago the landscape has already changed, and much more for the positive.</p>
 
@@ -891,7 +891,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Tracking Month over Month Growth in SQL]]></title>
     <link href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/"/>
-    <updated>2014-02-26T00:00:00-08:00</updated>
+    <updated>2014-02-26T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL</id>
     <content type="html"><![CDATA[<p><img src="http://f.cl.ly/items/3f1q2N2s2V0d0G2s1T01/Blank.jpg" style="float:right;margin-left:20px;"/> In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
 

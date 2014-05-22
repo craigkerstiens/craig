@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Business | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/business/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T07:49:37-07:00</updated>
+  <updated>2014-05-22T10:11:37-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Securing your Internal Organization with OpenID]]></title>
     <link href="http://www.craigkerstiens.com/2012/01/23/securing-your-organization/"/>
-    <updated>2012-01-23T00:00:00-08:00</updated>
+    <updated>2012-01-23T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2012/01/23/securing-your-organization</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
 
@@ -98,7 +98,7 @@ python yourapp/manage.py syncdb
   <entry>
     <title type="html"><![CDATA[How Heroku Works - Hiring]]></title>
     <link href="http://www.craigkerstiens.com/2011/12/02/how-heroku-works-hiring/"/>
-    <updated>2011-12-02T00:00:00-08:00</updated>
+    <updated>2011-12-02T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2011/12/02/how-heroku-works-hiring</id>
     <content type="html"><![CDATA[<p>I alluded in earlier posts of <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">How Heroku Works</a> that we have talented engineers. In fact I would venture to say that there is not a weak link when it comes to our engineers at Heroku. Ensuring we have talented engineers makes it easier for us to find other talented engineers and maintains a level of quality in our product. This means we must be very careful about not diluting our pool of engineering talent, which is where our hiring process becomes especially key. By the time we hire a new employee, we know without a doubt they&rsquo;re a fit within our organization.</p>
 
@@ -136,7 +136,7 @@ python yourapp/manage.py syncdb
   <entry>
     <title type="html"><![CDATA[How Heroku Works - Maker's Day]]></title>
     <link href="http://www.craigkerstiens.com/2011/11/07/how-heroku-works-maker-day/"/>
-    <updated>2011-11-07T00:00:00-08:00</updated>
+    <updated>2011-11-07T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2011/11/07/how-heroku-works-maker-day</id>
     <content type="html"><![CDATA[<p>In my earlier post on <a href="/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools at Heroku</a>, I mentioned how we value engineers' time; their work has enabled us to build a great platform. As a result of what we&rsquo;ve built, we&rsquo;ve had great growth both of our platform and of our teams internally. With that growth inevitably comes different distractions on engineers' time. Despite how a manager may plan things, engineering work needs long periods of uninterrupted time. To ensure that no matter what, an engineer has plenty of opportunity to do the work he or she was hired to do, Heroku has Maker&rsquo;s Day.</p>
 
@@ -168,7 +168,7 @@ python yourapp/manage.py syncdb
   <entry>
     <title type="html"><![CDATA[How Heroku Works - Teams and Tools]]></title>
     <link href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/"/>
-    <updated>2011-11-02T00:00:00-07:00</updated>
+    <updated>2011-11-02T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools</id>
     <content type="html"><![CDATA[<p>Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of engineers, even product managers often write code. Heroku as a platform drives many of the features not from top down, but from bottom up based on engineers desires or skunkworks projects. There&rsquo;s many valuable insights into how Heroku runs efficiently for engineering.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Developers | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/developers/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T07:49:37-07:00</updated>
+  <updated>2014-05-22T10:11:37-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Where to go with developer content]]></title>
     <link href="http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/"/>
-    <updated>2014-01-28T00:00:00-08:00</updated>
+    <updated>2014-01-28T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content</id>
     <content type="html"><![CDATA[<p>Last week I wrote up some <a href="/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
 
@@ -54,7 +54,7 @@
   <entry>
     <title type="html"><![CDATA[Where to start with developer content]]></title>
     <link href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/"/>
-    <updated>2014-01-16T00:00:00-08:00</updated>
+    <updated>2014-01-16T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content</id>
     <content type="html"><![CDATA[<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Redis | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/redis/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T07:49:37-07:00</updated>
+  <updated>2014-05-22T10:11:37-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Redis in my Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/"/>
-    <updated>2012-10-18T00:00:00-07:00</updated>
+    <updated>2012-10-18T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres</id>
     <content type="html"><![CDATA[<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
 
