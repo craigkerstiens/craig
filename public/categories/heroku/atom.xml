@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/heroku/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T08:14:55-07:00</updated>
+  <updated>2014-07-14T09:43:44-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[The Rule of Thirds - followup]]></title>
     <link href="http://www.craigkerstiens.com/2013/08/13/rule-of-thirds/"/>
-    <updated>2013-08-13T00:00:00-07:00</updated>
+    <updated>2013-08-13T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2013/08/13/rule-of-thirds</id>
     <content type="html"><![CDATA[<p>Several months back I wrote about how we do <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">higher level, long term planning within the Heroku Postgres team</a>. If you haven&rsquo;t read the previous article please start there.</p>
 
@@ -74,7 +74,7 @@
   <entry>
     <title type="html"><![CDATA[Prioritizing and Planning within Heroku Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/"/>
-    <updated>2013-03-13T00:00:00-07:00</updated>
+    <updated>2013-03-13T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing</id>
     <content type="html"><![CDATA[<p>Over a year ago I blogged about Heroku&rsquo;s approach to <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools</a>. Since that time Heroku has grown from around 25 people to over 100, we&rsquo;ve continued to iterate and find new tools that work for how we do things. For many of the <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">product management</a> and software engineering books I&rsquo;ve read I&rsquo;ve yet to find something that helps a team priorize in a fashion I that feels right.</p>
 
@@ -123,7 +123,7 @@
   <entry>
     <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
     <link href="http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping/"/>
-    <updated>2012-07-19T00:00:00-07:00</updated>
+    <updated>2012-07-19T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping</id>
     <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Historically with implementing the API fully you can&rsquo;t see how you truly feel about the result, causing this cycle to take longer than it should. Heroku Postgres has <a href="https://postgres.heroku.com/blog/past/2012/1/31/simple_data_sharing_with_data_clips/">Dataclips</a>, which (among other things) can be used for quickly prototyping APIs. <a href="https://postgres.heroku.com/dataclips">Dataclips</a> allows you to easily share data, but more importantly consume it in a form much like you would a restful API. Lets take a look at how this would work:</p>
 
@@ -177,7 +177,7 @@ ORDER BY
   <entry>
     <title type="html"><![CDATA[Sphinx Build Pack on Heroku]]></title>
     <link href="http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack/"/>
-    <updated>2012-01-25T00:00:00-08:00</updated>
+    <updated>2012-01-25T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack</id>
     <content type="html"><![CDATA[<p>Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via <a href="http://github.com/heroku/">Heroku&rsquo;s github</a>, you can view several of them at:</p>
 
@@ -217,7 +217,7 @@ $ heroku open
   <entry>
     <title type="html"><![CDATA[How Heroku Works - Hiring]]></title>
     <link href="http://www.craigkerstiens.com/2011/12/02/how-heroku-works-hiring/"/>
-    <updated>2011-12-02T00:00:00-08:00</updated>
+    <updated>2011-12-02T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2011/12/02/how-heroku-works-hiring</id>
     <content type="html"><![CDATA[<p>I alluded in earlier posts of <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">How Heroku Works</a> that we have talented engineers. In fact I would venture to say that there is not a weak link when it comes to our engineers at Heroku. Ensuring we have talented engineers makes it easier for us to find other talented engineers and maintains a level of quality in our product. This means we must be very careful about not diluting our pool of engineering talent, which is where our hiring process becomes especially key. By the time we hire a new employee, we know without a doubt they&rsquo;re a fit within our organization.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Developer | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/developer/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T08:14:55-07:00</updated>
+  <updated>2014-07-14T09:43:44-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
     <link href="http://www.craigkerstiens.com/2012/07/19/supporting-developers/"/>
-    <updated>2012-07-19T00:00:00-07:00</updated>
+    <updated>2012-07-19T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/07/19/supporting-developers</id>
     <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Often you&rsquo;re unable to tell how you truly feel about your API without fully implementing it, causing this cycle to take longer than it should. Heroku Postgres has Dataclips, which (among other things) can be used for quickly prototyping APIs. Lets take a look at how this would work:</p>
 
@@ -70,7 +70,7 @@ ORDER BY
   <entry>
     <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
     <link href="http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping/"/>
-    <updated>2012-07-19T00:00:00-07:00</updated>
+    <updated>2012-07-19T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping</id>
     <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Historically with implementing the API fully you can&rsquo;t see how you truly feel about the result, causing this cycle to take longer than it should. Heroku Postgres has <a href="https://postgres.heroku.com/blog/past/2012/1/31/simple_data_sharing_with_data_clips/">Dataclips</a>, which (among other things) can be used for quickly prototyping APIs. <a href="https://postgres.heroku.com/dataclips">Dataclips</a> allows you to easily share data, but more importantly consume it in a form much like you would a restful API. Lets take a look at how this would work:</p>
 
@@ -124,7 +124,7 @@ ORDER BY
   <entry>
     <title type="html"><![CDATA[Protips for Conference Talks]]></title>
     <link href="http://www.craigkerstiens.com/2012/06/19/pro-tips-for-conference-talks/"/>
-    <updated>2012-06-19T00:00:00-07:00</updated>
+    <updated>2012-06-19T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/06/19/pro-tips-for-conference-talks</id>
     <content type="html"><![CDATA[<p>A few weeks ago I was sitting at the hotel in Zurich with <a href="http://www.twitter.com/jacobian">Jacob Kaplan Moss</a> prior to <a href="http://klewel.com/conferences/djangocon-2012/">DjangoCon EU</a> enjoying a beer, talking about Django, and discussing a bit about our upcoming talks for the conference. He talked briefly about his upcoming <a href="http://klewel.com/conferences/djangocon-2012/index.php?talkID=2">keynote</a> and how he was doing something different, including essentially 5 mini-talks. This seemed interesting enough, but the part that surprised me was when Jacob said, &ldquo;I&rsquo;m among friends here so it&rsquo;ll be a good place to test this format.&rdquo; Many if not all in the community know who Jacob is as one of the creators of Django, though still to be &ldquo;among friends&rdquo; at a roughly 300 person conference surprised me. However, as someone thats keynoted several times, spoken at conferences for many years, and familiar with many people in the community; for the 150-200 people there he had not met before, he was still truly among friends. While giving a keynote is never an easy feat, it seems to ease the worry ahead of time of doing such.</p>
 

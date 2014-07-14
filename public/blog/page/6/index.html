@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="A few weeks ago I was sitting at the hotel in Zurich with Jacob Kaplan Moss prior to DjangoCon EU enjoying a beer, talking about Django, and &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -103,6 +103,61 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/2012/07/19/rapid-api-prototyping/">
+		
+			Rapid API Prototyping With Heroku Postgres Dataclips</a>
+	</h2>
+	<div class="entry-content">
+		<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Historically with implementing the API fully you can&rsquo;t see how you truly feel about the result, causing this cycle to take longer than it should. Heroku Postgres has <a href="https://postgres.heroku.com/blog/past/2012/1/31/simple_data_sharing_with_data_clips/">Dataclips</a>, which (among other things) can be used for quickly prototyping APIs. <a href="https://postgres.heroku.com/dataclips">Dataclips</a> allows you to easily share data, but more importantly consume it in a form much like you would a restful API. Lets take a look at how this would work:</p>
+
+<h2>Given a schema</h2>
+
+<p><img src="http://f.cl.ly/items/0n0k1h3q1I1W1T373q0D/1.%20psql.png" alt="schema" /></p>
+
+<p>We can see from the screen shot of the schema above we can see we have a few tables. These tables are the complete works of Shakespeare thanks to <a href="http://www.opensourceshakespeare.org/downloads/">opensourceshakespeare</a>. Lets take a couple of hypothetical endpoints we&rsquo;ve decided on that we&rsquo;d like to expose for users and test as an API.</p>
+
+<ul>
+<li>The number of works per year</li>
+<li>Drone factory (this is a fun one courtesy of Richard Morrison &ndash; <a href="https://twitter.com/mozz100">@mozz100</a> essentially who has the longest paragraphs on average in his works.</li>
+</ul>
+
+
+
+		
+		<a href="/2012/07/19/rapid-api-prototyping/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-19T00:00:00-05:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/api/'>API</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/heroku/'>Heroku</a>, <a class='category' href='/categories/mobile/'>Mobile</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/prototype/'>Prototype</a>, <a class='category' href='/categories/ios/'>iOS</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/2012/06/19/pro-tips-for-conference-talks/">
 		
 			Protips for Conference Talks</a>
@@ -137,7 +192,7 @@ $(document).ready(
   
 
 
-<time datetime="2012-06-19T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-06-19T00:00:00-05:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -202,7 +257,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2012-06-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-06-11T00:00:00-05:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -279,7 +334,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2012-05-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-05-07T00:00:00-05:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -337,7 +392,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2012-05-04T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-05-04T00:00:00-05:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -398,7 +453,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2012-04-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-04-30T00:00:00-05:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -454,7 +509,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2012-04-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-04-13T00:00:00-05:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -506,7 +561,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2012-01-25T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-01-25T00:00:00-06:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -551,7 +606,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2012-01-23T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2012-01-23T00:00:00-06:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -596,50 +651,7 @@ connection.product.insert(django_pony)
   
 
 
-<time datetime="2011-12-02T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/11/07/how-heroku-works-maker-day/">
-		
-			How Heroku Works - Maker&#8217;s Day</a>
-	</h2>
-	<div class="entry-content">
-		<p>In my earlier post on <a href="/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools at Heroku</a>, I mentioned how we value engineers&#8217; time; their work has enabled us to build a great platform. As a result of what we&rsquo;ve built, we&rsquo;ve had great growth both of our platform and of our teams internally. With that growth inevitably comes different distractions on engineers&#8217; time. Despite how a manager may plan things, engineering work needs long periods of uninterrupted time. To ensure that no matter what, an engineer has plenty of opportunity to do the work he or she was hired to do, Heroku has Maker&rsquo;s Day.</p>
-
-
-		
-		<a href="/2011/11/07/how-heroku-works-maker-day/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-12-02T00:00:00-06:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

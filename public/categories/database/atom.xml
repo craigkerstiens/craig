@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Database | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/database/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T08:14:55-07:00</updated>
+  <updated>2014-07-14T09:43:44-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Getting more out of psql (The PostgreSQL CLI)]]></title>
     <link href="http://www.craigkerstiens.com/2013/02/21/more-out-of-psql/"/>
-    <updated>2013-02-21T00:00:00-08:00</updated>
+    <updated>2013-02-21T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2013/02/21/more-out-of-psql</id>
     <content type="html"><![CDATA[<p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
 
@@ -347,7 +347,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[How I work with Postgres – psql, My PostgreSQL Admin]]></title>
     <link href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/"/>
-    <updated>2013-02-13T00:00:00-08:00</updated>
+    <updated>2013-02-13T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres</id>
     <content type="html"><![CDATA[<p>On at least a weekly basis and not uncommonly multiple times in a single week I get this question:</p>
 
@@ -728,7 +728,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Introducing django-db-tools]]></title>
     <link href="http://www.craigkerstiens.com/2013/02/08/django-read-only-mode/"/>
-    <updated>2013-02-08T00:00:00-08:00</updated>
+    <updated>2013-02-08T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2013/02/08/django-read-only-mode</id>
     <content type="html"><![CDATA[<p>For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple add a <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">column here or add an index there</a>, but rather truly sizeable migrations&hellip; Going from <a href="http://lanyrd.com/blog/2012/lanyrds-big-move/">MySQL to Postgres</a> or migrating from an older version of Postgres such as a <a href="http://blog.sendhub.com/post/30041247598/how-to-upgrade-a-legacy-heroku-database">32 bit instance</a> to a newer 64 bit instance. In these cases the default approach is to just schedule downtime often throwing up a splash screen saying so.</p>
 
@@ -773,7 +773,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Redis in my Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/"/>
-    <updated>2012-10-18T00:00:00-07:00</updated>
+    <updated>2012-10-18T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres</id>
     <content type="html"><![CDATA[<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
 
@@ -902,7 +902,7 @@ WHERE
   <entry>
     <title type="html"><![CDATA[Understanding Postgres Performance]]></title>
     <link href="http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/"/>
-    <updated>2012-10-01T00:00:00-07:00</updated>
+    <updated>2012-10-01T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance</id>
     <content type="html"><![CDATA[<p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
 

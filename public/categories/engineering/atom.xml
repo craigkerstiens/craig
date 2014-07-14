@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Engineering | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/engineering/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T08:14:55-07:00</updated>
+  <updated>2014-07-14T09:43:44-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Why PostgreSQL Part 2]]></title>
     <link href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/"/>
-    <updated>2012-05-07T00:00:00-07:00</updated>
+    <updated>2012-05-07T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2</id>
     <content type="html"><![CDATA[<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
 
@@ -339,7 +339,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Why Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2012/04/30/why-postgres/"/>
-    <updated>2012-04-30T00:00:00-07:00</updated>
+    <updated>2012-04-30T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/04/30/why-postgres</id>
     <content type="html"><![CDATA[<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
 
@@ -652,7 +652,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Apps to Services]]></title>
     <link href="http://www.craigkerstiens.com/2012/04/13/apps_to_services/"/>
-    <updated>2012-04-13T00:00:00-07:00</updated>
+    <updated>2012-04-13T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/04/13/apps_to_services</id>
     <content type="html"><![CDATA[<p><em>Update the talk for this is now viewable on YouTube <a href="http://www.youtube.com/watch?v=ztGpK-v2Oow">here</a></em></p>
 
@@ -774,7 +774,7 @@ requests.POST(os.environ[‘FAQ_API’] + ‘/v2/create’, data=data)</p>
   <entry>
     <title type="html"><![CDATA[Sphinx Build Pack on Heroku]]></title>
     <link href="http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack/"/>
-    <updated>2012-01-25T00:00:00-08:00</updated>
+    <updated>2012-01-25T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack</id>
     <content type="html"><![CDATA[<p>Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via <a href="http://github.com/heroku/">Heroku&rsquo;s github</a>, you can view several of them at:</p>
 
@@ -814,7 +814,7 @@ $ heroku open
   <entry>
     <title type="html"><![CDATA[Securing your Internal Organization with OpenID]]></title>
     <link href="http://www.craigkerstiens.com/2012/01/23/securing-your-organization/"/>
-    <updated>2012-01-23T00:00:00-08:00</updated>
+    <updated>2012-01-23T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2012/01/23/securing-your-organization</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
 

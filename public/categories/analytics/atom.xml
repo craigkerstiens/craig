@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Analytics | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/analytics/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T08:14:55-07:00</updated>
+  <updated>2014-07-14T09:43:44-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Attribution 101]]></title>
     <link href="http://www.craigkerstiens.com/2011/03/18/attribution-101/"/>
-    <updated>2011-03-18T00:00:00-07:00</updated>
+    <updated>2011-03-18T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2011/03/18/attribution-101</id>
     <content type="html"><![CDATA[<p>Continuing with the recent posts on metrics and marketing. I want to give a quick primer on attribution. To any marketing or analytics people out there, simply skip this it would aim to be a primer recap at best for you.</p>
 
@@ -81,7 +81,7 @@
   <entry>
     <title type="html"><![CDATA[Reading Metrics to Evaluate Marketing]]></title>
     <link href="http://www.craigkerstiens.com/2011/03/02/understanding-metrics/"/>
-    <updated>2011-03-02T00:00:00-08:00</updated>
+    <updated>2011-03-02T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2011/03/02/understanding-metrics</id>
     <content type="html"><![CDATA[<p>A short while backed I talked about <a href="http://www.craigekerstiens.com/2011/02/03/tactical-steps-for-startup-metrics/">tactically measuring metrics</a> for your site/company. Recently I talked a bit about <a href="http://www.craigekerstiens.com/2011/02/14/bootstrappedstartup-marketing-part-1/">methods of marketing</a>. A large key to getting the most out of your time and money is to properly report against the intersection of these two items. First I&rsquo;m going to make the assumption you&rsquo;ve read those posts, if you haven&rsquo;t go back and do that. Next this is heavily on the assumption that you&rsquo;re using Google Analytics as your primary tool for measuring metrics and have setup goals appropriately.</p>
 
@@ -111,7 +111,7 @@
   <entry>
     <title type="html"><![CDATA[Setting up Goals and Funnels - Google Analytics]]></title>
     <link href="http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels/"/>
-    <updated>2011-02-28T00:00:00-08:00</updated>
+    <updated>2011-02-28T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2011/02/28/setting-goals-funnels</id>
     <content type="html"><![CDATA[<p>I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">Google Analytics</a> first check that out. With most websites today there is some portion of the site that is event and not page based, meaning you have some workflow on the page based on Javascript. If this is the case you&rsquo;ll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> instead of an event in order to entirely use it in funnels and goals.</p>
 
@@ -177,7 +177,7 @@ This is the first place you want to create both a goal and a funnel.</ol>
   <entry>
     <title type="html"><![CDATA[Tactical Steps for Startup Metrics]]></title>
     <link href="http://www.craigkerstiens.com/2011/02/03/tactical-steps-for-startup-metrics/"/>
-    <updated>2011-02-03T19:39:54-08:00</updated>
+    <updated>2011-02-03T21:39:54-06:00</updated>
     <id>http://www.craigkerstiens.com/2011/02/03/tactical-steps-for-startup-metrics</id>
     <content type="html"><![CDATA[<p>Metrics are obviously a very valuable area for start-ups, if you don&rsquo;t believe in metrics and think you&rsquo;re idea wins just because its great then you better start searching for your next day job. <a href="http://twitter.com/davemcclure">Dave McClure</a> has done a great talk on start-ups several times over, you can check out a video and corresponding slide show at:</p>
 

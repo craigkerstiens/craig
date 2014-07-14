@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T08:14:55-07:00</updated>
+  <updated>2014-07-14T09:43:44-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -14,9 +14,61 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Scaling Organizations - Scribing]]></title>
+    <link href="http://www.craigkerstiens.com/2014/07/14/on-scribing/"/>
+    <updated>2014-07-14T00:00:00-05:00</updated>
+    <id>http://www.craigkerstiens.com/2014/07/14/on-scribing</id>
+    <content type="html"><![CDATA[<p>In the process of growing a company there&rsquo;s several hurdles based on the size of the company. What worked at 5 doesn&rsquo;t work at 20, what works at 20 doesn&rsquo;t work at 50, and what worked at 50 doesn&rsquo;t work at 150. There&rsquo;s a lot of talk about <a href="http://lifehacker.com/5965280/follow-jeff-bezos-two-pizza-rule-to-avoid-the-dangers-of-groupthink">two pizza teams</a> and <a href="http://adam.herokuapp.com/past/2011/4/28/scaling_a_development_team/">scaling development teams</a> out there. One thing I haven&rsquo;t seen quite enough of is details around scribing and documenting things.</p>
+
+<!--more-->
+
+
+<h3>Planning</h3>
+
+<p>At teams of 2 and 3 you get everyone in a room. Perhaps 1 person says what you&rsquo;re going to do and you all rally around it, or maybe it&rsquo;s a day of debate and persuasion from all sides.</p>
+
+<p>In the end though you all leave, get heads down, but all know what goal you&rsquo;re working towards. At a larger company planning doesn&rsquo;t scale quite this way. I&rsquo;ve seen roadmapping and planning done a variety of ways as companies scale, but most times the thing they miss for far too long is documenting what comes out of it. Many may produce some level of artifact, but a cohesive wrap-up is often missed. Such an artifact should be easily digestible within a couple minutes, but also deep enough to answer many of the initial questions raised by the high level pieces.</p>
+
+<h3>Meetings</h3>
+
+<p>Meetings are a smaller level item than broader planning, and tend to go without thorough note taking than higher level planning. With growth you&rsquo;ll have more meetings, trust me you will. The more meetings you have the more likely you may miss one or two you&rsquo;re interested in. Or perhaps its as simple as some team members being out. Summer is especially hard around this. For a team of 10 it&rsquo;s not uncommon that you may go all summer with at least 1 person not in the meeting and often two.</p>
+
+<p>Keeping those that miss the meeting well informed of what happened at it is critical as you scale. This is slightly less important at an extremely large company, though still valuable, but critical <em>as you scale to larger</em>. As you&rsquo;re scaling things are changing faster, and context can more easily get lost.</p>
+
+<p>So how do you improve this?</p>
+
+<p>Some practical tips:</p>
+
+<ul>
+<li>Have a set of running notes with someone consistently scribing is a great standard to set. <em>If you missed a meeting you know where to go for it.</em></li>
+<li>Recording who was and was not at the meeting can be incredibly valuable. I&rsquo;ve heard statements &ldquo;I said X at Y meeting&rdquo;, the only problem with that statement is I wasn&rsquo;t at Y meeting.</li>
+<li>Not only recording the meeting notes, but explicitly calling out who&rsquo;s not there can help to know if that information should be explicitly passed along vs. just missed.</li>
+<li>Within your long running document have a summary to wrap it up. While scribing is great it can lead to not seeing the forest for the trees at times.</li>
+</ul>
+
+
+<p>And a few from others:</p>
+
+<ul>
+<li>Meetings need a <strong>purpose</strong> and an <strong>agenda</strong>. If I don&rsquo;t know why I&rsquo;m having a meeting, or what will be covered, I won&rsquo;t go. If I&rsquo;m organizing a meeting and can&rsquo;t spare the time to produce an agenda and goal, I shouldn&rsquo;t waste other people&rsquo;s time with the meeting – <a href="http://www.twitter.com/jacobian">@jacobian</a></li>
+<li>Any meeting over about 15-20 isn&rsquo;t a meeting, it&rsquo;s a presentation (which is OK too but make it clear that it&rsquo;s a download, not a discussion). – <a href="http://www.twitter.com/jacobian">@jacobian</a></li>
+</ul>
+
+
+<h3>Email</h3>
+
+<p>If you aren&rsquo;t aware I&rsquo;m a <a href="http://www.craigkerstiens.com/2014/02/07/my-email-hacks/">big fan of email</a>. Email is almost guaranteed that someone will at least open it (at least if its to them or a clear enough list). If you have something you want someone to read – email it. You can have a canonical wiki, or Trello board, or a variety of tools, but email will get more eyeballs than any of these. At the same time don&rsquo;t email things that are already documented elsewhere.</p>
+
+<p>Emails are great for highlighting the things people absolutely need to know about. Short and concise emails will also help to improve reach. Be careful to make these emails have a high ratio of information size to value. If you have a lot of extra follow on content send them somewhere else to read.</p>
+
+<p>Finally don’t overuse email. If you’re sending the same thing every week people will become numb to this. <a href="http://www.yesware.com">Monitoring if your emails are being opened/responded</a> to can help to know if you&rsquo;re over-broadcasting.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Postgres and Connection Pooling]]></title>
     <link href="http://www.craigkerstiens.com/2014/05/22/on-connection-pooling/"/>
-    <updated>2014-05-22T00:00:00-07:00</updated>
+    <updated>2014-05-22T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/05/22/on-connection-pooling</id>
     <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
 
@@ -50,7 +102,7 @@
 
 <h4>Standalone pooling</h4>
 
-<p>Postgres can be a bit of a sore spot when it comes to handling a ton of connections. For Postgres each connection you have to your database assumes some overhead of memory. Casual observations have seen it be between 5 and 10 MB assuming some basic query workload. And even if you have the memory overhead on your Postgres instance there becomes a point where management of connections becomes a limiting factor, we&rsquo;ve seen this somewhere in the hundreds. While framework level connection poolers can give soem better performance and lenthen the time before you have to deal with something more complex if you&rsquo;re successful that time may come.</p>
+<p>Postgres can be a bit of a sore spot when it comes to handling a ton of connections. For Postgres each connection you have to your database assumes some overhead of memory. Casual observations have seen it be between 5 and 10 MB assuming some basic query workload. And even if you have the memory overhead on your Postgres instance there becomes a point where management of connections becomes a limiting factor, we&rsquo;ve seen this somewhere in the hundreds. While framework level connection poolers can give some better performance and lengthen the time before you have to deal with something more complex if you&rsquo;re successful that time may come.</p>
 
 <p><em>A rule of thumb I&rsquo;d use is if you have over 100 connections you want to look at something more robust</em></p>
 
@@ -300,7 +352,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Personas, data science, k-means]]></title>
     <link href="http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means/"/>
-    <updated>2014-05-08T00:00:00-07:00</updated>
+    <updated>2014-05-08T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means</id>
     <content type="html"><![CDATA[<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;margin-left:20px;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective.</p>
 
@@ -360,7 +412,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
     <link href="http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/"/>
-    <updated>2014-05-07T00:00:00-07:00</updated>
+    <updated>2014-05-07T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using</id>
     <content type="html"><![CDATA[<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let&rsquo;s look at some of these rarer but awesome types.</p>
 
@@ -635,7 +687,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[What you need to know about April 7 and your security on the web.]]></title>
     <link href="http://www.craigkerstiens.com/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/"/>
-    <updated>2014-04-08T00:00:00-07:00</updated>
+    <updated>2014-04-08T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/04/08/What-you-need-to-know-about-april-7-and-the-web</id>
     <content type="html"><![CDATA[<p><img src="http://heartbleed.com/heartbleed.png" style="float:right;margin-left:20px;height:300px;"/>
 On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In the most basic sense this library allowed intentional external parties to acquire data that was thought to be safe and secure from whomever was running a vulnerable website. There was little to know one that was except from this due to their security practices, major examples of sites that were affected include:</p>
@@ -683,7 +735,7 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
   <entry>
     <title type="html"><![CDATA[Some non-traditional marketing tips]]></title>
     <link href="http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips/"/>
-    <updated>2014-03-31T00:00:00-07:00</updated>
+    <updated>2014-03-31T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips</id>
     <content type="html"><![CDATA[<p>Marketing is generally unexciting to a ton of engineers, until it brings eyeballs which bring feedback and dollars. Marketing doesn&rsquo;t have to always be cheesy campaigns or ads, it can often just be surfacing the things your customers actually do want to care about. My favorite type of marketing is when a service sells me on something at the exact time I want it. Here&rsquo;s a few short tips on some non-traditional marketing that won&rsquo;t seem sleezy but still can work quite well.</p>
 
@@ -715,7 +767,7 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
   <entry>
     <title type="html"><![CDATA[A year's look at Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
-    <updated>2014-03-26T00:00:00-07:00</updated>
+    <updated>2014-03-26T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
     <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
 
@@ -773,7 +825,7 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
   <entry>
     <title type="html"><![CDATA[PostgreSQL 9.4 - Looking up (with JSONB and logical decoding)]]></title>
     <link href="http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/"/>
-    <updated>2014-03-24T00:00:00-07:00</updated>
+    <updated>2014-03-24T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up</id>
     <content type="html"><![CDATA[<p>Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the <a href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">9.4 PostgreSQL release</a>. Since that post a few weeks ago the landscape has already changed, and much more for the positive.</p>
 
@@ -1031,7 +1083,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Tracking Month over Month Growth in SQL]]></title>
     <link href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/"/>
-    <updated>2014-02-26T00:00:00-08:00</updated>
+    <updated>2014-02-26T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL</id>
     <content type="html"><![CDATA[<p><img src="http://f.cl.ly/items/3f1q2N2s2V0d0G2s1T01/Blank.jpg" style="float:right;margin-left:20px;"/> In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
 
@@ -1318,7 +1370,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[PostgreSQL 9.4 - What I was hoping for]]></title>
     <link href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/"/>
-    <updated>2014-02-15T00:00:00-08:00</updated>
+    <updated>2014-02-15T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted</id>
     <content type="html"><![CDATA[<p>Theres no doubt that the <a href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/">9.4 release</a> of PostgreSQL will have some great improvements. However, for all of the improvements it delivering it had the promise of being perhaps the most impactful release of <a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">Postgres</a> yet. Several of the features that would have given it my stamp of best release in at least 5 years are now already not making it and a few others are still on the border. Here&rsquo;s a look at few of the things that were hoped for and not to be at least until another 18 months.</p>
 
@@ -1578,7 +1630,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[How I hack email]]></title>
     <link href="http://www.craigkerstiens.com/2014/02/07/my-email-hacks/"/>
-    <updated>2014-02-07T00:00:00-08:00</updated>
+    <updated>2014-02-07T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/07/my-email-hacks</id>
     <content type="html"><![CDATA[<p>In a conversation with <a href="http://www.twitter.com/alexbaldwin">@alexbaldwin</a> yesterday the topic of email came up, with each of us quickly diving into various observations, how its both awesome and a great form of communication/engagement, how most people still do it really bad. Alex has some good experience with it with hack design having over 100,000 subscribers. A tangent in an entirely unrelated meeting with <a href="http://www.twitter.com/mschoening">@mschoening</a> and others it was suggested instead of emailing a list to send out a ton of individual emails instead. Both of these reminded me that email is incredibly powerful, but taking advantage of its power has to be intentional.</p>
 
@@ -1591,7 +1643,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#97;&#x6c;&#108;&#x40;&#x79;&#111;&#117;&#114;&#x63;&#x6f;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#x63;&#111;&#109;">&#x61;&#x6c;&#x6c;&#x40;&#x79;&#111;&#x75;&#x72;&#x63;&#x6f;&#x6d;&#x70;&#x61;&#110;&#x79;&#46;&#99;&#x6f;&#x6d;</a> or <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x6f;&#117;&#114;&#x67;&#114;&#x6f;&#x75;&#x70;&#64;&#109;&#121;&#x63;&#x6f;&#x6d;&#112;&#x61;&#110;&#x79;&#x2e;&#x63;&#111;&#x6d;&#46;">&#x6f;&#117;&#x72;&#x67;&#x72;&#x6f;&#117;&#112;&#64;&#109;&#121;&#x63;&#x6f;&#x6d;&#112;&#97;&#x6e;&#121;&#46;&#99;&#111;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#x61;&#x6c;&#x6c;&#x40;&#121;&#111;&#x75;&#x72;&#99;&#111;&#109;&#x70;&#x61;&#110;&#x79;&#46;&#99;&#x6f;&#109;">&#x61;&#x6c;&#x6c;&#64;&#x79;&#x6f;&#117;&#114;&#x63;&#x6f;&#109;&#x70;&#97;&#x6e;&#x79;&#x2e;&#x63;&#x6f;&#x6d;</a> or <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#111;&#117;&#x72;&#x67;&#114;&#111;&#x75;&#x70;&#x40;&#109;&#x79;&#x63;&#111;&#109;&#x70;&#97;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#109;&#x2e;">&#111;&#x75;&#114;&#x67;&#114;&#x6f;&#x75;&#x70;&#x40;&#x6d;&#121;&#99;&#x6f;&#x6d;&#x70;&#x61;&#110;&#121;&#46;&#x63;&#111;&#109;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -1628,7 +1680,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Examining Postgres 9.4 - A first look]]></title>
     <link href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/"/>
-    <updated>2014-02-02T00:00:00-08:00</updated>
+    <updated>2014-02-02T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4</id>
     <content type="html"><![CDATA[<p><a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">PostgreSQL</a> is currently entering its final commit fest. While its still going, which means there could still be more great features to come, we can start to take a look at what you can expect from it now. This release seems to bring a lot of minor increments versus some bigger highlights of previous ones. At the same time there&rsquo;s still a lot on the bubble that may or may not make it which could entirely change the shape of this one. For a peek back of some of the past ones:</p>
 
@@ -1932,7 +1984,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Where to go with developer content]]></title>
     <link href="http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/"/>
-    <updated>2014-01-28T00:00:00-08:00</updated>
+    <updated>2014-01-28T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content</id>
     <content type="html"><![CDATA[<p>Last week I wrote up some <a href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
 
@@ -1970,7 +2022,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Rethinking the limits on relational databases]]></title>
     <link href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/"/>
-    <updated>2014-01-24T00:00:00-08:00</updated>
+    <updated>2014-01-24T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational</id>
     <content type="html"><![CDATA[<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
 
@@ -2018,7 +2070,7 @@ ALTER TABLE foo ALTER COLUMN bar NOT NULL;
   <entry>
     <title type="html"><![CDATA[Where to start with developer content]]></title>
     <link href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/"/>
-    <updated>2014-01-16T00:00:00-08:00</updated>
+    <updated>2014-01-16T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content</id>
     <content type="html"><![CDATA[<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
 
@@ -2060,7 +2112,7 @@ ALTER TABLE foo ALTER COLUMN bar NOT NULL;
   <entry>
     <title type="html"><![CDATA[The best Postgres feature you're not using – CTEs aka WITH clauses]]></title>
     <link href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/"/>
-    <updated>2013-11-18T00:00:00-08:00</updated>
+    <updated>2013-11-18T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using</id>
     <content type="html"><![CDATA[<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
 
@@ -2422,7 +2474,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Tooling for Simple but Informative Emails]]></title>
     <link href="http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails/"/>
-    <updated>2013-10-13T00:00:00-07:00</updated>
+    <updated>2013-10-13T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2013/10/13/simple-but-informative-emails</id>
     <content type="html"><![CDATA[<p>Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some->many-> all. Its still highly effective even as much noise as we receive in our inboxes. Over the years I&rsquo;ve tried a lot of email tools from custom built solutions, to newer entrants that help around drip actions (<a href="http://www.intercom.io">intercom.io</a> and <a href="http://www.customer.io">customer.io</a>), to more &ldquo;enterprise&rdquo; tools such as Marketo. While I have varying opinions on all of those, I still find myself coming back to a simple one off script setup to deliver clear concise emails.</p>
 
@@ -2530,7 +2582,7 @@ end
   <entry>
     <title type="html"><![CDATA[Disabling muting while typing in Google hangouts]]></title>
     <link href="http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts/"/>
-    <updated>2013-09-12T00:00:00-07:00</updated>
+    <updated>2013-09-12T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts</id>
     <content type="html"><![CDATA[<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
 
@@ -2544,7 +2596,7 @@ end
   <entry>
     <title type="html"><![CDATA[Diving into Postgres JSON operators and functions]]></title>
     <link href="http://www.craigkerstiens.com/2013/09/11/diving-into-postgres-json-operators/"/>
-    <updated>2013-09-11T00:00:00-07:00</updated>
+    <updated>2013-09-11T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2013/09/11/diving-into-postgres-json-operators</id>
     <content type="html"><![CDATA[<p>Just as <a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/">PostgreSQL 9.3</a> was coming out I had a need to take advantage of the JSON datatype and some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">operators and functions</a> within it. The use case was pretty simple, run a query across a variety of databases, then take the results and store them. We explored doing something more elaborate with the columns/values, but in the end just opted to save the entire result set as JSON then I could use the operators to explore it as desired.</p>
 
@@ -2607,7 +2659,7 @@ LIMIT 1;
   <entry>
     <title type="html"><![CDATA[The Rule of Thirds - followup]]></title>
     <link href="http://www.craigkerstiens.com/2013/08/13/rule-of-thirds/"/>
-    <updated>2013-08-13T00:00:00-07:00</updated>
+    <updated>2013-08-13T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2013/08/13/rule-of-thirds</id>
     <content type="html"><![CDATA[<p>Several months back I wrote about how we do <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">higher level, long term planning within the Heroku Postgres team</a>. If you haven&rsquo;t read the previous article please start there.</p>
 
@@ -2659,55 +2711,6 @@ LIMIT 1;
 <p>We intentionally design it so that low effort and high impact is on the top right corner. Finally once everything is on there we allocate names to the tasks, and put boxes around items we&rsquo;re planning to do in the coming months. With boxes make it very clear of what we are doing as well as explicitly things we are not. The initials or names make it clear of how loaded down people are. If your name is on 3 tasks that are high difficulty, then you&rsquo;re likely over allocated.</p>
 
 <p>At this point things usually fall out pretty quickly and we emerge with some rough roadmap that in retrospect we&rsquo;ve followed pretty accuately.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The missing PostgreSQL documentation]]></title>
-    <link href="http://www.craigkerstiens.com/2013/08/07/the-missing-postgresql-documentation/"/>
-    <updated>2013-08-07T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/08/07/the-missing-postgresql-documentation</id>
-    <content type="html"><![CDATA[<p>For a couple of years I&rsquo;ve complained about the Postgres documentation and at the same time paraded it as one of the best sets of documentation I&rsquo;ve encountered. In many ways the reason I veer towards <a href="http://www.postgresql.org">Postgres</a> as well as <a href="http://www.python.org">Python</a> and <a href="http://www.djangoproject.com">Django</a> is the quality of their documentation. If you need to find details about something its documented, and more importantly well and thoroughly documented.</p>
-
-<p>In large part I came to Python by happenstance through <a href="http://www.djangoproject.com">Django</a>, and Postgres through happenstance of an employer. Yet, Django was very little of an accident. The Django Tutorial got me a large part of what I needed to know and more excited about development than I had been in some time. Python has done some work at adding docs to make this even better, sadly its still very much needed for PostgreSQL.</p>
-
-<!--more-->
-
-
-<h3>Whats Missing in the Postgres Docs</h3>
-
-<p>Theres a huge variety of types of documentation, off the top of my head theres:</p>
-
-<ul>
-<li>Reference docs (Postgres excels at this)</li>
-<li>Onboarding (Postgres tutorial huh?)</li>
-<li>Tailored guides (Postgres? I can haz? Nope&hellip; We don&rsquo;t understand&hellip;.)</li>
-</ul>
-
-
-<p>Postgres is great if you know the name of what you&rsquo;re looking for, but if you don&rsquo;t you&rsquo;re entirely left in the dark.</p>
-
-<h3>Understanding the power of Postgres</h3>
-
-<p>Postgres is good enough at performance, good enough at usability, and awesome at how powerful and flexible it can be. But all of this is entirely lost if you have to know the esoteric name of what you&rsquo;re looking for.</p>
-
-<p><em>What the hell is an hstore&hellip; In so many ways KVstore makes infintely more sense. In the same sense PLV8, I have to know not only what PL stands for but V8 as well, versus the JavaScript extension for Postgres.</em></p>
-
-<p>I understand there are plenty of reasons why some of these things are the way they are, but its also limiting how great the broader perception is. Postgres externally is this hard to use DB, that well is just a database, versus giving developers a set of powerful and useful functions to make their lives better.</p>
-
-<h3>The Solution</h3>
-
-<p>Lets fix things, there are a ton of people that would love to know more about all things Postgres. This ranges from a good set of onboarding docs, to specific blog posts on topics that people are curious about. Just last week I got an email about improving <strong>the</strong> Postgres tutorial&hellip; Yes theres a tutorial hidden in the <a href="http://www.postgresql.org/docs/9.2/static/tutorial.html">2000 page set of documentation for Postgres</a>. Its simply old, mostly uninteresting, and well just needs to be completely recreated. A great alternative would be a few tutorials/guides for:</p>
-
-<ul>
-<li>Noobs to databases in general (Total 101 guide)</li>
-<li>Building and architecting your application with Postgres (App Devs)</li>
-<li>Administering and maintaining Postgres (DBAs)</li>
-<li>SQL and reporting in Postgres (consumers of data, analysts, product people, marketing, etc.)</li>
-</ul>
-
-
-<p>If jumping in and contributing to fixing the core tutorial isn&rsquo;t your cup of tea because you don&rsquo;t want to learn and write in <a href="http://www-sul.stanford.edu/tools/tutorials/html2.0/gentle.html">SGML</a>, send a pull request to <a href="http://postgresguide.com">postgresguide.com</a> or do a <a href="mailto:craig.kerstiens@gmail.com].%20If%20thats%20too%20much%20effort%20please%20just%20let%20us%20know,%20what%20do%20you%20want%20to%20see%20-%20[craig.kerstiens%20at%20gmail.com](mailto:craig.kerstiens@gmail.com">guest post on my blog</a></p>
 ]]></content>
   </entry>
   

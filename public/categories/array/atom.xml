@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Array | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/array/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-05-22T08:14:55-07:00</updated>
+  <updated>2014-07-14T09:43:44-05:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Using Postgres Arrays in Django]]></title>
     <link href="http://www.craigkerstiens.com/2012/11/06/django-and-arrays/"/>
-    <updated>2012-11-06T00:00:00-08:00</updated>
+    <updated>2012-11-06T00:00:00-06:00</updated>
     <id>http://www.craigkerstiens.com/2012/11/06/django-and-arrays</id>
     <content type="html"><![CDATA[<p>A few weeks back I did a brief <a href="/2012/08/20/arrays-in-postgres/">feature highlight on Postgres arrays</a>. Since that time I&rsquo;ve found myself using them with increasing regularity on small side projects. Much of this time I&rsquo;m using Django and of course not opting to write raw SQL to be able to use arrays. Django actually makes it quite simple to work with Arrays in Postgres with a package by <a href="http://www.niwi.be/about.html">Andrey Antukh</a>. Lets get started by installing two libraries:</p>
 
@@ -90,7 +90,7 @@ class Post(models.Model):
   <entry>
     <title type="html"><![CDATA[Arrays in Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres/"/>
-    <updated>2012-08-20T00:00:00-07:00</updated>
+    <updated>2012-08-20T00:00:00-05:00</updated>
     <id>http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres</id>
     <content type="html"><![CDATA[<p>Postgres out of the box has an abundance of datatypes, from standard <a href="http://www.postgresql.org/docs/9.1/static/datatype.html#DATATYPE-NUMERIC">numeric datatypes</a> to <a href="http://www.postgresql.org/docs/9.1/static/datatype-geometric.html">geometric</a> or even <a href="http://www.postgresql.org/docs/9.1/static/datatype-net-types.html">network datatypes</a>. With extensions you can get even more out of it as earlier discussed with <a href="http://craigkerstiens.com/2012/06/11/schemaless-django/">hStore</a>. Though with all of the datatypes its easy to miss out on some of them that are there, in fact one of my favorites is often missed entirely. The <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> datatype lets you do just as you&rsquo;d expect, store an array inside Postgres. With this you can often get some of the functionality you&rsquo;d want in a single table when you might traditionally have expanded to multiple tables.</p>
 
