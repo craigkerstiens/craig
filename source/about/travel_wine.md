@@ -19,6 +19,8 @@ Among my hobbies include food/wine/travel. Yes, wine is a hobby. As I know frequ
 
 [San Francisco](/about/sf.html) - Hopefully not much needs to be said about the city by the bay. A foodie city with lots of activities, and a woefully out of date list because the pace at which things change around here is exhausting.
 
+[Disneyland](/about/disneyland.html) - As my wife is a large Disney fan and now with a toddler, we frequent Disney. As we frequent it we tend to hit up a few of the extra things such as food and alcohol of course, here's some of our faves.
+
 ### Wine Guides
 
 [Wine reviews](/about/wine.html) - Reviews of various wineries I've attended. Each winery has been attended more than once to have some comparisson between visits. Most are in the Sonoma region, though some outside. 

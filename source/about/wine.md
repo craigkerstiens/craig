@@ -7,9 +7,11 @@ sharing: true
 footer: true
 ---
 
-As a frequent visitor to Sonoma and wine drinker I often guide friends and visitors around Sonoma. Even when not playing tour guide I'll give advice to those looking for a wine tasting experience. To simplify this I've written up some notes on many of the places I've visited on several occasions and have a a set of recommended agenda over [here](/about/wine_route.html) based on your preferences.
+As a frequent visitor to Sonoma/Napa area and wine drinker I often guide friends and visitors when planning their wine country trip. Even when not playing tour guide I'll give advice to those looking for a wine tasting experience. To simplify this I've written up some notes on many of the places I've visited on several occasions and have a a set of recommended agenda over [here](/about/wine_route.html) based on your preferences.
 
 ### Imagery Winery
+
+[Website](http://www.imagerywinery.com/) | [Yelp](http://www.yelp.com/biz/imagery-estate-winery-glen-ellen)
 
 Large variety, great to expose those newer to wines to some approachable ones as well as having something for the experienced wine drinker. They're often a bit more creative with their wines, sometimes doing grapes that are commonly blended by themselves and other times doing creative blends such as their code blue which is 80% Syrah and 20% blueberry wine (a wine that smells blueberry, tastes like a solid Syrah and finishes like blueberry, but not sweet at any point). 
 
@@ -100,8 +102,6 @@ Kenwood winery also commonly found in stores has a much broader selection as wel
 * Tasting $5
 * Bottles $10-$60
 
-### Loxton
-
 ### Mayo Family
 
 A smaller family winery with its tasting room separate from the vineyard its a nice spot for a variety of wines. Its one of a few places serving champagne and also has a couple of choices for dessert wines for those that prefer it. 
@@ -174,9 +174,36 @@ For sometime I'd passed VJB up as it seemed very touristy, though sad it took so
 
 ### Iron Horse
 
+[Website](http://www.ironhorsevineyards.com/) - [Yelp](http://www.yelp.com/biz/iron-horse-vineyards-sebastopol)
+
 Among Gloria Ferrer, Domaine Carneros, and Chandon Iron Horse is hands down my favorite. They do both still and sparkling wines, though I can only comment about their sparkling. In getting there you feel as if you're entirely off the beaten path. The tasting area is outside and overlooks the valley with gorgeous views. Their champagnes are great quality and many that may be harder to find in stores, including one commissioned especially by Disney for distribution in their parks which is quite great.
 
 * Tasting ~ $10
 * Bottles $30 - $80
 
-### 
+### Morlet
+
+[Website](http://www.morletwine.com/) | [Yelp](http://www.yelp.com/biz/morlet-family-vineyards-st-helena)
+
+This is the most impressive wine experience I've ever had, and at the same time an extremely relaxed one. Their tasting is by appointment only and you should plan a few weeks out. The wine maker is a 4th generation wine maker and grower from France. He's the wine maker for several other great quality wineries in the area as well. Easily some of the best wine I've tasted in my life, though it also comes with a price to match. Some wines of particular note include his White Bordeaux, his Syrah which smells just like fresh craked black pepper, and every single one of his cabs. A final note, the wine tasting is always conducted by him or his wife, both of whom are a wonderful experience and very different from each other.
+
+* Tasting ~ $100
+* Bottles $65-$300
+
+### Salvestrin
+
+[Website](http://www.salvestrinwinery.com/) | [Yelp](http://www.yelp.com/biz/salvestrin-saint-helena)
+
+This was an impromptu visit for us, they generally encourage a reservation though it seems easy enough to just stop in. Their environment was very relaxed as nice break from so much of Napa. Their lower end wines were definitely the ones that seemed to excel. The higher end into cab and estate wines were of good quality but didn't quite hold up to some of the outstanding others in the Napa area. The great thing was their lower end ones stood out as great compared to so many surrounding wineries.
+
+* Tasting ~ $20
+* Bottles $25-$100
+
+### Lasseter 
+
+[Website](http://www.lasseterfamilywinery.com/) | [Yelp](http://www.yelp.com/biz/lasseter-family-winery-glen-ellen)
+
+If you love anything about Disney or Pixar whats not to love about a winery by John Lasseter himself. In truth the winery is actually mostly a labor of love by his wife, or as he describes it "her movie". Appointment only here definitely holds true, but as with most places that require an appointment it's worth the coordination. Their tasting experience includes a quick walk through the grounds and barrel room, followed by a great tasting experience paired with cheeses and chocolates. They focus exclusively on Rhone style blends, all of which are quite excellent. 
+
+* Tasting ~ $25
+* Bottles $25-$60

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Productivity | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/productivity/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-07-14T09:53:03-05:00</updated>
+  <updated>2014-08-13T10:49:18-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[How I hack email]]></title>
     <link href="http://www.craigkerstiens.com/2014/02/07/my-email-hacks/"/>
-    <updated>2014-02-07T00:00:00-06:00</updated>
+    <updated>2014-02-07T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2014/02/07/my-email-hacks</id>
     <content type="html"><![CDATA[<p>In a conversation with <a href="http://www.twitter.com/alexbaldwin">@alexbaldwin</a> yesterday the topic of email came up, with each of us quickly diving into various observations, how its both awesome and a great form of communication/engagement, how most people still do it really bad. Alex has some good experience with it with hack design having over 100,000 subscribers. A tangent in an entirely unrelated meeting with <a href="http://www.twitter.com/mschoening">@mschoening</a> and others it was suggested instead of emailing a list to send out a ton of individual emails instead. Both of these reminded me that email is incredibly powerful, but taking advantage of its power has to be intentional.</p>
 
@@ -29,7 +29,7 @@
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#97;&#x6c;&#x6c;&#64;&#x79;&#x6f;&#117;&#114;&#x63;&#x6f;&#x6d;&#112;&#x61;&#110;&#121;&#46;&#x63;&#x6f;&#x6d;">&#97;&#x6c;&#x6c;&#64;&#121;&#x6f;&#x75;&#x72;&#99;&#111;&#x6d;&#112;&#97;&#110;&#x79;&#46;&#x63;&#x6f;&#x6d;</a> or <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x6f;&#x75;&#114;&#103;&#114;&#111;&#x75;&#x70;&#x40;&#109;&#x79;&#99;&#x6f;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;&#x2e;">&#x6f;&#117;&#114;&#x67;&#114;&#x6f;&#x75;&#x70;&#64;&#109;&#121;&#99;&#x6f;&#109;&#x70;&#97;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#108;&#108;&#x40;&#x79;&#111;&#x75;&#x72;&#99;&#x6f;&#x6d;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#x6d;">&#97;&#x6c;&#x6c;&#x40;&#121;&#x6f;&#x75;&#114;&#99;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#46;&#x63;&#x6f;&#x6d;</a> or <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x6f;&#x75;&#114;&#103;&#x72;&#111;&#x75;&#112;&#64;&#109;&#x79;&#x63;&#111;&#109;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;&#x2e;">&#x6f;&#117;&#x72;&#103;&#x72;&#111;&#117;&#112;&#x40;&#109;&#121;&#99;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#x2e;&#99;&#111;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 

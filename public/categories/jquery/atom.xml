@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JQuery | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/jquery/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-07-14T09:53:03-05:00</updated>
+  <updated>2014-08-13T10:49:18-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[JQuery and Django Autocomplete]]></title>
     <link href="http://www.craigkerstiens.com/2011/02/25/jquery-django-autocomplete/"/>
-    <updated>2011-02-25T00:00:00-06:00</updated>
+    <updated>2011-02-25T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2011/02/25/jquery-django-autocomplete</id>
     <content type="html"><![CDATA[<p>In a couple of various places I&rsquo;ve seen light requests of how to put autocomplete in for a Django web application. Here&rsquo;s a really light weight version with a view and autocomplete functionality using:</p>
 

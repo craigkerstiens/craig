@@ -17,3 +17,4 @@ In addition to writing about tech, startups, databases on here I:
 * [Speak at quite a few conferences](/about/speaking.html), if you're interested in having me talk at one reach out
 * [Speak many words of wisdom on twitter like everyone else](http://www.twitter.com/craigkerstiens)
 
+If you want help with optimizing your DB for performance or getting insights into your data please reach out [craig.kerstiens@gmail.com](mailto:craig.kerstiens@gmail.com)

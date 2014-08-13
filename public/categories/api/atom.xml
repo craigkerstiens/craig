@@ -4,7 +4,7 @@
   <title><![CDATA[Category: API | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/api/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-07-14T09:53:03-05:00</updated>
+  <updated>2014-08-13T10:49:18-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
     <link href="http://www.craigkerstiens.com/2012/07/19/supporting-developers/"/>
-    <updated>2012-07-19T00:00:00-05:00</updated>
+    <updated>2012-07-19T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2012/07/19/supporting-developers</id>
     <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Often you&rsquo;re unable to tell how you truly feel about your API without fully implementing it, causing this cycle to take longer than it should. Heroku Postgres has Dataclips, which (among other things) can be used for quickly prototyping APIs. Lets take a look at how this would work:</p>
 
@@ -70,7 +70,7 @@ ORDER BY
   <entry>
     <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
     <link href="http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping/"/>
-    <updated>2012-07-19T00:00:00-05:00</updated>
+    <updated>2012-07-19T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping</id>
     <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Historically with implementing the API fully you can&rsquo;t see how you truly feel about the result, causing this cycle to take longer than it should. Heroku Postgres has <a href="https://postgres.heroku.com/blog/past/2012/1/31/simple_data_sharing_with_data_clips/">Dataclips</a>, which (among other things) can be used for quickly prototyping APIs. <a href="https://postgres.heroku.com/dataclips">Dataclips</a> allows you to easily share data, but more importantly consume it in a form much like you would a restful API. Lets take a look at how this would work:</p>
 

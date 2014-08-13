@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Development | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/development/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-07-14T09:53:03-05:00</updated>
+  <updated>2014-08-13T10:49:18-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[More on Postgres Performance]]></title>
     <link href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/"/>
-    <updated>2013-01-10T00:00:00-06:00</updated>
+    <updated>2013-01-10T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance</id>
     <content type="html"><![CDATA[<p>If you missed my previous post on <a href="/2012/10/01/understanding-postgres-performance/">Understanding Postgres Performance</a> its a great starting point. On this particular post I&rsquo;m going to dig in to some real life examples of optimizing queries and indexes.</p>
 
@@ -385,7 +385,7 @@ function mce_success_cb(resp){
   <entry>
     <title type="html"><![CDATA[Sharding your database]]></title>
     <link href="http://www.craigkerstiens.com/2012/11/30/sharding-your-database/"/>
-    <updated>2012-11-30T00:00:00-06:00</updated>
+    <updated>2012-11-30T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2012/11/30/sharding-your-database</id>
     <content type="html"><![CDATA[<p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
 
@@ -474,7 +474,7 @@ physical_shard = logical_shard % total_physical_shards
   <entry>
     <title type="html"><![CDATA[How I Write SQL]]></title>
     <link href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/"/>
-    <updated>2012-11-17T00:00:00-06:00</updated>
+    <updated>2012-11-17T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2012/11/17/how-i-write-sql</id>
     <content type="html"><![CDATA[<p>I recently got asked by <a href="http://rzrsharp.net/">a friend</a> and former co-worker how I write SQL. At first this caught me by surprise and I assumed there was nothing different, but after a few additional comments on it, it became clear most people have no concept for creating clean readable SQL. So without further adieu here&rsquo;s how I write SQL, with a built up example query.</p>
 
@@ -624,7 +624,7 @@ WHERE foo.id = bar.foo_id
   <entry>
     <title type="html"><![CDATA[Using Postgres Arrays in Django]]></title>
     <link href="http://www.craigkerstiens.com/2012/11/06/django-and-arrays/"/>
-    <updated>2012-11-06T00:00:00-06:00</updated>
+    <updated>2012-11-06T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2012/11/06/django-and-arrays</id>
     <content type="html"><![CDATA[<p>A few weeks back I did a brief <a href="/2012/08/20/arrays-in-postgres/">feature highlight on Postgres arrays</a>. Since that time I&rsquo;ve found myself using them with increasing regularity on small side projects. Much of this time I&rsquo;m using Django and of course not opting to write raw SQL to be able to use arrays. Django actually makes it quite simple to work with Arrays in Postgres with a package by <a href="http://www.niwi.be/about.html">Andrey Antukh</a>. Lets get started by installing two libraries:</p>
 
@@ -698,7 +698,7 @@ class Post(models.Model):
   <entry>
     <title type="html"><![CDATA[Redis in my Postgres]]></title>
     <link href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/"/>
-    <updated>2012-10-18T00:00:00-05:00</updated>
+    <updated>2012-10-18T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres</id>
     <content type="html"><![CDATA[<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
 

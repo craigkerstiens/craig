@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="I&rsquo;m reasonably proficient at SQL – a coworker when pseudocoding some logic for him pointed out that my pseudocode is what he thought was &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Postgres is rich with options for indexing. First you&rsquo;ve got a variety of types, and beyond that you can do a variety of things with each of &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -103,6 +103,49 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/">
+		
+			Postgres Indexes – Expression/Functional Indexing</a>
+	</h2>
+	<div class="entry-content">
+		<p>Postgres is rich with options for indexing. First you&rsquo;ve got a variety of types, and beyond that you can do a variety of things with each of these such as create unique indexes, use conditions to index only a portion of your data, or create indexes based on complex expressions or functions. In cases where you commonly use various PostgreSQL functions in your application or reporting you can get some great gains from this.</p>
+
+
+		
+		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/2013/05/06/my-sql-bad-habits/">
 		
 			My SQL Bad Habits</a>
@@ -129,7 +172,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-05-06T00:00:00-05:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-05-06T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -174,7 +217,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-04-29T00:00:00-05:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-04-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -229,7 +272,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-04-27T00:00:00-05:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-04-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -274,7 +317,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-04-17T00:00:00-05:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-04-17T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -319,7 +362,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-04-16T07:59:00-05:00" pubdate data-updated="true">Apr 16<span>th</span>, 2013</time></div>
+<time datetime="2013-04-16T07:59:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2013</time></div>
 	
 
 <div class="tags">
@@ -364,7 +407,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-04-12T00:00:00-05:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-04-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -407,7 +450,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-03-31T00:00:00-05:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 
@@ -446,7 +489,7 @@ $(document).ready(
   
 
 
-<time datetime="2013-03-13T00:00:00-05:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-03-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -495,59 +538,12 @@ $(document).ready(
   
 
 
-<time datetime="2013-03-07T00:00:00-06:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
 	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/02/21/more-out-of-psql/">
-		
-			Getting More Out of Psql (the PostgreSQL CLI)</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
-
-<h2>Get the most of psql</h2>
-
-<p>Psql, the CLI postgreSQL client, is a powerful tool. Sadly, lot of developers are not aware of the features and instead look for a GUI to provide what they need. Let&rsquo;s fly over what can psql do for you.</p>
-
-
-		
-		<a href="/2013/02/21/more-out-of-psql/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-21T00:00:00-06:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Technology | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/technology/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-07-14T09:53:03-05:00</updated>
+  <updated>2014-08-13T10:49:18-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Personas, data science, k-means]]></title>
     <link href="http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means/"/>
-    <updated>2014-05-08T00:00:00-05:00</updated>
+    <updated>2014-05-08T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means</id>
     <content type="html"><![CDATA[<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;margin-left:20px;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective.</p>
 
@@ -76,7 +76,7 @@
   <entry>
     <title type="html"><![CDATA[What you need to know about April 7 and your security on the web.]]></title>
     <link href="http://www.craigkerstiens.com/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/"/>
-    <updated>2014-04-08T00:00:00-05:00</updated>
+    <updated>2014-04-08T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2014/04/08/What-you-need-to-know-about-april-7-and-the-web</id>
     <content type="html"><![CDATA[<p><img src="http://heartbleed.com/heartbleed.png" style="float:right;margin-left:20px;height:300px;"/>
 On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In the most basic sense this library allowed intentional external parties to acquire data that was thought to be safe and secure from whomever was running a vulnerable website. There was little to know one that was except from this due to their security practices, major examples of sites that were affected include:</p>
