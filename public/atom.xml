@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-08-13T10:49:18-07:00</updated>
+  <updated>2014-08-15T08:49:56-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[My wishlist for Postgres 9.5]]></title>
+    <link href="http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5/"/>
+    <updated>2014-08-15T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5</id>
+    <content type="html"><![CDATA[<p>As I followed along with the <a href="http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/">9.4 release</a> of Postgres I had a few posts of things that I was excited about, some things that missed, and a bit of a wrap-up. I thought this year (year in the sense of PG releases) I&rsquo;d jump the gun and lay out areas I&rsquo;d love to see addressed in PostgreSQL 9.5. And here it goes:</p>
+
+<!--more-->
+
+
+<h3>Upsert</h3>
+
+<p>Merge/Upsert/Insert or Update whatever you want to call it this is still a huge wart that it doesn&rsquo;t exist. There&rsquo;s been a few implementations show up on mailing lists, and to the best of my understanding there&rsquo;s been debate on if it&rsquo;s performant enough or that some people would prefer another implementation or I don&rsquo;t know what other excuse. The short is this really needs to happen, until that time you can always <a href="http://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql/8702291#8702291">implement it with a CTE</a> which can have a race condition.</p>
+
+<h3>Foreign Data Wrappers</h3>
+
+<p>There&rsquo;s so much opportunity here, and this has easily been my <a href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/">favorite feature of the past 2-3 years in Postgres</a>. Really any improvement is good here, but a hit list of a few valuable things:</p>
+
+<ul>
+<li>Pushdown of conditions</li>
+<li>Ability to accept a DSN to a utility function to create foreign user and tables.</li>
+<li>Better security around creds of foreign tables</li>
+<li>More out of the box FDWs</li>
+</ul>
+
+
+<h3>Stats/Analytics</h3>
+
+<p>Today there&rsquo;s <a href="http://madlib.net/">madlib</a> for machine learning, and 9.4 got support for <a href="http://www.depesz.com/2014/01/11/waiting-for-9-4-support-ordered-set-within-group-aggregates/">ordered set aggregates</a>, but even still Postgres needs to keep moving forward here. PL-R and PL-Python can help a good bit as well, but having more out of the <a href="http://www.postgresql.org/docs/9.3/static/functions-aggregate.html">box functions</a> for stats can continue to keep it at the front of the pack for a database that&rsquo;s not only safe for your data, but powerful to do analysis with.</p>
+
+<h3>Multi-master</h3>
+
+<p>This is definitely more of a dream than not. Full multi-master replication would be amazing, and it&rsquo;s getting closer to possible. The sad truth is even once it lands it will probably require a year of maturing, so even more reason for it to hopefully hit in 9.5</p>
+
+<h3>Logical Replication</h3>
+
+<p>The foundation made it in for 9.4 which is huge. This means we&rsquo;ll probably see a good working out of the box logical replication in 9.5. For those less familiar this means the replication is SQL based vs. the binary WAL stream. This means things like using replication to upgrade across versions is possible. So not quite 0 downtime, but ~ a minute or two to upgrade versions. Even of large DBs.</p>
+
+<h3>An official GUI</h3>
+
+<p>Alright this one is probably a pipe dream. And to kick it off, no pgAdmin doesn&rsquo;t cut it. A good end user tool for connecting/querying would be huge. Fortunately the ecosystem is improving here with <a href="http://www.jackdb.com">JackDB</a> (web based) and <a href="https://eggerapps.at/pgcommander/">PG Commander</a> (mac app), but these still aren&rsquo;t discoverable enough for most users.</p>
+
+<h3>What do you want?</h3>
+
+<p>So there&rsquo;s my wishlist, what&rsquo;s yours for 9.5? Let me know &ndash; <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[When to ship it, when to kill it]]></title>
@@ -1675,7 +1723,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x61;&#108;&#108;&#64;&#x79;&#x6f;&#x75;&#114;&#99;&#111;&#109;&#x70;&#x61;&#x6e;&#x79;&#46;&#x63;&#111;&#x6d;">&#x61;&#108;&#108;&#x40;&#121;&#111;&#x75;&#114;&#99;&#111;&#x6d;&#112;&#x61;&#x6e;&#121;&#46;&#99;&#x6f;&#x6d;</a> or <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#111;&#x75;&#x72;&#103;&#114;&#111;&#x75;&#112;&#x40;&#x6d;&#121;&#x63;&#x6f;&#109;&#x70;&#97;&#110;&#x79;&#x2e;&#99;&#x6f;&#x6d;&#x2e;">&#111;&#117;&#x72;&#x67;&#114;&#111;&#117;&#112;&#64;&#x6d;&#121;&#x63;&#x6f;&#109;&#112;&#x61;&#110;&#x79;&#x2e;&#x63;&#x6f;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#97;&#x6c;&#108;&#64;&#x79;&#x6f;&#117;&#x72;&#99;&#111;&#109;&#112;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#x6d;">&#x61;&#108;&#108;&#64;&#x79;&#111;&#117;&#x72;&#99;&#111;&#x6d;&#x70;&#97;&#110;&#x79;&#46;&#99;&#111;&#109;</a> or <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6f;&#117;&#114;&#103;&#x72;&#x6f;&#x75;&#x70;&#64;&#109;&#121;&#99;&#x6f;&#109;&#112;&#x61;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#x6d;&#x2e;">&#x6f;&#117;&#114;&#103;&#114;&#x6f;&#x75;&#112;&#x40;&#x6d;&#121;&#x63;&#111;&#109;&#112;&#x61;&#110;&#x79;&#x2e;&#99;&#111;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -2622,69 +2670,6 @@ end
 </code></pre>
 
 <p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Diving into Postgres JSON operators and functions]]></title>
-    <link href="http://www.craigkerstiens.com/2013/09/11/diving-into-postgres-json-operators/"/>
-    <updated>2013-09-11T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/09/11/diving-into-postgres-json-operators</id>
-    <content type="html"><![CDATA[<p>Just as <a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/">PostgreSQL 9.3</a> was coming out I had a need to take advantage of the JSON datatype and some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">operators and functions</a> within it. The use case was pretty simple, run a query across a variety of databases, then take the results and store them. We explored doing something more elaborate with the columns/values, but in the end just opted to save the entire result set as JSON then I could use the operators to explore it as desired.</p>
-
-<p>Here&rsquo;s the general idea in code (using sequel):</p>
-
-<pre><code>result = r.connection { |c| c.fetch(self.query).all }
-mymodel.results = result.to_json
-</code></pre>
-
-<!--more-->
-
-
-<p>As the entire dataset was stored as some compressed JSON I needed to do a bit of manipulation to get it back into a form that was workable. Fortunately all the steps were fairly straightforward.</p>
-
-<p>First you want to unnest each result from the json array, in my case this looked like:</p>
-
-<pre><code>SELECT json_array_elements(result)
-</code></pre>
-
-<p>The above will unnest all of the array elements so I have an individual result as JSON. A real world example would look something similar to:</p>
-
-<pre><code>SELECT json_array_elements(result) 
-FROM query_results 
-LIMIT 2;
-      json_array_elements
-</code></pre>
-
-<hr />
-
-<p> {&ldquo;column_name&rdquo;:&ldquo;data_in_here&rdquo;}
- {&ldquo;column_name_2&rdquo;:&ldquo;other_data_in_here&rdquo;}
-(2 rows)</p>
-
-<p>From here based on the query I would want to get some specific value. In this case I&rsquo;m going to search for the text key column_name_2:</p>
-
-<pre><code>SELECT json_array_elements(result)-&gt;'column_name_2' 
-FROM query_results 
-LIMIT 1;
-
-  json_array_elements  
------------------------
- "other_data_in_here"
-(1 rows)
-</code></pre>
-
-<p><em>One gotcha I encountered was when I wanted to search for some value or exclude some value&hellip; Expecting I could just compare the result of the above in a where statement I was sadly mistaken because the equals operator didn&rsquo;t translate.</em> My first attempt at fixing this was to cast in this form:</p>
-
-<pre><code>SELECT json_array_elements(result)-&gt;'column_name_2'::text
-</code></pre>
-
-<p>The sad part is because of the operator the cast doesn&rsquo;t get applied as I&rsquo;d expect. Instead you&rsquo;ll want to do:</p>
-
-<pre><code>SELECT (json_array_elements(result)-&gt;'column_name_2')::text
-</code></pre>
-
-<p>Of course theres plenty more you can do with the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">JSON operators in the new Postgres 9.3</a>. If you&rsquo;ve already got JSON in your application give them a look today. And while slightly worse, if you&rsquo;ve got JSON stored in a text field simply cast it with <code>::json</code> to begin using the operators.</p>
 ]]></content>
   </entry>
   

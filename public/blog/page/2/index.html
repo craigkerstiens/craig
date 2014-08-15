@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Theres no doubt that the 9.4 release of PostgreSQL will have some great improvements. However, for all of the improvements it delivering it had the &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,49 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/02/26/Tracking-MoM-growth-in-SQL/">
+		
+			Tracking Month Over Month Growth in SQL</a>
+	</h2>
+	<div class="entry-content">
+		<p><img src="http://f.cl.ly/items/3f1q2N2s2V0d0G2s1T01/Blank.jpg" style="float:right;margin-left:20px;"/> In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
+
+
+		
+		<a href="/2014/02/26/Tracking-MoM-growth-in-SQL/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -497,55 +540,6 @@ $(document).ready(
 <div class="tags">
 
 	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/09/11/diving-into-postgres-json-operators/">
-		
-			Diving Into Postgres JSON Operators and Functions</a>
-	</h2>
-	<div class="entry-content">
-		<p>Just as <a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/">PostgreSQL 9.3</a> was coming out I had a need to take advantage of the JSON datatype and some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">operators and functions</a> within it. The use case was pretty simple, run a query across a variety of databases, then take the results and store them. We explored doing something more elaborate with the columns/values, but in the end just opted to save the entire result set as JSON then I could use the operators to explore it as desired.</p>
-
-<p>Here&rsquo;s the general idea in code (using sequel):</p>
-
-<pre><code>result = r.connection { |c| c.fetch(self.query).all }
-mymodel.results = result.to_json
-</code></pre>
-
-
-		
-		<a href="/2013/09/11/diving-into-postgres-json-operators/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
