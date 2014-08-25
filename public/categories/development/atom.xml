@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Development | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/development/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-08-15T08:49:56-07:00</updated>
+  <updated>2014-08-25T11:12:54-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -537,7 +537,7 @@ GROUP BY
   wine_id, tags;
 </code></pre>
 
-<p>Finally I&rsquo;m going to put it all together. This is going to have and additional query to get the winery and the wine name as well. We&rsquo;re also going to use CTE&rsquo;s (Common Table Expressions), think of these as temporary views that can make your query more readable:</p>
+<p>Finally I&rsquo;m going to put it all together. This is going to have an additional query to get the winery and the wine name as well. We&rsquo;re also going to use CTE&rsquo;s (Common Table Expressions), think of these as temporary views that can make your query more readable:</p>
 
 <pre><code>WITH 
 
@@ -590,7 +590,7 @@ ORDER BY
   rating DESC
 </code></pre>
 
-<p>One thing to point out, is <code>SELECT</code>, <code>FROM</code> and <code>ORDER BY</code> are followed by a new line. When I <code>WHERE</code> multiple conditions I ensure the <code>AND</code> and the condition occur on the same line. This is intentional to make those easier to read as well as easy to remove/add. The key to allowing it to still be readable is an extra two spaces before the <code>AND</code> so the condition aligns with the above one. This would appear something similar to:</p>
+<p>One thing to point out, is <code>SELECT</code>, <code>FROM</code> and <code>ORDER BY</code> are followed by a new line. When I have <code>WHERE</code> multiple conditions I ensure the <code>AND</code> and the condition occur on the same line. This is intentional to make those easier to read as well as easy to remove/add. The key to allowing it to still be readable is an extra two spaces before the <code>AND</code> so the condition aligns with the above one. This would appear something similar to:</p>
 
 <pre><code>SELECT foo
 FROM bar
