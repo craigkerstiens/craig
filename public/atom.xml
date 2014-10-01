@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-08-25T11:12:54-07:00</updated>
+  <updated>2014-10-01T07:32:53-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
+    <link href="http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations/"/>
+    <updated>2014-10-01T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations</id>
+    <content type="html"><![CDATA[<p>Most web applications will add/remove columns over time. This is extremely common early on and even mature applications will continue modifying their schemas with new columns. An all too common pitfall when adding new columns is setting a not null constraint in Postgres.</p>
+
+<!--more-->
+
+
+<h3>Not null constraints</h3>
+
+<p>What happens when you have a not null constraint on a table is it will re-write the entire table. Under the cover Postgres is really just an append only log. So when you update or delete data it&rsquo;s really just writing new data. This means when you add a column with a new value it has to write a new record. If you do this requiring columns to not be null then you&rsquo;re re-writing your entire table.</p>
+
+<p>Where this becomes problematic for larger applications is it will hold a lock preventing you from writing new data during this time.</p>
+
+<h3>A better way</h3>
+
+<p>Of course you may want to not allow nulls and you may want to set a default value, the problem simply comes when you try to do this all at once. The safest approach at least in terms of uptime for your table &ndash;> data &ndash;> appliction is to break apart these steps.</p>
+
+<ol>
+<li>Start by simply adding the column with allowing nulls but setting a default value</li>
+<li>Run a background job that will go and retroactively update the new column to your default value</li>
+<li>Add your not null constraint.</li>
+</ol>
+
+
+<p>Yes it&rsquo;s a few extra steps, but I can say from having walked through this with a number of developers and their apps it makes for a much smoother process for making changes to your apps.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[My wishlist for Postgres 9.5]]></title>
@@ -1723,7 +1754,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#x61;&#x6c;&#x6c;&#x40;&#121;&#111;&#x75;&#114;&#x63;&#x6f;&#x6d;&#112;&#x61;&#x6e;&#x79;&#46;&#99;&#111;&#109;">&#97;&#108;&#108;&#x40;&#121;&#111;&#x75;&#x72;&#99;&#x6f;&#109;&#112;&#97;&#110;&#121;&#x2e;&#99;&#111;&#109;</a> or <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x6f;&#117;&#x72;&#x67;&#114;&#x6f;&#117;&#x70;&#x40;&#109;&#x79;&#99;&#x6f;&#x6d;&#x70;&#97;&#110;&#x79;&#46;&#99;&#111;&#109;&#46;">&#111;&#117;&#114;&#103;&#x72;&#x6f;&#117;&#x70;&#64;&#x6d;&#121;&#99;&#x6f;&#109;&#112;&#97;&#x6e;&#121;&#46;&#x63;&#x6f;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#x61;&#x6c;&#x6c;&#64;&#121;&#111;&#117;&#114;&#99;&#111;&#109;&#x70;&#97;&#x6e;&#121;&#46;&#x63;&#111;&#109;">&#97;&#108;&#108;&#64;&#121;&#x6f;&#x75;&#114;&#99;&#111;&#109;&#112;&#x61;&#x6e;&#x79;&#x2e;&#x63;&#x6f;&#x6d;</a> or <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#111;&#x75;&#114;&#103;&#x72;&#111;&#117;&#x70;&#64;&#x6d;&#121;&#x63;&#x6f;&#109;&#x70;&#x61;&#110;&#121;&#46;&#x63;&#x6f;&#109;&#46;">&#111;&#117;&#x72;&#103;&#114;&#x6f;&#x75;&#x70;&#64;&#x6d;&#x79;&#99;&#111;&#x6d;&#x70;&#97;&#x6e;&#121;&#46;&#x63;&#x6f;&#x6d;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -2656,20 +2687,6 @@ end
 
 <pre><code>ruby email.rb nameofyourfile.csv
 </code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Disabling muting while typing in Google hangouts]]></title>
-    <link href="http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts/"/>
-    <updated>2013-09-12T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/09/12/disabling-muting-while-typing-in-hangouts</id>
-    <content type="html"><![CDATA[<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
-
-<pre><code> defaults write com.google.googletalkplugind exps -string [\"-tm\"]
-</code></pre>
-
-<p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
 ]]></content>
   </entry>
   
