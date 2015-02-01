@@ -20,6 +20,17 @@
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+  (function() {
+    window._pa = window._pa || {};
+    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
+    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
+    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.perfectaudience.com/serve/517fd07cf1409000020002dc.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+</script>
 	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
 
 <script language="Javascript" type="text/javascript">
@@ -62,6 +73,7 @@ $(document).ready(
     <meta property="twitter:url" content="http://www.craigkerstiens.com">
     <meta property="twitter:title" content="Where to start with developer content">
     <meta property="twitter:description" content="Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to &hellip;">
+
 
 </head>
 
@@ -204,7 +216,7 @@ $(document).ready(
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2014
+	<footer id="footer" class="inner">Copyright &copy; 2015
 
     Craig Kerstiens
 

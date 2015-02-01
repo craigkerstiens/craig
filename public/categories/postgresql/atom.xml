@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2014-10-01T07:32:53-07:00</updated>
+  <updated>2015-02-01T09:02:54-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -31,7 +31,7 @@
 
 <h3>A better way</h3>
 
-<p>Of course you may want to not allow nulls and you may want to set a default value, the problem simply comes when you try to do this all at once. The safest approach at least in terms of uptime for your table &ndash;> data &ndash;> appliction is to break apart these steps.</p>
+<p>Of course you may want to not allow nulls and you may want to set a default value, the problem simply comes when you try to do this all at once. The safest approach at least in terms of uptime for your table &ndash;> data &ndash;> application is to break apart these steps.</p>
 
 <ol>
 <li>Start by simply adding the column with allowing nulls but setting a default value</li>
