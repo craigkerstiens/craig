@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Update the talk for this is now viewable on YouTube here When I first came across Django I was an immediate fan. It featured: Good documentation &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -72,9 +72,7 @@ $(document).ready(
     <meta property="twitter:site" content="craigkerstiens">
     <meta property="twitter:url" content="http://www.craigkerstiens.com">
     <meta property="twitter:title" content="Craig Kerstiens">
-    <meta property="twitter:description" content="Update the talk for this is now viewable on YouTube here When I first came across Django I was an immediate fan. It featured: Good documentation
-Steady but stable progress
-Community around apps &hellip;">
+    <meta property="twitter:description" content="This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within PostgresGuide.com. If you need to get started check &hellip;">
 
 
 </head>
@@ -118,6 +116,67 @@ Community around apps &hellip;">
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/04/30/why-postgres/">
+		
+			Why Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
+
+<p><em>UPDATE: A <a href="/2012/05/07/why-postgres-part-2/">part 2</a> has been posted on <a href="/2012/05/07/why-postgres-part-2/">Why Use Postgres</a></em></p>
+
+<p>Very often recently I find myself explaining why Postgres is so great. In an effort to save myself a bit of time in repeating this, I though it best to consolidate why Postgres is so great and dispel some of the historical arguments against it.</p>
+
+<h2>Replication</h2>
+
+<p>For some time the biggest argument for MySQL over Postgres was the lack of a good replication story for Postgres. With the release of <a href="http://www.postgresql.org/docs/8.4/static/high-availability.html">8.4 Postgres&rsquo;s</a> story around replication quickly became much better.</p>
+
+<p><em>While replication is indeed very important, are users actually setting up replication each time with MySQL or is it to only have the option later?</em></p>
+
+<h2>Window functions</h2>
+
+<p>This is a feature those familiar with Oracle greatly missed in Postgres. In fact even SQL Server had some form of them, though it was with T-SQL, which adds a bit more complexity to the feature. This is a feature that once you have you can&rsquo;t live without; the other options that existed before were slower and much more complicated. With the release of <a href="http://www.postgresql.org/docs/9.1/static/tutorial-window.html">8.4</a> window functions were added to bring Postgres on par with Oracle in this area. For more info on using them check the Postgres docs above or <a href="http://postgresguide.com/tips/window.html">PostgresGuide.com</a>.</p>
+
+<h2>Flexible Datatypes</h2>
+
+<p>Creating a custom column is simpler in Postgres than any other database I&rsquo;ve used by far. Excluding custom datatypes, even Postgres&rsquo;s out of the box datatypes make Postgres stand out far ahead of other databases. In particular the ability to create a column as an <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> of some datatype. Want to store a game of tic-tac-toe in a database, or an array of 1 user&rsquo;s phone numbers? It simply becomes a single column that can contain multiple phone numbers for a user.</p>
+
+
+		
+		<a href="/2012/04/30/why-postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -536,56 +595,6 @@ Community around apps &hellip;">
 <div class="tags">
 
 	<a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/05/16/environment-structure-django-apps/">
-		
-			Environment Structure for Django Apps</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve been writing applications off and on for nearly 4 years now, since before Django 1.0 was even released. I must say the framework could not be better described than by its own tagline &ldquo;The Web framework for perfectionists with deadlines&rdquo;. Among the things I love about it are:</p>
-
-<ul>
-    <li>Amazing documentation, there&#8217;s not 30 different blog posts with different ways to do things, either read the django project documentation or the app documentation</li>
-    <li>They don&#8217;t consistently break backwards compatibility. While at times they do this, it is not the norm or standard, which isn&#8217;t the case for some other unnamed frameworks</li>
-    <li>DRY, Don&#8217;t Repeat Yourself. If there&#8217;s an app that exists people don&#8217;t have a burning need to recreate the same functionality, resulting in lower number but higher quality pluggable apps.</li>
-</ul>
-
-
-
-		
-		<a href="/2011/05/16/environment-structure-django-apps/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-16T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
 
 </div>
 

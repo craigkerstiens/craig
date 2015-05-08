@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-03-03T13:18:12-08:00</updated>
+  <updated>2015-05-08T08:26:01-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5!]]></title>
+    <link href="http://www.craigkerstiens.com/2015/04/11/upsert-lands-in-postgres-9.5/"/>
+    <updated>2015-04-11T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/04/11/upsert-lands-in-postgres-9.5</id>
+    <content type="html"><![CDATA[<p>If you’ve followed anything I’ve <a href="/2012/04/30/why-postgres/">written about Postgres</a>, you know that I’m a fan. At the same time you know that there’s been one feature that so many other databases have, which Postgres lacks and it <a href="/2014/08/15/my-postgres-wishlist-for-9.5/">causes a huge amount of angst for not being in Postgres</a>… Upsert. Well the day has come, it’s finally committed and will be available <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=168d5805e4c08bed7b95d351bf097cff7c07dd65">in Postgres 9.5</a>.</p>
+
+<p>Sure we’re still several months away from Postgres 9.5 being released, anywhere from 3-6 months as a best guess. That doesn’t mean we can’t take a first look at this feature. Though before we get into it a few special call outs of thanks to Peter Geoghegan of the <a href="http://www.heroku.com/postgres">Heroku Postgres</a> team for being the primary author on it, Andres Freund who recently just joined <a href="https://www.citusdata.com">Citus Data</a> for his heavy contributions, and Heikki Linnakangas as well for his contributions.</p>
+
+<!-- more -->
+
+
+<p>And now onto the exploration. Upsert is the common name, but if you’re unfamiliar upsert is essentially create or update – Create this new record, but if a conflict exists update it. Let’s take a practical example.</p>
+
+<p>Assume you have a web scraper that imports product information into a table. Each product has a UPC code, title, description, and link. There’s a unique constraint on the UPC code. Now, if your web scraper tries to insert a new product, and a product with the same UPC already exists, you’d usually get an error. But you don’t want the query to fail, you’d want to update the existing product instead. Maybe with a new image, maybe a new description, whatever have you, but I don’t want it to blow up… I simply want to capture the new data and save it.</p>
+
+<p><strong>So before</strong>: Insert a record… Exception this violates a unique constraint… Let your app figure out what to do. <em>protip: often applications would try to work around this, but you can run a chance of a race condition and duplicate records if there’s a conflict. TLDR; it’s not a perfect solution.</em></p>
+
+<p><strong>Now</strong>: Insert a record… There’s a unique constraint violation… Okay, let’s just update all the new record’s fields <strong>inside a single transaction</strong></p>
+
+<p>So enough explanation, here’s how it actually looks in the syntax:</p>
+
+<pre><code>INSERT INTO products (upc, title, description, link) 
+VALUES (123456789, ‘Figment #1 of 5’, ‘THE NEXT DISNEY ADVENTURE IS HERE - STARRING ONE OF DISNEY'S MOST POPULAR CHARACTERS! ’, ‘[http://www.amazon.com/dp/B00KGJVRNE](http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20)’)
+ON CONFLICT DO UPDATE SET;
+</code></pre>
+
+<p>It’s been a long time coming for this, and it makes building applications that need this kind of behavior even easier. While it would have been great for this to be available years ago, kudos to Postgres and its community for taking the approach that is safe for your data. The result we have now both provides the desired behavior of create or update, <strong>and</strong> is performant without the risk of race conditions for your data.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
@@ -648,64 +679,6 @@ function mce_success_cb(resp){
 
 <!--End mc_embed_signup-->
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A year's look at Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
-    <updated>2014-03-26T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
-    <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
-
-<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
-
-<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
-
-<!--more-->
-
-
-<h3>The inagural issue</h3>
-
-<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
-
-<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
-
-<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
-
-<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
-
-<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
-
-<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
-
-<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
-
-<h3>A mix of notable entries</h3>
-
-<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
-
-<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
-
-<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
-
-<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
-
-<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
-
-<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
-
-<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
-
-<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
-
-<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
-
-<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
-
-<h3>In conclusion</h3>
-
-<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
 ]]></content>
   </entry>
   
