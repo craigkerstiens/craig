@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-05-08T08:26:01-07:00</updated>
+  <updated>2015-05-08T08:46:32-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5!]]></title>
+    <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5 – A first look]]></title>
     <link href="http://www.craigkerstiens.com/2015/04/11/upsert-lands-in-postgres-9.5/"/>
     <updated>2015-04-11T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2015/04/11/upsert-lands-in-postgres-9.5</id>
@@ -35,8 +35,17 @@
 
 <p>So enough explanation, here’s how it actually looks in the syntax:</p>
 
-<pre><code>INSERT INTO products (upc, title, description, link) 
-VALUES (123456789, ‘Figment #1 of 5’, ‘THE NEXT DISNEY ADVENTURE IS HERE - STARRING ONE OF DISNEY'S MOST POPULAR CHARACTERS! ’, ‘[http://www.amazon.com/dp/B00KGJVRNE](http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20)’)
+<pre><code>INSERT INTO products (
+    upc, 
+    title, 
+    description, 
+    link) 
+VALUES (
+    123456789, 
+    ‘Figment #1 of 5’, 
+    ‘THE NEXT DISNEY ADVENTURE IS HERE - STARRING ONE OF DISNEY'S MOST POPULAR CHARACTERS! ’, 
+    ‘[http://www.amazon.com/dp/B00KGJVRNE](http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20)’
+    )
 ON CONFLICT DO UPDATE SET;
 </code></pre>
 
