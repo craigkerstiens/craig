@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-05-08T08:46:32-07:00</updated>
+  <updated>2015-05-08T08:48:33-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -44,7 +44,7 @@ VALUES (
     123456789, 
     ‘Figment #1 of 5’, 
     ‘THE NEXT DISNEY ADVENTURE IS HERE - STARRING ONE OF DISNEY'S MOST POPULAR CHARACTERS! ’, 
-    ‘[http://www.amazon.com/dp/B00KGJVRNE](http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20)’
+    ‘http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20’
     )
 ON CONFLICT DO UPDATE SET;
 </code></pre>
