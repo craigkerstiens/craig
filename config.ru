@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'sinatra/base'
+require 'rack-rewrite'
 
 # The project root directory
 $root = ::File.dirname(__FILE__)
@@ -24,6 +25,10 @@ class SinatraStaticServer < Sinatra::Base
     File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
   end
 
+end
+
+use Rack::Rewrite do
+    r301 %r{^/2015/04/11/upsert-lands-in-postgres-9.5/?$}, '/2015/05/08/upsert-lands-in-postgres-9.5/'
 end
 
 run SinatraStaticServer
