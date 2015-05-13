@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-05-13T07:49:12-07:00</updated>
+  <updated>2015-05-13T08:02:55-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5 – A first look]]></title>
-    <link href="http://www.craigkerstiens.com/2015/05/09/upsert-lands-in-postgres-9.5/"/>
-    <updated>2015-05-09T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2015/05/09/upsert-lands-in-postgres-9.5</id>
+    <link href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/"/>
+    <updated>2015-05-08T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5</id>
     <content type="html"><![CDATA[<p>If you’ve followed anything I’ve <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">written about Postgres</a>, you know that I’m a fan. At the same time you know that there’s been one feature that so many other databases have, which Postgres lacks and it <a href="http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5/">causes a huge amount of angst for not being in Postgres</a>… Upsert. Well the day has come, it’s finally committed and will be available <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=168d5805e4c08bed7b95d351bf097cff7c07dd65">in Postgres 9.5</a>.</p>
 
 <p>Sure we’re still several months away from Postgres 9.5 being released, anywhere from 3-6 months as a best guess. That doesn’t mean we can’t take a first look at this feature. Though before we get into it a few special call outs of thanks to Peter Geoghegan of the <a href="http://www.heroku.com/postgres">Heroku Postgres</a> team for being the primary author on it, Andres Freund who recently just joined <a href="https://www.citusdata.com">Citus Data</a> for his heavy contributions, and Heikki Linnakangas as well for his contributions.</p>
@@ -1848,7 +1848,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x61;&#x6c;&#x6c;&#x40;&#121;&#x6f;&#x75;&#114;&#99;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#121;&#46;&#x63;&#111;&#109;">&#x61;&#x6c;&#108;&#x40;&#121;&#x6f;&#117;&#x72;&#99;&#111;&#x6d;&#x70;&#x61;&#110;&#121;&#46;&#x63;&#111;&#109;</a> or <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#111;&#x75;&#114;&#103;&#x72;&#x6f;&#x75;&#112;&#64;&#x6d;&#x79;&#99;&#x6f;&#x6d;&#x70;&#97;&#x6e;&#121;&#46;&#x63;&#x6f;&#x6d;&#x2e;">&#x6f;&#x75;&#x72;&#103;&#114;&#x6f;&#117;&#112;&#x40;&#x6d;&#121;&#x63;&#x6f;&#x6d;&#112;&#x61;&#110;&#x79;&#46;&#99;&#111;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#97;&#x6c;&#x6c;&#64;&#x79;&#111;&#117;&#114;&#x63;&#x6f;&#109;&#112;&#x61;&#x6e;&#x79;&#x2e;&#x63;&#111;&#x6d;">&#x61;&#108;&#108;&#64;&#x79;&#x6f;&#x75;&#114;&#99;&#x6f;&#109;&#x70;&#x61;&#x6e;&#x79;&#46;&#99;&#x6f;&#109;</a> or <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#111;&#x75;&#114;&#103;&#114;&#x6f;&#117;&#x70;&#64;&#x6d;&#121;&#x63;&#x6f;&#109;&#112;&#x61;&#110;&#121;&#46;&#x63;&#111;&#109;&#46;">&#111;&#x75;&#x72;&#x67;&#x72;&#x6f;&#117;&#112;&#x40;&#x6d;&#121;&#x63;&#111;&#x6d;&#x70;&#x61;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
