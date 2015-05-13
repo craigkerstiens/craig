@@ -28,6 +28,7 @@ class SinatraStaticServer < Sinatra::Base
 end
 
 use Rack::Rewrite do
+    r301 %r{^/2015/4/11/upsert-lands-in-postgres-9.5/(\?.*)}, '/2015/05/08/upsert-lands-in-postgres-9.5/'
     r301 %r{^/2015/04/11/upsert-lands-in-postgres-9.5/(\?.*)}, '/2015/05/08/upsert-lands-in-postgres-9.5/'
 end
 
