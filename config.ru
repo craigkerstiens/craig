@@ -29,6 +29,7 @@ end
 
 use Rack::Rewrite do
     r301 %r{^/2015/04/11/upsert-lands-in-postgres-9.5/?$}, '/2015/05/08/upsert-lands-in-postgres-9.5/'
+    r301 %r{^/2015/04/11/upsert-lands-in-postgres-9.5/?utm_source=postgresweekly&utm_medium=email$}, '/2015/05/08/upsert-lands-in-postgres-9.5/'
 end
 
 run SinatraStaticServer
