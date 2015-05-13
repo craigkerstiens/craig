@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-05-08T08:48:33-07:00</updated>
+  <updated>2015-05-13T07:49:12-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5 – A first look]]></title>
-    <link href="http://www.craigkerstiens.com/2015/04/11/upsert-lands-in-postgres-9.5/"/>
-    <updated>2015-04-11T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2015/04/11/upsert-lands-in-postgres-9.5</id>
+    <link href="http://www.craigkerstiens.com/2015/05/09/upsert-lands-in-postgres-9.5/"/>
+    <updated>2015-05-09T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/05/09/upsert-lands-in-postgres-9.5</id>
     <content type="html"><![CDATA[<p>If you’ve followed anything I’ve <a href="/2012/04/30/why-postgres/">written about Postgres</a>, you know that I’m a fan. At the same time you know that there’s been one feature that so many other databases have, which Postgres lacks and it <a href="/2014/08/15/my-postgres-wishlist-for-9.5/">causes a huge amount of angst for not being in Postgres</a>… Upsert. Well the day has come, it’s finally committed and will be available <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=168d5805e4c08bed7b95d351bf097cff7c07dd65">in Postgres 9.5</a>.</p>
 
 <p>Sure we’re still several months away from Postgres 9.5 being released, anywhere from 3-6 months as a best guess. That doesn’t mean we can’t take a first look at this feature. Though before we get into it a few special call outs of thanks to Peter Geoghegan of the <a href="http://www.heroku.com/postgres">Heroku Postgres</a> team for being the primary author on it, Andres Freund who recently just joined <a href="https://www.citusdata.com">Citus Data</a> for his heavy contributions, and Heikki Linnakangas as well for his contributions.</p>
