@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-05-13T08:45:58-07:00</updated>
+  <updated>2015-05-13T08:50:02-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -46,7 +46,7 @@ VALUES (
     ‘THE NEXT DISNEY ADVENTURE IS HERE - STARRING ONE OF DISNEY'S MOST POPULAR CHARACTERS! ’, 
     ‘http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20’
     )
-ON CONFLICT DO UPDATE SET;
+ON CONFLICT DO UPDATE SET description=description;
 </code></pre>
 
 <p>It’s been a long time coming for this, and it makes building applications that need this kind of behavior even easier. While it would have been great for this to be available years ago, kudos to Postgres and its community for taking the approach that is safe for your data. The result we have now both provides the desired behavior of create or update, <strong>and</strong> is performant without the risk of race conditions for your data.</p>
