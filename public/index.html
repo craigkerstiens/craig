@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="If you’ve followed anything I’ve written about Postgres, you know that I’m a fan. At the same time you know that there’s been one feature that so &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -72,7 +72,7 @@ $(document).ready(
     <meta property="twitter:site" content="craigkerstiens">
     <meta property="twitter:url" content="http://www.craigkerstiens.com">
     <meta property="twitter:title" content="Craig Kerstiens">
-    <meta property="twitter:description" content="If you’ve followed anything I’ve written about Postgres, you know that I’m a fan. At the same time you know that there’s been one feature that so many other databases have, which Postgres lacks and &hellip;">
+    <meta property="twitter:description" content="Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue Per User. In theory this tells you if you can &hellip;">
 
 
 </head>
@@ -116,6 +116,75 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/06/07/Moving-past-averages-in-sql/">
+		
+			Moving Past Averages in SQL (Postgres) – Percentiles</a>
+	</h2>
+	<div class="entry-content">
+		<p>Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue Per User. In theory this tells you if you can acquire new user how much you&rsquo;ll make off that user. Or maybe what&rsquo;s your average life time value of a customer. Yet, many that are more familiar looking and extracting meaning from data median or a few different looks at <a href="http://apmblog.dynatrace.com/2012/11/14/why-averages-suck-and-percentiles-are-great/">percentiles can be much more meaningful</a>.</p>
+
+<p>And while you can very easily get the <code>AVG</code> in Postgres, with a small amount more effort you can report on percentiles as well. Window functions have been around for some time in Postgres. They allow you to order your result set over a certain group. The most basic example is if you want to order by date, but know which one falls at place 10 in order you can use a window function and project out the <code>rank()</code>.</p>
+
+<p>Beyond outputting the rank yourself and doing extra manipulation Postgres has some great utilities to make the most common uses even easier. Being able to compute things such as the perc 95 directly on the data, or lay out for every record in the result where it falls within a percentile is hugely useful. Let&rsquo;s take a look:</p>
+
+<p>Assuming you have a table called purchases, which has a total in it we could try:</p>
+
+<pre><code>SELECT id,
+       total,
+       ntile(100) OVER (ORDER BY total) AS perc_rank
+FROM purchases
+</code></pre>
+
+<p>This would give us something like:</p>
+
+<pre><code>    id    |  total  | perc_rank
+----------|---------|-----------
+   264    |  12034  |    100
+   643    |  11830  |    100
+...
+...
+   304    |   751   |     95
+</code></pre>
+
+<p>What this would tell us is we have less than 5% of our purchases that have a total over 751. From here you can start to dig in and extract all sorts of different meanings, and by doing directly in SQL you&rsquo;re closer to the data and have one less processing step.</p>
+
+<p>Percentiles get even more fun with the ordered set functions that came out in <a href="/2014/02/02/Examining-PostgreSQL-9.4/">Postgres 9.4</a>. They even allow you to project out hypothetical values in certain cases. For now I&rsquo;d encourage adding ntile to your toolbox anytime you&rsquo;re analyzing average or medians it will make your world a bit better, and then consider exploring further on the <a href="http://www.postgresql.org/docs/9.4/static/functions-aggregate.html#FUNCTIONS-ORDEREDSET-TABLE">ordered set functions</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-06-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -495,63 +564,6 @@ $(document).ready(
 <div class="tags">
 
 	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/">
-		
-			What You Need to Know About April 7 and Your Security on the Web.</a>
-	</h2>
-	<div class="entry-content">
-		<p><img src="http://heartbleed.com/heartbleed.png" style="float:right;margin-left:20px;height:300px;"/>
-On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In the most basic sense this library allowed intentional external parties to acquire data that was thought to be safe and secure from whomever was running a vulnerable website. There was little to know one that was except from this due to their security practices, major examples of sites that were affected include:</p>
-
-<ul>
-<li>Yahoo</li>
-<li>Amazon.com</li>
-<li>Netflix</li>
-<li>Various banks</li>
-<li>Many more</li>
-</ul>
-
-
-<p>If you&rsquo;re interested in more technical details you can <a href="http://www.heartbleed.com">follow along</a> or on the <a href="https://blog.heroku.com/archives/2014/4/8/openssl_heartbleed_security_update">Heroku blog</a>.</p>
-
-<p>The short of it is you, yes you as in everyone, should rotate your passwords once all websites are safe. For further details please continue reading.</p>
-
-
-		
-		<a href="/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-08T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/technology/'>Technology</a>
 
 </div>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-05-13T12:11:48-07:00</updated>
+  <updated>2015-06-07T06:58:19-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Moving past averages in SQL (Postgres) – Percentiles]]></title>
+    <link href="http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql/"/>
+    <updated>2015-06-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql</id>
+    <content type="html"><![CDATA[<p>Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue Per User. In theory this tells you if you can acquire new user how much you&rsquo;ll make off that user. Or maybe what&rsquo;s your average life time value of a customer. Yet, many that are more familiar looking and extracting meaning from data median or a few different looks at <a href="http://apmblog.dynatrace.com/2012/11/14/why-averages-suck-and-percentiles-are-great/">percentiles can be much more meaningful</a>.</p>
+
+<p>And while you can very easily get the <code>AVG</code> in Postgres, with a small amount more effort you can report on percentiles as well. Window functions have been around for some time in Postgres. They allow you to order your result set over a certain group. The most basic example is if you want to order by date, but know which one falls at place 10 in order you can use a window function and project out the <code>rank()</code>.</p>
+
+<p>Beyond outputting the rank yourself and doing extra manipulation Postgres has some great utilities to make the most common uses even easier. Being able to compute things such as the perc 95 directly on the data, or lay out for every record in the result where it falls within a percentile is hugely useful. Let&rsquo;s take a look:</p>
+
+<p>Assuming you have a table called purchases, which has a total in it we could try:</p>
+
+<pre><code>SELECT id,
+       total,
+       ntile(100) OVER (ORDER BY total) AS perc_rank
+FROM purchases
+</code></pre>
+
+<p>This would give us something like:</p>
+
+<pre><code>    id    |  total  | perc_rank
+----------|---------|-----------
+   264    |  12034  |    100
+   643    |  11830  |    100
+...
+...
+   304    |   751   |     95
+</code></pre>
+
+<p>What this would tell us is we have less than 5% of our purchases that have a total over 751. From here you can start to dig in and extract all sorts of different meanings, and by doing directly in SQL you&rsquo;re closer to the data and have one less processing step.</p>
+
+<p>Percentiles get even more fun with the ordered set functions that came out in <a href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/">Postgres 9.4</a>. They even allow you to project out hypothetical values in certain cases. For now I&rsquo;d encourage adding ntile to your toolbox anytime you&rsquo;re analyzing average or medians it will make your world a bit better, and then consider exploring further on the <a href="http://www.postgresql.org/docs/9.4/static/functions-aggregate.html#FUNCTIONS-ORDEREDSET-TABLE">ordered set functions</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5 – A first look]]></title>
@@ -1848,7 +1884,7 @@ function mce_success_cb(resp){
 
 <h3>1 email to 100 vs. 100 emails to 1</h3>
 
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x61;&#108;&#108;&#64;&#121;&#111;&#x75;&#x72;&#99;&#111;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#46;&#x63;&#111;&#x6d;">&#x61;&#x6c;&#108;&#64;&#x79;&#x6f;&#x75;&#x72;&#99;&#x6f;&#x6d;&#112;&#97;&#110;&#x79;&#46;&#99;&#x6f;&#109;</a> or <a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#111;&#x75;&#x72;&#103;&#x72;&#111;&#x75;&#x70;&#64;&#109;&#x79;&#99;&#x6f;&#x6d;&#x70;&#97;&#110;&#121;&#46;&#x63;&#111;&#x6d;&#46;">&#111;&#117;&#x72;&#103;&#x72;&#111;&#x75;&#112;&#64;&#x6d;&#x79;&#99;&#111;&#x6d;&#x70;&#x61;&#110;&#x79;&#46;&#99;&#111;&#109;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
+<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#97;&#108;&#108;&#x40;&#121;&#111;&#117;&#114;&#x63;&#111;&#109;&#x70;&#x61;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;">&#97;&#108;&#x6c;&#x40;&#x79;&#111;&#117;&#114;&#99;&#x6f;&#109;&#112;&#x61;&#x6e;&#121;&#46;&#x63;&#111;&#x6d;</a> or <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x6f;&#x75;&#x72;&#x67;&#x72;&#x6f;&#117;&#112;&#64;&#x6d;&#x79;&#x63;&#111;&#x6d;&#112;&#97;&#x6e;&#x79;&#x2e;&#x63;&#111;&#109;&#46;">&#x6f;&#x75;&#114;&#103;&#x72;&#x6f;&#117;&#112;&#64;&#109;&#x79;&#99;&#x6f;&#x6d;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#109;&#46;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
 
 <p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
 
@@ -2269,48 +2305,6 @@ ALTER TABLE foo ALTER COLUMN bar NOT NULL;
 <h3>Where to</h3>
 
 <p>Some of the shifts in schema-less or really in other databases in general are not so large they cannot be subsummed into a broader option. At the same time there are some strong merits such as the ones above which do take an active effort to deliver on expanding what is a &ldquo;relational database&rdquo;.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Where to start with developer content]]></title>
-    <link href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/"/>
-    <updated>2014-01-16T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content</id>
-    <content type="html"><![CDATA[<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
-
-<h3>Stop marketing</h3>
-
-<p>Forget trying to &ldquo;market&rdquo; to developers. Hopefully you at least have developers that believe in the product their building, if thats not the case then find a new product or a new team. If you&rsquo;ve got a product targetted at developers and a team that believes in it then you&rsquo;re already half way there to marketing it. Now back to the first point, forget trying to market it. Start with building some form of an audience, reputation, respect among other developers. This isn&rsquo;t done through ads, email marketing, SEO or any of that. Its done by creating content that developers find interesting, as a first step forget your product entirely, but don&rsquo;t worry we&rsquo;ll get there soon enough.</p>
-
-<!--more-->
-
-
-<h3>Sourcing content</h3>
-
-<p>The first piece of it on finding content should actually be extremely simple. Typically engineers love sharing knowledge and information. At least once a week there&rsquo;s an email out to all the engineers of a truly interesting approach to something. This content is often not in a perfect form for external publication, but quite close. In particular Heroku has <a href="https://twitter.com/mmcgrana">one employee</a>, an early employee and now architect, that every email he sends to such a group I pull down and save for future reading. Another example of this was one of the Heroku founder Adam Wiggins, you can find many similar emails slightly cleaned up as blog posts on his own <a href="https://adam.heroku.com/">blog</a>.</p>
-
-<p>Take these emails, find someone technical enough to clean them up and ship them. Your goals here are to simply build some level of connection with other developers. Now a lot of time these may not be in the right &ldquo;voice&rdquo; for your company blog. Thats quite fine, I&rsquo;m a strong proponent of letting developers create their own personalitiies. The place for the content then may not always be on the company blog. In general I find there&rsquo;s three groupings:</p>
-
-<ul>
-<li>Content for the company blog by an employee</li>
-<li>Content for an individuals blog (the caveat here is they need to regularly create content &ndash; every 6 months doesnt cut it)</li>
-<li>Content for an <a href="http://codeascraft.com/">engineering blog</a> (if you have enough of the above that blog infrequently this is a great home for it)</li>
-</ul>
-
-
-<h3>Don&rsquo;t worry about the product yet</h3>
-
-<p>No really don&rsquo;t worry about pitching your product. There was an awesome piece on the <a href="http://insideintercom.io/new-features-usually-flop/">intercom blog talking about why most features fail</a> and how companies pitch the details versus the problem they solve. Though there was a hidden gem in there:</p>
-
-<blockquote><p>Telling your customers something is a “ground up rewrite”, “HTML5 based”, “responsive” or anything like that will miss the mark unless you’re selling to developers.</p><footer><strong>[Des Traynor] [http://insideintercom.io/new-features-usually-flop/] [New Features Usually Flop]</strong></footer></blockquote>
-
-
-<p>For companies targetting developers this actually works really well, as a developer I care about the how. Simply put its interesting. Another great example of this is <a href="http://blog.priceonomics.com/">priceonomics</a>. To be honest I only checked what they actually do in writing this post, but their posts I regularly find interesting.</p>
-
-<h3>Whats next</h3>
-
-<p>What do you want to know about? Creating a voice/brand, starting to pitch your product, content distribution? Let me know. A good about of my time is spent on these and happy to discuss further on whats valuable to others so we don&rsquo;t have to suffer through painful marketing. Let me know <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a> or <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
 ]]></content>
   </entry>
   
