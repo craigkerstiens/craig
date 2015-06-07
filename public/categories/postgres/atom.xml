@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-06-07T06:58:19-07:00</updated>
+  <updated>2015-06-07T07:00:27-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -19,6 +19,9 @@
     <updated>2015-06-07T00:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql</id>
     <content type="html"><![CDATA[<p>Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue Per User. In theory this tells you if you can acquire new user how much you&rsquo;ll make off that user. Or maybe what&rsquo;s your average life time value of a customer. Yet, many that are more familiar looking and extracting meaning from data median or a few different looks at <a href="http://apmblog.dynatrace.com/2012/11/14/why-averages-suck-and-percentiles-are-great/">percentiles can be much more meaningful</a>.</p>
+
+<!--more-->
+
 
 <p>And while you can very easily get the <code>AVG</code> in Postgres, with a small amount more effort you can report on percentiles as well. Window functions have been around for some time in Postgres. They allow you to order your result set over a certain group. The most basic example is if you want to order by date, but know which one falls at place 10 in order you can use a window function and project out the <code>rank()</code>.</p>
 

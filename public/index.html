@@ -128,35 +128,9 @@ $(document).ready(
 	<div class="entry-content">
 		<p>Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue Per User. In theory this tells you if you can acquire new user how much you&rsquo;ll make off that user. Or maybe what&rsquo;s your average life time value of a customer. Yet, many that are more familiar looking and extracting meaning from data median or a few different looks at <a href="http://apmblog.dynatrace.com/2012/11/14/why-averages-suck-and-percentiles-are-great/">percentiles can be much more meaningful</a>.</p>
 
-<p>And while you can very easily get the <code>AVG</code> in Postgres, with a small amount more effort you can report on percentiles as well. Window functions have been around for some time in Postgres. They allow you to order your result set over a certain group. The most basic example is if you want to order by date, but know which one falls at place 10 in order you can use a window function and project out the <code>rank()</code>.</p>
-
-<p>Beyond outputting the rank yourself and doing extra manipulation Postgres has some great utilities to make the most common uses even easier. Being able to compute things such as the perc 95 directly on the data, or lay out for every record in the result where it falls within a percentile is hugely useful. Let&rsquo;s take a look:</p>
-
-<p>Assuming you have a table called purchases, which has a total in it we could try:</p>
-
-<pre><code>SELECT id,
-       total,
-       ntile(100) OVER (ORDER BY total) AS perc_rank
-FROM purchases
-</code></pre>
-
-<p>This would give us something like:</p>
-
-<pre><code>    id    |  total  | perc_rank
-----------|---------|-----------
-   264    |  12034  |    100
-   643    |  11830  |    100
-...
-...
-   304    |   751   |     95
-</code></pre>
-
-<p>What this would tell us is we have less than 5% of our purchases that have a total over 751. From here you can start to dig in and extract all sorts of different meanings, and by doing directly in SQL you&rsquo;re closer to the data and have one less processing step.</p>
-
-<p>Percentiles get even more fun with the ordered set functions that came out in <a href="/2014/02/02/Examining-PostgreSQL-9.4/">Postgres 9.4</a>. They even allow you to project out hypothetical values in certain cases. For now I&rsquo;d encourage adding ntile to your toolbox anytime you&rsquo;re analyzing average or medians it will make your world a bit better, and then consider exploring further on the <a href="http://www.postgresql.org/docs/9.4/static/functions-aggregate.html#FUNCTIONS-ORDEREDSET-TABLE">ordered set functions</a></p>
 
 		
-		
+		<a href="/2015/06/07/Moving-past-averages-in-sql/" class="more-link">Read on </a>
 	</div>
 
 
