@@ -28,7 +28,7 @@ email: craig.kerstiens@gmail.com
 root: /
 permalink: /:year/:month/:day/:title/
 source: source
-destination: public
+destination: public_html
 plugins: plugins
 code_dir: downloads/code
 category_dir: categories
@@ -72,12 +72,12 @@ twitter_user: craigkerstiens
 twitter_tweet_button: true
 
 # Google +1
-google_plus_one: false
+google_plus_one: true
 google_plus_one_size: medium
 
 # Google Plus Profile
 # Hidden: No visible button, just add author information to search results
-googleplus_user:
+googleplus_user: 109069245899887196751
 googleplus_hidden: false
 
 # Pinboard
