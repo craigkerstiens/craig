@@ -1,0 +1,250 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>A year's look at Postgres Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">A Year's Look at Postgres</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
+
+<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
+
+<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
+
+<!--more-->
+
+
+<h3>The inagural issue</h3>
+
+<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
+
+<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
+
+<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
+
+<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
+
+<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
+
+<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
+
+<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
+
+<h3>A mix of notable entries</h3>
+
+<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
+
+<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
+
+<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
+
+<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
+
+<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
+
+<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
+
+<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
+
+<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
+
+<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
+
+<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
+
+<h3>In conclusion</h3>
+
+<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-26T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

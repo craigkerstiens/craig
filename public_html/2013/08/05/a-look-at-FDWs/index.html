@@ -1,0 +1,264 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>A look at Foreign Data Wrappers Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="There are two particular sets of features that continue to keep me very excited about the momentum of Postgres. And while PostgreSQL has had some &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">A Look at Foreign Data Wrappers</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>There are two particular sets of features that continue to keep me very excited about the momentum of Postgres. And while PostgreSQL has had some great momentum in the past few years these features may give it an entirely new pace all together. One is extensions, which is really its own category. Dimitri Fontaine was talking about doing a full series just on extensions, so here&rsquo;s hoping he does so I dont have to :)</p>
+
+<p>One subset of extensions which I consider entirely separate is the other thing, which is foreign data wrappers or FDWs. FDWs allow you to connect to other data sources from within Postgres. From there you can query them with SQL, join across disparate data sets, or join across different systems. Recently I had a good excuse to give the <code>postgres_fdw</code> a try. And while I&rsquo;ve blogged about the Redis FDW previously, the Postgres one is particularly exciting because with PostgreSQL 9.3 it will ship as a contrib module, which means all Postgres installers should have it&hellip; you just have to turn it on.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s take a look at getting it setup and then dig into it a bit. First, because I don&rsquo;t have Postgres 9.3 sitting around on my system I&rsquo;m going to provision one from Heroku Postgres:</p>
+
+<pre><code>$ heroku addons:add heroku-postgresql:crane --version 9.3
+</code></pre>
+
+<p>Once it becomes available I&rsquo;m going to connect to it then enable the extension:</p>
+
+<pre><code>$ heroku pg:psql BLACK -acraig
+# CREATE EXTENSION postgres_fdw;
+</code></pre>
+
+<p>Now its there, so we can actually start using it. To use the FDW there&rsquo;s four basic things you&rsquo;ll want to do:</p>
+
+<ol>
+<li>Create the remote server</li>
+<li>Create a user mapping for the remote server</li>
+<li>Create your foreign tables</li>
+<li>Start querying some things</li>
+</ol>
+
+
+<h3>The setup</h3>
+
+<p>You&rsquo;ll only need to do each of the following once, once you&rsquo;re server, user and foreign table are all setup you can simply query away. This is a nice advantage over db_link which only exists for the set session. <em>One downside I did find was that you can&rsquo;t use a full Postgres connection string, which would make setting it up much simpler</em>. So onto setting up our server:</p>
+
+<pre><code># CREATE SERVER app_db 
+  FOREIGN DATA WRAPPER postgres_fdw 
+  OPTIONS (dbname 'dbnamehere', host 'hostname-here);
+</code></pre>
+
+<p>Next we&rsquo;ll actually create our user mapping. In this case we&rsquo;ll take the remote username and password and map it to our current user we&rsquo;re already connected with.</p>
+
+<pre><code># CREATE USER MAPPING for user_current 
+  SERVER app_db 
+  OPTIONS (user 'remote_user', password 'remote_password');
+</code></pre>
+
+<p>And finally we&rsquo;re going to configure our tables. <em>There were some additional pains here as there wasn&rsquo;t a perfectly clean way to generate the <code>CREATE TABLE</code>. Sure you could pg_dump just that table, but overall it felt a bit cludgey.</em></p>
+
+<pre><code># CREATE FOREIGN TABLE users
+  (
+    id integer,
+    email text,
+      created_at timestamp,
+      first_name text,
+      last_name text
+  )
+  SERVER app_db OPTIONS (table_name 'users')
+</code></pre>
+
+<p>Now we&rsquo;ve got all of our local data, as well as remote data. For that report against two databases where you previously wrote a ruby or python script, ran a query, constructed another query, then executed it you can directly do in your database. We can simply query our new table &ndash; <code>SELECT * FROM users LIMIT 5;</code></p>
+
+<p>But the real power of foreign data wrappers goes well beyond just Postgres to Postgres. Having a defined contract in translating from one system to another, will really allow reinventing the way we work with data. This is especially true in large datasets where doing ETL on terrabytes of data takes longer than asking the questions of it.</p>
+
+<p>While we&rsquo;re waiting for more FDWs to be ready to use in production situations the Postgres FDW is a great start, <em>though the Redis one is on its way</em>. Even better is that it ships with standard installs of Postgres, meaning it will see more usage and help push them to advance further.</p>
+
+<p><em>One final nicety, you&rsquo;re not required to have ALL Postgres 9.3 DBs, just one that can then connect to the others, so go ahead and give it try :)</em></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-05T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

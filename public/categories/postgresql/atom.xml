@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-06-07T07:00:27-07:00</updated>
+  <updated>2015-11-30T08:53:21-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,117 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
+    <link href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/"/>
+    <updated>2015-11-30T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro</id>
+    <content type="html"><![CDATA[<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
+
+<ol>
+<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
+<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
+</ol>
+
+
+<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
+
+<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
+
+<!--more-->
+
+
+<h3>Getting setup</h3>
+
+<p>Without further adieu here&rsquo;s a quick tour around it.</p>
+
+<p>First let&rsquo;s pull down the example database from <a href="http://postgresguide.com/setup/example.html">PostgresGuide</a></p>
+
+<p>Then let&rsquo;s setup out Node app:</p>
+
+<pre><code>$ npm init
+$ npm install massive --save
+</code></pre>
+
+<h3>Connecting and querying</h3>
+
+<p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
+
+<pre><code>var massive = require("massive");
+var connectionString = "postgres://:@localhost/example";
+
+var db = massive.connectSync({connectionString : connectionString});
+
+db.users.find(1, function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>Upon first run if you&rsquo;re like me and use the <a href="http://postgresguide.com/setup/example.html">PostgresGuide example database</a> (which I now need to go back and tidy up), you&rsquo;ll get the following:</p>
+
+<pre><code>db.users.find(1, function(err,res){
+        ^
+TypeError: Cannot read property 'find' of undefined
+</code></pre>
+
+<p>I can&rsquo;t describe how awesome it is to see this. What&rsquo;s happening is when Massive loads up it&rsquo;s connecting to your database, checking what tables you have. In this case though because we don&rsquo;t have a proper primary key defined it doesn&rsquo;t load them. It could treat id as some magical field of course like Rails used to and ignore the need for an index, but instead it not only encourages a good database design but requires it.</p>
+
+<p>So let&rsquo;s go back and create our index in our database:</p>
+
+<pre><code>$ psql example
+$ alter table users add primary key (id);
+</code></pre>
+
+<p>Alright now let&rsquo;s run our script again with <code>node index.js</code> and see what we have:</p>
+
+<pre><code>{ id: 1,
+  email: 'john.doe@gmail.com',
+  created_at: Thu Sep 24 2015 03:42:52 GMT-0700 (PDT),
+  deleted_at: null }
+</code></pre>
+
+<p>Perfect! Now we&rsquo;re all connected and it even queried our database for us. Now let&rsquo;s take a few more look at some of the operators.</p>
+
+<h3>Running an arbitrary query</h3>
+
+<p><code>db.run</code> will let me run any arbritrary SQL. An example such as <code>db.run("select 'hello'")</code> will produce [ { &lsquo;?column?&rsquo;: &lsquo;hello&rsquo; } ].</p>
+
+<p>This makes it nice and easier for us to break out of the standard ORM model and just run SQL.</p>
+
+<h3>Find for quick look ups</h3>
+
+<p>Similar to so many other database tools <code>find</code> will offer you the most common quick look ups:</p>
+
+<pre><code>$ db.users.find({email: 'jane.doe@gmail.com'}, function(err, res){console.log(res)});
+$ db.users.find({'created_at &gt;': '2015-09-24'}, function(err, res){console.log(res)});
+</code></pre>
+
+<p>And of course there&rsquo;s a where operator for multiple conditions.</p>
+
+<h3>Structuring queries in your application</h3>
+
+<p>While in the next post I&rsquo;ll dig in deep to JSON, this is perhaps my favorite feature of Massive&hellip; It&rsquo;s design for pulling out queries into individudal SQL files. Simply create a <code>db</code> folder and put your SQL in there. Let&rsquo;s take the most basic example of our user email lookup and put it in <code>user_lookup.sql</code></p>
+
+<pre><code>SELECT *
+FROM users
+WHERE email = $1
+</code></pre>
+
+<p>Now back in our application we can run this and pass in a parameter to it:</p>
+
+<pre><code>db.user_lookup(['jane.doe@gmail.com'], function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>This separation of our queries from our code makes it easier to track them, view diffs, and even more so <a href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/">create very readable SQL</a>.</p>
+
+<h3>Up next</h3>
+
+<p>So sure, you can connect to a database, you can query some things. There were a couple of small but more novel things that we blew through in here. First is the fact I didn&rsquo;t have to define all my schema, it just knew it as <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">it really should</a>. The separation of SQL queries you&rsquo;ll custom write into files is simple, but will make for much more maintainable applications over the long term. And best of all is the JSON support, which I&rsquo;ll get to soon&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
@@ -648,64 +759,6 @@ function mce_success_cb(resp){
 
 <!--End mc_embed_signup-->
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A year's look at Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
-    <updated>2014-03-26T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
-    <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
-
-<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
-
-<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
-
-<!--more-->
-
-
-<h3>The inagural issue</h3>
-
-<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
-
-<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
-
-<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
-
-<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
-
-<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
-
-<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
-
-<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
-
-<h3>A mix of notable entries</h3>
-
-<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
-
-<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
-
-<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
-
-<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
-
-<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
-
-<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
-
-<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
-
-<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
-
-<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
-
-<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
-
-<h3>In conclusion</h3>
-
-<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
 ]]></content>
   </entry>
   

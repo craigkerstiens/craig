@@ -1,0 +1,640 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title> Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/17/array-agg/">
+		
+			Using Array_agg in Postgres – Powerful and Flexible</a>
+	</h2>
+	<div class="entry-content">
+		<p>In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do this by running a query to get much of the raw data, looping over the data and pushing it into a set, appending each new value to the appropriate key. Hopefully, it&rsquo;s not a surprise that there&rsquo;s a much better way to do this with PostgreSQL.</p>
+
+<p>Postgres has a flexible and robust <a href="/2012/08/20/arrays-in-postgres/">array datatype</a> that comes with a variety of functions. Even without taking advantage of the array datatype in <a href="/2012/11/06/django-and-arrays/">your application</a>, you can still take advantage of some of the functions to get the functionality you need. Lets take a look at an example schema and use case.</p>
+
+
+		
+		<a href="/2013/04/17/array-agg/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-17T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/16/creating-advocates/">
+		
+			Scaling Evangelism – Creating Advocates</a>
+	</h2>
+	<div class="entry-content">
+		<p>The first area I tend to think about when it comes to developer marketing is around advocates. A simple definition of an advocate is <em>someone that speaks/writes in favor of some thing</em>.</p>
+
+<p>Creating advocates is a means of creating more of myself to go out and talk loudly and ideally effectively. However, they do take time to cultivate and it is a hard item to track. But by cultivating advocates I&rsquo;m able to scale what would otherwise be a bottleneck of my own personal time.</p>
+
+
+		
+		<a href="/2013/04/16/creating-advocates/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-16T07:59:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2013</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/12/perspective-on-developer-marketing/">
+		
+			Doing Marketing (for Developers) Differently</a>
+	</h2>
+	<div class="entry-content">
+		<p>As developers we can tend to be a fickle bunch; especially in certain open source communities. We like to see intelligence and systems applied to things, hope for a better world through making things open, and appreciate when others relate to our world as we often attempt to relate to theirs. Marketing is often a loaded word when it comes to developers – leaving mixed feelings about webinars, email campaigns, and the like.</p>
+
+<p><em>A quick clarification in terms of marketing I&rsquo;m referring to product marketing, but of a technical product. This is based on the idea that <a href="http://thenewkingmakers.com/">developers are the new kingmakers</a> and when marketing a product to them it needs to be done differently.</em></p>
+
+
+		
+		<a href="/2013/04/12/perspective-on-developer-marketing/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketin/'>Marketin</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/31/why-i-blog/">
+		
+			Why I Blog</a>
+	</h2>
+	<div class="entry-content">
+		<p>I blog because I&rsquo;m lazy. There&rsquo;s more too it though: In any given day I may explain something to someone, the first time I do this I make a bit of a mental note. The second time I do this, especially within a short time frame I make a physical note of this in the form of the title of a blog post. Once I&rsquo;m already to a second time of doing this its almost inevitable I&rsquo;ll continue repeating myself – and its valuable to others.</p>
+
+
+		
+		<a href="/2013/03/31/why-i-blog/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/13/planning-and-prioritizing/">
+		
+			Prioritizing and Planning Within Heroku Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>Over a year ago I blogged about Heroku&rsquo;s approach to <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools</a>. Since that time Heroku has grown from around 25 people to over 100, we&rsquo;ve continued to iterate and find new tools that work for how we do things. For many of the <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">product management</a> and software engineering books I&rsquo;ve read I&rsquo;ve yet to find something that helps a team priorize in a fashion I that feels right.</p>
+
+<p>One process emerged nearly a year ago from within the <a href="https://postgres.heroku.com">Heroku Postgres</a> team and is now followed by many others. Within a team this process is now commonly conducted each 6 months. Lets take a look at how this process looks</p>
+
+
+		
+		<a href="/2013/03/13/planning-and-prioritizing/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/heroku/'>Heroku</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/07/Fixing-django-db-connections/">
+		
+			Fixing Database Connections in Django</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;re looking to get better performance from your Django apps you can check out <a href="http://www.amazon.com/Pro-Django-Experts-Voice-Development/dp/1430210478?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Pro Django</a>, <a href="http://www.amazon.com/PostgreSQL-High-Performance-Gregory-Smith/dp/184951030X?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">PostgreSQL High Performance</a>, or read some my earlier posts on <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">Postgres Performance</a>. All of these are of course good things to do – you can also start by correcting an incredibly common but also painful performance issue, that until 1.6 is unaddressed in Django.</p>
+
+<p>Django&rsquo;s current default behavior is to establish a connection for each request within a Django application. In many cases any particularly in distributed cloud environments this is a large time sink of your response time. An example application running on <a href="http://www.heroku.com">Heroku</a> shows a typical connection time of 70ms. A large part of this time is the SSL negotiation that occurs in connecting to your database, <em>which is a good practice to ensure security of your data</em>. Regardless, this is a long time in simply establishing a connection. As a point of comparisson its commonly encourage that most queries to your database are under 10ms.</p>
+
+<p>An example that highlights this in a small lightweight application shows the bulk of a request time being within a connection displayed by <a href="http://www.newrelic.com">New Relic</a>:</p>
+
+<p><img src="http://f.cl.ly/items/0X3u0e3Q3G0L19263k2Z/Screenshot_3_6_13_1_12_PM.png" alt="connection time" /></p>
+
+
+		
+		<a href="/2013/03/07/Fixing-django-db-connections/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/02/21/more-out-of-psql/">
+		
+			Getting More Out of Psql (the PostgreSQL CLI)</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
+
+<h2>Get the most of psql</h2>
+
+<p>Psql, the CLI postgreSQL client, is a powerful tool. Sadly, lot of developers are not aware of the features and instead look for a GUI to provide what they need. Let&rsquo;s fly over what can psql do for you.</p>
+
+
+		
+		<a href="/2013/02/21/more-out-of-psql/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-21T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/02/13/How-I-Work-With-Postgres/">
+		
+			How I Work With Postgres – Psql, My PostgreSQL Admin</a>
+	</h2>
+	<div class="entry-content">
+		<p>On at least a weekly basis and not uncommonly multiple times in a single week I get this question:</p>
+
+<blockquote><p>I&#8217;ve been hunting for a nice PG interface that works within other things. PGAdmin kinda works, except the SQL editor is a piece of shit</p><footer><strong>@neilmiddleton</strong> <cite><a href='https://twitter.com/neilmiddleton'></a></cite></footer></blockquote>
+
+
+<p>Sometimes it leans more to, what is the Sequel Pro equivilant for Postgres. My default answer is I just use psql, though I do have to then go on to explain how I use it. For those just interested you can read more below or just get the highlights here:</p>
+
+<ul>
+<li>Set your default <code>EDITOR</code> then use \e</li>
+<li>On postgres 9.2 and up <code>\x auto</code> is your friend</li>
+<li>Set history to unlimited</li>
+<li><code>\d</code> all the things</li>
+</ul>
+
+
+<p>Before going into detail on why psql works perfectly fine as an interface I want to rant for a minute about what the problems with current editors are and where I expect them to go in the future. First this is not a knock on the work thats been done on previous ones, for their time PgAdmin, phpPgAdmin, and others were valuable tools, but we&rsquo;re coming to a point where theres a broader set of users of databases than ever before and empowering them is becoming ever more important.</p>
+
+<p>Empowering developers, DBA&rsquo;s, product people, marketers and others to be comfortable with their database will lead to more people taking advantage of whats in their data. <a href="http://craigkerstiens.com/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a> was a great start to this laying a great foundation for valuable information being captured. Even with all of the powerful stats being captured in the statistics of PostgreSQL so many are still terrified when they see something like:</p>
+
+<pre><code>                                                   QUERY PLAN
+----------------------------------------------------------------------------------------------------------------
+ Hash Join  (cost=4.25..8.62 rows=100 width=107) (actual time=0.126..0.230 rows=100 loops=1)
+   Hash Cond: (purchases.user_id = users.id)
+   -&gt;  Seq Scan on purchases  (cost=0.00..3.00 rows=100 width=84) (actual time=0.012..0.035 rows=100 loops=1)
+   -&gt;  Hash  (cost=3.00..3.00 rows=100 width=27) (actual time=0.097..0.097 rows=100 loops=1)
+         Buckets: 1024  Batches: 1  Memory Usage: 6kB
+         -&gt;  Seq Scan on users  (cost=0.00..3.00 rows=100 width=27) (actual time=0.007..0.042 rows=100 loops=1)
+ Total runtime: 0.799 ms
+(7 rows)
+</code></pre>
+
+<p>Empowering more developers by surfacing this information in a digestable form, such as building on top of <code>pg_stat_statements</code> tools such as <a href="http://datascope.heroku.com">datascope</a> by <a href="http://www.twitter.com/leinweber">@leinweber</a> and getting this to be part of the default admin we will truly begin empowering a new set of user.</p>
+
+<p>But enough of a detour, those tools aren&rsquo;t available today. If you&rsquo;re interested in helping build those to make the community better please reach out. For now I live in a work where I&rsquo;m quite content with simple ole <code>psql</code> here&rsquo;s how:</p>
+
+
+		
+		<a href="/2013/02/13/How-I-Work-With-Postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-13T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/02/08/django-read-only-mode/">
+		
+			Introducing Django-db-tools</a>
+	</h2>
+	<div class="entry-content">
+		<p>For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple add a <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">column here or add an index there</a>, but rather truly sizeable migrations&hellip; Going from <a href="http://lanyrd.com/blog/2012/lanyrds-big-move/">MySQL to Postgres</a> or migrating from an older version of Postgres such as a <a href="http://blog.sendhub.com/post/30041247598/how-to-upgrade-a-legacy-heroku-database">32 bit instance</a> to a newer 64 bit instance. In these cases the default approach is to just schedule downtime often throwing up a splash screen saying so.</p>
+
+<p>For many sites this approach is simply wrong and lazy, with little effort you can improve the experience and there by ease the burden in conducting these types of migrations. By having the ability to turn your site into a read only mode which <a href="http://twitter.com/simonw">Simon Wilson</a> talked about in his post on Lanyrd you can still continue to operate just in a limited capacity. <a href="http://www.aeracode.org/2012/11/13/one-change-not-enough/">Andrew Godwin</a> further talks about some of this as well in regards to the Lanyrd move and even includes  the script they used to <a href="https://github.com/lanyrd/mysql-postgresql-converter/">migrate data from MySQL to Postgres</a>. Though just in talking with Simon about this a week ago it occurred to me they had not released the code for their read-only mode.</p>
+
+<p>Finally onto the announcing, today I&rsquo;m releasing <a href="https://github.com/craigkerstiens/django-db-tools">django-db-tools</a>. This is currently a very lightweight utility that allows you to flip your site into two modes.</p>
+
+
+		
+		<a href="/2013/02/08/django-read-only-mode/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/01/10/more-on-postgres-performance/">
+		
+			More on Postgres Performance</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you missed my previous post on <a href="/2012/10/01/understanding-postgres-performance/">Understanding Postgres Performance</a> its a great starting point. On this particular post I&rsquo;m going to dig in to some real life examples of optimizing queries and indexes.</p>
+
+<h3>It all starts with stats</h3>
+
+<p>I wrote about some of the <a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/">great new features in Postgres 9.2</a> in the recent announcement on support of Postgres 9.2 on <a href="https://www.heroku.com">Heroku</a>. One of those awesome features, is <a href="http://www.postgresql.org/docs/9.2/static/pgstatstatements.html">pg_stat_statements</a>. Its not commonly known how much information Postgres keeps about your database (beyond the data of course), but in reality it keeps a great deal. Ranging from basic stuff like table size to cardinality of joins to distribution of indexes, and with pg_stat_statments it keeps a normalized record of when queries are run.</p>
+
+
+		
+		<a href="/2013/01/10/more-on-postgres-performance/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/4/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/6/" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'craigkerstiens';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

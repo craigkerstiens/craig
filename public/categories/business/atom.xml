@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Business | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/business/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-06-07T07:00:27-07:00</updated>
+  <updated>2015-11-30T08:53:21-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,190 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Seeding a sharing-economy or platform company]]></title>
+    <link href="http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company/"/>
+    <updated>2015-10-02T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company</id>
+    <content type="html"><![CDATA[<p>These days if you&rsquo;re creating a company you likely hope to accomplish more with less people, two ways of doing this fall to: The sharing economy and creating a platform. It&rsquo;s easy to see the case for this when you have such <a href="http://graphics.wsj.com/billion-dollar-club/">unicorns</a> like AirBnB or Uber. The opportunity for each of those to compete against hotel chains or taxi services which each need to manage their own inventory is incredibly exciting and revolutionary. In a similar fashion platforms can offer much the same, Heroku&rsquo;s platform and marketplace made it easier than ever for developers to click a button and get everything they needed years ago. It&rsquo;s not just their code, it&rsquo;s everything from <a href="https://www.heroku.com/postgres">Postgres</a> to Mongo to <a href="https://elements.heroku.com/addons#logging">Logging</a>. Or take the app store as example. Smart phones weren&rsquo;t a new thing when the iPhone came out, but it was only the saviest of users that had apps installed on their windows smartphone or blackberry. The app store made the iPhone different than any other phone by allowing others to build and improve it, turning the iPhone not into a phone but a platform.</p>
+
+<!--more-->
+
+
+<p>Platforms and the sharing economy both let you get further than having to take on the costs of offering the equivilent all on your own. And while a great idea to venture into one of these two areas, starting them isn&rsquo;t as trivial as simply deciding to. For both of these you have issues with having a two sided market, first you have to convince the providers to come along, then the customers or vice versa. As a result of this two sided market issue the easiest way to actually start is by bootstrapping it yourself – or faking it til you make it.</p>
+
+<p>What are some good examples of faking this? I&rsquo;m sure you can probably find some good stories going back about AirBnB or Uber, but let&rsquo;s assume times were different then. Let&rsquo;s take a look at a very recent example: <a href="http://techcrunch.com/2015/08/26/lugg-an-app-for-on-demand-short-distance-moves-raises-3-8-million/">Lugg</a> which just launched in the latest batch of YC. Lugg is Uber for moving essentially, allowing you to on-demand request furniture moved from one place to another. Early on Lugg built their app, then waited for requests to come in, then the founders got in a truck and moved the furniture themselves. As a customer the founders are likely providing a great experience, without ever having to tip their hat at the ways their hacking the impression of being a large well oiled machine.</p>
+
+<p>But what about a platform? Slack continues to grow like wildfire as the new medium for communication. These days there&rsquo;s endless integrations for slack, and I expect they&rsquo;ll continue to expand what a platform for communication looks like. But a year ago they were quite a ways from having people show up at their door to add an integration. Sure there were people using them, but to expect github/trello/asana to immediately build an integration for every new flavor of the week tool would be crazy. Yet, without these integrations slack wouldn&rsquo;t be nearly as useful as it is today–and probably wouldn&rsquo;t have seen the growth it&rsquo;s seen. In the early days of a platform the easiest way to get these integrations and partners in place is to show up and build the work yourself. Slack carried the weight early of building these integrations, much as Heroku add-ons showed up at partners offices and help write the code to get them as a provider in the marketplace. And while both Slack and Heroku are larger companies now, it still holds true for smaller ones starting today. <a href="https://www.blockspring.com/">Blockspring</a>, a company which aims to make web services available through spreadsheets, had to do very much the same thing building their initial integrations themselves. Now with their rapidly growing user base and already large collection of APIs they may be able to shift the model, but early on that wasn&rsquo;t so much an option.</p>
+
+<p>If you want to build a platform, start by creating the impression of one while still carrying the load yourself. Yes, move to a true platform as soon as you can, but don&rsquo;t wait for others to show up before you go that route.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A guide to analyst relations for startups]]></title>
+    <link href="http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/"/>
+    <updated>2015-07-25T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups</id>
+    <content type="html"><![CDATA[<p>When it comes to go to market and marketing there&rsquo;s lots of pieces in a toolchest that all work together. One that comes a bit later, but if used properly (much like a <a href="/2015/07/21/An-intro-PR-guide-for-startups/">PR agency</a>) can be valuable is industry analysts. And while working with a PR agency can quickly start to become clear. How to work with analysts so it is productive on both sides can take a bit longer to figure out, or at least it did for me. Even before you do start working with them there&rsquo;s the question of if or when should you. Here&rsquo;s hoping this primer makes it a bit faster and easier for others.</p>
+
+<!--more-->
+
+
+<h3>What is an analyst</h3>
+
+<p><em>Apologies to all analysts, but of all parts of this post I might butcher this one</em></p>
+
+<p>Analysts talk to a lot of companies, both the ones making products as well as the ones purchasing them. I&rsquo;m not actually sure what the spread is I&rsquo;d guess 80-20. A large output of this and other activities is  creating various reports and rankings. Gartner&rsquo;s Magic Quadrant is probably the most well known industry ranking. Much of what they create isn&rsquo;t freely available for consumption so you likely don&rsquo;t see the sheer volume of insights they put out.</p>
+
+<h3>Why would you engage with an analyst</h3>
+
+<p>So what do they do for you? There’s really two major buckets:</p>
+
+<p><strong>Help with sales/marketing</strong> &ndash; Given they&rsquo;re informing and influencing buying decisions of businesses they can be one more person on your side. If a launch in Techcrunch makes business foo aware of product bar, then an analyst report or ranking can help sway a decision on whether to try bar vs. baz.</p>
+
+<p><strong>Consulting</strong> &ndash; The other major opportunity is for the analyst to give some form of guidance. In a larger company when you already have an established product they should absolutely be part of your launch process (more on that in a future post). They&rsquo;re actively following your market and space, hopefully just as you are to some extent. They can offer an outside perspective and help with broad areas of focus and messaging.</p>
+
+<p><em>More</em> &ndash; In reality it’s as clean cut as above. They may be able to introduce you to good candidates for hiring. They may be able to introduce you to a large company interested in acquiring some capability which you have. They may be able to connect you with investors. All of these things can and do happen, but the above buckets typically are the primary drivers.</p>
+
+<h3>When?</h3>
+
+<p>First, engaging with analysts should always come after you have some confidence in the product, after you&rsquo;ve started some marketing drumbeat, and after sales. In short don&rsquo;t be in a huge rush here, you&rsquo;ll get there, but don&rsquo;t be in too big of a rush. As you start to get some attention and momentum it&rsquo;s just as likely they&rsquo;ll engage with you first as you reaching out. Also, marketing != sales, more on that in a future post.</p>
+
+<p>But, let&rsquo;s assume you&rsquo;ve got a product <strong>which targets business</strong> (<em>Analysts aren&rsquo;t just for tech companies, though you’ll see the benefit here sooner if you’re say a database company than a HR product</em>). Let’s also assume you&rsquo;ve got some sales and have some <a href="/2015/07/21/An-intro-PR-guide-for-startups/">good launches under your belt</a>. As it starts to come up in sales calls if you&rsquo;re in any industry reports or rankings that may be an indicator, if you&rsquo;re hearing about other competitors having more validation in such reports. As a general rule of thumb once you&rsquo;ve got inhouse PR they should be able to help guide and steer to the right time.</p>
+
+<h3>So how do you engage with an analyst</h3>
+
+<p>If you&rsquo;re engaging in some form of report or article, that should start to be pretty self explanatory. They&rsquo;ll send you a questionnaire, you fill it out. You go back and forth a little bit.</p>
+
+<p>However, the majority of my interactions aren&rsquo;t on those articles and reports, for ever one time I fill out lots of questions to help some report or ranking I have 20 calls with an analyst.</p>
+
+<p>There are two primary calls you can have, an inquiry and a briefing.</p>
+
+<h4>Inquiries</h4>
+
+<p>Inquiry is just a fancy word for consulting call. An inquiry you will always be paying for.</p>
+
+<p><em>A small detour here. The regularity and consistency in which you engage with an analyst makes a difference. They&rsquo;re also people at the end of the day, so while firms have certain styles it&rsquo;s even further multiplied by being very people driven. In your interactions you&rsquo;ll have a different rapport with different people, it&rsquo;s at a minimum important to be aware of this.</em></p>
+
+<p>So back to an inquiry. Within an inquiry your goal is to pull back the curtain and give some backstage insights into what you&rsquo;re doing and where you&rsquo;re headed. This is typically under NDA and trust the NDA of an analyst. It&rsquo;s worthwhile to be as candid as you can here, yes it feels weird, but you&rsquo;ll get the most value. They&rsquo;re not like that of a reporter looking for a scoop (not that you can&rsquo;t trust reporters, just know if you say it, it&rsquo;s on record). You don&rsquo;t have to relish the entire call to one area, but areas of coverage are often:</p>
+
+<ul>
+<li>Upcoming products and major releases you’re working on</li>
+<li>Broader strategy and roadmap</li>
+<li>Get input on what they&rsquo;re seeing and hearing from customers</li>
+</ul>
+
+
+<h4>Briefings</h4>
+
+<p>The other type of call we have is a briefing. This is a little similar to that of a press briefing. You&rsquo;ll get on the call, and walk through some upcoming launch or just give an update on your company and progress. The latter is more common if they&rsquo;re unfamiliar with you or your product.</p>
+
+<p>Analyst briefings are good to do earlier than your press briefings, compared to press they&rsquo;re like a bike with training wheels. It&rsquo;s best if you still maintain your balance–the ride will be smoother, but there&rsquo;s a little less risk of completely toppling over. One key difference is you often have a powerpoint deck you get to walk through during an analyst briefing. I&rsquo;ve found this is helpful for pacing and key messages, I used to be skeptical, but now very much feel it&rsquo;s always worth doing.</p>
+
+<p><em>Pro-tip: You can create a deck and use it for press too, no they won&rsquo;t want to get on a gotomeeting, but you can send it over so they have more content later. BUT, more importantly you can also walk through it on your own screen if it helps with pacing.</em></p>
+
+<p>Within a briefing you&rsquo;ll have some ability to ask them questions at points. Does this resonate? Are you hearing similar? What are you seeing in the market? Don&rsquo;t turn it into an inquiry, but knowing the parts that hit home for them allow you to refine your pitch for the next call.</p>
+
+<h4>Engaging &ndash; the tactical parts</h4>
+
+<p>&ldquo;Analysts are pretty much paid to talk and write&rdquo; &ndash; <a href="http://www.twitter.com/cote">@cote</a>. So expect that often when you occupy their time there&rsquo;s a price to it. In terms of finding them it should be pretty easy, to know the list of ones in your space, you may see them quoted or reference in various media outlets. You may just naturally crop up in a report.</p>
+
+<p>If you create a regular relationship with them you&rsquo;ll have some contract of hours over the course of a quarter or year. At an early stage company this is often owned and manage by whomever runs your PR from an internal perspective.</p>
+
+<h3>Conclusion</h3>
+
+<p>If you&rsquo;re about to engage with analysts for the first time or haven’t figured out how to get the most out of your interactions I hope the broad overview is helpful. If there&rsquo;s some glaring parts you feel I&rsquo;ve missed let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>. And for further reading/watching I’d encourage checking out the great talk from <a href="http://www.twitter.com/cote">@cote</a> in the <a href="http://www.heavybit.com/library/video/2014-01-21-michael-cote">Heavybit library</a>.</p>
+
+<p>As far as take-aways and a recap:</p>
+
+<ol>
+<li>Don&rsquo;t be too eager to jump in with analysts. They can absolutely provide value, but you have to put some time in before it really starts to pay off. It&rsquo;s not an overnight change and takes building a rapport with them.</li>
+<li>At the same time, analysts can be useful in many B2B areas not just tech ones.</li>
+<li>When in an inquiry be open and as transparent as possible.</li>
+<li>Powerpoint/Keynote/Google presentations are useful in briefings, even if it&rsquo;s just for you to follow along.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A guide to PR for startups]]></title>
+    <link href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/"/>
+    <updated>2015-07-21T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups</id>
+    <content type="html"><![CDATA[<p>You&rsquo;ve built your product and you&rsquo;re now ready for your first major launch. Or you&rsquo;ve been through a launch or two, but are looking to scale the process as you&rsquo;re doing more launches and announcements. You really have two options: do it <a href="http://jasonlbaptiste.com/featured-articles/how-i-pitched-techcrunch-and-13-ways-to-get-press-when-you-launch-your-startup/">all on your own</a>, or work with a PR agency. One frequent crossroad is that you&rsquo;re not at the point of a full time PR person, but unsure what a PR agency can offer you; and, further what&rsquo;s the best way to work with them so you&rsquo;re getting the maximum value.</p>
+
+<p>As I&rsquo;ve talked to more startups lately, it&rsquo;s become clear that effectively working with PR teams and the media is mostly learned by doing. Because there&rsquo;s not much guidance out there, here&rsquo;s an attempt at some basic guidelines.</p>
+
+<!--more-->
+
+
+<h3>On PR</h3>
+
+<p>First there&rsquo;s two types here and they&rsquo;re not mutually exclusive. In-house PR is a full time person or team that works within your company, here you&rsquo;ll often have a pretty different experience. From my experience, in-house PR people tend to understand a company message and vision because they are living and breathing your company values every day.</p>
+
+<p>The other alternative is hiring a PR agency. An agency will have several (sometimes hundreds!) of clients. The relationship that you’ll have with an agency is much different than in-house. You&rsquo;ll use them just like you would a consultant or contractor. Most startups end up with the agency approach first, because of the perception of “more people working for a cheaper cost than hiring in-house.” However, it&rsquo;s of note an agency doesn&rsquo;t alleviate you of doing work, nor should you want them to handle all parts of it.</p>
+
+<h4>Messaging</h4>
+
+<p>An agency may offer to help with messaging, but take this somewhat lightly. I don&rsquo;t doubt that some are very good at it, but in most cases I&rsquo;ve found they don&rsquo;t have the same amount of customer interaction as you as a founder or early employee would. Further, your vision of impact to the market and direction may be more distant than theirs. You should expect to own your messaging, just like you own your product.</p>
+
+<p>Where they can heavily help is providing a lot of structured frameworks for helping you get to your messaging. Some pretty basic templates of standard questions for customers and partners can go along way in helping you actually uncover what they feel your value is.</p>
+
+<p><em>On your key messaging/value prop, there&rsquo;s two pieces I&rsquo;ll drop in here. While I&rsquo;d love to write another long post on it, I wonder when I&rsquo;ll actually get it out. So the first is pitch the problem you&rsquo;re trying to solve–<a href="http://500hats.typepad.com/500blogs/2009/08/your-solution-is-not-my-problem.html">Dave McClure</a> talks about this as well as anyone. The second is don&rsquo;t pitch features, pitch the use cases and solutions. Pitch what&rsquo;s possible</em></p>
+
+<h4>Pitching</h4>
+
+<p>This is the number one area I&rsquo;ve found that having PR makes a huge difference. In the world of reporting, different reporters have different beats (areas of coverage), styles, outreach preferences, and most importantly, different relationships with companies and people. Knowing <em>all</em> of this and how to pitch a story to them is key. Yes you can spend hours researching and creating a perfect story just for them, and do that again, and again and hopefully land some coverage. But I&rsquo;d argue a bit: that&rsquo;s not the best use of your time.</p>
+
+<p>With a good PR person or agency you&rsquo;ll be able to strike a mix of:</p>
+
+<ul>
+<li>Here&rsquo;s the outlets I want to be in and why (have a good reason for why).</li>
+<li>Understanding the audience and readership.</li>
+<li>What outlets you feel like your key customers are reading, and validate this with the agency.</li>
+</ul>
+
+
+<p>From there, if you&rsquo;ve found a good agency they already have relationships with your key journalists / publications. So if you have a compelling product, you just need to give them the right messaging of the particular launch or news.</p>
+
+<h4>What else to expect from your agency</h4>
+
+<p>A surprise for some is how the whole process works. The agency is going to be there on the phone with you. You&rsquo;re not going to hang out over beers while pitching being chummy. The reporter is listening to multiple other pitches, it&rsquo;s likely they had one right before you and right after. The agency is there listening, helping keep time and track of conversation for reporter fact-checking after the interview.</p>
+
+<p>Hopefully they&rsquo;re also keeping notes. They should be able to provide you with some high level notes of what message resonated with each reporter and what didn&rsquo;t, what you covered, and what they asked. This is especially useful for future interactions.</p>
+
+<p>Similarly you should get a briefing 1 pager ahead of time. You should be able to skim this, you don&rsquo;t have to memorize. But it&rsquo;ll include key things about recent articles written by the reporter, their beat, topics to dive into and ones to stay away from. If you can connect the dots, those notes from an initial call start to feed into the 1 pagers for future calls.</p>
+
+<h3>Onto the briefing</h3>
+
+<p>Of course it&rsquo;s important to land the briefing in the first place, but just as important is getting it right. Coming into it, the reporter will have already gotten the high level pitch&hellip; It&rsquo;s why they took the call. You&rsquo;ll get a mixed bag of those that are open to teeing up the opportunity to those that want to get right to the news. Roll with what they prefer, but also don&rsquo;t be afraid of trying to hit some of your key points.</p>
+
+<h4>Have your key messages ready</h4>
+
+<p>Sound bites help hugely here. Analogies, customer references, whatever you want to hit. Have it ready. Also if you&rsquo;ve got a great sound bite that helps tell the story, it can make the reporter&rsquo;s job easier. Just don&rsquo;t swing too far into happy go lucky marketing land. It’s important to remember that you’re talking to a person. Have a conversation &ndash; don’t talk at them.</p>
+
+<h4>Go slow</h4>
+
+<p>It may seem obvious when you think about it, but as you&rsquo;re talking the reporter is writing. Or at least you hope they are. Some do it by hand and type up notes late, some type right then and there. When you hear a pause it doesn&rsquo;t always mean to keep going and it seldom means hurry up. Become extra comfortable with pauses. Check in if you&rsquo;re going to fast, if they&rsquo;re following, if they have any questions. I&rsquo;ve had people bring me in a beer before because I&rsquo;d had multiple cups of coffee through a few pitches, and they were trying to slow me down a bit. Know your pace, and then slow it down.</p>
+
+<h4>Questions</h4>
+
+<p>It&rsquo;s okay if they don&rsquo;t have a lot of questions, they may not. They may have none at all. Yes, pause, and give them a chance, or even ask if they have any. But don&rsquo;t stress too much if they have no questions.</p>
+
+<p>On the flip side of that &ndash; you’re PR person should have prepared a list of questions for you beforehand that the reporter could possibly throw your way. Be sure you’ve thought through and practiced all the Q&amp;A scenarios before the interview so you aren’t caught off-guard when you’re in front of the reporter.</p>
+
+<h3>In conclusion</h3>
+
+<p>If it&rsquo;s your first go around, don&rsquo;t stress too much. Have the headlines you want in your mind and key messages, or better yet write them out. <em>Personally I write key things on a whiteboard nice and large before I&rsquo;m on the call</em>. Finally once you&rsquo;re all done, enjoy reading the coverage. <strong>But you&rsquo;re not all done</strong> after you get some coverage look back, run a retrospective just like you would for a software project. What worked well, why did or didn&rsquo;t something work. What can you improve next time.</p>
+
+<p><em>Full disclosure, this is based across interactions with a small sample size of different PR agencies and individuals. Mileage may differ heavily from PR firm to PR firm, but hopefully the above provides at least some roadmap for more clarity vs. flying blind. As always if you&rsquo;ve got feedback/questions, feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></em></p>
+
+<p><em>Finally a special thanks to <a href="http://www.twitter.com/pavtalk">Paul Katsen</a> for much of the inspiration on creating this post and to he and <a href="http://www.twitter.com/kboysen">Katie Boysen</a> for review</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Securing your Internal Organization with OpenID]]></title>
@@ -130,74 +314,6 @@ python yourapp/manage.py syncdb
 <p><em>As a slight aside, we even conduct starter projects when current Herokai move from one team to another</em></p>
 
 <p>Starter projects usually last anywhere from a day to several days. At the end of a starter project the candidate presents what they did, in a similar fashion to weekly demos that occur at workshop (more on that some other time). In earlier days it was nearly the entire company that would sit in, ask questions and give feedback. Now it&rsquo;s a bit harder for all us to fit into one conference room, though there&rsquo;s an open invite and anyone that wishes can sit in (often 10-20 Herokai). At the end of the starter project there&rsquo;s no question that the candidate fits or doesn&rsquo;t, often from both sides. Of course if it&rsquo;s a fit we make an offer and welcome them into the family.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How Heroku Works - Maker's Day]]></title>
-    <link href="http://www.craigkerstiens.com/2011/11/07/how-heroku-works-maker-day/"/>
-    <updated>2011-11-07T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2011/11/07/how-heroku-works-maker-day</id>
-    <content type="html"><![CDATA[<p>In my earlier post on <a href="/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools at Heroku</a>, I mentioned how we value engineers' time; their work has enabled us to build a great platform. As a result of what we&rsquo;ve built, we&rsquo;ve had great growth both of our platform and of our teams internally. With that growth inevitably comes different distractions on engineers' time. Despite how a manager may plan things, engineering work needs long periods of uninterrupted time. To ensure that no matter what, an engineer has plenty of opportunity to do the work he or she was hired to do, Heroku has Maker&rsquo;s Day.</p>
-
-<!--more-->
-
-
-<p><em>Maker&rsquo;s Day ensures that engineers get a full day of uninterrupted time to focus on making things.</em></p>
-
-<p><img src="/images/makerday.png" alt="Maker's Day" /></p>
-
-<p>The more consistent interruptions are throughout an engineer&rsquo;s day, the more time will be lost due to context switching in addition to the time spent on those other activities. These interruptions may include a quick question from a manager, a question on a code problem someone else is working through, or an email or IM from a coworker. Regardless of the type of interruption, it causes an engineer to lose focus. According to <a href="http://www.amazon.com/gp/product/0932633439/ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Peopleware: Productive Projects and Teams</a>, in a study regarding productivity among engineers, the top performers when surveyed said they were interrupted regularly 38% of the time versus the bottom performers, who were interrupted 76%. Context switching should be counted as fully wasted time for an engineer, and all too often as the number of meetings increases, the time involved with context switching is increased similarly to the following:</p>
-
-<p><img src="/images/contextswitch.png" alt="Cost of context switching" /></p>
-
-<p>For more on how interruptions or context switching decreases productivity, Jeff Atwood has a great post about <a href="http://www.codinghorror.com/blog/2006/09/the-multi-tasking-myth.html">The Multi-Tasking Myth</a>, which demonstrates &hellip;</p>
-
-<p>Most people understand that context switching is bad, but another team may still have valid demands on your time. Pushing back against another team or manager isn&rsquo;t always feasible; after all, we do work together, and each team at times may need something from another team. This is where Maker&rsquo;s Day starts to come in. Every Thursday at Heroku is Maker&rsquo;s Day.</p>
-
-<p><strong>Maker&rsquo;s day is meant for making shit. Meetings don&rsquo;t happen on Maker&rsquo;s Day</strong>. If someone asks if that time on your calendar works for a meeting, the simple response is no&mdash;it&rsquo;s Maker&rsquo;s Day. Because Maker&rsquo;s Day has been ingrained into our culture, engineers have no problem giving that response when there&rsquo;s a request on their time on Maker&rsquo;s Day. If someone in marketing, sales, or another non-engineering role wants to book meetings, they’re welcome to do so, but they&rsquo;re going to be without engineers. However, even for non-engineers, Maker&rsquo;s Day is equally invaluable; uninterrupted hours of focus at a time are amazing for productivity in any role.</p>
-
-<p>Maker&rsquo;s Day varies in how it is executed from person to person. Often the office is slightly less busy due to some engineers working from home or coffee shops to maximize their productivity. To an outsider, the office may appear business as usual: engineers sit at their desks, working. At lunch, everyone is sitting around the lunch table eating together. To the unobservant eye it may appear to be just any other day, but the engineers notice the difference. There will be significantly less interruptions by someone walking over to your desk, you won&rsquo;t be pulled into meetings that distract you from features, and you know it&rsquo;s an opportunity to accomplish a bulk of work laid out from your weekly planning meeting.</p>
-
-<p>As Heroku has grown, meetings have increased, and the value of Maker Day&rsquo;s has increased exponentially.</p>
-
-<p>Whether you&rsquo;re in the early stages of bootstrapping a company or at a large company of thousands of engineers, one of the best practices anyone can put into place is dedicated quality time for engineers to produce code. Maker&rsquo;s Day is a fantastic way to ensure this happens on a weekly basis.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How Heroku Works - Teams and Tools]]></title>
-    <link href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/"/>
-    <updated>2011-11-02T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools</id>
-    <content type="html"><![CDATA[<p>Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of engineers, even product managers often write code. Heroku as a platform drives many of the features not from top down, but from bottom up based on engineers desires or skunkworks projects. There&rsquo;s many valuable insights into how Heroku runs efficiently for engineering.</p>
-
-<p>I&rsquo;ll be diving into many various practices that enable Heroku to put quality engineering above all else, but first let me highlight the team structure and tools that enable this.</p>
-
-<!--more-->
-
-
-<p>Heroku is comprised of many small teams internally, each team operates much like an individual entity. The team chooses its own tools and best method for communication, though as a whole some form of Scrum is run throughout teams. Think of the unix philosophy of small sharp tools <a href="http://www.amazon.com/gp/product/0131429019/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0131429019">as in The Art of Unix Programming</a> applied to teams and people.</p>
-
-<p>For most teams this involves a weekly planning meeting earlier in the week. In such a meeting teams may conduct a retrospective, opportunities to improve the process the coming week, and of course plan tasks for the coming week. Its <b>very</b> important to note that planning tasks for the week doesn&rsquo;t necessarily involve planning the deadline for them, but rather simply laying out what people are working on (more on this in a future post). Each team will record and track this in a tool of their own choosing. Several use <a href="http://www.pivotaltracker.com">pivotal tracker</a>, one uses <a href="http://www.scrumy.com">scrumy</a>, some use email to distribute and track against personal to do lists. The method for tracking issues is again entirely up to the individual team. A one person team may choose to use a simple to do list, larger teams commonly use <a href="http://www.github.com">github</a> issues and pull requests. Given the team is the one responsible for their own productivity the team is the one to choose what tools they use.</p>
-
-<p>Meeting loads vary from person to person depending on what is the demands are on their time, though everyone at Heroku participates in some form of standup. Most teams do these daily as quick status stand-ups of what was worked on the day before and whats to be worked on the next day. In addition to the planning meeting and stand-ups, there is often collaborative engineering, and company wide gatherings.</p>
-
-<p>Collaborative engineering once again varies depending on which engineers are working together. Engineers may get in front of a white board or in front of machines and simple collaborate. For engineers together in the office this is often the most productive way. These practices work the same for remote employees, though slightly modified for the high touch interaction. For remote employees this often works as pair programming via Skype. Skype is indispensable for allowing remote workers to feel far less remote. Skype alongside <a href="http://typewith.me/">typewith.me</a> and you have an unbelievable easy to collaborate not just with 1 other, but with multiple parties to work through a document on a given topic. For smaller activities of communication asynchronous is key. This ranges from <a href="http://campfirenow.com/">campfire</a> most commonly during common working hours when someone is likely to be at a machine, to email when the return on a request may take slightly longer.</p>
-
-<p>Finally there is the all common company wide meeting, which occurs weekly. The structure of this varies from status updates to broader ongoings. Its often the perfect time for engineers to hear about what sales is doing or get updates on teams you don&rsquo;t commonly interact with. Along with common status updates there will be broader company updates.</p>
-
-<p>Consistently across all teams you&rsquo;ll find these principles which allow us to ensure the quality of engineering as we continue to grow:</p>
-
-<ul>
-<li>Small teams that talk across defined API&rsquo;s and data contracts</li>
-<li>Teams using the tool that they believe is best for the job</li>
-<li>Frequent asynchronous communication</li>
-<li>Collaboration (including for remote employees)</li>
-</ul>
-
-
-<p>The key in Heroku running efficiently is primarily allowing each team to run as it chooses. Heroku works because we have talented engineers, the best thing we can do for those engineers is allow them to work productively. Often only they know the best way to accomplish this, so who better to let them accomplish it than themselves.</p>
 ]]></content>
   </entry>
   
