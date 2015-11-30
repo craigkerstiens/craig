@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Moving past averages in SQL (Postgres) – Percentiles]]></title>
+    <link href="http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql/"/>
+    <updated>2015-06-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql</id>
+    <content type="html"><![CDATA[<p>Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue Per User. In theory this tells you if you can acquire new user how much you&rsquo;ll make off that user. Or maybe what&rsquo;s your average life time value of a customer. Yet, many that are more familiar looking and extracting meaning from data median or a few different looks at <a href="http://apmblog.dynatrace.com/2012/11/14/why-averages-suck-and-percentiles-are-great/">percentiles can be much more meaningful</a>.</p>
+
+<!--more-->
+
+
+<p>And while you can very easily get the <code>AVG</code> in Postgres, with a small amount more effort you can report on percentiles as well. Window functions have been around for some time in Postgres. They allow you to order your result set over a certain group. The most basic example is if you want to order by date, but know which one falls at place 10 in order you can use a window function and project out the <code>rank()</code>.</p>
+
+<p>Beyond outputting the rank yourself and doing extra manipulation Postgres has some great utilities to make the most common uses even easier. Being able to compute things such as the perc 95 directly on the data, or lay out for every record in the result where it falls within a percentile is hugely useful. Let&rsquo;s take a look:</p>
+
+<p>Assuming you have a table called purchases, which has a total in it we could try:</p>
+
+<pre><code>SELECT id,
+       total,
+       ntile(100) OVER (ORDER BY total) AS perc_rank
+FROM purchases
+</code></pre>
+
+<p>This would give us something like:</p>
+
+<pre><code>    id    |  total  | perc_rank
+----------|---------|-----------
+   264    |  12034  |    100
+   643    |  11830  |    100
+...
+...
+   304    |   751   |     95
+</code></pre>
+
+<p>What this would tell us is we have less than 5% of our purchases that have a total over 751. From here you can start to dig in and extract all sorts of different meanings, and by doing directly in SQL you&rsquo;re closer to the data and have one less processing step.</p>
+
+<p>Percentiles get even more fun with the ordered set functions that came out in <a href="/2014/02/02/Examining-PostgreSQL-9.4/">Postgres 9.4</a>. They even allow you to project out hypothetical values in certain cases. For now I&rsquo;d encourage adding ntile to your toolbox anytime you&rsquo;re analyzing average or medians it will make your world a bit better, and then consider exploring further on the <a href="http://www.postgresql.org/docs/9.4/static/functions-aggregate.html#FUNCTIONS-ORDEREDSET-TABLE">ordered set functions</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5 – A first look]]></title>
+    <link href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/"/>
+    <updated>2015-05-08T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5</id>
+    <content type="html"><![CDATA[<p>If you’ve followed anything I’ve <a href="/2012/04/30/why-postgres/">written about Postgres</a>, you know that I’m a fan. At the same time you know that there’s been one feature that so many other databases have, which Postgres lacks and it <a href="/2014/08/15/my-postgres-wishlist-for-9.5/">causes a huge amount of angst for not being in Postgres</a>… Upsert. Well the day has come, it’s finally committed and will be available <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=168d5805e4c08bed7b95d351bf097cff7c07dd65">in Postgres 9.5</a>.</p>
+
+<p>Sure we’re still several months away from Postgres 9.5 being released, anywhere from 3-6 months as a best guess. That doesn’t mean we can’t take a first look at this feature. Though before we get into it a few special call outs of thanks to Peter Geoghegan of the <a href="http://www.heroku.com/postgres">Heroku Postgres</a> team for being the primary author on it, Andres Freund who recently just joined <a href="https://www.citusdata.com">Citus Data</a> for his heavy contributions, and Heikki Linnakangas as well for his contributions.</p>
+
+<!-- more -->
+
+
+<p>And now onto the exploration. Upsert is the common name, but if you’re unfamiliar upsert is essentially create or update – Create this new record, but if a conflict exists update it. Let’s take a practical example.</p>
+
+<p>Assume you have a web scraper that imports product information into a table. Each product has a UPC code, title, description, and link. There’s a unique constraint on the UPC code. Now, if your web scraper tries to insert a new product, and a product with the same UPC already exists, you’d usually get an error. But you don’t want the query to fail, you’d want to update the existing product instead. Maybe with a new image, maybe a new description, whatever have you, but I don’t want it to blow up… I simply want to capture the new data and save it.</p>
+
+<p><strong>So before</strong>: Insert a record… Exception this violates a unique constraint… Let your app figure out what to do. <em>protip: often applications would try to work around this, but you can run a chance of a race condition and duplicate records if there’s a conflict. TLDR; it’s not a perfect solution.</em></p>
+
+<p><strong>Now</strong>: Insert a record… There’s a unique constraint violation… Okay, let’s just update all the new record’s fields <strong>inside a single transaction</strong></p>
+
+<p>So enough explanation, here’s how it actually looks in the syntax:</p>
+
+<pre><code>INSERT INTO products (
+    upc, 
+    title, 
+    description, 
+    link) 
+VALUES (
+    123456789, 
+    ‘Figment #1 of 5’, 
+    ‘THE NEXT DISNEY ADVENTURE IS HERE - STARRING ONE OF DISNEY'S MOST POPULAR CHARACTERS! ’, 
+    ‘http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20’
+    )
+ON CONFLICT DO UPDATE SET description=excluded.description;
+</code></pre>
+
+<p>It’s been a long time coming for this, and it makes building applications that need this kind of behavior even easier. While it would have been great for this to be available years ago, kudos to Postgres and its community for taking the approach that is safe for your data. The result we have now both provides the desired behavior of create or update, <strong>and</strong> is performant without the risk of race conditions for your data.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
+    <link href="http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations/"/>
+    <updated>2014-10-01T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations</id>
+    <content type="html"><![CDATA[<p>Most web applications will add/remove columns over time. This is extremely common early on and even mature applications will continue modifying their schemas with new columns. An all too common pitfall when adding new columns is setting a not null constraint in Postgres.</p>
+
+<!--more-->
+
+
+<h3>Not null constraints</h3>
+
+<p>What happens when you have a not null constraint on a table is it will re-write the entire table. Under the cover Postgres is really just an append only log. So when you update or delete data it&rsquo;s really just writing new data. This means when you add a column with a new value it has to write a new record. If you do this requiring columns to not be null then you&rsquo;re re-writing your entire table.</p>
+
+<p>Where this becomes problematic for larger applications is it will hold a lock preventing you from writing new data during this time.</p>
+
+<h3>A better way</h3>
+
+<p>Of course you may want to not allow nulls and you may want to set a default value, the problem simply comes when you try to do this all at once. The safest approach at least in terms of uptime for your table &ndash;> data &ndash;> application is to break apart these steps.</p>
+
+<ol>
+<li>Start by simply adding the column with allowing nulls but setting a default value</li>
+<li>Run a background job that will go and retroactively update the new column to your default value</li>
+<li>Add your not null constraint.</li>
+</ol>
+
+
+<p>Yes it&rsquo;s a few extra steps, but I can say from having walked through this with a number of developers and their apps it makes for a much smoother process for making changes to your apps.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My wishlist for Postgres 9.5]]></title>
+    <link href="http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5/"/>
+    <updated>2014-08-15T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5</id>
+    <content type="html"><![CDATA[<p>As I followed along with the <a href="/2014/03/24/Postgres-9.4-Looking-up/">9.4 release</a> of Postgres I had a few posts of things that I was excited about, some things that missed, and a bit of a wrap-up. I thought this year (year in the sense of PG releases) I&rsquo;d jump the gun and lay out areas I&rsquo;d love to see addressed in PostgreSQL 9.5. And here it goes:</p>
+
+<!--more-->
+
+
+<h3>Upsert</h3>
+
+<p>Merge/Upsert/Insert or Update whatever you want to call it this is still a huge wart that it doesn&rsquo;t exist. There&rsquo;s been a few implementations show up on mailing lists, and to the best of my understanding there&rsquo;s been debate on if it&rsquo;s performant enough or that some people would prefer another implementation or I don&rsquo;t know what other excuse. The short is this really needs to happen, until that time you can always <a href="http://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql/8702291#8702291">implement it with a CTE</a> which can have a race condition.</p>
+
+<h3>Foreign Data Wrappers</h3>
+
+<p>There&rsquo;s so much opportunity here, and this has easily been my <a href="/2013/08/05/a-look-at-FDWs/">favorite feature of the past 2-3 years in Postgres</a>. Really any improvement is good here, but a hit list of a few valuable things:</p>
+
+<ul>
+<li>Pushdown of conditions</li>
+<li>Ability to accept a DSN to a utility function to create foreign user and tables.</li>
+<li>Better security around creds of foreign tables</li>
+<li>More out of the box FDWs</li>
+</ul>
+
+
+<h3>Stats/Analytics</h3>
+
+<p>Today there&rsquo;s <a href="http://madlib.net/">madlib</a> for machine learning, and 9.4 got support for <a href="http://www.depesz.com/2014/01/11/waiting-for-9-4-support-ordered-set-within-group-aggregates/">ordered set aggregates</a>, but even still Postgres needs to keep moving forward here. PL-R and PL-Python can help a good bit as well, but having more out of the <a href="http://www.postgresql.org/docs/9.3/static/functions-aggregate.html">box functions</a> for stats can continue to keep it at the front of the pack for a database that&rsquo;s not only safe for your data, but powerful to do analysis with.</p>
+
+<h3>Multi-master</h3>
+
+<p>This is definitely more of a dream than not. Full multi-master replication would be amazing, and it&rsquo;s getting closer to possible. The sad truth is even once it lands it will probably require a year of maturing, so even more reason for it to hopefully hit in 9.5</p>
+
+<h3>Logical Replication</h3>
+
+<p>The foundation made it in for 9.4 which is huge. This means we&rsquo;ll probably see a good working out of the box logical replication in 9.5. For those less familiar this means the replication is SQL based vs. the binary WAL stream. This means things like using replication to upgrade across versions is possible. So not quite 0 downtime, but ~ a minute or two to upgrade versions. Even of large DBs.</p>
+
+<h3>An official GUI</h3>
+
+<p>Alright this one is probably a pipe dream. And to kick it off, no pgAdmin doesn&rsquo;t cut it. A good end user tool for connecting/querying would be huge. Fortunately the ecosystem is improving here with <a href="http://www.jackdb.com">JackDB</a> (web based) and <a href="https://eggerapps.at/pgcommander/">PG Commander</a> (mac app), but these still aren&rsquo;t discoverable enough for most users.</p>
+
+<h3>What do you want?</h3>
+
+<p>So there&rsquo;s my wishlist, what&rsquo;s yours for 9.5? Let me know &ndash; <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and Connection Pooling]]></title>
+    <link href="http://www.craigkerstiens.com/2014/05/22/on-connection-pooling/"/>
+    <updated>2014-05-22T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/05/22/on-connection-pooling</id>
+    <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
+
+<h3>The basics</h3>
+
+<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres <a href="/2013/03/07/Fixing-django-db-connections/">some overhead here</a>. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
+
+<!--more-->
+
+
+<h3>The options</h3>
+
+<p>There&rsquo;s really two major options when it comes to connection pooling:</p>
+
+<ul>
+<li>Framework pooling</li>
+<li>Standalone pooler</li>
+<li><em>Persistent connections</em></li>
+</ul>
+
+
+<h4>Framework pooling</h4>
+
+<p>Today many modern application frameworks have at least some basic level of connection pooling. This means as your application server starts up it will create a pool of connections to use. It&rsquo;s worth noting that while most modern frameworks have pooling, not all do, and further it may not be enabled by default.</p>
+
+<p>If you&rsquo;re using the Sequel ORM for Ruby or SQLAlchemy for Python you&rsquo;re well covered here. Further <a href="https://devcenter.heroku.com/articles/concurrency-and-database-connections">Rails</a> is in pretty good shape also, though you may want to configure the pool size. For Django it&rsquo;s a bit of a mixed story. For some time <a href="/2013/03/07/Fixing-django-db-connections/">Django</a> did not have pooling at all. As of Django 1.6 you now have persistent connections by default and the ability to enable a pool.</p>
+
+<h4>Persistent connections</h4>
+
+<p>Persistent connections don&rsquo;t offer all of the benefits of pooling, but can often work well enough. Persistent connections is the act of maintaining a connection to your database once it&rsquo;s connected. In the case where you have overhead of 30-50 ms each time you connect this can be quite helpful. At the same time you&rsquo;re limited to the number of things that can be interacting with your databases as you&rsquo;re limited to 1 connection per entry point to your webserver.</p>
+
+<h4>Standalone pooling</h4>
+
+<p>Postgres can be a bit of a sore spot when it comes to handling a ton of connections. For Postgres each connection you have to your database assumes some overhead of memory. Casual observations have seen it be between 5 and 10 MB assuming some basic query workload. And even if you have the memory overhead on your Postgres instance there becomes a point where management of connections becomes a limiting factor, we&rsquo;ve seen this somewhere in the hundreds. While framework level connection poolers can give some better performance and lengthen the time before you have to deal with something more complex if you&rsquo;re successful that time may come.</p>
+
+<p><em>A rule of thumb I&rsquo;d use is if you have over 100 connections you want to look at something more robust</em></p>
+
+<p>In this case that something more robust is a standalone pooler specifically for Postgres. A standalone pooler can be much more configurable overall letting you specify how it works for Postgres sessions, transactions, or statements. Further these are very specifically designed to work with Postgres handling a very large pool of connections without adding too much overhead. In contrast to the 5MB-ish standard connection to Postgres PG Bouncer has a 2kb per connection.</p>
+
+<p>So once you&rsquo;re at the point of needing one there&rsquo;s really two options.</p>
+
+<ol>
+<li><a href="http://pgfoundry.org/projects/pgbouncer">PG Bouncer</a></li>
+<li><a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">PG Pool</a></li>
+</ol>
+
+
+<h3>PG Bouncer</h3>
+
+<p>My short and sweet recomendation is towards PG Bouncer. Contrary to how it&rsquo;s named PG Pool is a multi purpose tool that does a lot of things (pooling, load balancing, replication, more). PG Bouncer takes the philosophy of doing one thing and doing it extremely well. I tend to favor these types of tools, which is the same reason I lean towards <a href="https://github.com/wal-e/wal-e">WAL-E</a> to help with Postgres replication.</p>
+
+<h3>Need more?</h3>
+
+<p>Need more guidance with setting up and running PGBouncer? Give this <a href="http://datachomp.com/archives/getting-started-with-pgbouncer/">guide</a> a look or try the <a href="https://github.com/gregburek/heroku-buildpack-pgbouncer">pgbouncer buildpack</a> if running on Heroku. If you&rsquo;re still interested in a deeper guide let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> and I&rsquo;ll work on getting it into the queue.</p>
+
+<p>Finally, make sure to sign-up below to get updates on Postgres content and first access to training.</p>
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+]]></content>
+  </entry>
+  
+</feed>

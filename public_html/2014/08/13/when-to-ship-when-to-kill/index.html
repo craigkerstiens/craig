@@ -1,0 +1,218 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>When to ship it, when to kill it Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="A few weeks ago at lunch I had the opportunity to catch up with a company in the current YC batch, building something very similar to dataclips. &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">When to Ship It, When to Kill It</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>A few weeks ago at lunch I had the opportunity to catch up with a company in the current YC batch, building something very similar to dataclips. While we talked about a lot of things from what we&rsquo;ve learned from dataclips, marketing, and other areas. One area we talked about was product and when to ship vs. when to kill things and I realized I hadn&rsquo;t talked on my fairly simple but clear view on this publicly, so here it is.</p>
+
+<p><em>A large credit to <a href="http://www.twitter.com/hirodusk">Adam Wiggins</a> for giving this model early on in Heroku and his approach to shipping product.</em></p>
+
+<!--more-->
+
+
+<h3>A precursor to shipping</h3>
+
+<p>First a little background on shipping, in shipping something I&rsquo;m going to assume you have some process of alpha/beta testing with users. This is actually fairly key, if you&rsquo;re not testing it with users then well the rest of this is all moot. Alpha and beta testing is pretty simple, you need some early users. These can be friends, people within a network, or random users you select from. There&rsquo;s different value to how you select these but that&rsquo;s a topic for another time and place.</p>
+
+<h3>On to shipping</h3>
+
+<p>So how do you know it&rsquo;s ready. The basic idea is super simple. Give it to some users in alpha/beta testing. Or start to roll it out following a one &ndash;> some &ndash;> many all principle (maybe to 5% or 10% of your userbase). Then take that brand new feature away.</p>
+
+<p>There&rsquo;s a couple of ways to do this as far as mechanics. If you&rsquo;re in contact with users such as alpha/beta users that you were higher touch with just email them. Tell them you&rsquo;re removing the feature, or if you want to approach it more softly ask them how much they&rsquo;d miss it if it were gone tomorrow. If you&rsquo;re rolling it out more broadly perhaps behind a feature flag, flip it off and watch for feedback.</p>
+
+<p><em>Once you take the feature away or threaten to if you don&rsquo;t have users with pitchforks almost immediately then it&rsquo;s not ready to ship</em>.</p>
+
+<p>Go back to the drawing board and work more on it or simply kill it. As <a href="http://www.twitter.com/james_heroku">@james_heroku</a> would say: &ldquo;So you&rsquo;re saying the reason to ship the shitty thing now is becase you&rsquo;ve spent a lot of time on it?&rdquo;. Stepping back it&rsquo;s all logical, but all too often it&rsquo;s not put in practice when shipping it.</p>
+
+<h3>Your metrics can lie</h3>
+
+<p>Relying on just seeing a user spend some time on the new feature can often be misleading vs. the above approach. There&rsquo;s a great talk by Des Traynor over at <a href="http://insideintercom.io/talk-product-strategy-saying/">intercom.io</a> that hits on this in part, the basic premise in there is that users shifting time from feature X to Y doesn&rsquo;t mean it was a success it just means they&rsquo;re spending time on something different. In launching new things you want to increase the overall value of your product, not simply shift users focus to the new flavor of the week.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Securing your Internal Organization with OpenID Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Securing Your Internal Organization With OpenID</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
+
+<p>In our personal lives we use email as our keys to the kingdom. In fact I now almost refuse to sign up for any service that doesn&rsquo;t let me use oauth, so why should a work place be much different. So I inquired with a few companies to see if they were fine with securing things like documentation or wiki&rsquo;s being google auth, they indeed were. Yet they still seem to have users keep one more username and password for their VPN to be able to login to access internal docs/tools.</p>
+
+<!-- more -->
+
+
+<p>Most tech centric companies grow their own apps for many things they do within a company. Even the heavier adopters of SaaS still end up building a lot of internal systems. So why not secure them with your email domain just as you commonly would if it were a public service?</p>
+
+<p>The problem comes in that OpenId with google has an initial setup overhead, but after that works unbelievably well.</p>
+
+<h2>The catch</h2>
+
+<p>In some cases you currently have to identify your domain as an OpenId provider. This means that @yourname.com is an OpenId provider. This simply means creating a url route for openid in your base site similar to the below:</p>
+
+<figure class='code'><figcaption><span>http://heroku.com/openid</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;xrds:XRDS</span> <span class="na">xmlns:xrds=</span><span class="s">&quot;xri://$xrds&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;xri://$xrd*($v*2.0)&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;XRD&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;Service</span> <span class="na">priority=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;Type&gt;</span>http://specs.openid.net/auth/2.0/signon<span class="nt">&lt;/Type&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;URI&gt;</span>https://www.google.com/a/craigkerstiens.com/o8/ud?be=o8<span class="nt">&lt;/URI&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/Service&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/XRD&gt;</span>
+</span><span class='line'><span class="nt">&lt;/xrds:XRDS&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>This is due to an issue of OpenID discovery which you can read more on at: <a href="https://groups.google.com/group/google-federated-login-api/browse_thread/thread/4a7dd2312a47a082/9285cec18a30b9d3?lnk=gst&amp;q=apps+discovery&amp;pli=1#9285cec18a30b9d3.">https://groups.google.com/group/google-federated-login-api/browse_thread/thread/4a7dd2312a47a082/9285cec18a30b9d3?lnk=gst&amp;q=apps+discovery&amp;pli=1#9285cec18a30b9d3.</a> In short, setting up the above can save you a lot of time</em></p>
+
+<h2>Setting up in apps</h2>
+
+<p>Most web frameworks have libraries that make it easy to secure your apps with openid/oauth. In particular Django and Rails both make this pretty easy. To make this even simpler for you below is code to actually secure an internal app for both Django and Rails. You can do similar with Flask or Sinatra as well.</p>
+
+<h3>Rails</h3>
+
+<p>In case your admin controller isn&rsquo;t already generated:</p>
+
+<figure class='code'><figcaption><span>http://heroku.com/openid</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>rails g controller admin/users
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then anything you want to secure:</p>
+
+<figure class='code'><figcaption><span>http://heroku.com/openid</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>module Admin
+</span><span class='line'>  class UsersController <span class="nt">&lt; ApplicationController</span>
+</span><span class='line'>    <span class="err">before_filter</span> <span class="err">:admin_required</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="err">def</span> <span class="err">index</span>
+</span><span class='line'>      <span class="err">render</span> <span class="na">:text =</span><span class="err">&gt;</span> <span class="s">&#39;Hello from the admin panel!&#39;</span>
+</span><span class='line'>    <span class="err">end</span>
+</span><span class='line'>  <span class="err">end</span>
+</span><span class='line'><span class="err">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Django</h3>
+
+<p>Finally sync your database:</p>
+
+<figure class='code'><figcaption><span>http://heroku.com/openid</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>python yourapp/manage.py syncdb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Secure any view with the <code>login_required</code> decorator as your typically would with Django.</p>
+
+<h2>Summary</h2>
+
+<p>In short with some very basic app setup you can have an internal workflow thats just as good as what you use in your day to day outside the office.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-23T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/startup/'>Startup</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

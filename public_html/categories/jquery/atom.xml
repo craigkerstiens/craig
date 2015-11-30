@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JQuery | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/jquery/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JQuery and Django Autocomplete]]></title>
+    <link href="http://www.craigkerstiens.com/2011/02/25/jquery-django-autocomplete/"/>
+    <updated>2011-02-25T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2011/02/25/jquery-django-autocomplete</id>
+    <content type="html"><![CDATA[<p>In a couple of various places I&rsquo;ve seen light requests of how to put autocomplete in for a Django web application. Here&rsquo;s a really light weight version with a view and autocomplete functionality using:</p>
+
+<ul>
+    <li><a href="http://www.djangoproject.com">Django</a></li>
+    <li><a href="http://www.jquery.com">JQuery</a></li>
+    <li><a href="http://www.jqueryui.com">JQuery UI</a></li>
+</ul>
+
+
+<p>For a view to search within your django model it would look something like:</p>
+
+<p>``` python models.py
+from django.utils import simplejson
+def autocompleteModel(request):</p>
+
+<pre><code>search_qs = ModelName.objects.filter(name__startswith=request.REQUEST['search'])
+results = []
+for r in search_qs:
+    results.append(r.name)
+resp = request.REQUEST['callback'] + '(' + simplejson.dumps(result) + ');'
+return HttpResponse(resp, content_type='application/json')
+</code></pre>
+
+<p>```</p>
+
+<p>For the jQuery autocomplete and call:</p>
+]]></content>
+  </entry>
+  
+</feed>

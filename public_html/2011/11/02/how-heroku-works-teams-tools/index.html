@@ -1,0 +1,251 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>How Heroku Works - Teams and Tools Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">How Heroku Works - Teams and Tools</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of engineers, even product managers often write code. Heroku as a platform drives many of the features not from top down, but from bottom up based on engineers desires or skunkworks projects. There&rsquo;s many valuable insights into how Heroku runs efficiently for engineering.</p>
+
+<p>I&rsquo;ll be diving into many various practices that enable Heroku to put quality engineering above all else, but first let me highlight the team structure and tools that enable this.</p>
+
+<!--more-->
+
+
+<p>Heroku is comprised of many small teams internally, each team operates much like an individual entity. The team chooses its own tools and best method for communication, though as a whole some form of Scrum is run throughout teams. Think of the unix philosophy of small sharp tools <a href="http://www.amazon.com/gp/product/0131429019/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0131429019">as in The Art of Unix Programming</a> applied to teams and people.</p>
+
+<p>For most teams this involves a weekly planning meeting earlier in the week. In such a meeting teams may conduct a retrospective, opportunities to improve the process the coming week, and of course plan tasks for the coming week. Its <b>very</b> important to note that planning tasks for the week doesn&rsquo;t necessarily involve planning the deadline for them, but rather simply laying out what people are working on (more on this in a future post). Each team will record and track this in a tool of their own choosing. Several use <a href="http://www.pivotaltracker.com">pivotal tracker</a>, one uses <a href="http://www.scrumy.com">scrumy</a>, some use email to distribute and track against personal to do lists. The method for tracking issues is again entirely up to the individual team. A one person team may choose to use a simple to do list, larger teams commonly use <a href="http://www.github.com">github</a> issues and pull requests. Given the team is the one responsible for their own productivity the team is the one to choose what tools they use.</p>
+
+<p>Meeting loads vary from person to person depending on what is the demands are on their time, though everyone at Heroku participates in some form of standup. Most teams do these daily as quick status stand-ups of what was worked on the day before and whats to be worked on the next day. In addition to the planning meeting and stand-ups, there is often collaborative engineering, and company wide gatherings.</p>
+
+<p>Collaborative engineering once again varies depending on which engineers are working together. Engineers may get in front of a white board or in front of machines and simple collaborate. For engineers together in the office this is often the most productive way. These practices work the same for remote employees, though slightly modified for the high touch interaction. For remote employees this often works as pair programming via Skype. Skype is indispensable for allowing remote workers to feel far less remote. Skype alongside <a href="http://typewith.me/">typewith.me</a> and you have an unbelievable easy to collaborate not just with 1 other, but with multiple parties to work through a document on a given topic. For smaller activities of communication asynchronous is key. This ranges from <a href="http://campfirenow.com/">campfire</a> most commonly during common working hours when someone is likely to be at a machine, to email when the return on a request may take slightly longer.</p>
+
+<p>Finally there is the all common company wide meeting, which occurs weekly. The structure of this varies from status updates to broader ongoings. Its often the perfect time for engineers to hear about what sales is doing or get updates on teams you don&rsquo;t commonly interact with. Along with common status updates there will be broader company updates.</p>
+
+<p>Consistently across all teams you&rsquo;ll find these principles which allow us to ensure the quality of engineering as we continue to grow:</p>
+
+<ul>
+<li>Small teams that talk across defined API&rsquo;s and data contracts</li>
+<li>Teams using the tool that they believe is best for the job</li>
+<li>Frequent asynchronous communication</li>
+<li>Collaboration (including for remote employees)</li>
+</ul>
+
+
+<p>The key in Heroku running efficiently is primarily allowing each team to run as it chooses. Heroku works because we have talented engineers, the best thing we can do for those engineers is allow them to work productively. Often only they know the best way to accomplish this, so who better to let them accomplish it than themselves.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'craigkerstiens';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/';
+        var disqus_url = 'http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

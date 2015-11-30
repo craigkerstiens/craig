@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
+    <link href="http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations/"/>
+    <updated>2014-10-01T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations</id>
+    <content type="html"><![CDATA[<p>Most web applications will add/remove columns over time. This is extremely common early on and even mature applications will continue modifying their schemas with new columns. An all too common pitfall when adding new columns is setting a not null constraint in Postgres.</p>
+
+<!--more-->
+
+
+<h3>Not null constraints</h3>
+
+<p>What happens when you have a not null constraint on a table is it will re-write the entire table. Under the cover Postgres is really just an append only log. So when you update or delete data it&rsquo;s really just writing new data. This means when you add a column with a new value it has to write a new record. If you do this requiring columns to not be null then you&rsquo;re re-writing your entire table.</p>
+
+<p>Where this becomes problematic for larger applications is it will hold a lock preventing you from writing new data during this time.</p>
+
+<h3>A better way</h3>
+
+<p>Of course you may want to not allow nulls and you may want to set a default value, the problem simply comes when you try to do this all at once. The safest approach at least in terms of uptime for your table &ndash;> data &ndash;> application is to break apart these steps.</p>
+
+<ol>
+<li>Start by simply adding the column with allowing nulls but setting a default value</li>
+<li>Run a background job that will go and retroactively update the new column to your default value</li>
+<li>Add your not null constraint.</li>
+</ol>
+
+
+<p>Yes it&rsquo;s a few extra steps, but I can say from having walked through this with a number of developers and their apps it makes for a much smoother process for making changes to your apps.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My wishlist for Postgres 9.5]]></title>
+    <link href="http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5/"/>
+    <updated>2014-08-15T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5</id>
+    <content type="html"><![CDATA[<p>As I followed along with the <a href="/2014/03/24/Postgres-9.4-Looking-up/">9.4 release</a> of Postgres I had a few posts of things that I was excited about, some things that missed, and a bit of a wrap-up. I thought this year (year in the sense of PG releases) I&rsquo;d jump the gun and lay out areas I&rsquo;d love to see addressed in PostgreSQL 9.5. And here it goes:</p>
+
+<!--more-->
+
+
+<h3>Upsert</h3>
+
+<p>Merge/Upsert/Insert or Update whatever you want to call it this is still a huge wart that it doesn&rsquo;t exist. There&rsquo;s been a few implementations show up on mailing lists, and to the best of my understanding there&rsquo;s been debate on if it&rsquo;s performant enough or that some people would prefer another implementation or I don&rsquo;t know what other excuse. The short is this really needs to happen, until that time you can always <a href="http://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql/8702291#8702291">implement it with a CTE</a> which can have a race condition.</p>
+
+<h3>Foreign Data Wrappers</h3>
+
+<p>There&rsquo;s so much opportunity here, and this has easily been my <a href="/2013/08/05/a-look-at-FDWs/">favorite feature of the past 2-3 years in Postgres</a>. Really any improvement is good here, but a hit list of a few valuable things:</p>
+
+<ul>
+<li>Pushdown of conditions</li>
+<li>Ability to accept a DSN to a utility function to create foreign user and tables.</li>
+<li>Better security around creds of foreign tables</li>
+<li>More out of the box FDWs</li>
+</ul>
+
+
+<h3>Stats/Analytics</h3>
+
+<p>Today there&rsquo;s <a href="http://madlib.net/">madlib</a> for machine learning, and 9.4 got support for <a href="http://www.depesz.com/2014/01/11/waiting-for-9-4-support-ordered-set-within-group-aggregates/">ordered set aggregates</a>, but even still Postgres needs to keep moving forward here. PL-R and PL-Python can help a good bit as well, but having more out of the <a href="http://www.postgresql.org/docs/9.3/static/functions-aggregate.html">box functions</a> for stats can continue to keep it at the front of the pack for a database that&rsquo;s not only safe for your data, but powerful to do analysis with.</p>
+
+<h3>Multi-master</h3>
+
+<p>This is definitely more of a dream than not. Full multi-master replication would be amazing, and it&rsquo;s getting closer to possible. The sad truth is even once it lands it will probably require a year of maturing, so even more reason for it to hopefully hit in 9.5</p>
+
+<h3>Logical Replication</h3>
+
+<p>The foundation made it in for 9.4 which is huge. This means we&rsquo;ll probably see a good working out of the box logical replication in 9.5. For those less familiar this means the replication is SQL based vs. the binary WAL stream. This means things like using replication to upgrade across versions is possible. So not quite 0 downtime, but ~ a minute or two to upgrade versions. Even of large DBs.</p>
+
+<h3>An official GUI</h3>
+
+<p>Alright this one is probably a pipe dream. And to kick it off, no pgAdmin doesn&rsquo;t cut it. A good end user tool for connecting/querying would be huge. Fortunately the ecosystem is improving here with <a href="http://www.jackdb.com">JackDB</a> (web based) and <a href="https://eggerapps.at/pgcommander/">PG Commander</a> (mac app), but these still aren&rsquo;t discoverable enough for most users.</p>
+
+<h3>What do you want?</h3>
+
+<p>So there&rsquo;s my wishlist, what&rsquo;s yours for 9.5? Let me know &ndash; <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and Connection Pooling]]></title>
+    <link href="http://www.craigkerstiens.com/2014/05/22/on-connection-pooling/"/>
+    <updated>2014-05-22T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/05/22/on-connection-pooling</id>
+    <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
+
+<h3>The basics</h3>
+
+<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres <a href="/2013/03/07/Fixing-django-db-connections/">some overhead here</a>. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
+
+<!--more-->
+
+
+<h3>The options</h3>
+
+<p>There&rsquo;s really two major options when it comes to connection pooling:</p>
+
+<ul>
+<li>Framework pooling</li>
+<li>Standalone pooler</li>
+<li><em>Persistent connections</em></li>
+</ul>
+
+
+<h4>Framework pooling</h4>
+
+<p>Today many modern application frameworks have at least some basic level of connection pooling. This means as your application server starts up it will create a pool of connections to use. It&rsquo;s worth noting that while most modern frameworks have pooling, not all do, and further it may not be enabled by default.</p>
+
+<p>If you&rsquo;re using the Sequel ORM for Ruby or SQLAlchemy for Python you&rsquo;re well covered here. Further <a href="https://devcenter.heroku.com/articles/concurrency-and-database-connections">Rails</a> is in pretty good shape also, though you may want to configure the pool size. For Django it&rsquo;s a bit of a mixed story. For some time <a href="/2013/03/07/Fixing-django-db-connections/">Django</a> did not have pooling at all. As of Django 1.6 you now have persistent connections by default and the ability to enable a pool.</p>
+
+<h4>Persistent connections</h4>
+
+<p>Persistent connections don&rsquo;t offer all of the benefits of pooling, but can often work well enough. Persistent connections is the act of maintaining a connection to your database once it&rsquo;s connected. In the case where you have overhead of 30-50 ms each time you connect this can be quite helpful. At the same time you&rsquo;re limited to the number of things that can be interacting with your databases as you&rsquo;re limited to 1 connection per entry point to your webserver.</p>
+
+<h4>Standalone pooling</h4>
+
+<p>Postgres can be a bit of a sore spot when it comes to handling a ton of connections. For Postgres each connection you have to your database assumes some overhead of memory. Casual observations have seen it be between 5 and 10 MB assuming some basic query workload. And even if you have the memory overhead on your Postgres instance there becomes a point where management of connections becomes a limiting factor, we&rsquo;ve seen this somewhere in the hundreds. While framework level connection poolers can give some better performance and lengthen the time before you have to deal with something more complex if you&rsquo;re successful that time may come.</p>
+
+<p><em>A rule of thumb I&rsquo;d use is if you have over 100 connections you want to look at something more robust</em></p>
+
+<p>In this case that something more robust is a standalone pooler specifically for Postgres. A standalone pooler can be much more configurable overall letting you specify how it works for Postgres sessions, transactions, or statements. Further these are very specifically designed to work with Postgres handling a very large pool of connections without adding too much overhead. In contrast to the 5MB-ish standard connection to Postgres PG Bouncer has a 2kb per connection.</p>
+
+<p>So once you&rsquo;re at the point of needing one there&rsquo;s really two options.</p>
+
+<ol>
+<li><a href="http://pgfoundry.org/projects/pgbouncer">PG Bouncer</a></li>
+<li><a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">PG Pool</a></li>
+</ol>
+
+
+<h3>PG Bouncer</h3>
+
+<p>My short and sweet recomendation is towards PG Bouncer. Contrary to how it&rsquo;s named PG Pool is a multi purpose tool that does a lot of things (pooling, load balancing, replication, more). PG Bouncer takes the philosophy of doing one thing and doing it extremely well. I tend to favor these types of tools, which is the same reason I lean towards <a href="https://github.com/wal-e/wal-e">WAL-E</a> to help with Postgres replication.</p>
+
+<h3>Need more?</h3>
+
+<p>Need more guidance with setting up and running PGBouncer? Give this <a href="http://datachomp.com/archives/getting-started-with-pgbouncer/">guide</a> a look or try the <a href="https://github.com/gregburek/heroku-buildpack-pgbouncer">pgbouncer buildpack</a> if running on Heroku. If you&rsquo;re still interested in a deeper guide let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> and I&rsquo;ll work on getting it into the queue.</p>
+
+<p>Finally, make sure to sign-up below to get updates on Postgres content and first access to training.</p>
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
+    <link href="http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/"/>
+    <updated>2014-05-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using</id>
+    <content type="html"><![CDATA[<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let&rsquo;s look at some of these rarer but awesome types.</p>
+
+<h3>hstore</h3>
+
+<p>Yes, I&rsquo;ve talked about <a href="/2013/07/03/hstore-vs-json/">this one before</a>, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. <!--more-->Hstore is a key-value store directly within Postgres. This means you can easily add new keys and values <em>(optionally)</em>, without haveing to run a migration to setup new columns. Further you can still get great performance by using Gin and GiST indexes with them, which automatically index all keys and values for hstore.</p>
+
+<p><em>It&rsquo;s of note that hstore is an extension and not enabled by default. If you want the ins and outs of getting hands on with it, give the article on <a href="http://postgresguide.com/sexy/hstore.html">Postgres Guide</a> a read.</em></p>
+
+<h3>Range types</h3>
+
+<p>If there is ever a time where you have two columns in your database with one being a from, another being a to, you probably want to be using <a href="http://www.postgresql.org/docs/9.2/static/rangetypes.html">range types</a>. Range types are just that a set of ranges. A super common use of them is when doing anything with calendaring. The place where they really become useful is in their ability to apply constraints on those ranges. This means you can make sure you don&rsquo;t have overlapping time issues, and don&rsquo;t have to rebuild heavy application logic to accomplish it.</p>
+
+<h3>Timestamp with Timezone</h3>
+
+<p>Timestamps are annoying, plain and simple. If you&rsquo;ve re-invented handling different timezones within your application you&rsquo;ve wasted plenty of time and likely done it wrong. If you&rsquo;re using plain timestamps within your application further there&rsquo;s a good chance they dont even mean what you think they mean. Timestamps with timezone or timestamptz automatically includes the timezone with the timestamp. This makes it easy to convert between timezones, know exactly what you&rsquo;re dealing with, and will in short save you a ton of time. There&rsquo;s seldom a case you shouldn&rsquo;t be using these.</p>
+
+<h3>UUID</h3>
+
+<p>Integers as primary keys aren&rsquo;t great. Sure if you&rsquo;re running a small blog they work fine, but if you&rsquo;re application has to scale to a large size then integers can create problems. First you can run out of them, second it can make other details such as sharding a little more annoying. At the same time they are super readable. However, using the actual UUID datatype and extension to automatically generate them can be incredibly handy if you have to scale an application.</p>
+
+<p><em>Similar to hstore, there&rsquo;s an <a href="http://www.postgresql.org/docs/9.3/static/uuid-ossp.html">extension</a> that makes the UUID much more useful.</em></p>
+
+<h3>Binary JSON</h3>
+
+<p>This isn&rsquo;t available yet, but will be in Postgres 9.4. <a href="/2014/03/24/Postgres-9.4-Looking-up/">Binary JSON</a> is of course JSON directly within your database, but also lets you add Gin indexes directly onto JSON. This means a much simpler setup in not only inserting JSON, but having fast reads. If you want to learn a bit more about this, <a href="/training/index.html">sign up</a> to <a href="/training/index.html">get notified</a> of training regarding the upcoming PostgreSQL 9.4 release.</p>
+
+<h3>Money</h3>
+
+<p>Please don&rsquo;t use this&hellip; The money datatype assumes a single currency type, and generally brings with it more caveats than simply using a numeric type.</p>
+
+<h3>More</h3>
+
+<p>It&rsquo;s already been pointed out on twitter that I missed a few. To give a quick highlight of some others:</p>
+
+<ul>
+<li><a href="http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres/">Arrays</a></li>
+<li>Interval – time intervals, such as &lsquo;1 hour&rsquo;, &lsquo;1 day&rsquo;</li>
+<li>ISN &ndash; should help for anything with products</li>
+<li>Inet &ndash; Tracking IPs</li>
+</ul>
+
+
+<h3>In conclusion</h3>
+
+<p>What&rsquo;d I miss? What are you&rsquo;re favorite types? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>, or sign-up below to updates on Postgres content and first access to training.</p>
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A year's look at Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
+    <updated>2014-03-26T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
+    <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
+
+<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
+
+<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
+
+<!--more-->
+
+
+<h3>The inagural issue</h3>
+
+<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
+
+<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
+
+<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
+
+<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
+
+<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
+
+<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
+
+<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
+
+<h3>A mix of notable entries</h3>
+
+<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
+
+<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
+
+<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
+
+<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
+
+<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
+
+<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
+
+<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
+
+<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
+
+<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
+
+<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
+
+<h3>In conclusion</h3>
+
+<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
+]]></content>
+  </entry>
+  
+</feed>

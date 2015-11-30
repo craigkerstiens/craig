@@ -1,0 +1,523 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Getting more out of psql (The PostgreSQL CLI) Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Getting More Out of Psql (the PostgreSQL CLI)</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
+
+<h2>Get the most of psql</h2>
+
+<p>Psql, the CLI postgreSQL client, is a powerful tool. Sadly, lot of developers are not aware of the features and instead look for a GUI to provide what they need. Let&rsquo;s fly over what can psql do for you.</p>
+
+<!--more-->
+
+
+<h2>Feel yourself at home</h2>
+
+<p>One of the most common misconception people have about CLI is «They are a poor user interface». C&#8217;mon, the CLI is <strong>the most efficient user interface ever</strong>. There is nothing to disturb you from what you are doing and you are by far fastest without switching to your mouse all the time. Let&rsquo;s see how we can configure psql at our convenience.</p>
+
+<p>First, you&rsquo;ll have managed to choose a nice and fancy <a href="http://hivelogic.com/articles/top-10-programming-fonts">terminal font</a> like monofur or inconsolata. Do not underestimate the power of the font</p>
+
+<p><img src="http://public.coolkeums.org/github/power_font.png" alt="monofur font in action" /></p>
+
+<p>The nice line style shown above can be set with <code>\pset linestyle unicode</code> and <code>\pset border 2</code>. This is just an example of the many environment variables you can play with to get your preferred style of working out of psql.</p>
+
+<p>For example, I found the character ¤ the most accurate to express nullity (instead of default <code>NULL</code>). Let&rsquo;s just <code>\pset null ¤</code> and here it is:</p>
+
+<pre><code>SELECT * FROM very_interesting_stat;
+┌──────┬──────┬──────┬──────┬──────┐
+│  a   │  b   │  c   │  d   │  e   │
+├──────┼──────┼──────┼──────┼──────┤
+│ 9.06 │    ¤ │    ¤ │    ¤ │    ¤ │
+│ 7.30 │ 3.55 │ 7.57 │ 3.31 │    ¤ │
+│ 7.20 │ 5.08 │    ¤ │ 6.58 │ 5.90 │
+...
+</code></pre>
+
+<p>Another hugely value to get environment variables is colors in the prompt. Colors in the prompt are important because it makes easier to spot where output starts and ends between two interactions at the console. The <a href="http://www.postgresql.org/docs/9.2/static/app-psql.html#APP-PSQL-PROMPTING">PROMPT1</a> environment variable will even let you set an indicator to notify you are inside a transaction or not, give this a try for a sweet surprise&hellip;</p>
+
+<pre><code>\set PROMPT1 '%[%033[33;1m%]%x%[%033[0m%]%[%033[1m%]%/%[%033[0m%]%R%# '
+</code></pre>
+
+<p>I also like to disable the pager by default <code>\pset pager off</code> and display the time every issued query takes <code>\timing</code>. If you are used to psql, you may notice in the picture above, some content is wrapped. This is <code>\pset format wrapped</code> option.</p>
+
+<p>Of course, writing all that on every connection would be a pain, so just write them in a <code>~/.psqlrc</code> file, it will be sourced every time psql is launched.</p>
+
+<p>If you are familiar with <code>bash</code> or other recent unix shells, you might also declare aliases in your configuration file. You can do the same with psql. For example if you want to have a query for slow queries such as from this <a href="http://craigkerstiens.com/2013/01/10/more-on-postgres-performance/">earlier post</a> but not have to remember the query every time you can set it up as:</p>
+
+<pre><code>\set show_slow_queries 
+'SELECT 
+  (total_time / 1000 / 60) as total_minutes, 
+  (total_time/calls) as average_time, query 
+FROM pg_stat_statements 
+ORDER BY 1 DESC 
+LIMIT 100;'
+</code></pre>
+
+<p>Now, just entering <code>:show_slow_queries</code> in your psql client will launch this query and give you the results:</p>
+
+<pre><code>    total_time    |     avg_time     |                                                                                                                                                              query
+------------------+------------------+------------------------------------------------------------
+ 295.761165833319 | 10.1374053278061 | SELECT id FROM users WHERE email LIKE ?
+ 219.138564283326 | 80.24530822355305 | SELECT * FROM address WHERE user_id = ? AND current = True
+</code></pre>
+
+<h2>Psql at your fingertips</h2>
+
+<p>Now you have got a fancy prompt, here is the real question you ask, what can psql do for me ? and <code>\?</code> has all of the answers. It has built-in queries to describe almost all database objects from tables to operators, indexes, triggers etc&hellip; with clever auto-completion. Not only completion on tables and columns &mdash; but also on aliases (sweet), <strong>SQL commands</strong> (w00t) and database objects.</p>
+
+<p>Now we can enter some SQL commands. As usual, you need to check in the documentation how the heck to write this damn <code>ALTER TABLE</code>. Relax, psql proposes inline documentation. Just enter <code>\h alter table</code> (auto complete w00t) and you ll be ok.</p>
+
+<h3>Interacting with your editor</h3>
+
+<p>psql provides two very handy commands: \e and \i. This last command sources a sql file in the client&rsquo;s current session. \e edits the last command using the editor defined in the <code>EDITOR</code> shell environment variables (aka vim). This grant you with real editor feature when it comes to writing long queries. What psql does, it saves the buffer in a temporary file and fires up the editor with that file. Once the editor is terminated, psql sources the file. Of course, you can use your editor to save queries in other places where they would be under version control, but the \e has a serious limitation: it spawns only the last query. Even if you sent several queries on the same line. (Note that \r clears psql&rsquo;s last query buffer).</p>
+
+<p>Note: <code>\ef my_function</code> opens stored function source code (With auto completion, I know, it&rsquo;s awesome).</p>
+
+<p>Vim users can here benefit from Vim&rsquo;s server mode. If you launch a vim specifying a server name (let&#8217; say &ldquo;PSQL&rdquo;) somewhere, and set the EDITOR variable as is <code>export EDITOR="vim --servername PSQL --remote-tab-wait</code> then psql will open a new tab on the running vim with the last query and run it as soon as you close this tab. Tmux or gnu/screen users will split their screen to have Vim and psql running on the same terminal window.</p>
+
+<p><img src="http://public.coolkeums.org/github/vim_tmux.png" alt="Vim, psql and tmux" /></p>
+
+<h3>Call a friend</h3>
+
+<p>Vim power users know it is possible to pipe a buffer (or selection) directly in a program that can be &hellip; psql (Using the <code>:w !psql</code> syntax). Even from the shell, you might want to take advantage of the fantastic <code>\copy</code> feature that loads formated file in the database (I use it to load apache logs). But always having to specify connection parameters are a hassle. Let&rsquo;s use shell environment instead. Psql is sensitive to the following variables:</p>
+
+<ul>
+<li>PGDATABASE</li>
+<li>PGHOST</li>
+<li>PGPORT</li>
+<li>PGUSER</li>
+<li>PGCLUSTER (debian wrapper).</li>
+</ul>
+
+
+<p>Set them once for all in you shell environment and call <code>psql</code> to connect to the database. In case you want to skip password prompt, you can store your pass in a 600 mode access file named <code>.pgpass</code> in your home (do not do that on shared or exposed computers). Although this is nice for development database servers, I do NOT recommend this for production servers since it should not be easy to mess with them.</p>
+
+<p>Resource for additional information is &hellip; the man page and <a href="http://www.postgresql.org/docs/9.2/static/index.html">Postgres Docs</a>. All <a href="http://www.postgresql.org/docs/9.2/static/index.html">PostgreSQL documentation</a> is an example of what software reference documentation should be. Enjoy!</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-21T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

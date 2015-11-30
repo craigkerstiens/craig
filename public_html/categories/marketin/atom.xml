@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Marketin | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/marketin/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Doing Marketing (for developers) Differently]]></title>
+    <link href="http://www.craigkerstiens.com/2013/04/12/perspective-on-developer-marketing/"/>
+    <updated>2013-04-12T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/04/12/perspective-on-developer-marketing</id>
+    <content type="html"><![CDATA[<p>As developers we can tend to be a fickle bunch; especially in certain open source communities. We like to see intelligence and systems applied to things, hope for a better world through making things open, and appreciate when others relate to our world as we often attempt to relate to theirs. Marketing is often a loaded word when it comes to developers – leaving mixed feelings about webinars, email campaigns, and the like.</p>
+
+<p><em>A quick clarification in terms of marketing I&rsquo;m referring to product marketing, but of a technical product. This is based on the idea that <a href="http://thenewkingmakers.com/">developers are the new kingmakers</a> and when marketing a product to them it needs to be done differently.</em></p>
+
+<!--more-->
+
+
+<p>While many of the above steps can add immense value, they often miss when it comes to developers. By changing these processes only slightly there can be much more efficiency in connecting with and actually delivering the value you hope for to developers.</p>
+
+<h3>Email Marketing</h3>
+
+<p>This is an area that there are more and more companies already starting to solve the right problems. Companies like <a href="http://intercom.io">intercom.io</a> and <a href="http://customer.io">customer.io</a> are allowing for better tracking of what users are doing and notifying them at the <em>right</em> time instead of via massive impersonal campaigns. Developers build systems that take into account similar factores every day, you should be doing the same.</p>
+
+<p>Emails that are sent at the wrong time or miss on what someone is trying to do can often do more damage towards building a rapport than good. Pushing content to solve a recent issue or problem at a relevant time should be table stakes for any email thats sent.</p>
+
+<h3>Community Engagement</h3>
+
+<p>Whether at conferences or in online collaborations developers are more social than so many give them credit for. We appreciate when things are done to improve the greater good particularly for developers, but often for the world as well. From supporting individual developers or projects financially such as through <a href="http://www.gittip.com">gittip</a> or <a href="http://www.kickstarter.com/projects/andrewgodwin/schema-migrations-for-django">certain kickstarter projects</a> all the way to employing developers to <a href="http://www.twitter.com/tenderlove">work full time on open source</a>.</p>
+
+<h3>Being Better Than Webinars</h3>
+
+<p>After doing a webinar for a particular audience I had a <a href="http://www.heroku.com">Heroku</a> co-worker come up to me. This individual has contributed many ideas that have become core functionality such as the <a href="#">Cedar stack</a> and is generally open minded and listens very well. He came up to me and genuinely asked, &ldquo;so what is a webinar?&rdquo; I explained its like a live webcast with an opportunity for questions at the end. He was quiet for minute and responded, &ldquo;Why can&rsquo;t we just say that?&rdquo;</p>
+
+<p>There are some words that simply send off the wrong signals. Webinar rather clearly is one of those. As a community we&rsquo;ve shown that we have a desire for this kind of content. The <a href="http://www.lanyrd.com">conference community</a> has continued to grow steadily, and while they are many parts to every conference a pretty common one is the talk track itself. A talk at a conference is essentially a live in person webinar, of course the experience is often a bit richer.</p>
+
+<p>Instead of the term webinar what is wrong with online office hours or webcasts with an opportunity for questions? Even doing the same thing with a different name is underdelivering on what we&rsquo;re capable of.</p>
+
+<p>I welcome hearing from others directly at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a> on what they&rsquo;re doing to engage with developers thats working. Not only working in the sense of eyeballs or dollars, but in adding value, in improving communities, in make the world better for developers. If there&rsquo;s enough interest would be happy to post more detail around things I&rsquo;ve seen work and what I hear works for others.</p>
+
+<!-- Perfect Audience - Developer Marketing - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=711656&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

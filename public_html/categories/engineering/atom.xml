@@ -1,0 +1,825 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Engineering | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/engineering/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why Not Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2012/05/12/why-not-postgres/"/>
+    <updated>2012-05-12T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/05/12/why-not-postgres</id>
+    <content type="html"><![CDATA[<p>In hopefully a fair fashion, I hope to call out all the reasons to not use Postgres.</p>
+
+<h2>Setup</h2>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why PostgreSQL Part 2]]></title>
+    <link href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/"/>
+    <updated>2012-05-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2</id>
+    <content type="html"><![CDATA[<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
+
+<p>Last week I did a post on the <a href="/2012/04/30/why-postgres/">many reasons to use Postgres</a>. My goal with the post was two fold:</p>
+
+<ul>
+<li>Call out some of the historical arguments against it that don&rsquo;t hold any more</li>
+<li>Highlight some of the awesome but more unique features that are less commonly found in databases.</li>
+</ul>
+
+
+<p>Once I published the post it was clear and was immediately pointed out in the comments and on <a href="http://news.ycombinator.com/item?id=3910743">hacker news</a> that I missed quite a few features that I&rsquo;d mostly come to take for granted. <em>Perhaps this is due to so much awesomeness existing within Postgres.</em> A large thanks to everyone for calling these out. To help consolidate many of these, here&rsquo;s a second list of the many reasons to use PostgreSQL:</p>
+
+<h2>Create Index Concurrently</h2>
+
+<p>On most traditional databases when you create an index it holds a lock on the table while it creates the index. This means that the table is more or less useless during that time. When you&rsquo;re starting out this isn&rsquo;t a problem, but as your data grows and you then add indexes later to improve performance it could mean downtime just to add an index. Not surprisingly Postgres has a great means of adding an index without holding that lock. Simply doing <a href="http://www.postgresql.org/docs/9.1/static/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY"><code>CREATE INDEX CONCURRENTLY</code></a> instead of <code>CREATE INDEX</code> will create your index without holding the lock.</p>
+
+<p><em>Of course with many features there are caveats, in the case of creating your index concurrently it does take somewhere on the order of 2-3 times longer, and cannot be done within a transaction</em></p>
+
+<h2>Transactional DDL</h2>
+
+<p>If you&rsquo;ve ever run a migration had something break mid-way, either due to a constraint or some other means you understand what pain can come of quickly untangling such. Typically migrations on a schema are intended to be run holistically and if they fail you want to fully rollback. Some other databases such as Oracle in recent versions and SQL server do support, this. And of course Postgres supports wrapping your DDL inside a transaction. This means if an error does occur you can simply rollback and have the previous DDL statements rolled back with it, leaving your schema migrations as safe as your data, and your application in a consistent state.</p>
+
+<h2>Foreign Data Wrappers</h2>
+
+<p>I talked before about other languages within your database such as Ruby or Python, but what if you wanted to talk to other databases from your database. Postgres&rsquo;s Foreign Data Wrapper allows you to fully wrap external data systems and join on them in a similar fashion to as if they existed locally within the database. Here&rsquo;s a sampling of just a few of the foreign data wrappers that exist:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+</ul>
+
+
+<p>In fact you can even use <a href="http://multicorn.org/">Multicorn</a> to allow you to write other foreign data wrappers in Python. An example of how this can be done, in this case with Database.com/Force.com can be found <a href="http://blog.database.com/blog/2011/11/21/a-database-comforce-com-foreign-data-wrapper-for-postgresql/">here</a></p>
+
+<!-- more -->
+
+
+<h2>Conditional Constraints and Partial Indexes</h2>
+
+<p>In a similar fashion to affecting only part of your data you may care about an index on only a portion of your data. Or you may care about placing a constraint only where a certain condition is true. Take an example case of the white pages. Within the white pages you only have one active address, but you&rsquo;ve had multiple ones over recent years. You likely wouldn&rsquo;t care about the past addresses being indexed, but would want everyones current address to be indexed. With <a href="http://www.postgresql.org/docs/9.1/static/indexes-partial.html">Partial Indexes</a> becomes simple and straight forward:</p>
+
+<p>```bash</p>
+
+<pre><code>CREATE INDEX idx_address_current ON address (user_id) WHERE current IS True;
+</code></pre>
+
+<p>```</p>
+
+<h2>Postgres in the Cloud</h2>
+
+<p>Postgres has been chosen by individual shops and been proven to scale by places such as <a href="http://media.postgresql.org/sfpug/instagram_sfpug.pdf">Instagram</a> and <a href="http://ontwik.com/python/disqus-scaling-the-world%E2%80%99s-largest-django-application/">Disqus</a>. Perhaps even more importantly it&rsquo;s becoming easy to use PostgreSQL due to the many clouds that are running Postgres as a Service, such as:</p>
+
+<ul>
+<li><a href="http://postgres.heroku.com">Heroku Postgres</a></li>
+<li><a href="http://www.vmware.com/products/application-platform/vfabric-data-director/features.html">VMware vFabric</a></li>
+<li><a href="http://www.enterprisedb.com/">Enterprise DB</a></li>
+<li><a href="https://www.cloudpostgres.com">Cloud Postgres</a></li>
+</ul>
+
+
+<p><em>Full disclosure, I work at <a href="http://www.heroku.com">Heroku</a>, and am also a large fan of their database service</em></p>
+
+<h2>Listen/Notify</h2>
+
+<p>If you want to use your database as a queue there&rsquo;s some cases where it just won&rsquo;t work, as heavily discussed in a <a href="http://mikehadlow.blogspot.se/2012/04/database-as-queue-anti-pattern.html">recent write-up</a>. However, much of this could be discarded if you included Postgres in this discussion due to Listen/Notify. Postgres will allow you to <a href="http://www.postgresql.org/docs/9.1/static/sql-listen.html">LISTEN</a> to an event and of course <a href="http://www.postgresql.org/docs/9.1/static/sql-notify.html">NOTIFY</a> for when the event has occurred. A great example of this in action is <a href="http://www.twitter.com/ryandotsmith">Ryan Smith&rsquo;s</a> <a href="https://github.com/ryandotsmith/queue_classic">Queue Classic</a>.</p>
+
+<h2>Fast column addition/removal</h2>
+
+<p>Want to add a column or remove one. With millions of records this modification in some databases could take seconds or even minutes, in cases I&rsquo;ve even heard horror stories of adding a column taking hours. With Postgres this is a near immediate action. The only time you pay a higher price is when you choose to write default data to a new column.</p>
+
+<h2>Table Inheritance</h2>
+
+<p>Want inheritance in your database just like you have in with models inside your application code? Not a problem for Postgres. You can have one table easily inherit for another, leaving a cleaner data model within your database while still giving all the flexibility you&rsquo;d like on your data model. The Postgres docs on <a href="http://www.postgresql.org/docs/9.1/static/ddl-inherit.html">DDL Inheritance</a> do a great job of documenting how to use this and giving a very simple but clear use case.</p>
+
+<h2>Per transaction synchronous replication</h2>
+
+<p>The default mode for Postgres streaming replication is asynchronous. This works well when you want to maintain performance, but also care about your data. There are cases where you want your replication to be <a href="http://www.postgresql.org/docs/current/static/warm-standby.html#SYNCHRONOUS-REPLICATION">synchronous</a> though. Furthermore, for some cases asynchronous may work well enough where as other data you may care more about the data and want synchronous replication, within the same database. For example, if you care about user sign-ups and purchases, but ratings of products and comments is less important Postgres provides the ability to treat them as such. With Postgres you can have per transaction synchronous replication, this means you could have strong data guarantee on your user and purchase transactions, and less guarantees on others. This means you only pay the extra performance cost where you really care about versus an all or nothing approach you have with other databases.</p>
+
+<h2>Conclusion</h2>
+
+<p>Hopefully you&rsquo;re convinced on why Postgres is a great tool, if not take a look back at my <a href="/2012/04/30/why-postgres/">previous post</a>.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2012/04/30/why-postgres/"/>
+    <updated>2012-04-30T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/04/30/why-postgres</id>
+    <content type="html"><![CDATA[<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
+
+<p><em>UPDATE: A <a href="/2012/05/07/why-postgres-part-2/">part 2</a> has been posted on <a href="/2012/05/07/why-postgres-part-2/">Why Use Postgres</a></em></p>
+
+<p>Very often recently I find myself explaining why Postgres is so great. In an effort to save myself a bit of time in repeating this, I though it best to consolidate why Postgres is so great and dispel some of the historical arguments against it.</p>
+
+<h2>Replication</h2>
+
+<p>For some time the biggest argument for MySQL over Postgres was the lack of a good replication story for Postgres. With the release of <a href="http://www.postgresql.org/docs/8.4/static/high-availability.html">8.4 Postgres&rsquo;s</a> story around replication quickly became much better.</p>
+
+<p><em>While replication is indeed very important, are users actually setting up replication each time with MySQL or is it to only have the option later?</em></p>
+
+<h2>Window functions</h2>
+
+<p>This is a feature those familiar with Oracle greatly missed in Postgres. In fact even SQL Server had some form of them, though it was with T-SQL, which adds a bit more complexity to the feature. This is a feature that once you have you can&rsquo;t live without; the other options that existed before were slower and much more complicated. With the release of <a href="http://www.postgresql.org/docs/9.1/static/tutorial-window.html">8.4</a> window functions were added to bring Postgres on par with Oracle in this area. For more info on using them check the Postgres docs above or <a href="http://postgresguide.com/tips/window.html">PostgresGuide.com</a>.</p>
+
+<h2>Flexible Datatypes</h2>
+
+<p>Creating a custom column is simpler in Postgres than any other database I&rsquo;ve used by far. Excluding custom datatypes, even Postgres&rsquo;s out of the box datatypes make Postgres stand out far ahead of other databases. In particular the ability to create a column as an <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> of some datatype. Want to store a game of tic-tac-toe in a database, or an array of 1 user&rsquo;s phone numbers? It simply becomes a single column that can contain multiple phone numbers for a user.</p>
+
+<!-- more -->
+
+
+<h2>Functions</h2>
+
+<p>Need to do some logic outside of standard SQL? Postgres likely has a function already available to do it for you. What about the time you wanted to take all rows returned by a query and combine them into a function? Give <a href="http://www.postgresql.org/docs/9.1/static/functions-aggregate.html">array_agg a look</a>. Need to split a string and grab a part of it or some other string action, there&rsquo;s a <a href="http://www.postgresql.org/docs/9.1/static/functions-string.html">function for that</a>.</p>
+
+<h2>Custom Languages</h2>
+
+<p>Want to use another language inside your database? Postgres probably supports it:</p>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/9.1/static/plpython.html">Python in Postgres</a></li>
+<li><a href="https://github.com/knu/postgresql-plruby">Ruby in Postgres</a></li>
+<li><a href="http://www.joeconway.com/plr/">R in Postgres</a></li>
+<li><a href="http://code.google.com/p/plv8js/wiki/PLV8">V8 in Postgres</a></li>
+</ul>
+
+
+<h2>Extensions</h2>
+
+<p>Need to go beyond standard Postgres? There&rsquo;s a good chance that someone else has, and that there&rsquo;s already an extension for it. Extensions take Postgres further with things such as Geospatial support, JSON data types, Key Value Stores, and connecting to external data sources (Oracle, MySQL, Redis). I could easily have a full post on extensions available alone, fortunately someone else has already created an awesome one &ndash; <a href="http://blog.railsware.com/2012/04/23/postgresql-most-useful-extensions/">PostgreSQL Most Useful Extensions</a>.</p>
+
+<h2>NoSQL gives flexibility</h2>
+
+<p>I don&rsquo;t want to get too NoSQL versus SQL debate&hellip;. no matter which side you fall on you can get both in Postgres. With hstore and <a href="http://code.google.com/p/plv8js/wiki/PLV8">PLV8</a> you&rsquo;ll get the flexibility in your data that you would with Mongo along with all of the above features. <a href="http://www.twitter.com/leinweber">Will Leinweber</a> has a talk that he&rsquo;s given at several conferences recently that highlights <a href="http://ssql-railsconf.herokuapp.com/">Schemaless SQL</a>.</p>
+
+<h2>Custom Functions</h2>
+
+<p>Didn&rsquo;t find the function you wanted in the above? Try creating it yourself:</p>
+
+<p>```bash</p>
+
+<pre><code>CREATE FUNCTION awesomeness(varchar) RETURNS boolean
+    AS 'CASE WHEN $1 == \'postgres\' THEN TRUE ELSE FALSE END;'
+    LANGUAGE SQL
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+</code></pre>
+
+<p>```</p>
+
+<h2>Common Table Expressions</h2>
+
+<p>Often times when exploring data or creating a new view you&rsquo;ll want to load data into a temporary table. When exploring data you only need this for a temporary time. Why actually go through the effort of putting it into a temporary table, especially if you only need it for a single query. <a href="http://www.postgresql.org/docs/8.4/static/queries-with.html">Common Table Expressions</a> let you accomplish just that.</p>
+
+<h2>Development Pace</h2>
+
+<p>For some period of time MySQL and Postgres were both moving at fast paces. In recent years though Postgres has rapidly picked up its pace of how much gets packed into a single release. Just take a look at the  <a href="http://en.wikipedia.org/wiki/PostgreSQL#Major_releases">Major Releases</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>Hopefully you&rsquo;re convinced on why Postgres is a great tool. Next take a visit to <a href="http://www.postgresguide.com">PostgresGuide</a> if you need some direction on where to start or how to use many of the above features.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apps to Services]]></title>
+    <link href="http://www.craigkerstiens.com/2012/04/13/apps_to_services/"/>
+    <updated>2012-04-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/04/13/apps_to_services</id>
+    <content type="html"><![CDATA[<p><em>Update the talk for this is now viewable on YouTube <a href="http://www.youtube.com/watch?v=ztGpK-v2Oow">here</a></em></p>
+
+<p>When I first came across Django I was an immediate fan. It featured:</p>
+
+<ul>
+<li>Good documentation</li>
+<li>Steady but stable progress</li>
+<li>Community around apps which encouraged <em>DRY</em></li>
+</ul>
+
+
+<p>I&rsquo;ve been a user off and on depending on my needs for nearly four years since discovering it, and throughout that time all of the above have remained true. However, as I&rsquo;ve worked on and encountered more complex applications there&rsquo;s one thing that has time and again broke down for me, which is the Django apps model. It hasn&rsquo;t broken down due to Django only though, I&rsquo;ve seen it break down in Ruby (Rails), Java, .Net, take you&rsquo;re pick of language or framework.</p>
+
+<p>The breakdown of this model is due to several things:</p>
+
+<!-- more -->
+
+
+<ul>
+<li>Successful applications grow which mean more complex applications and more developers</li>
+<li>More complex applications often mean larger code bases
+
+<ul>
+<li>Deprecating code is good, but not always easy in large code bases</li>
+<li>More code means more testing, but slower releases</li>
+</ul>
+</li>
+</ul>
+
+
+<p>At Heroku one way we often describe the platform to others is <em>&ldquo;A distributed Unix in the cloud.&rdquo;</em> There may be many reasons for this, but one of which is that we love the Unix approach and philosophy of <em>Small sharp tools</em>. Sticking to that, many of our internal pieces are small individual apps that talk across defined contracts or APIs.</p>
+
+<p>Back to Django&rsquo;s app structure&hellip; Many people build apps and re-use them and often share them with the world. This is truly great for re-usability, which means you can focus on building key features. However, this does not enable your application to be more maintainable in the future nor does it enable scalability. Yes, you can absolutely scale a monolithic application, but it doesn&rsquo;t mean you should. This doesn&rsquo;t mean the app structure is entirely broken, it just means that it is a partial step to where you should be. The real solution is to build more of these pieces of your greater application as services.</p>
+
+<p>A Django app is defined as <em>A web application that does something. I.e. Weblog, Poll, Ticket system</em>. Within Django an app contains:</p>
+
+<ul>
+<li>Models</li>
+<li>Views</li>
+<li>URLs</li>
+</ul>
+
+
+<p>I couldn&rsquo;t find a great definition of a Service that was succinct and also said something of value (If you have one please pass along as I&rsquo;d love to have a definition from a source other than myself). For the sake setting something in place I&rsquo;m defining a service as <em>Method of communication over the web with a provider using a defined contract</em>. By this definition a service contains:</p>
+
+<ul>
+<li>Provider</li>
+<li>Endpoint</li>
+<li>Contract</li>
+</ul>
+
+
+<p>Let me clarify this a bit further&hellip;</p>
+
+<p>Tangible example/parable:</p>
+
+<p>Django Apps::</p>
+
+<ul>
+<li>Ticket</li>
+<li>FAQ</li>
+</ul>
+
+
+<p>Company Teams::</p>
+
+<ul>
+<li>Support</li>
+<li>Community Evangelist</li>
+</ul>
+
+
+<p>You start with two apps, that maybe share a little code. Moreover they at least exist in a central code base. Then you deploy something and the Ticket app can no longer create FAQ, due to a change in one or the other. There&rsquo;s no finger to point, but more importantly, you don&rsquo;t know how to contact to resolve. Neither team wants to deploy, so you test more. Before every deploy you run tests&hellip; and validate a build&hellip; and deployment slows&hellip; well maybe not with two teams. But as you get to 5 teams it does, and more so with 15, and more so with 30 teams. Then you hire a build master and release master, who really wants that?</p>
+
+<p>So within Django maybe you go from apps all in the same codebase to releasing private versions of apps&hellip;</p>
+
+<p>Your requirements.txt for a main site looks like:</p>
+
+<p>``` python requirements.txt</p>
+
+<p>FAQ==0.2</p>
+
+<p>```</p>
+
+<p>You have 3 apps which depend on it, support, marketing, billing. You bump a version <code>FAQ==0.3</code> but then all three or no teams have to upgrade the version to the new APIs. However if your interface was:</p>
+
+<p>``` python</p>
+
+<p>data = {
+‘question’: “my question”,
+‘source’: 123
+}
+requests.POST(os.environ[‘FAQ_API’] + ‘/v1/create’, data=data)</p>
+
+<p>```</p>
+
+<p>You could also have:</p>
+
+<p>``` python</p>
+
+<p>data = {
+‘question’: “my question”,
+‘source’: 123,
+‘related’: [456, 789]
+}
+requests.POST(os.environ[‘FAQ_API’] + ‘/v2/create’, data=data)</p>
+
+<p>```</p>
+
+<p>Then you can easily support both, deprecate v1, and track its usage easily. This doesn&rsquo;t guarantee, but it does enable <em>re-usability</em>, <em>scalability</em>, <em>maintainability</em>. And of course continues to let you build features instead of maintaining software.</p>
+
+<p>In the next post I&rsquo;ll go into a bit more detail of how a real example looks with apps in both forms, using a set of Django Apps and using a set of Services built on Django Apps.</p>
+
+<p><em>Slides from a corresponding talk at DjangoCong are <a href="http://bit.ly/djangocong">here</a></em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sphinx Build Pack on Heroku]]></title>
+    <link href="http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack/"/>
+    <updated>2012-01-25T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/01/25/sphinx-buildpack</id>
+    <content type="html"><![CDATA[<p>Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via <a href="http://github.com/heroku/">Heroku&rsquo;s github</a>, you can view several of them at:</p>
+
+<ul>
+<li><a href="https://github.com/heroku/heroku-buildpack-python">Python Build Pack</a></li>
+<li><a href="https://github.com/heroku/heroku-buildpack-ruby">Ruby Build Pack</a></li>
+<li><a href="https://github.com/heroku/heroku-buildpack-scala">Scala Build Pack</a></li>
+</ul>
+
+
+<p><em>There have even been some created as fun weekend hacks such as the <a href="http://github.com/hone/heroku-buildpack-jsnes">NES Rom Buildpack</a>.</em></p>
+
+<!-- more -->
+
+
+<p>Recently at Heroku my teams have started exploring new forms of collaborating and documenting. In particular editing a wiki for communication is contrary to our regular workflow. Much of our day is spent in code and git. To edit a wiki within a web browser and using some markup we&rsquo;re less familiar with is an overhead we were aiming to reduce. As a result we&rsquo;ve tried a few things, the first was simply using a github repo to edit markdown.</p>
+
+<p>Personally I have always been a fan of Sphinx documentation. However, Sphinx has no means to secure a site out of the box. Generating the static site then running it being a Rack app to secure it seemed like a few extra steps that would hinder workflow. As a result I set out to build the Sphinx buildpack which would let you push a Sphinx project to Heroku and automatically run your documentation. The buildpack itself supports two modes, public documentation and a private documentation. To have your documentation secured in private mode you simple need to add your google apps domain as a config var <code>heroku config:add DOMAIN=mydomain.com</code>.</p>
+
+<p><em>If you need more information about setting up OpenID check out my recent post <a href="/2012/01/23/securing-your-organization/">Securing your organization with OpenID </a></em></p>
+
+<p>```bash</p>
+
+<pre><code>$ sphinx-quickstart 
+$ git init .
+$ git add .
+$ git commit -m initial
+$ heroku create -s cedar -b http://github.com/craigkerstiens/heroku-buildpack-sphinx.git
+$ git push heroku master
+$ heroku open
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>

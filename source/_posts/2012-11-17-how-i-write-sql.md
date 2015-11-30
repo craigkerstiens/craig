@@ -65,7 +65,7 @@ Next I'll work with the array of tags which has some specific things to Postgres
     GROUP BY 
       wine_id, tags;
 
-Finally I'm going to put it all together. This is going to have and additional query to get the winery and the wine name as well. We're also going to use CTE's (Common Table Expressions), think of these as temporary views that can make your query more readable:
+Finally I'm going to put it all together. This is going to have an additional query to get the winery and the wine name as well. We're also going to use CTE's (Common Table Expressions), think of these as temporary views that can make your query more readable:
 
     WITH 
 
@@ -117,7 +117,7 @@ Finally I'm going to put it all together. This is going to have and additional q
     ORDER BY
       rating DESC
 
-One thing to point out, is `SELECT`, `FROM` and `ORDER BY` are followed by a new line. When I `WHERE` multiple conditions I ensure the `AND` and the condition occur on the same line. This is intentional to make those easier to read as well as easy to remove/add. The key to allowing it to still be readable is an extra two spaces before the `AND` so the condition aligns with the above one. This would appear something similar to:
+One thing to point out, is `SELECT`, `FROM` and `ORDER BY` are followed by a new line. When I have `WHERE` multiple conditions I ensure the `AND` and the condition occur on the same line. This is intentional to make those easier to read as well as easy to remove/add. The key to allowing it to still be readable is an extra two spaces before the `AND` so the condition aligns with the above one. This would appear something similar to:
 
     SELECT foo
     FROM bar

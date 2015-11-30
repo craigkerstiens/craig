@@ -5,12 +5,14 @@
 	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<script type="text/javascript">
+	</script>
 	<meta charset="utf-8">
-	<title> </title>
+	<title> Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="First a huge thanks to all organizers of conferences, but especially for those that organize not-for-profit conferences. I do understand its a great &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -20,17 +22,6 @@
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript">
-  (function() {
-    window._pa = window._pa || {};
-    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
-    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
-    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
-    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
-    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.perfectaudience.com/serve/517fd07cf1409000020002dc.js";
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
-  })();
-</script>
 	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
 
 <script language="Javascript" type="text/javascript">
@@ -68,13 +59,6 @@ $(document).ready(
 </script>
 
 	
-    <meta property="twitter:card" content="summary">
-    <meta property="twitter:site" content="craigkerstiens">
-    <meta property="twitter:url" content="http://www.craigkerstiens.com">
-    <meta property="twitter:title" content="Craig Kerstiens">
-    <meta property="twitter:description" content="First a huge thanks to all organizers of conferences, but especially for those that organize not-for-profit conferences. I do understand its a great amount of work, and in nearly all cases have &hellip;">
-
-
 </head>
 
 
@@ -116,6 +100,254 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/07/19/rapid-api-prototyping/">
+		
+			Rapid API Prototyping With Heroku Postgres Dataclips</a>
+	</h2>
+	<div class="entry-content">
+		<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Historically with implementing the API fully you can&rsquo;t see how you truly feel about the result, causing this cycle to take longer than it should. Heroku Postgres has <a href="https://postgres.heroku.com/blog/past/2012/1/31/simple_data_sharing_with_data_clips/">Dataclips</a>, which (among other things) can be used for quickly prototyping APIs. <a href="https://postgres.heroku.com/dataclips">Dataclips</a> allows you to easily share data, but more importantly consume it in a form much like you would a restful API. Lets take a look at how this would work:</p>
+
+<h2>Given a schema</h2>
+
+<p><img src="http://f.cl.ly/items/0n0k1h3q1I1W1T373q0D/1.%20psql.png" alt="schema" /></p>
+
+<p>We can see from the screen shot of the schema above we can see we have a few tables. These tables are the complete works of Shakespeare thanks to <a href="http://www.opensourceshakespeare.org/downloads/">opensourceshakespeare</a>. Lets take a couple of hypothetical endpoints we&rsquo;ve decided on that we&rsquo;d like to expose for users and test as an API.</p>
+
+<ul>
+<li>The number of works per year</li>
+<li>Drone factory (this is a fun one courtesy of Richard Morrison &ndash; <a href="https://twitter.com/mozz100">@mozz100</a> essentially who has the longest paragraphs on average in his works.</li>
+</ul>
+
+
+
+		
+		<a href="/2012/07/19/rapid-api-prototyping/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-19T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/api/'>API</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/heroku/'>Heroku</a>, <a class='category' href='/categories/mobile/'>Mobile</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/prototype/'>Prototype</a>, <a class='category' href='/categories/ios/'>iOS</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/06/19/pro-tips-for-conference-talks/">
+		
+			Protips for Conference Talks</a>
+	</h2>
+	<div class="entry-content">
+		<p>A few weeks ago I was sitting at the hotel in Zurich with <a href="http://www.twitter.com/jacobian">Jacob Kaplan Moss</a> prior to <a href="http://klewel.com/conferences/djangocon-2012/">DjangoCon EU</a> enjoying a beer, talking about Django, and discussing a bit about our upcoming talks for the conference. He talked briefly about his upcoming <a href="http://klewel.com/conferences/djangocon-2012/index.php?talkID=2">keynote</a> and how he was doing something different, including essentially 5 mini-talks. This seemed interesting enough, but the part that surprised me was when Jacob said, &ldquo;I&rsquo;m among friends here so it&rsquo;ll be a good place to test this format.&rdquo; Many if not all in the community know who Jacob is as one of the creators of Django, though still to be &ldquo;among friends&rdquo; at a roughly 300 person conference surprised me. However, as someone thats keynoted several times, spoken at conferences for many years, and familiar with many people in the community; for the 150-200 people there he had not met before, he was still truly among friends. While giving a keynote is never an easy feat, it seems to ease the worry ahead of time of doing such.</p>
+
+<p>Saturday night there was a bit of conversation on twitter that had some related discussion. In the last minute rush for DjangoCon US talk submissions a few that have been involved in the community for some time discussed submitting their first talk proposals. In parallel to that was some discussion around diversity, I volunteered the idea of not including presenters name&rsquo;s in the list when reviewing and voting on talks. While both of the above are controversial topics alone, I hope that can be left to another later time. The key idea that emerged that can be helpful to anyone looking to submit a talk to a conference is how the &ldquo;pro&rsquo;s do it&rdquo;, as <a href="http://www.twitter.com/jdunck">Jeremy Dunck</a> put it.</p>
+
+<p>So without further adieu, hopefully without speaking too much for him here&rsquo;s likely why Jacob viewed his 300 person keynote as being among friends:</p>
+
+<h2>1. Start small</h2>
+
+<p>Whether its practicing the talk itself or writing the abstract for a proposal practicing each step lets you refine this well ahead of time. In my experience, providing a talk description for a meetup can often be far harder than for a conference. For a meetup I feel confined to 2-3 sentences, versus an abstract a solid paragraph or two. Yet, I still have to make it as exciting, because of course I don&rsquo;t want 4 people to show up to the meetup because it sounds uninteresting. In the case I&rsquo;m most familiar with <a href="http://www.djangocon.us/">DjangoCon</a> and DjangoCon.eu both happen once a year, though many smaller regional conferences related to Python exist and especially meetup groups:</p>
+
+
+		
+		<a href="/2012/06/19/pro-tips-for-conference-talks/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-19T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/conference/'>Conference</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>, <a class='category' href='/categories/speaking/'>Speaking</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/06/11/schemaless-django/">
+		
+			Schemaless Postgres in Django</a>
+	</h2>
+	<div class="entry-content">
+		<p>Earlier this week while I was at <a href="http://lanyrd.com/2012/djangocon-europe/">DjangoCon EU</a> there seemed to be a surprising amount of talk about MongoDB. My problem with this isn&rsquo;t with MongoDB, but in  the assumption that only Mongo can solve what you&rsquo;re looking for. By and far the most common feature is people want schemaless. It gives them flexibility in their data model and lets them iterate quickly. While I still opt for relational models that map cleanly to a relational database, there are cases where developers may want schemaless. I gave a quick lightning talk on this with slides <a href="https://speakerdeck.com/u/craigkerstiens/p/django-and-hstore">here</a>, but it is worth recapping.</p>
+
+<p>The example given by <a href="http://www.twitter.com/pydanny">pydanny</a> was a product catalog. You may have different items you want to store for a catalog. Lets take an example below:</p>
+
+<pre><code>django_pony = {'name': 'Django Pony', 'rating': '5'}
+pink_pony = {'name': 'Pink Pony', 'rating': '4', 'color': 'pink'}
+</code></pre>
+
+<p>In the case of a product catalog it could be understandable you don&rsquo;t want to normalize every possible spec for the product. The argument for Mongo is so commonly that you can easily work with this data model. Admittedly it is quite simple:</p>
+
+<pre><code>from pymongo import Connection
+connection = Connection()
+django_pony = {'name': 'Django Pony', 'rating': '5'}
+connection.product.insert(django_pony)
+</code></pre>
+
+<p>The problem is that this assumes other schemaless options don&rsquo;t exist or are inferior.</p>
+
+<h2>Enter hStore</h2>
+
+<p><a href="http://www.postgresql.org/docs/8.4/static/hstore.html">hStore</a> is a column type within Postgres. It is a key value store that allows you to store a dictionary, with text values. It alone is not a full document store replacement, but allows for flexibility in your data model where you need it while letting you use relational models elsewhere. Its not exactly new within Postgres either, as its been available since 8.4, however its recently become easier to work with and is supported in some form or another by more frameworks.</p>
+
+<p>To do the same as above we only need to do a few steps:</p>
+
+
+		
+		<a href="/2012/06/11/schemaless-django/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/05/07/why-postgres-part-2/">
+		
+			Why PostgreSQL Part 2</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
+
+<p>Last week I did a post on the <a href="/2012/04/30/why-postgres/">many reasons to use Postgres</a>. My goal with the post was two fold:</p>
+
+<ul>
+<li>Call out some of the historical arguments against it that don&rsquo;t hold any more</li>
+<li>Highlight some of the awesome but more unique features that are less commonly found in databases.</li>
+</ul>
+
+
+<p>Once I published the post it was clear and was immediately pointed out in the comments and on <a href="http://news.ycombinator.com/item?id=3910743">hacker news</a> that I missed quite a few features that I&rsquo;d mostly come to take for granted. <em>Perhaps this is due to so much awesomeness existing within Postgres.</em> A large thanks to everyone for calling these out. To help consolidate many of these, here&rsquo;s a second list of the many reasons to use PostgreSQL:</p>
+
+<h2>Create Index Concurrently</h2>
+
+<p>On most traditional databases when you create an index it holds a lock on the table while it creates the index. This means that the table is more or less useless during that time. When you&rsquo;re starting out this isn&rsquo;t a problem, but as your data grows and you then add indexes later to improve performance it could mean downtime just to add an index. Not surprisingly Postgres has a great means of adding an index without holding that lock. Simply doing <a href="http://www.postgresql.org/docs/9.1/static/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY"><code>CREATE INDEX CONCURRENTLY</code></a> instead of <code>CREATE INDEX</code> will create your index without holding the lock.</p>
+
+<p><em>Of course with many features there are caveats, in the case of creating your index concurrently it does take somewhere on the order of 2-3 times longer, and cannot be done within a transaction</em></p>
+
+<h2>Transactional DDL</h2>
+
+<p>If you&rsquo;ve ever run a migration had something break mid-way, either due to a constraint or some other means you understand what pain can come of quickly untangling such. Typically migrations on a schema are intended to be run holistically and if they fail you want to fully rollback. Some other databases such as Oracle in recent versions and SQL server do support, this. And of course Postgres supports wrapping your DDL inside a transaction. This means if an error does occur you can simply rollback and have the previous DDL statements rolled back with it, leaving your schema migrations as safe as your data, and your application in a consistent state.</p>
+
+<h2>Foreign Data Wrappers</h2>
+
+<p>I talked before about other languages within your database such as Ruby or Python, but what if you wanted to talk to other databases from your database. Postgres&rsquo;s Foreign Data Wrapper allows you to fully wrap external data systems and join on them in a similar fashion to as if they existed locally within the database. Here&rsquo;s a sampling of just a few of the foreign data wrappers that exist:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+</ul>
+
+
+<p>In fact you can even use <a href="http://multicorn.org/">Multicorn</a> to allow you to write other foreign data wrappers in Python. An example of how this can be done, in this case with Database.com/Force.com can be found <a href="http://blog.database.com/blog/2011/11/21/a-database-comforce-com-foreign-data-wrapper-for-postgresql/">here</a></p>
+
+
+		
+		<a href="/2012/05/07/why-postgres-part-2/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -427,182 +659,6 @@ $(document).ready(
 <div class="tags">
 
 	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/11/07/how-heroku-works-maker-day/">
-		
-			How Heroku Works - Maker&#8217;s Day</a>
-	</h2>
-	<div class="entry-content">
-		<p>In my earlier post on <a href="/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools at Heroku</a>, I mentioned how we value engineers&#8217; time; their work has enabled us to build a great platform. As a result of what we&rsquo;ve built, we&rsquo;ve had great growth both of our platform and of our teams internally. With that growth inevitably comes different distractions on engineers&#8217; time. Despite how a manager may plan things, engineering work needs long periods of uninterrupted time. To ensure that no matter what, an engineer has plenty of opportunity to do the work he or she was hired to do, Heroku has Maker&rsquo;s Day.</p>
-
-
-		
-		<a href="/2011/11/07/how-heroku-works-maker-day/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/11/03/moreadvanceddependencies/">
-		
-			More Advanced Dependencies</a>
-	</h2>
-	<div class="entry-content">
-		<p>So we walked through setting up your <a href="/2011/11/01/installingpythonpackages/">virtualenv and installing some packages</a>. The basic workflow for installing packages will work 95% of the time, however part of the time you will need a little more. Below are several cases that may require extra effort. Its likely worthwhile to skim these and only reference them when needed as they likely wont be part of your everyday workflow (with the exception of using mirrors).</p>
-
-<p>Most packages you install should be on pip and an actual released version of a package. There are times however when you may need to test out a package that is still being worked on. For these cases there&rsquo;s what developers commonly do and what you should do.</p>
-
-
-		
-		<a href="/2011/11/03/moreadvanceddependencies/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-03T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/11/02/how-heroku-works-teams-tools/">
-		
-			How Heroku Works - Teams and Tools</a>
-	</h2>
-	<div class="entry-content">
-		<p>Heroku is a largely agile company, we work in primarily small teams that talk via api and data contracts. Its also a company comprised primarily of engineers, even product managers often write code. Heroku as a platform drives many of the features not from top down, but from bottom up based on engineers desires or skunkworks projects. There&rsquo;s many valuable insights into how Heroku runs efficiently for engineering.</p>
-
-<p>I&rsquo;ll be diving into many various practices that enable Heroku to put quality engineering above all else, but first let me highlight the team structure and tools that enable this.</p>
-
-
-		
-		<a href="/2011/11/02/how-heroku-works-teams-tools/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/11/01/installingpythonpackages/">
-		
-			Installing Python Packages</a>
-	</h2>
-	<div class="entry-content">
-		<p>Now that you have you system and project environment all setup you probably want to start developing. But you likely don&rsquo;t want to start writing an entire project fully from scratch, as you dive in you&rsquo;ll quickly realize theres many tools helping you build projects and sites faster. For example making a request to a website there&rsquo;s <a href="http://docs.python-requests.org/en/latest/index.html">Requests</a>, for handling processing images there&rsquo;s <a href="http://www.pythonware.com/products/pil/">Python Imaging   Library</a>, or for a full framework to help you in building a site there&rsquo;s <a href="http://www.djangoproject.com">Django</a>. With all of these there&rsquo;s one simple and common way to install them. But first a little more on how it all works.</p>
-
-
-		
-		<a href="/2011/11/01/installingpythonpackages/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/python/'>Python</a>
 
 </div>
 

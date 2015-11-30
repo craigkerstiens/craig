@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Development | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/development/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[More on Postgres Performance]]></title>
+    <link href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/"/>
+    <updated>2013-01-10T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance</id>
+    <content type="html"><![CDATA[<p>If you missed my previous post on <a href="/2012/10/01/understanding-postgres-performance/">Understanding Postgres Performance</a> its a great starting point. On this particular post I&rsquo;m going to dig in to some real life examples of optimizing queries and indexes.</p>
+
+<h3>It all starts with stats</h3>
+
+<p>I wrote about some of the <a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/">great new features in Postgres 9.2</a> in the recent announcement on support of Postgres 9.2 on <a href="https://www.heroku.com">Heroku</a>. One of those awesome features, is <a href="http://www.postgresql.org/docs/9.2/static/pgstatstatements.html">pg_stat_statements</a>. Its not commonly known how much information Postgres keeps about your database (beyond the data of course), but in reality it keeps a great deal. Ranging from basic stuff like table size to cardinality of joins to distribution of indexes, and with pg_stat_statments it keeps a normalized record of when queries are run.</p>
+
+<!-- more -->
+
+
+<p>First you&rsquo;ll want to turn on pg_stat_statments:</p>
+
+<pre><code>CREATE extension pg_stat_statements;
+</code></pre>
+
+<p>What this means it would record both:</p>
+
+<pre><code>SELECT id 
+FROM users
+WHERE email LIKE 'craig@heroku.com';
+</code></pre>
+
+<p>and</p>
+
+<pre><code>SELECT id 
+FROM users
+WHERE email LIKE 'craig.kerstiens@gmail.com';
+</code></pre>
+
+<p>To a normalized form which looks like this:</p>
+
+<pre><code>SELECT id 
+FROM users
+WHERE email LIKE ?;
+</code></pre>
+
+<h3>Understanding them from afar</h3>
+
+<p>While Postgres collects a great deal of this information dissecting it to something useful is sometimes more mystery than it should be. This simple query will show a few very key pieces of information that allow you to begin optimizing:</p>
+
+<pre><code>SELECT 
+  (total_time / 1000 / 60) as total_minutes, 
+  (total_time/calls) as average_time, 
+  query 
+FROM pg_stat_statements 
+ORDER BY 1 DESC 
+LIMIT 100;
+</code></pre>
+
+<p>The above query shows three key things:</p>
+
+<ol>
+<li>The total time a query has occupied against your system in minutes</li>
+<li>The average time it takes to run in milliseconds</li>
+<li>The query itself</li>
+</ol>
+
+
+<p>Giving an output something like:</p>
+
+<pre><code>    total_time    |     avg_time     |                                                                                                                                                              query
+------------------+------------------+------------------------------------------------------------
+ 295.761165833319 | 10.1374053278061 | SELECT id FROM users WHERE email LIKE ?
+ 219.138564283326 | 80.24530822355305 | SELECT * FROM address WHERE user_id = ? AND current = True
+(2 rows)
+</code></pre>
+
+<h3>What to optimize</h3>
+
+<p>A general rule of thumb is that most of your very common queries that return 1 or a small set of records should return in ~ 1 ms. In some cases there may be queries that regularly run in 4-5 ms, but in most cases ~ 1 ms or less is an ideal.</p>
+
+<p>To pick where to begin I usually attempt to strike some balance between total time and long average time. In this case I&rsquo;d start with the second probably, as on the first one I could likely shave an order of magnitude off, on the second I&rsquo;m hopeful to shave two order of magnitudes off thus reducing the time spent on that query from a cumulative 220 minutes down to 2 minutes.</p>
+
+<h3>Optimizing</h3>
+
+<p>From here you probably want to first example my other detail on understanding the explain plan. I want to highlight some of this with a more specific case based on the second query above. The above second query on an example data set does contain an index on user_id and yet there&rsquo;s still high query times. To start to get an idea of why I would run:</p>
+
+<pre><code>EXPLAIN ANALYZE
+SELECT * 
+FROM address 
+WHERE user_id = 245 
+  AND current = True
+</code></pre>
+
+<p>This would yield results:</p>
+
+<pre><code>                                                                                   QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=4690.88..4690.88 rows=1 width=0) (actual time=519.288..519.289 rows=1 loops=1)
+   -&gt;  Nested Loop  (cost=0.00..4690.66 rows=433 width=0) (actual time=15.302..519.076 rows=213 loops=1)
+         -&gt;  Index Scan using idx_address_userid on address  (cost=0.00..232.52 rows=23 width=4) (actual time=10.143..62.822 rows=1 loops=8)
+               Index Cond: (user_id = 245)
+               Filter: current
+               Rows Removed by Filter: 14
+ Total runtime: 219.428 ms
+(1 rows)
+</code></pre>
+
+<p>Hopefully not being too overwhelmed by this due to having read the other detail on <a href="/2012/10/01/understanding-postgres-performance/">query plans</a> we can see that it is using an index as expected. The difference is its having to fetch 15 different rows from the index then discard the bulk of them. The number of rows discarded is showcased by the line:</p>
+
+<pre><code>Rows Removed by Filter: 14
+</code></pre>
+
+<p><em>This is just one more of the many improvements in Postgres 9.2 alongside pg_stat_statements.</em></p>
+
+<p>To further optimize this we would great a conditional OR composite index. A conditional would be where only current = true, where as the composite would index both values. A conditional is commonly more valuable when you have a smaller set of what the values may be, meanwhile the composite is when you have a high variability of values. Creating the conditional index:</p>
+
+<pre><code>CREATE INDEX CONCURRENTLY idx_address_userid_current ON address(user_id) WHERE current = True;
+</code></pre>
+
+<p>We can then see the query plan is now even further improved as we&rsquo;d hope:</p>
+
+<pre><code>EXPLAIN ANALYZE
+SELECT * 
+FROM address 
+WHERE user_id = 245 
+  AND current = True
+
+                                                                                   QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=4690.88..4690.88 rows=1 width=0) (actual time=519.288..519.289 rows=1 loops=1)
+     -&gt;  Index Scan using idx_address_userid_current on address  (cost=0.00..232.52 rows=23 width=4) (actual time=10.143..62.822 rows=1 loops=8)
+           Index Cond: ((user_id = 245) AND (current = True))
+ Total runtime: .728 ms
+(1 rows)
+</code></pre>
+
+<p><em>For further reading, give Greg Smith&rsquo;s <a href="http://www.amazon.com/gp/product/184951030X/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=184951030X">Postgres High Performance</a> a read</em></p>
+
+<p>If you want help with optimizing your DB for performance or getting insights into your data please reach out <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+  <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+  <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+  <div id="mce-responses" class="clear">
+    <div class="response" id="mce-error-response" style="display:none"></div>
+    <div class="response" id="mce-success-response" style="display:none"></div>
+  </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                      if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                        this.value = '';
+                      } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                        this.value = '';
+                      } else {
+                          if (/\[day\]/.test(fields[0].name)){
+                                              this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                         
+                          } else {
+                                              this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                          }
+                                      }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                        this.value = '';
+                      } else {
+                          this.value = 'filled';
+                                      }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+      });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sharding your database]]></title>
+    <link href="http://www.craigkerstiens.com/2012/11/30/sharding-your-database/"/>
+    <updated>2012-11-30T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/11/30/sharding-your-database</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
+
+<!--more-->
+
+
+<h3>What and Why</h3>
+
+<p>Sharding is the process of splitting up your data so it resides in different tables or often different physical databases. Sharding is helpful when you have some specific set of data that outgrows either storage or reasonable performance within a single database.</p>
+
+<h3>Logical Shards</h3>
+
+<p>First when initially implementing sharding you&rsquo;ll want to create an arbitrary number of logical shards. This will allow you to change less code later when it comes to adding more shards. You&rsquo;ll also want to define your shards to the power of 2. Generally I&rsquo;d recommend for most services 1024 can be a good number, I believe Instagram actually used 4096, either can really be an appropriate number. For simplicity sake lets start with an example of using 4 logical shards. First lets look at an example set of users:</p>
+
+<pre><code> id |           email           |      name       
+----+---------------------------+-----------------
+  1 | craig.kerstiens@gmail.com | Craig Kerstiens
+  2 | john.doe@gmail.com        | John Doe
+  3 | jane.doe@gmail.com        | Jane Doe
+  4 | user4@gmail.com           | User 4
+  5 | user5@gmail.com           | User 5
+  6 | user6@gmail.com           | User 6
+  7 | user7@gmail.com           | User 7
+  8 | user8@gmail.com           | User 8
+</code></pre>
+
+<p>Dividing these up into logical shards we&rsquo;re going to have something that looks roughly like this:</p>
+
+<p><img src="http://f.cl.ly/items/0Q1A38191Q0N3G0L413K/Screenshot%2011:29:12%209:45%20AM.png" alt="sharding layout" /></p>
+
+<p>Its important when sharding that you find a mechanism that requires you to not hit the database. As the above example shows its using the ID of the row inside the database instead we&rsquo;re likely going to want to determine the shard based on a hash of some value such as the email:</p>
+
+<pre><code>logical_shard = hash(User.email) % 4
+</code></pre>
+
+<h3>Physical Shards</h3>
+
+<p>From here we&rsquo;ll then take the logical shards and create actual physical shards. If you have a single physical shard you&rsquo;re using a single database, but the rest of your application code is ready to handle additional shards. For now lets use an example of two physical shards, the end result would be dividing our data up somehow like this:</p>
+
+<p><img src="http://f.cl.ly/items/0A3b3O3A3K28043Y2s0j/Screenshot%2011:29:12%209:46%20AM.png" alt="sharding layout" /></p>
+
+<p>The physical shard to access can easily be counted by taking the modulus of the logical shard its on by the physical shards that exist:</p>
+
+<pre><code>total_physical_shards = 2
+total_logical_shards = 4
+logical_shard = hash(User.email) % total_logical_shards
+physical_shard = logical_shard % total_physical_shards
+</code></pre>
+
+<h3>Generating IDs (Primary Keys)</h3>
+
+<p>As you&rsquo;re distributing data across multiple databases you&rsquo;ll want to avoid using an integer as your primary key. This would cause for keys to be duplicated within your database and make for a headache when attempting to report against your data. Instead the ideal is to use a UUID as the primary key. By using a UUID and generating this in either your application code or within your database you ensure each User ID is actually unique.</p>
+
+<h3>Adding Capacity</h3>
+
+<p>The best case scenario for most web applications, such is the case for <a href="http://www.databasesoup.com/2012/04/sharding-postgres-with-instagram.html">Instagram</a>, is to have to scale beyond their initial capacity, in order to do this you&rsquo;ll simple expand the number of physical shards. In order to do this you&rsquo;ll want to move data from one physical shard to another, then remove data from the old physical shard. Its also generally a good practice to grow your physical shards in powers of 2 the same way you would your logical shards. Lets take a look at a clearer example of how we would do this using the <a href="https://postgres.heroku.com">Heroku Postgres Service</a>&hellip;</p>
+
+<p>First we&rsquo;re going to add a <a href="https://postgres.heroku.com/blog/past/2012/10/25/announcing_follow/">follower</a> for each shard we have:</p>
+
+<p><img src="http://f.cl.ly/items/1N233k203j2d1O2l2w47/Screenshot%2011:29:12%202:36%20PM.png" alt="Followers" /></p>
+
+<p>We&rsquo;re then going to promote our followers to be their own independent databases which can accept writes. This means we&rsquo;ll have two copies that can be written to with the same data:</p>
+
+<p><img src="http://f.cl.ly/items/3Q1D2O0J0o2b0e051t46/Screenshot%2011:29:12%202:39%20PM.png" alt="Promotion" /></p>
+
+<p>At this point you can update your application code to have the new number of physical shards and it should begin writing data to the appropriate place. Of course you do still want to clean up some of that extra data. To do this you&rsquo;ll want to remove the data that doesn&rsquo;t belong in the appropriate shard. For example, id of 3 wouldn&rsquo;t belong in physical shard 1 any more. Now we can run a background process to clean up such data:</p>
+
+<p><img src="http://f.cl.ly/items/0a2r132M1f1m171B3y3R/Screenshot%2011:29:12%202:42%20PM.png" alt="Cleanup" /></p>
+
+<h3>Conclusion</h3>
+
+<p>While many applications may never need to scale out their database, when they do, sharding can be both straight forward and effective. While I would encourage many to scale up first as it is an easy option, hopefully this provides further guidance to how to scale out. For those that do anticipate this needed planning for it early with key things such as using UUID&rsquo;s can make the process less painful.</p>
+
+<p>This article of course only grazes the surface, if there&rsquo;s interest from readers there will be more specifics to follow with actual code examples.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How I Write SQL]]></title>
+    <link href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/"/>
+    <updated>2012-11-17T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/11/17/how-i-write-sql</id>
+    <content type="html"><![CDATA[<p>I recently got asked by <a href="http://rzrsharp.net/">a friend</a> and former co-worker how I write SQL. At first this caught me by surprise and I assumed there was nothing different, but after a few additional comments on it, it became clear most people have no concept for creating clean readable SQL. So without further adieu here&rsquo;s how I write SQL, with a built up example query.</p>
+
+<!--more-->
+
+
+<p>First let&rsquo;s understand an example schema:</p>
+
+<pre><code># \dt
+ Schema |            Name            | Type  |     Owner      
+--------+----------------------------+-------+----------------
+ public | app_rating                 | table |     craig
+ public | app_recommendation         | table |     craig
+ public | app_userprofile            | table |     craig
+ public | app_wine                   | table |     craig
+ public | app_winemakeup             | table |     craig
+ public | app_winery                 | table |     craig
+ public | auth_user                  | table |     craig
+</code></pre>
+
+<p>The above schema contains wines from wineries, that users give ratings and notes to. Especially relevant is the app_rating table, it contains a variety of things we&rsquo;re going to want report against:</p>
+
+<pre><code># \d app_rating
+                                    Table "public.app_rating"
+   Column   |           Type           |                        Modifiers                        
+------------+--------------------------+---------------------------------------------------------
+ id         | integer                  | not null default nextval('app_rating_id_seq'::regclass)
+ user_id    | integer                  | not null
+ wine_id    | integer                  | not null
+ rated_at   | date                     | not null
+ rating     | integer                  | not null
+ notes      | text                     | 
+ tags       | character varying(255)[] | 
+ created_at | timestamp with time zone | not null
+</code></pre>
+
+<p>Most of the above should be pretty straightforward, though if you&rsquo;re unfamiliar with Arrays in Postgres check out <a href="/2012/08/20/arrays-in-postgres/">this earlier article</a></p>
+
+<p>Given all this data lets say we want to produce some query that for a given wine contains  the winery, the average rating, the tags for it. Diving in I&rsquo;ll typically start by creating each key part then pulling it together. Let&rsquo;s start with grabbing the average.</p>
+
+<p>But first some basic structure, for maximum readability I make sure to use all caps for reserved SQL words. For a large query I make sure all my columns/conditions are on their own line. So to get the average it would look something like this:</p>
+
+<pre><code>SELECT 
+  avg(rating),
+  wine_id
+FROM 
+  app_wine
+GROUP BY
+  wine_id;
+</code></pre>
+
+<p>Next I&rsquo;ll work with the array of tags which has some specific things to Postgres:</p>
+
+<pre><code>SELECT DISTINCT
+  unnest(tags) as tag,
+  wine_id
+FROM 
+  app_rating
+GROUP BY 
+  wine_id, tags;
+</code></pre>
+
+<p>Finally I&rsquo;m going to put it all together. This is going to have an additional query to get the winery and the wine name as well. We&rsquo;re also going to use CTE&rsquo;s (Common Table Expressions), think of these as temporary views that can make your query more readable:</p>
+
+<pre><code>WITH 
+
+  wine_ratings as (
+    SELECT 
+      avg(rating) as rating,
+      wine_id
+    FROM 
+      app_rating
+    GROUP BY
+      wine_id),
+
+  wine_tags as (
+    SELECT DISTINCT
+      unnest(tags) as tag,
+      wine_id
+    FROM 
+      app_rating
+    GROUP BY 
+      wine_id, tags),
+
+  wine_detail as (
+    SELECT
+      app_wine.name as name,
+      app_wine.id,
+      app_winery.name as winery
+    FROM
+      app_wine,
+      app_winery
+    WHERE app_wine.winery_id = app_winery.id
+   )  
+
+
+SELECT 
+  name,
+  rating,
+  array_agg(tag),
+  winery
+FROM
+  wine_ratings,
+  wine_detail
+LEFT OUTER JOIN 
+  wine_tags ON wine_detail.id = wine_tags.wine_id
+WHERE wine_detail.id = wine_ratings.wine_id
+GROUP BY 
+  name,
+  rating,
+  winery
+ORDER BY
+  rating DESC
+</code></pre>
+
+<p>One thing to point out, is <code>SELECT</code>, <code>FROM</code> and <code>ORDER BY</code> are followed by a new line. When I have <code>WHERE</code> multiple conditions I ensure the <code>AND</code> and the condition occur on the same line. This is intentional to make those easier to read as well as easy to remove/add. The key to allowing it to still be readable is an extra two spaces before the <code>AND</code> so the condition aligns with the above one. This would appear something similar to:</p>
+
+<pre><code>SELECT foo
+FROM bar
+WHERE foo.id = bar.foo_id
+  AND foo.created_at &gt; now() - '7 days'::INTERVAL
+</code></pre>
+
+<p>And just for an example we get this result from the query:</p>
+
+<pre><code>         name          | rating |   array_agg        |         winery         
+-----------------------+--------+--------------------+------------------------
+ Bordeaux Blend        |   5.0  | {'dry', 'smooth'}  | Chateau Rahoul
+ Cabernet Franc        |   5.0  | {'chocolate'}      | Beaucanon
+ Cabernet Sauvignon    |   5.0  | {'young', 'dry'}   | Hawkes
+</code></pre>
+
+<p>While very long, this should ideally be quite legible.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using Postgres Arrays in Django]]></title>
+    <link href="http://www.craigkerstiens.com/2012/11/06/django-and-arrays/"/>
+    <updated>2012-11-06T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/11/06/django-and-arrays</id>
+    <content type="html"><![CDATA[<p>A few weeks back I did a brief <a href="/2012/08/20/arrays-in-postgres/">feature highlight on Postgres arrays</a>. Since that time I&rsquo;ve found myself using them with increasing regularity on small side projects. Much of this time I&rsquo;m using Django and of course not opting to write raw SQL to be able to use arrays. Django actually makes it quite simple to work with Arrays in Postgres with a package by <a href="http://www.niwi.be/about.html">Andrey Antukh</a>. Lets get started by installing two libraries:</p>
+
+<pre><code>pip install djorm-ext-pgarray
+pip install djorm-ext-expressions
+</code></pre>
+
+<p>The first library is for support for the array field type, the second allows us to more easily mix bits of SQL within the Django ORM.</p>
+
+<!-- more -->
+
+
+<p>Now within our <code>models.py</code> we&rsquo;ll want import the library then we&rsquo;ll have an entirely new field type available to us:</p>
+
+<pre><code>from djorm_pgarray.fields import ArrayField
+from djorm_expressions.models import ExpressionManager
+
+class Post(models.Model):
+    subject = models.CharField(max_length=255)
+    content = models.TextField()
+    tags = ArrayField(dbtype="varchar(255)")
+</code></pre>
+
+<p>Now we can begin using this. For example to create a simple blog post:</p>
+
+<pre><code>Post(subject='foo', content='bar', tags=['hello','world'])
+post.save()
+</code></pre>
+
+<p>In this example we&rsquo;re able to tag blog posts as one normally might, without requiring an extra model to join against. Taking advantage of the SQL Expressions library by Andrey as well we can query a blog post contains a certain tag:</p>
+
+<pre><code>qs = Posts.objects.where(
+    SqlExpression("tags", "@&gt;", ['postgres', 'django'])
+)
+</code></pre>
+
+<p>Now to show some contrast lets take a look at how you would do the same thing without using the Array field:</p>
+
+<pre><code>class Tag(models.Model):
+    name = models.CharField(max_length=255) 
+
+class Post(models.Model):
+    subject = models.CharField(max_length=255)
+    content = models.TextField()
+    tags = models.ManyToManyField(Tag)
+</code></pre>
+
+<p>Using the many-to-many relationship within Django requires you to save the Post, then add your tag is it requires having a primary key first:</p>
+
+<pre><code> post = Post(subject='foo', content='bar')
+ post.save()
+ post.tags.add('hello','world')
+</code></pre>
+
+<p>This means we have two calls to save it, and similarly querying it is less clean as well:</p>
+
+<pre><code>posts = Post.objects.filter(tags__name="hello").distinct()
+</code></pre>
+
+<p>This would gives us all posts that have the tag hello in them. We could also search for multiple ones:</p>
+
+<pre><code>posts = Post.objects.filter(tags__in=["hello","world"]).distinct()
+</code></pre>
+
+<p>In the latter case distinct is especially important since it could return a post twice if its tagged with both hello and world.</p>
+
+<p>In addition to an improvement on performance the gotchas are far less in dealing with a single array datatype and make it a quick but great win in certain cases like above.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Redis in my Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/"/>
+    <updated>2012-10-18T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres</id>
+    <content type="html"><![CDATA[<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
+
+<p>SQL is an expressive language, though people are often okay with accessing Mongo data through its own ORM. The real value is that you could actually query the data from within Postgres then join across your data stores, without having to do some ETL process to move data around.  Think&hellip; joining sales data from Postgres with user reviews stored in Mongo or searching for visits to a website (retained in redis) against purchases by user in Postgres.</p>
+
+<p>The mechanism pointed out was a MongoDB Foreign Data Wrapper. A Foreign Data Wrapper or FDW essentially lets you connect to an external datastore from within a Postgres database. In addition to the Mongo FDW released the other day there&rsquo;s  many others. For example Postgres 9.0 and up ships with one called <code>db_link</code>, which lets you query and join across two different Postgres databases. Beyond that there&rsquo;s support for a variety of other data stores including some you may have never expected:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/file_textarray_fdw/">Textfile</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/odbc_fdw/">ODBC</a></li>
+<li><a href="http://pgxn.org/dist/ldap_fdw/">LDAP</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+<li><a href="http://pgxn.org/tag/fdw/">More</a></li>
+</ul>
+
+
+<p>Lets look at actually getting the Redis one running then see what some of the power of it really looks like. First we have to get the code then build it:</p>
+
+<!--more-->
+
+
+<pre><code>git clone git://github.com/antirez/hiredis.git
+cd hiredis
+make 
+sudo make install
+</code></pre>
+
+<p>Then download the FDW from <a href="http://pgxn.org/dist/redis_fdw/">PGXN</a></p>
+
+<pre><code>PATH=/Applications/Postgres.app/Contents/MacOS/bin/:$PATH USE_PGXS=1 make
+sudo PATH=/Applications/Postgres.app/Contents/MacOS/bin/:$PATH USE_PGXS=1 make install
+</code></pre>
+
+<p>Now you&rsquo;ll want to connect to your Postgres database, using <code>psql</code> and enable the extension, and finally create your foreign table to your redis server. This is assuming a locally running redis, though you could connect to a remote just as easily:</p>
+
+<pre><code>CREATE EXTENSION redis_fdw;
+
+CREATE SERVER redis_server 
+    FOREIGN DATA WRAPPER redis_fdw 
+    OPTIONS (address '127.0.0.1', port '6379');
+
+CREATE FOREIGN TABLE redis_db0 (key text, value text) 
+    SERVER redis_server
+    OPTIONS (database '0');
+
+CREATE USER MAPPING FOR PUBLIC
+    SERVER redis_server
+    OPTIONS (password 'secret');
+</code></pre>
+
+<p>With <code>dt</code> we can now see the list of all of our tables:</p>
+
+<pre><code># \dt
+         List of relations
+ Schema |   Name    | Type  | Owner 
+--------+-----------+-------+-------
+ public | products  | table | craig
+ public | purchases | table | craig
+ public | users     | table | craig
+(3 rows)
+</code></pre>
+
+<p>And with a full <code>\d</code> we can see not just the tables but also see we have a foreign table as well:</p>
+
+<pre><code># \d
+                 List of relations
+ Schema |       Name       |     Type      | Owner 
+--------+------------------+---------------+-------
+ public | products         | table         | craig
+ public | purchases        | table         | craig
+ public | redis_db0        | foreign table | craig
+ public | users            | table         | craig
+(4 rows)
+</code></pre>
+
+<p>Finally we can actually query against it:</p>
+
+<pre><code># SELECT * from redis_db0 limit 5;   
+   key   | value 
+---------+-------
+ user_40 | 44
+ user_41 | 32
+ user_42 | 11
+ user_43 | 3
+ user_80 | 7
+(5 rows)
+</code></pre>
+
+<p>Or more interestingly we can join it against other parts of our data and filter accordingly. Below we&rsquo;ll show users that have logged in at least 40 times:</p>
+
+<pre><code>SELECT 
+  id, 
+  email, 
+  value as visits 
+FROM 
+  users, 
+  redis_db0 
+WHERE 
+      ('user_' || cast(id as text)) = cast(redis_db0.key as text) 
+  AND cast(value as int) &gt; 40;
+
+ id |           email            | visits 
+----+----------------------------+--------
+ 40 | Cherryl.Crissman@gmail.com | 44
+ 44 | Brady.Paramo@gmail.com     | 44
+ 46 | Laronda.Razor@yahoo.com    | 44
+ 47 | Karole.Sosnowski@gmail.com | 44
+ 12 | Jami.Jeon@yahoo.com        | 49
+ 14 | Jenee.Morrissey@gmail.com  | 47
+ 16 | Yuki.Alber@yahoo.com       | 48
+ 18 | Marquis.Tartaglia@aol.com  | 44
+ 31 | Collin.Parrilla@gmail.com  | 46
+ 39 | Nydia.Bukowski@aol.com     | 47
+  2 | Gaye.Monteith@aol.com      | 48
+  6 | Letitia.Tripodi@aol.com    | 41
+(12 rows)
+</code></pre>
+
+<p>While several of the current FDWs are not production ready yet, some are more battle tested including db_link, textfile, ODBC and MySQL ones.</p>
+]]></content>
+  </entry>
+  
+</feed>

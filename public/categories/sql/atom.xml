@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/sql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-06-07T07:00:27-07:00</updated>
+  <updated>2015-11-30T08:53:21-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -271,10 +271,12 @@ Has OIDs: no
 
 <p>But it doesn&rsquo;t necessarily have to stop there. Which actually brings me to one other item, you should be commenting your SQL just the same. SQL comments can be done easily by just starting a line with <code>--</code>, or you can have it at the end of the line with further info. Here&rsquo;s a nice example:</p>
 
-<pre><code>-- Query aggregates all project names that have open past due tasks grouped by email
+<pre><code>/* Query aggregates all project names that have open past due tasks grouped by email
+Other details in here
+*/
 SELECT 
   users.email,
-  array_to_string(array_agg(projects.name), ',')) as projects # Aggregate all projects and separate by comma
+  array_to_string(array_agg(projects.name), ',')) as projects -- Aggregate all projects and separate by comma
 FROM
   projects,
   tasks,
@@ -288,6 +290,8 @@ WHERE projects.id = tasks.project_id
 GROUP BY 
   users.email
 </code></pre>
+
+<p><em>Of note, multi-line comments within <code>/* */</code> will appear in pg_stat_statements and other logging areas, whereas inline comments via <code>--</code> will not.</em></p>
 
 <p>You comment your code, why shouldn&rsquo;t you comment your database?</p>
 ]]></content>

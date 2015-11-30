@@ -1,0 +1,281 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Sharding your database Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="I&rsquo;m increasingly encountering users on Heroku that are encountering the need to shard their data. For most users this is something you delay as &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Sharding Your Database</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
+
+<!--more-->
+
+
+<h3>What and Why</h3>
+
+<p>Sharding is the process of splitting up your data so it resides in different tables or often different physical databases. Sharding is helpful when you have some specific set of data that outgrows either storage or reasonable performance within a single database.</p>
+
+<h3>Logical Shards</h3>
+
+<p>First when initially implementing sharding you&rsquo;ll want to create an arbitrary number of logical shards. This will allow you to change less code later when it comes to adding more shards. You&rsquo;ll also want to define your shards to the power of 2. Generally I&rsquo;d recommend for most services 1024 can be a good number, I believe Instagram actually used 4096, either can really be an appropriate number. For simplicity sake lets start with an example of using 4 logical shards. First lets look at an example set of users:</p>
+
+<pre><code> id |           email           |      name       
+----+---------------------------+-----------------
+  1 | craig.kerstiens@gmail.com | Craig Kerstiens
+  2 | john.doe@gmail.com        | John Doe
+  3 | jane.doe@gmail.com        | Jane Doe
+  4 | user4@gmail.com           | User 4
+  5 | user5@gmail.com           | User 5
+  6 | user6@gmail.com           | User 6
+  7 | user7@gmail.com           | User 7
+  8 | user8@gmail.com           | User 8
+</code></pre>
+
+<p>Dividing these up into logical shards we&rsquo;re going to have something that looks roughly like this:</p>
+
+<p><img src="http://f.cl.ly/items/0Q1A38191Q0N3G0L413K/Screenshot%2011:29:12%209:45%20AM.png" alt="sharding layout" /></p>
+
+<p>Its important when sharding that you find a mechanism that requires you to not hit the database. As the above example shows its using the ID of the row inside the database instead we&rsquo;re likely going to want to determine the shard based on a hash of some value such as the email:</p>
+
+<pre><code>logical_shard = hash(User.email) % 4
+</code></pre>
+
+<h3>Physical Shards</h3>
+
+<p>From here we&rsquo;ll then take the logical shards and create actual physical shards. If you have a single physical shard you&rsquo;re using a single database, but the rest of your application code is ready to handle additional shards. For now lets use an example of two physical shards, the end result would be dividing our data up somehow like this:</p>
+
+<p><img src="http://f.cl.ly/items/0A3b3O3A3K28043Y2s0j/Screenshot%2011:29:12%209:46%20AM.png" alt="sharding layout" /></p>
+
+<p>The physical shard to access can easily be counted by taking the modulus of the logical shard its on by the physical shards that exist:</p>
+
+<pre><code>total_physical_shards = 2
+total_logical_shards = 4
+logical_shard = hash(User.email) % total_logical_shards
+physical_shard = logical_shard % total_physical_shards
+</code></pre>
+
+<h3>Generating IDs (Primary Keys)</h3>
+
+<p>As you&rsquo;re distributing data across multiple databases you&rsquo;ll want to avoid using an integer as your primary key. This would cause for keys to be duplicated within your database and make for a headache when attempting to report against your data. Instead the ideal is to use a UUID as the primary key. By using a UUID and generating this in either your application code or within your database you ensure each User ID is actually unique.</p>
+
+<h3>Adding Capacity</h3>
+
+<p>The best case scenario for most web applications, such is the case for <a href="http://www.databasesoup.com/2012/04/sharding-postgres-with-instagram.html">Instagram</a>, is to have to scale beyond their initial capacity, in order to do this you&rsquo;ll simple expand the number of physical shards. In order to do this you&rsquo;ll want to move data from one physical shard to another, then remove data from the old physical shard. Its also generally a good practice to grow your physical shards in powers of 2 the same way you would your logical shards. Lets take a look at a clearer example of how we would do this using the <a href="https://postgres.heroku.com">Heroku Postgres Service</a>&hellip;</p>
+
+<p>First we&rsquo;re going to add a <a href="https://postgres.heroku.com/blog/past/2012/10/25/announcing_follow/">follower</a> for each shard we have:</p>
+
+<p><img src="http://f.cl.ly/items/1N233k203j2d1O2l2w47/Screenshot%2011:29:12%202:36%20PM.png" alt="Followers" /></p>
+
+<p>We&rsquo;re then going to promote our followers to be their own independent databases which can accept writes. This means we&rsquo;ll have two copies that can be written to with the same data:</p>
+
+<p><img src="http://f.cl.ly/items/3Q1D2O0J0o2b0e051t46/Screenshot%2011:29:12%202:39%20PM.png" alt="Promotion" /></p>
+
+<p>At this point you can update your application code to have the new number of physical shards and it should begin writing data to the appropriate place. Of course you do still want to clean up some of that extra data. To do this you&rsquo;ll want to remove the data that doesn&rsquo;t belong in the appropriate shard. For example, id of 3 wouldn&rsquo;t belong in physical shard 1 any more. Now we can run a background process to clean up such data:</p>
+
+<p><img src="http://f.cl.ly/items/0a2r132M1f1m171B3y3R/Screenshot%2011:29:12%202:42%20PM.png" alt="Cleanup" /></p>
+
+<h3>Conclusion</h3>
+
+<p>While many applications may never need to scale out their database, when they do, sharding can be both straight forward and effective. While I would encourage many to scale up first as it is an easy option, hopefully this provides further guidance to how to scale out. For those that do anticipate this needed planning for it early with key things such as using UUID&rsquo;s can make the process less painful.</p>
+
+<p>This article of course only grazes the surface, if there&rsquo;s interest from readers there will be more specifics to follow with actual code examples.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-30T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/development/'>Development</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Environment Structure for Django Apps Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="I&rsquo;ve been writing applications off and on for nearly 4 years now, since before Django 1.0 was even released. I must say the framework could not &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Environment Structure for Django Apps</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>I&rsquo;ve been writing applications off and on for nearly 4 years now, since before Django 1.0 was even released. I must say the framework could not be better described than by its own tagline &ldquo;The Web framework for perfectionists with deadlines&rdquo;. Among the things I love about it are:</p>
+
+<ul>
+    <li>Amazing documentation, there&#8217;s not 30 different blog posts with different ways to do things, either read the django project documentation or the app documentation</li>
+    <li>They don&#8217;t consistently break backwards compatibility. While at times they do this, it is not the norm or standard, which isn&#8217;t the case for some other unnamed frameworks</li>
+    <li>DRY, Don&#8217;t Repeat Yourself. If there&#8217;s an app that exists people don&#8217;t have a burning need to recreate the same functionality, resulting in lower number but higher quality pluggable apps.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>However, after using the framework for nearly 4 years I&rsquo;m just now discovering my preferred way of managing environments. I know there&rsquo;s still a bit of back and forth on development environment/IDE, but as far as configuring actual project environment I&rsquo;ve become very comfortable with what I&rsquo;ve now been using for many months. It also allows for someone else bootstrapping their environment incredible quickly as well. Below is a quick cookbook of how to do this on OSX and Ubuntu.</p>
+
+<h2>OSX with Macports:</h2>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo port install python27
+</span><span class='line'><span class="nv">$ </span>sudo port install py27-virtualenv
+</span><span class='line'><span class="nv">$ </span>sudo port install postgresql90
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now for setting up your project:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir example
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>example
+</span><span class='line'><span class="nv">$ </span>virtualenv-2.7 --no-site-packages .
+</span><span class='line'><span class="nv">$ </span><span class="nb">source </span>bin/activate
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h2>OSX with Brew:</h2>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo brew install python
+</span><span class='line'><span class="nv">$ </span>sudo brew install virtualenv
+</span><span class='line'><span class="nv">$ </span>sudo brew install postgresql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now for setting up your project:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir example
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>example
+</span><span class='line'><span class="nv">$ </span>virtualenv --no-site-packages .
+</span><span class='line'><span class="nv">$ </span><span class="nb">source </span>bin/activate
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h2>Ubuntu:</h2>
+
+
+<p>Now for setting up your project:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo aptitude install python
+</span><span class='line'>sudo aptitude install virtualenv
+</span><span class='line'>sudo aptitude install postgresql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now for setting up your project:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir example
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>example
+</span><span class='line'><span class="nv">$ </span>virtualenv --no-site-packages .
+</span><span class='line'><span class="nv">$ </span><span class="nb">source </span>bin/activate
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For those of you not familiar virtualenv is a self-contained python environment. It holds its own copy of python and any libraries you install. Now that you&rsquo;ve setup your virtualenv we can go through the process of installing django and setting up your repository. This is the same across all of the above platforms:</p>
+
+<p>Add to a .gitignore file:</p>
+
+<figure class='code'><figcaption><span>.gitignore </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bin
+</span><span class='line'>build
+</span><span class='line'>include
+</span><span class='line'>lib
+</span><span class='line'>.Python
+</span><span class='line'>*.pyc
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Add to a requirements.txt file:</p>
+
+<figure class='code'><figcaption><span>requirements.txt</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">Django</span><span class="o">==</span>1.3.1
+</span><span class='line'><span class="nv">psycopg2</span><span class="o">==</span>2.4.1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then run:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bin/pip install -r requirements.txt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This should fully installed any of your required apps and makes it easy for others to do the same to begin contributing to a larger app. Finally if you like you can create your git repo from this an make your first commit:</p>
+
+<pre><code>$ git init
+$ git add .
+$ git commit -m 'my first django virtualenv'
+</code></pre>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-16T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'craigkerstiens';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.craigkerstiens.com/2011/05/16/environment-structure-django-apps/';
+        var disqus_url = 'http://www.craigkerstiens.com/2011/05/16/environment-structure-django-apps/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

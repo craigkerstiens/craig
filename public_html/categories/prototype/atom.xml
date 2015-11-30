@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Prototype | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/prototype/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
+    <link href="http://www.craigkerstiens.com/2012/07/19/supporting-developers/"/>
+    <updated>2012-07-19T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/07/19/supporting-developers</id>
+    <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Often you&rsquo;re unable to tell how you truly feel about your API without fully implementing it, causing this cycle to take longer than it should. Heroku Postgres has Dataclips, which (among other things) can be used for quickly prototyping APIs. Lets take a look at how this would work:</p>
+
+<h2>Given a schema</h2>
+
+<p><img src="http://f.cl.ly/items/0n0k1h3q1I1W1T373q0D/1.%20psql.png" alt="schema" /></p>
+
+<p>We the screen shot of the schema above we can see we have a few tables. These tables are the complete works of Shakespeare. Lets take a couple of hypothetical endpoints we&rsquo;ve decided on that we&rsquo;d like to expose for users and test as an API.</p>
+
+<ul>
+<li>The number of works per year</li>
+<li>Drone factory (this is a fun one courtesy of &hellip;.). Its essentially who has the longest paragraphs on average in his works.</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Create a dataclip</h2>
+
+<p>Now we open up our database on Heroku Postgres and go down near the bottom to the dataclips section. Click the plus to create a new dataclip and we can enter our queries.</p>
+
+<pre><code>SELECT 
+  year, 
+  count(*) 
+FROM 
+  works 
+GROUP BY 
+  year 
+ORDER BY 
+  year ASC
+</code></pre>
+
+<p>Click <code>Create Clip</code> and you&rsquo;ll be redirected to your new dataclip. This unique URL will always return the results of that query and if you want to shift it to a real time API that re-runs the query you can flip the <code>now</code> switch. For my simple example above my url for this dataclip is now <a href="https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi">https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi</a>.</p>
+
+<h2>Using the dataclip as a prototype API</h2>
+
+<p>There&rsquo;s many different use cases for dataclips, but of course for our sake we care about prototyping an API instead of sharing the data. To do this you can simply append the format you want to the url above and test as if it were an API:</p>
+
+<ul>
+<li>JSON &ndash; <a href="https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi.json">https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi.json</a></li>
+<li>CSV &ndash; <a href="https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi.csv">https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi.csv</a></li>
+<li>YAML &ndash; <a href="https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi.yaml">https://postgres.heroku.com/dataclips/ljfeywbwtxbcabardaxvcstjyodi.yaml</a></li>
+</ul>
+
+
+<p>Essentially anything you can bake down to a query (much like you would in your App&rsquo;s API layer) you can expose in this form to quickly test. For a more complicated example you can check out the <a href="https://postgres.heroku.com/dataclips/tzvzbnnijzezyvzwjeoibwdpfjqb">Drone factor query</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rapid API Prototyping with Heroku Postgres Dataclips]]></title>
+    <link href="http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping/"/>
+    <updated>2012-07-19T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/07/19/rapid-api-prototyping</id>
+    <content type="html"><![CDATA[<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Historically with implementing the API fully you can&rsquo;t see how you truly feel about the result, causing this cycle to take longer than it should. Heroku Postgres has <a href="https://postgres.heroku.com/blog/past/2012/1/31/simple_data_sharing_with_data_clips/">Dataclips</a>, which (among other things) can be used for quickly prototyping APIs. <a href="https://postgres.heroku.com/dataclips">Dataclips</a> allows you to easily share data, but more importantly consume it in a form much like you would a restful API. Lets take a look at how this would work:</p>
+
+<h2>Given a schema</h2>
+
+<p><img src="http://f.cl.ly/items/0n0k1h3q1I1W1T373q0D/1.%20psql.png" alt="schema" /></p>
+
+<p>We can see from the screen shot of the schema above we can see we have a few tables. These tables are the complete works of Shakespeare thanks to <a href="http://www.opensourceshakespeare.org/downloads/">opensourceshakespeare</a>. Lets take a couple of hypothetical endpoints we&rsquo;ve decided on that we&rsquo;d like to expose for users and test as an API.</p>
+
+<ul>
+<li>The number of works per year</li>
+<li>Drone factory (this is a fun one courtesy of Richard Morrison &ndash; <a href="https://twitter.com/mozz100">@mozz100</a> essentially who has the longest paragraphs on average in his works.</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Create a dataclip</h2>
+
+<p>Now we open up our database on Heroku Postgres and go down near the bottom to the dataclips section. Click the plus to create a new dataclip and we can enter our queries.</p>
+
+<pre><code>SELECT 
+  year, 
+  count(*) 
+FROM 
+  works 
+GROUP BY 
+  year 
+ORDER BY 
+  year ASC
+</code></pre>
+
+<p>Click <code>Create Clip</code> and you&rsquo;ll be redirected to your new dataclip. This unique URL will always return the results of that query and if you want to shift it to a real time API that re-runs the query you can flip the <code>now</code> switch. For my simple example above my url for this dataclip is now <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex</a>.</p>
+
+<h2>Using the dataclip as a prototype API</h2>
+
+<p>There are many different use cases for dataclips, but of course for our sake we care about prototyping an API instead of sharing the data. To do this you can simply append the format you want to the url above and test as if it were an API:</p>
+
+<ul>
+<li>JSON &ndash; <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.json">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.json</a></li>
+<li>CSV &ndash; <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.csv">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.csv</a></li>
+<li>XLS &ndash; <a href="https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.xls">https://dataclips.heroku.com/fcroecrluhwltbjinstfqmwyneex.xls</a></li>
+</ul>
+
+
+<p>Essentially anything you can bake down to a query (much like you would in your App&rsquo;s API layer) you can expose in this form to quickly test. For a more complicated example you can check out the <a href="https://postgres.heroku.com/dataclips/tzvzbnnijzezyvzwjeoibwdpfjqb">Drone factor query</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

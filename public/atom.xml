@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-06-07T07:00:27-07:00</updated>
+  <updated>2015-11-30T08:53:21-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,301 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
+    <link href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/"/>
+    <updated>2015-11-30T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro</id>
+    <content type="html"><![CDATA[<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
+
+<ol>
+<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
+<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
+</ol>
+
+
+<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
+
+<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
+
+<!--more-->
+
+
+<h3>Getting setup</h3>
+
+<p>Without further adieu here&rsquo;s a quick tour around it.</p>
+
+<p>First let&rsquo;s pull down the example database from <a href="http://postgresguide.com/setup/example.html">PostgresGuide</a></p>
+
+<p>Then let&rsquo;s setup out Node app:</p>
+
+<pre><code>$ npm init
+$ npm install massive --save
+</code></pre>
+
+<h3>Connecting and querying</h3>
+
+<p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
+
+<pre><code>var massive = require("massive");
+var connectionString = "postgres://:@localhost/example";
+
+var db = massive.connectSync({connectionString : connectionString});
+
+db.users.find(1, function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>Upon first run if you&rsquo;re like me and use the <a href="http://postgresguide.com/setup/example.html">PostgresGuide example database</a> (which I now need to go back and tidy up), you&rsquo;ll get the following:</p>
+
+<pre><code>db.users.find(1, function(err,res){
+        ^
+TypeError: Cannot read property 'find' of undefined
+</code></pre>
+
+<p>I can&rsquo;t describe how awesome it is to see this. What&rsquo;s happening is when Massive loads up it&rsquo;s connecting to your database, checking what tables you have. In this case though because we don&rsquo;t have a proper primary key defined it doesn&rsquo;t load them. It could treat id as some magical field of course like Rails used to and ignore the need for an index, but instead it not only encourages a good database design but requires it.</p>
+
+<p>So let&rsquo;s go back and create our index in our database:</p>
+
+<pre><code>$ psql example
+$ alter table users add primary key (id);
+</code></pre>
+
+<p>Alright now let&rsquo;s run our script again with <code>node index.js</code> and see what we have:</p>
+
+<pre><code>{ id: 1,
+  email: 'john.doe@gmail.com',
+  created_at: Thu Sep 24 2015 03:42:52 GMT-0700 (PDT),
+  deleted_at: null }
+</code></pre>
+
+<p>Perfect! Now we&rsquo;re all connected and it even queried our database for us. Now let&rsquo;s take a few more look at some of the operators.</p>
+
+<h3>Running an arbitrary query</h3>
+
+<p><code>db.run</code> will let me run any arbritrary SQL. An example such as <code>db.run("select 'hello'")</code> will produce [ { &lsquo;?column?&rsquo;: &lsquo;hello&rsquo; } ].</p>
+
+<p>This makes it nice and easier for us to break out of the standard ORM model and just run SQL.</p>
+
+<h3>Find for quick look ups</h3>
+
+<p>Similar to so many other database tools <code>find</code> will offer you the most common quick look ups:</p>
+
+<pre><code>$ db.users.find({email: 'jane.doe@gmail.com'}, function(err, res){console.log(res)});
+$ db.users.find({'created_at &gt;': '2015-09-24'}, function(err, res){console.log(res)});
+</code></pre>
+
+<p>And of course there&rsquo;s a where operator for multiple conditions.</p>
+
+<h3>Structuring queries in your application</h3>
+
+<p>While in the next post I&rsquo;ll dig in deep to JSON, this is perhaps my favorite feature of Massive&hellip; It&rsquo;s design for pulling out queries into individudal SQL files. Simply create a <code>db</code> folder and put your SQL in there. Let&rsquo;s take the most basic example of our user email lookup and put it in <code>user_lookup.sql</code></p>
+
+<pre><code>SELECT *
+FROM users
+WHERE email = $1
+</code></pre>
+
+<p>Now back in our application we can run this and pass in a parameter to it:</p>
+
+<pre><code>db.user_lookup(['jane.doe@gmail.com'], function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>This separation of our queries from our code makes it easier to track them, view diffs, and even more so <a href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/">create very readable SQL</a>.</p>
+
+<h3>Up next</h3>
+
+<p>So sure, you can connect to a database, you can query some things. There were a couple of small but more novel things that we blew through in here. First is the fact I didn&rsquo;t have to define all my schema, it just knew it as <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">it really should</a>. The separation of SQL queries you&rsquo;ll custom write into files is simple, but will make for much more maintainable applications over the long term. And best of all is the JSON support, which I&rsquo;ll get to soon&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Seeding a sharing-economy or platform company]]></title>
+    <link href="http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company/"/>
+    <updated>2015-10-02T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company</id>
+    <content type="html"><![CDATA[<p>These days if you&rsquo;re creating a company you likely hope to accomplish more with less people, two ways of doing this fall to: The sharing economy and creating a platform. It&rsquo;s easy to see the case for this when you have such <a href="http://graphics.wsj.com/billion-dollar-club/">unicorns</a> like AirBnB or Uber. The opportunity for each of those to compete against hotel chains or taxi services which each need to manage their own inventory is incredibly exciting and revolutionary. In a similar fashion platforms can offer much the same, Heroku&rsquo;s platform and marketplace made it easier than ever for developers to click a button and get everything they needed years ago. It&rsquo;s not just their code, it&rsquo;s everything from <a href="https://www.heroku.com/postgres">Postgres</a> to Mongo to <a href="https://elements.heroku.com/addons#logging">Logging</a>. Or take the app store as example. Smart phones weren&rsquo;t a new thing when the iPhone came out, but it was only the saviest of users that had apps installed on their windows smartphone or blackberry. The app store made the iPhone different than any other phone by allowing others to build and improve it, turning the iPhone not into a phone but a platform.</p>
+
+<!--more-->
+
+
+<p>Platforms and the sharing economy both let you get further than having to take on the costs of offering the equivilent all on your own. And while a great idea to venture into one of these two areas, starting them isn&rsquo;t as trivial as simply deciding to. For both of these you have issues with having a two sided market, first you have to convince the providers to come along, then the customers or vice versa. As a result of this two sided market issue the easiest way to actually start is by bootstrapping it yourself – or faking it til you make it.</p>
+
+<p>What are some good examples of faking this? I&rsquo;m sure you can probably find some good stories going back about AirBnB or Uber, but let&rsquo;s assume times were different then. Let&rsquo;s take a look at a very recent example: <a href="http://techcrunch.com/2015/08/26/lugg-an-app-for-on-demand-short-distance-moves-raises-3-8-million/">Lugg</a> which just launched in the latest batch of YC. Lugg is Uber for moving essentially, allowing you to on-demand request furniture moved from one place to another. Early on Lugg built their app, then waited for requests to come in, then the founders got in a truck and moved the furniture themselves. As a customer the founders are likely providing a great experience, without ever having to tip their hat at the ways their hacking the impression of being a large well oiled machine.</p>
+
+<p>But what about a platform? Slack continues to grow like wildfire as the new medium for communication. These days there&rsquo;s endless integrations for slack, and I expect they&rsquo;ll continue to expand what a platform for communication looks like. But a year ago they were quite a ways from having people show up at their door to add an integration. Sure there were people using them, but to expect github/trello/asana to immediately build an integration for every new flavor of the week tool would be crazy. Yet, without these integrations slack wouldn&rsquo;t be nearly as useful as it is today–and probably wouldn&rsquo;t have seen the growth it&rsquo;s seen. In the early days of a platform the easiest way to get these integrations and partners in place is to show up and build the work yourself. Slack carried the weight early of building these integrations, much as Heroku add-ons showed up at partners offices and help write the code to get them as a provider in the marketplace. And while both Slack and Heroku are larger companies now, it still holds true for smaller ones starting today. <a href="https://www.blockspring.com/">Blockspring</a>, a company which aims to make web services available through spreadsheets, had to do very much the same thing building their initial integrations themselves. Now with their rapidly growing user base and already large collection of APIs they may be able to shift the model, but early on that wasn&rsquo;t so much an option.</p>
+
+<p>If you want to build a platform, start by creating the impression of one while still carrying the load yourself. Yes, move to a true platform as soon as you can, but don&rsquo;t wait for others to show up before you go that route.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A guide to analyst relations for startups]]></title>
+    <link href="http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/"/>
+    <updated>2015-07-25T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups</id>
+    <content type="html"><![CDATA[<p>When it comes to go to market and marketing there&rsquo;s lots of pieces in a toolchest that all work together. One that comes a bit later, but if used properly (much like a <a href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/">PR agency</a>) can be valuable is industry analysts. And while working with a PR agency can quickly start to become clear. How to work with analysts so it is productive on both sides can take a bit longer to figure out, or at least it did for me. Even before you do start working with them there&rsquo;s the question of if or when should you. Here&rsquo;s hoping this primer makes it a bit faster and easier for others.</p>
+
+<!--more-->
+
+
+<h3>What is an analyst</h3>
+
+<p><em>Apologies to all analysts, but of all parts of this post I might butcher this one</em></p>
+
+<p>Analysts talk to a lot of companies, both the ones making products as well as the ones purchasing them. I&rsquo;m not actually sure what the spread is I&rsquo;d guess 80-20. A large output of this and other activities is  creating various reports and rankings. Gartner&rsquo;s Magic Quadrant is probably the most well known industry ranking. Much of what they create isn&rsquo;t freely available for consumption so you likely don&rsquo;t see the sheer volume of insights they put out.</p>
+
+<h3>Why would you engage with an analyst</h3>
+
+<p>So what do they do for you? There’s really two major buckets:</p>
+
+<p><strong>Help with sales/marketing</strong> &ndash; Given they&rsquo;re informing and influencing buying decisions of businesses they can be one more person on your side. If a launch in Techcrunch makes business foo aware of product bar, then an analyst report or ranking can help sway a decision on whether to try bar vs. baz.</p>
+
+<p><strong>Consulting</strong> &ndash; The other major opportunity is for the analyst to give some form of guidance. In a larger company when you already have an established product they should absolutely be part of your launch process (more on that in a future post). They&rsquo;re actively following your market and space, hopefully just as you are to some extent. They can offer an outside perspective and help with broad areas of focus and messaging.</p>
+
+<p><em>More</em> &ndash; In reality it’s as clean cut as above. They may be able to introduce you to good candidates for hiring. They may be able to introduce you to a large company interested in acquiring some capability which you have. They may be able to connect you with investors. All of these things can and do happen, but the above buckets typically are the primary drivers.</p>
+
+<h3>When?</h3>
+
+<p>First, engaging with analysts should always come after you have some confidence in the product, after you&rsquo;ve started some marketing drumbeat, and after sales. In short don&rsquo;t be in a huge rush here, you&rsquo;ll get there, but don&rsquo;t be in too big of a rush. As you start to get some attention and momentum it&rsquo;s just as likely they&rsquo;ll engage with you first as you reaching out. Also, marketing != sales, more on that in a future post.</p>
+
+<p>But, let&rsquo;s assume you&rsquo;ve got a product <strong>which targets business</strong> (<em>Analysts aren&rsquo;t just for tech companies, though you’ll see the benefit here sooner if you’re say a database company than a HR product</em>). Let’s also assume you&rsquo;ve got some sales and have some <a href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/">good launches under your belt</a>. As it starts to come up in sales calls if you&rsquo;re in any industry reports or rankings that may be an indicator, if you&rsquo;re hearing about other competitors having more validation in such reports. As a general rule of thumb once you&rsquo;ve got inhouse PR they should be able to help guide and steer to the right time.</p>
+
+<h3>So how do you engage with an analyst</h3>
+
+<p>If you&rsquo;re engaging in some form of report or article, that should start to be pretty self explanatory. They&rsquo;ll send you a questionnaire, you fill it out. You go back and forth a little bit.</p>
+
+<p>However, the majority of my interactions aren&rsquo;t on those articles and reports, for ever one time I fill out lots of questions to help some report or ranking I have 20 calls with an analyst.</p>
+
+<p>There are two primary calls you can have, an inquiry and a briefing.</p>
+
+<h4>Inquiries</h4>
+
+<p>Inquiry is just a fancy word for consulting call. An inquiry you will always be paying for.</p>
+
+<p><em>A small detour here. The regularity and consistency in which you engage with an analyst makes a difference. They&rsquo;re also people at the end of the day, so while firms have certain styles it&rsquo;s even further multiplied by being very people driven. In your interactions you&rsquo;ll have a different rapport with different people, it&rsquo;s at a minimum important to be aware of this.</em></p>
+
+<p>So back to an inquiry. Within an inquiry your goal is to pull back the curtain and give some backstage insights into what you&rsquo;re doing and where you&rsquo;re headed. This is typically under NDA and trust the NDA of an analyst. It&rsquo;s worthwhile to be as candid as you can here, yes it feels weird, but you&rsquo;ll get the most value. They&rsquo;re not like that of a reporter looking for a scoop (not that you can&rsquo;t trust reporters, just know if you say it, it&rsquo;s on record). You don&rsquo;t have to relish the entire call to one area, but areas of coverage are often:</p>
+
+<ul>
+<li>Upcoming products and major releases you’re working on</li>
+<li>Broader strategy and roadmap</li>
+<li>Get input on what they&rsquo;re seeing and hearing from customers</li>
+</ul>
+
+
+<h4>Briefings</h4>
+
+<p>The other type of call we have is a briefing. This is a little similar to that of a press briefing. You&rsquo;ll get on the call, and walk through some upcoming launch or just give an update on your company and progress. The latter is more common if they&rsquo;re unfamiliar with you or your product.</p>
+
+<p>Analyst briefings are good to do earlier than your press briefings, compared to press they&rsquo;re like a bike with training wheels. It&rsquo;s best if you still maintain your balance–the ride will be smoother, but there&rsquo;s a little less risk of completely toppling over. One key difference is you often have a powerpoint deck you get to walk through during an analyst briefing. I&rsquo;ve found this is helpful for pacing and key messages, I used to be skeptical, but now very much feel it&rsquo;s always worth doing.</p>
+
+<p><em>Pro-tip: You can create a deck and use it for press too, no they won&rsquo;t want to get on a gotomeeting, but you can send it over so they have more content later. BUT, more importantly you can also walk through it on your own screen if it helps with pacing.</em></p>
+
+<p>Within a briefing you&rsquo;ll have some ability to ask them questions at points. Does this resonate? Are you hearing similar? What are you seeing in the market? Don&rsquo;t turn it into an inquiry, but knowing the parts that hit home for them allow you to refine your pitch for the next call.</p>
+
+<h4>Engaging &ndash; the tactical parts</h4>
+
+<p>&ldquo;Analysts are pretty much paid to talk and write&rdquo; &ndash; <a href="http://www.twitter.com/cote">@cote</a>. So expect that often when you occupy their time there&rsquo;s a price to it. In terms of finding them it should be pretty easy, to know the list of ones in your space, you may see them quoted or reference in various media outlets. You may just naturally crop up in a report.</p>
+
+<p>If you create a regular relationship with them you&rsquo;ll have some contract of hours over the course of a quarter or year. At an early stage company this is often owned and manage by whomever runs your PR from an internal perspective.</p>
+
+<h3>Conclusion</h3>
+
+<p>If you&rsquo;re about to engage with analysts for the first time or haven’t figured out how to get the most out of your interactions I hope the broad overview is helpful. If there&rsquo;s some glaring parts you feel I&rsquo;ve missed let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>. And for further reading/watching I’d encourage checking out the great talk from <a href="http://www.twitter.com/cote">@cote</a> in the <a href="http://www.heavybit.com/library/video/2014-01-21-michael-cote">Heavybit library</a>.</p>
+
+<p>As far as take-aways and a recap:</p>
+
+<ol>
+<li>Don&rsquo;t be too eager to jump in with analysts. They can absolutely provide value, but you have to put some time in before it really starts to pay off. It&rsquo;s not an overnight change and takes building a rapport with them.</li>
+<li>At the same time, analysts can be useful in many B2B areas not just tech ones.</li>
+<li>When in an inquiry be open and as transparent as possible.</li>
+<li>Powerpoint/Keynote/Google presentations are useful in briefings, even if it&rsquo;s just for you to follow along.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A guide to PR for startups]]></title>
+    <link href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/"/>
+    <updated>2015-07-21T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups</id>
+    <content type="html"><![CDATA[<p>You&rsquo;ve built your product and you&rsquo;re now ready for your first major launch. Or you&rsquo;ve been through a launch or two, but are looking to scale the process as you&rsquo;re doing more launches and announcements. You really have two options: do it <a href="http://jasonlbaptiste.com/featured-articles/how-i-pitched-techcrunch-and-13-ways-to-get-press-when-you-launch-your-startup/">all on your own</a>, or work with a PR agency. One frequent crossroad is that you&rsquo;re not at the point of a full time PR person, but unsure what a PR agency can offer you; and, further what&rsquo;s the best way to work with them so you&rsquo;re getting the maximum value.</p>
+
+<p>As I&rsquo;ve talked to more startups lately, it&rsquo;s become clear that effectively working with PR teams and the media is mostly learned by doing. Because there&rsquo;s not much guidance out there, here&rsquo;s an attempt at some basic guidelines.</p>
+
+<!--more-->
+
+
+<h3>On PR</h3>
+
+<p>First there&rsquo;s two types here and they&rsquo;re not mutually exclusive. In-house PR is a full time person or team that works within your company, here you&rsquo;ll often have a pretty different experience. From my experience, in-house PR people tend to understand a company message and vision because they are living and breathing your company values every day.</p>
+
+<p>The other alternative is hiring a PR agency. An agency will have several (sometimes hundreds!) of clients. The relationship that you’ll have with an agency is much different than in-house. You&rsquo;ll use them just like you would a consultant or contractor. Most startups end up with the agency approach first, because of the perception of “more people working for a cheaper cost than hiring in-house.” However, it&rsquo;s of note an agency doesn&rsquo;t alleviate you of doing work, nor should you want them to handle all parts of it.</p>
+
+<h4>Messaging</h4>
+
+<p>An agency may offer to help with messaging, but take this somewhat lightly. I don&rsquo;t doubt that some are very good at it, but in most cases I&rsquo;ve found they don&rsquo;t have the same amount of customer interaction as you as a founder or early employee would. Further, your vision of impact to the market and direction may be more distant than theirs. You should expect to own your messaging, just like you own your product.</p>
+
+<p>Where they can heavily help is providing a lot of structured frameworks for helping you get to your messaging. Some pretty basic templates of standard questions for customers and partners can go along way in helping you actually uncover what they feel your value is.</p>
+
+<p><em>On your key messaging/value prop, there&rsquo;s two pieces I&rsquo;ll drop in here. While I&rsquo;d love to write another long post on it, I wonder when I&rsquo;ll actually get it out. So the first is pitch the problem you&rsquo;re trying to solve–<a href="http://500hats.typepad.com/500blogs/2009/08/your-solution-is-not-my-problem.html">Dave McClure</a> talks about this as well as anyone. The second is don&rsquo;t pitch features, pitch the use cases and solutions. Pitch what&rsquo;s possible</em></p>
+
+<h4>Pitching</h4>
+
+<p>This is the number one area I&rsquo;ve found that having PR makes a huge difference. In the world of reporting, different reporters have different beats (areas of coverage), styles, outreach preferences, and most importantly, different relationships with companies and people. Knowing <em>all</em> of this and how to pitch a story to them is key. Yes you can spend hours researching and creating a perfect story just for them, and do that again, and again and hopefully land some coverage. But I&rsquo;d argue a bit: that&rsquo;s not the best use of your time.</p>
+
+<p>With a good PR person or agency you&rsquo;ll be able to strike a mix of:</p>
+
+<ul>
+<li>Here&rsquo;s the outlets I want to be in and why (have a good reason for why).</li>
+<li>Understanding the audience and readership.</li>
+<li>What outlets you feel like your key customers are reading, and validate this with the agency.</li>
+</ul>
+
+
+<p>From there, if you&rsquo;ve found a good agency they already have relationships with your key journalists / publications. So if you have a compelling product, you just need to give them the right messaging of the particular launch or news.</p>
+
+<h4>What else to expect from your agency</h4>
+
+<p>A surprise for some is how the whole process works. The agency is going to be there on the phone with you. You&rsquo;re not going to hang out over beers while pitching being chummy. The reporter is listening to multiple other pitches, it&rsquo;s likely they had one right before you and right after. The agency is there listening, helping keep time and track of conversation for reporter fact-checking after the interview.</p>
+
+<p>Hopefully they&rsquo;re also keeping notes. They should be able to provide you with some high level notes of what message resonated with each reporter and what didn&rsquo;t, what you covered, and what they asked. This is especially useful for future interactions.</p>
+
+<p>Similarly you should get a briefing 1 pager ahead of time. You should be able to skim this, you don&rsquo;t have to memorize. But it&rsquo;ll include key things about recent articles written by the reporter, their beat, topics to dive into and ones to stay away from. If you can connect the dots, those notes from an initial call start to feed into the 1 pagers for future calls.</p>
+
+<h3>Onto the briefing</h3>
+
+<p>Of course it&rsquo;s important to land the briefing in the first place, but just as important is getting it right. Coming into it, the reporter will have already gotten the high level pitch&hellip; It&rsquo;s why they took the call. You&rsquo;ll get a mixed bag of those that are open to teeing up the opportunity to those that want to get right to the news. Roll with what they prefer, but also don&rsquo;t be afraid of trying to hit some of your key points.</p>
+
+<h4>Have your key messages ready</h4>
+
+<p>Sound bites help hugely here. Analogies, customer references, whatever you want to hit. Have it ready. Also if you&rsquo;ve got a great sound bite that helps tell the story, it can make the reporter&rsquo;s job easier. Just don&rsquo;t swing too far into happy go lucky marketing land. It’s important to remember that you’re talking to a person. Have a conversation &ndash; don’t talk at them.</p>
+
+<h4>Go slow</h4>
+
+<p>It may seem obvious when you think about it, but as you&rsquo;re talking the reporter is writing. Or at least you hope they are. Some do it by hand and type up notes late, some type right then and there. When you hear a pause it doesn&rsquo;t always mean to keep going and it seldom means hurry up. Become extra comfortable with pauses. Check in if you&rsquo;re going to fast, if they&rsquo;re following, if they have any questions. I&rsquo;ve had people bring me in a beer before because I&rsquo;d had multiple cups of coffee through a few pitches, and they were trying to slow me down a bit. Know your pace, and then slow it down.</p>
+
+<h4>Questions</h4>
+
+<p>It&rsquo;s okay if they don&rsquo;t have a lot of questions, they may not. They may have none at all. Yes, pause, and give them a chance, or even ask if they have any. But don&rsquo;t stress too much if they have no questions.</p>
+
+<p>On the flip side of that &ndash; you’re PR person should have prepared a list of questions for you beforehand that the reporter could possibly throw your way. Be sure you’ve thought through and practiced all the Q&amp;A scenarios before the interview so you aren’t caught off-guard when you’re in front of the reporter.</p>
+
+<h3>In conclusion</h3>
+
+<p>If it&rsquo;s your first go around, don&rsquo;t stress too much. Have the headlines you want in your mind and key messages, or better yet write them out. <em>Personally I write key things on a whiteboard nice and large before I&rsquo;m on the call</em>. Finally once you&rsquo;re all done, enjoy reading the coverage. <strong>But you&rsquo;re not all done</strong> after you get some coverage look back, run a retrospective just like you would for a software project. What worked well, why did or didn&rsquo;t something work. What can you improve next time.</p>
+
+<p><em>Full disclosure, this is based across interactions with a small sample size of different PR agencies and individuals. Mileage may differ heavily from PR firm to PR firm, but hopefully the above provides at least some roadmap for more clarity vs. flying blind. As always if you&rsquo;ve got feedback/questions, feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></em></p>
+
+<p><em>Finally a special thanks to <a href="http://www.twitter.com/pavtalk">Paul Katsen</a> for much of the inspiration on creating this post and to he and <a href="http://www.twitter.com/kboysen">Katie Boysen</a> for review</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving past averages in SQL (Postgres) – Percentiles]]></title>
@@ -1868,446 +2163,6 @@ function mce_success_cb(resp){
 
 <!--End mc_embed_signup-->
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How I hack email]]></title>
-    <link href="http://www.craigkerstiens.com/2014/02/07/my-email-hacks/"/>
-    <updated>2014-02-07T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/02/07/my-email-hacks</id>
-    <content type="html"><![CDATA[<p>In a conversation with <a href="http://www.twitter.com/alexbaldwin">@alexbaldwin</a> yesterday the topic of email came up, with each of us quickly diving into various observations, how its both awesome and a great form of communication/engagement, how most people still do it really bad. Alex has some good experience with it with hack design having over 100,000 subscribers. A tangent in an entirely unrelated meeting with <a href="http://www.twitter.com/mschoening">@mschoening</a> and others it was suggested instead of emailing a list to send out a ton of individual emails instead. Both of these reminded me that email is incredibly powerful, but taking advantage of its power has to be intentional.</p>
-
-<p>This is not about ways to get to inbox 0 or better manage your inflow of emails. Rather its about how to get the maximum output out of emails that you send, or minimum output depending on what you prefer.</p>
-
-<!--more-->
-
-
-<p></p>
-
-<h3>1 email to 100 vs. 100 emails to 1</h3>
-
-<p>This is perhaps my favorite approach to get more efficient feedback and also know how broad an impact something has. Most smaller companies or groups within a company have a mailing list thats <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#97;&#x6c;&#108;&#64;&#121;&#111;&#x75;&#x72;&#99;&#x6f;&#x6d;&#112;&#x61;&#110;&#x79;&#x2e;&#99;&#x6f;&#x6d;">&#97;&#x6c;&#x6c;&#x40;&#x79;&#111;&#x75;&#x72;&#99;&#x6f;&#109;&#x70;&#97;&#x6e;&#x79;&#46;&#x63;&#111;&#x6d;</a> or <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x6f;&#x75;&#114;&#x67;&#114;&#x6f;&#117;&#x70;&#64;&#x6d;&#121;&#99;&#111;&#109;&#x70;&#97;&#110;&#x79;&#x2e;&#x63;&#x6f;&#109;&#x2e;">&#111;&#117;&#x72;&#x67;&#114;&#111;&#x75;&#112;&#x40;&#109;&#121;&#99;&#x6f;&#x6d;&#112;&#97;&#110;&#x79;&#46;&#99;&#x6f;&#x6d;&#x2e;</a> When people want to communicate out to the entire list its a great mechanism, however when you want feedback from the entire company its not a great mechanism.</p>
-
-<p>The reason being is that most people will know how many are on that list and assume that someone else will pick it up. This concept is fairly common in physical settings known as the <a href="http://en.wikipedia.org/wiki/Bystander_effect">bystander effect</a>, stating that individuals often do not offer up help to a victim when there are other bystanders preset.</p>
-
-<p>Finally in certain situations you&rsquo;ll want to hear the same thing 100 times. Hearing something once doesn&rsquo;t represent how much others echo that. You&rsquo;ll only see so many +1s on a thread, getting 100 individual responses ensure you get not only the breadth of responses but amplitude of them.</p>
-
-<p><em>FWIW, I ran a test of this sending an email to essentially all@heroku, then an individualized email in a similar form. The one directly addressed to people received 5x response as well as more thorough responses in the same time frame</em></p>
-
-<h3>Scaling requests for input</h3>
-
-<p>The issue that typically exists with the above is that you don&rsquo;t want 100 responses from 100 people most of the time. Most of the time you want feedback from 2 or 3, then feedback from 4 or 5, then smaller feedback or revision from the rest of that 100. This is actually how I craft blog posts, I start with broad messaging/theming. At that level there&rsquo;s truly 100 different directions it could go, that kind of input it not helpful when I have to narrow it down to a single one. When collecting product/roadmap input it can be helpful. Knowing which of the two I&rsquo;m aiming for is critical in deciding a method.</p>
-
-<h3>Being explicit about the before and the ask</h3>
-
-<p>On the note of crafting a blog post I do usually start with a request from 2 or 3 to get general direction. This takes the effect of, is this interesting? From here though theres still further refinement. The next phase is, does this flow, does it make sense? Here having a broader list is helpful so usually it&rsquo;ll hit around 4 to 5 people. Finally I&rsquo;ll revert to the 1 email to 100 people on a mailing list asking for grammar input because mine is crap. Here I don&rsquo;t mind the bystander effect because I want people to intentionally filter so it works well.</p>
-
-<p>The key at each step of the process is being extremely clear of whats already been done. With a blog post as an example&hellip; If I don&rsquo;t explain the process of people having reviewed and set the goals and some consensus that it meets them, that several have been over it for flow, and that what I&rsquo;m looking for now which is grammar feedback.</p>
-
-<h3>Circulating through people</h3>
-
-<p>Email and requests are a time burden on people. I commonly diversify and circle through a set of people. Much in the same way I reach out to people to have drinks or coffee every so often I am to not do the same person every week and only that person with the exception of my wife.</p>
-
-<p>Having more of a rotating basis of getting through people increases their excited-ness to provide input. If I&rsquo;m always going back to the same people they may feel slightly drained by my constant requests, and quite rightfully so. At the same time the input is good, but diversifying where you receive it gives a broader perspective.</p>
-
-<h3>Delayed sending</h3>
-
-<p>This is one that may be a little more obvious to people. But sending an email to slow down a thread, not seem over eager, or for whatever other reason you may have is hugely useful. There&rsquo;s really two tools I look to here: 1. <a href="http://www.boomeranggmail.com/referral_download.html?ref=vsz82">Boomerang</a> and 2. <a href="http://www.yesware.com">Yesware</a>. Both have slightly different benefits. Boomerang with a much simpler interface, Yesware better integration with Salesforce. Regardless of which you choose, if you ever want to type and email but send it at some point later one of these is critical.</p>
-
-<h3>Fin.</h3>
-
-<p>While this list is less of a defined process and more of a collection of random processes, several of these I&rsquo;d be much less effective without, and the collection of all makes getting appropriate reactions from email incredibly useful. I&rsquo;d love to hear what hacks you use to elicit positive impact from the emails you receive, as always if you have feedback please drop me a note.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Examining Postgres 9.4 - A first look]]></title>
-    <link href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/"/>
-    <updated>2014-02-02T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">PostgreSQL</a> is currently entering its final commit fest. While its still going, which means there could still be more great features to come, we can start to take a look at what you can expect from it now. This release seems to bring a lot of minor increments versus some bigger highlights of previous ones. At the same time there&rsquo;s still a lot on the bubble that may or may not make it which could entirely change the shape of this one. For a peek back of some of the past ones:</p>
-
-<!--more-->
-
-
-<h3>Highlights of 9.2</h3>
-
-<ul>
-<li><a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a></li>
-<li><a href="https://wiki.postgresql.org/wiki/Index-only_scans">Index only scans</a></li>
-<li><a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/#json_support">JSON Support</a></li>
-<li><a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/#range_type_support">Range types</a></li>
-<li>Huge performance improvements</li>
-</ul>
-
-
-<h3>Highlights of 9.3</h3>
-
-<ul>
-<li><a href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/">Postgres foreign data wrapper</a></li>
-<li><a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/#materialized_views">Materialized views</a></li>
-<li>Checksums</li>
-</ul>
-
-
-<h2>On to 9.4</h2>
-
-<p>With 9.4 instead of a simply list lets dive into a little deeper to the more noticable one.</p>
-
-<h3>pg_prewarm</h3>
-
-<p>I&rsquo;ll lead with one that those who need it should see huge gains (read larger apps that have a read replica they eventually may fail over to). Pg_prewarm will pre-warm your cache by loading data into memory. You may be interested in running <code>pg_prewarm</code> before bringing up a new Postgres DB or on a replica to keep it fresh.</p>
-
-<p><em>Why it matters</em>  &ndash; If you have a read replica it won&rsquo;t have the same cache as the leader. This can work great as you can send queries to it and it&rsquo;ll optimize its own cache. However, if you&rsquo;re using it as a failover when you do have to failover you&rsquo;ll be running in a degraded mode while your cache warms up. Running <code>pg_pregwarm</code> against it on a periodic basis will make the experience when you do failover a much better one.</p>
-
-<h3>Refresh materialized view concurrently</h3>
-
-<p>Materialized views just came into Postgres in 9.3. The problem with them is they were largely unusable. This was because they 1. Didn&rsquo;t auto-refresh and 2. When you did refresh them it would lock the table while it ran the refresh making it unreadable during that time.</p>
-
-<p>Materialized views are often most helpful on large reporting tables that can take some time to generate. Often such a query can take 10-30 minutes or even more to run. If you&rsquo;re unable to access said view during that time it greatly dampens their usefulness. Now running <code>REFRESH MATERIALIZED VIEW CONCURRENTLY foo</code> will regenerate it in the background so long as you have a unique index for the view.</p>
-
-<h3>Ordered Set Aggregates</h3>
-
-<p>I&rsquo;m almost not really sure where to begin with this, the name itself almost makes me not want to take advantage. That said what this enables is if a few really awesome things you could do before that would require a few extra steps.</p>
-
-<p>While there&rsquo;s plenty of aggregate functions in postgres getting something like percentile 95 or percentile 99 takes a little more effort. First you must order the entire set, then re-iterate over it to find the position you want. This is something I&rsquo;ve commonly done by using a window function coupled with a CTE. Now its much easier:</p>
-
-<pre><code>SELECT percentile_disc(0.95) 
-WITHIN GROUP (ORDER BY response_time) 
-FROM pageviews;
-</code></pre>
-
-<p>In addition to varying percentile functions you can get quite a few others including:</p>
-
-<ul>
-<li>Mode</li>
-<li>percentile_disc</li>
-<li>percentile_cont</li>
-<li>rank</li>
-<li>dense_rank</li>
-</ul>
-
-
-<h3>More to come</h3>
-
-<p>As I mentiend earlier the commit fest is still ongoing this means some things are still in flight. Here&rsquo;s a few that still offer some huge promise but haven&rsquo;t been committed yet:</p>
-
-<ul>
-<li>Insert on duplicate key or better known as Upsert</li>
-<li>HStore 2 &ndash; various improvements to HStore</li>
-<li>JSONB &ndash; Binary format of JSON built on top of HStore</li>
-<li>Logical replication &ndash; this one looks like some pieces will make it, but not a wholey usable implementation.</li>
-</ul>
-
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <h2>Sign up to get weekly advice and content on Postgres</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Where to go with developer content]]></title>
-    <link href="http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/"/>
-    <updated>2014-01-28T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content</id>
-    <content type="html"><![CDATA[<p>Last week I wrote up some <a href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
-
-<p>Perhaps the easiest way to do this is by highlighting some examples of it.</p>
-
-<!--more-->
-
-
-<h3>Teach them how to</h3>
-
-<p><a href="https://www.tindie.com/">Tindie</a> is a marketplace focused on makers. Browsing their site is simply awesome, there&rsquo;s everything from fully <a href="https://www.tindie.com/products/browse/home/">built things</a> to raw supplies to let me <a href="https://www.tindie.com/supplies/">start hacking</a>. The biggest problem though is they don&rsquo;t tell me how to take advantage of so much on their site. Posts similar to New Relic&rsquo;s on how they made their <a href="http://blog.newrelic.com/2013/11/18/making-futurestack-badge/">awesome conference badges</a> with a ready made shopping list of components would both get me excited and teach me something I didn&rsquo;t know how to do prior.</p>
-
-<p>Now a lot of this may seem obvious, but its not just about giving a how to. This doesn&rsquo;t belong in a readme or in product documentation. Instead the activity of regularly crafting relevant stories that stretch how people think about hardware hacking should be a top of mind focus. It also positions you as a thought leader within the space. Right now there is no thought leader for makers, and theres ample opportunity to be that.</p>
-
-<h3>Timely content</h3>
-
-<p>Chipmaker <a href="https://www.spark.io/">Spark.io</a> recently hugely capitalized on the <a href="http://gizmodo.com/google-just-bought-nest-for-3-2-billion-1500503899">Nest acquisition</a> by writing a post only days after of how you can build an <a href="http://blog.spark.io/2014/01/17/open-source-thermostat/">open source Nest for $70</a>. I suspect they didn&rsquo;t have such a post just lying around waiting for the acquisition and instead scrambled to get it all together almost as soon as it occurred.</p>
-
-<p>Over time the opportunity will always present itself in some form to attach yourself to another story. Sometimes this can be related to a direct competitor, sometimes its simply tangential. Being willing to quickly invest time when an opportunity presents itself is key to taking advantage of those opportunities. But please don&rsquo;t let such opportunities be your only way of capturing attention, there should still be a steady beat and focus.</p>
-
-<h3>Let your beliefs come out</h3>
-
-<p>Nearly everytime I sit down with some founder or very early employee at a company the vibe and impression I get from them is an order of magnitude stronger than the company&rsquo;s public persona. At the root of every company trying to do something big is an acute focus on a problem with strong opinions about how to solve them. You don&rsquo;t win people over by giving middle of the road opinions.</p>
-
-<p>Heroku&rsquo;s often been an example of being extremely opinionated. For a long time you found bits of this within our product such as with an ephermal filesystem – which in the long term enables scalability. Or with directing the separation of code and config – which helps reproducability for when things go wrong and spinning up new copies of your app.</p>
-
-<p>Again the biggest problem with this opinionation wasn&rsquo;t that it existed, but that it wasn&rsquo;t talked about clearly or loudly enough. Its now much clearer and broader in the form of <a href="http://12factor.net/">12 Factor</a> which fully codifies those strong opinions which influence the product, but also has applicability outside of Heroku.</p>
-
-<h3>All of the approaches</h3>
-
-<p>Doing just one of the above really isn&rsquo;t enough. Having multiple types of content such as the above three allow you to be much more effective. Of course the way you manage them and distribute them changes based on the type of content, but more on that later.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rethinking the limits on relational databases]]></title>
-    <link href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/"/>
-    <updated>2014-01-24T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational</id>
-    <content type="html"><![CDATA[<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
-
-<h3>Forget migrations</h3>
-
-<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
-
-<!--more-->
-
-
-<p>This is often viewed as a limitation of relational databases. Yet it doesn&rsquo;t really have to. You see even in schema-less database the relationships are still there, its just you&rsquo;re managing it at the application level. There&rsquo;s no reason higher level frameworks or ORMs couldn&rsquo;t handle the migration process. As it is today the process of adding a column to a relational database is quite straightforward in a sense where it doesn&rsquo;t introduce downtime and is capable of letting the developer still move quickly its just not automatically baked in.</p>
-
-<pre><code># Assuming a column thats referenced doesn't exist
-# Automatically execute relevant bits in your ORM
-# This isn't code meant for you to run 
-
-ALTER TABLE foo ADD COLUMN bar varchar(255); # This is near instant
-# Set your default value in your ORM
-UPDATE TABLE foo SET bar = 'DEFAULT VALUE' WHERE bar IS NULL;
-ALTER TABLE foo ALTER COLUMN bar NOT NULL;
-</code></pre>
-
-<p>Having Rails/Django/(Framework of your choice) automatically notice the need for a column to exist and make appropriate modifications you could work with it the same way you would managing a document relation in your code. Sure this is a manual painful process today, but theres no reason this can&rsquo;t be fully handled by PostgreSQL or directly within an ORM .</p>
-
-<h3>Documents</h3>
-
-<p>The other really strong case for the MongoDB/CouchDB camp is document storage. In this case I&rsquo;m going to equate a document directly to a JSON object. JSON itself is a wonderfully simply model that works so well for portability, and having to convert it within your application layer is well just painful. Yes Postgres has a JSON datatype, and the JSON datatype is continuing to be adopted now by many other relational databases. <em>I was shocked to hear that DB2 is getting support for JSON myself, while I expect improvements to come to it JSON was not at the top of my list</em>.</p>
-
-<p>And JSON does absolutely make sense as a data type within a column. But thats still a bit limiting as a full document store, what you want in those cases is any query result as a full JSON object. This is heavily undersold within Postgres that you can simply convert a full row to JSON with a <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">single function</a> &ndash; <code>row_to_json</code>.</p>
-
-<p>Again having higher level frameworks take full advantage so that under the covers you can have your strongly typed tables, but a flexibility to map them to flexible JSON objects makes a great deal of sense here.</p>
-
-<h3>Out of the box interfaces</h3>
-
-<p>This isn&rsquo;t a strict benefit of schema-less databases. Some schema-less databases have this more out of the box such as Couch where others less so. The concept of exposing a rest interface is not something new, and has been tried on top of relational databases a <a href="http://htsql.org/">few times over</a>. This is clearly something that does need to be delivered. The case for it is pretty clear, it reduces the work of people having to recreate admin screens and gives an easy onboarding process for noobs.</p>
-
-<p>Unfortunately there&rsquo;s not clear progress on this today for Postgres or other relational databases. In contrast other databases are delivering on this front often from day one :/</p>
-
-<h3>Where to</h3>
-
-<p>Some of the shifts in schema-less or really in other databases in general are not so large they cannot be subsummed into a broader option. At the same time there are some strong merits such as the ones above which do take an active effort to deliver on expanding what is a &ldquo;relational database&rdquo;.</p>
 ]]></content>
   </entry>
   

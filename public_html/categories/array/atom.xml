@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Array | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/array/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-07-21T09:12:15-07:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Postgres Arrays in Django]]></title>
+    <link href="http://www.craigkerstiens.com/2012/11/06/django-and-arrays/"/>
+    <updated>2012-11-06T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2012/11/06/django-and-arrays</id>
+    <content type="html"><![CDATA[<p>A few weeks back I did a brief <a href="/2012/08/20/arrays-in-postgres/">feature highlight on Postgres arrays</a>. Since that time I&rsquo;ve found myself using them with increasing regularity on small side projects. Much of this time I&rsquo;m using Django and of course not opting to write raw SQL to be able to use arrays. Django actually makes it quite simple to work with Arrays in Postgres with a package by <a href="http://www.niwi.be/about.html">Andrey Antukh</a>. Lets get started by installing two libraries:</p>
+
+<pre><code>pip install djorm-ext-pgarray
+pip install djorm-ext-expressions
+</code></pre>
+
+<p>The first library is for support for the array field type, the second allows us to more easily mix bits of SQL within the Django ORM.</p>
+
+<!-- more -->
+
+
+<p>Now within our <code>models.py</code> we&rsquo;ll want import the library then we&rsquo;ll have an entirely new field type available to us:</p>
+
+<pre><code>from djorm_pgarray.fields import ArrayField
+from djorm_expressions.models import ExpressionManager
+
+class Post(models.Model):
+    subject = models.CharField(max_length=255)
+    content = models.TextField()
+    tags = ArrayField(dbtype="varchar(255)")
+</code></pre>
+
+<p>Now we can begin using this. For example to create a simple blog post:</p>
+
+<pre><code>Post(subject='foo', content='bar', tags=['hello','world'])
+post.save()
+</code></pre>
+
+<p>In this example we&rsquo;re able to tag blog posts as one normally might, without requiring an extra model to join against. Taking advantage of the SQL Expressions library by Andrey as well we can query a blog post contains a certain tag:</p>
+
+<pre><code>qs = Posts.objects.where(
+    SqlExpression("tags", "@&gt;", ['postgres', 'django'])
+)
+</code></pre>
+
+<p>Now to show some contrast lets take a look at how you would do the same thing without using the Array field:</p>
+
+<pre><code>class Tag(models.Model):
+    name = models.CharField(max_length=255) 
+
+class Post(models.Model):
+    subject = models.CharField(max_length=255)
+    content = models.TextField()
+    tags = models.ManyToManyField(Tag)
+</code></pre>
+
+<p>Using the many-to-many relationship within Django requires you to save the Post, then add your tag is it requires having a primary key first:</p>
+
+<pre><code> post = Post(subject='foo', content='bar')
+ post.save()
+ post.tags.add('hello','world')
+</code></pre>
+
+<p>This means we have two calls to save it, and similarly querying it is less clean as well:</p>
+
+<pre><code>posts = Post.objects.filter(tags__name="hello").distinct()
+</code></pre>
+
+<p>This would gives us all posts that have the tag hello in them. We could also search for multiple ones:</p>
+
+<pre><code>posts = Post.objects.filter(tags__in=["hello","world"]).distinct()
+</code></pre>
+
+<p>In the latter case distinct is especially important since it could return a post twice if its tagged with both hello and world.</p>
+
+<p>In addition to an improvement on performance the gotchas are far less in dealing with a single array datatype and make it a quick but great win in certain cases like above.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Arrays in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres/"/>
+    <updated>2012-08-20T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres</id>
+    <content type="html"><![CDATA[<p>Postgres out of the box has an abundance of datatypes, from standard <a href="http://www.postgresql.org/docs/9.1/static/datatype.html#DATATYPE-NUMERIC">numeric datatypes</a> to <a href="http://www.postgresql.org/docs/9.1/static/datatype-geometric.html">geometric</a> or even <a href="http://www.postgresql.org/docs/9.1/static/datatype-net-types.html">network datatypes</a>. With extensions you can get even more out of it as earlier discussed with <a href="http://craigkerstiens.com/2012/06/11/schemaless-django/">hStore</a>. Though with all of the datatypes its easy to miss out on some of them that are there, in fact one of my favorites is often missed entirely. The <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> datatype lets you do just as you&rsquo;d expect, store an array inside Postgres. With this you can often get some of the functionality you&rsquo;d want in a single table when you might traditionally have expanded to multiple tables.</p>
+
+<p>The broader question may be why you&rsquo;d actually want to use an array. One good reason may be if you&rsquo;re an application developer its how you think of your data, so why not model it the same way. As you&rsquo;ll see below it can be easier than joining and aggregating across a set of rows. Also depending on your case you performance could be improved, though mileage may vary here as it does depend on the data you&rsquo;re storing.</p>
+
+<p>First a bit of a hacky example&hellip; Lets say you have a basic website that sells stuff, and instead of having a purchase ID and a total you want to include the quantity, id, and price of each item in a single row. With a bit of a messy foreign key (using a decimal) you could store all of this within a single row:</p>
+
+<pre><code>CREATE TABLE purchases (
+    id integer NOT NULL,
+    user_id integer,
+    items decimal(10,2) [100][1],
+    occurred_at timestamp
+);
+</code></pre>
+
+<p>With this table I could have an array that holds multiple records of:</p>
+
+<ul>
+<li>The item purchased</li>
+<li>The quantity</li>
+<li>The price</li>
+</ul>
+
+
+<!-- more -->
+
+
+<p>An insert to this table would look something like:</p>
+
+<pre><code>INSERT INTO purchases VALUES (1, 37, '\{\{15.0, 1.0, 25.0\}, \{15.0, 1.0, 25.0\}\}', now());
+INSERT INTO purchases VALUES (2, 2, '{{11.0, 1.0, 4.99}}', now());
+</code></pre>
+
+<p>You can see a full example with UDF&rsquo;s to compute total <a href="https://github.com/craigkerstiens/postgres-demo">here</a></p>
+
+<p>A more practical example may actually be using an array for tags. If you were to tag your purchases:</p>
+
+<pre><code>CREATE TABLE products (
+    id integer NOT NULL,
+    title character varying(255),
+    description text,
+    tags text[],
+    price numeric(10,2)
+);
+</code></pre>
+
+<p>You could then query those just as you&rsquo;d expect with a basic select statement, or could even expand the array to have an individual result per row:</p>
+
+<pre><code> SELECT title, unnest(tags) items
+ FROM products
+</code></pre>
+
+<p>Protip: If you&rsquo;re using arrays you can also use Postgres' <a href="http://www.postgresql.org/docs/9.1/static/textsearch-indexes.html">Gin and Gist</a> indexes to search for products quickly that contain certain tags. Given an index you could search where its tagged with some id:</p>
+
+<pre><code>-- Search where product contains tag ids 1 AND 2
+SELECT  *
+FROM    products
+WHERE   tags @&gt; ARRAY[1, 2]
+
+-- Search where product contains tag ids 1 OR 2
+SELECT  *
+FROM    products
+WHERE   tags &amp;&amp; ARRAY[1, 2]
+</code></pre>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
+]]></content>
+  </entry>
+  
+</feed>
