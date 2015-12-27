@@ -5,14 +5,12 @@
 	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
-	<script type="text/javascript">
-	</script>
 	<meta charset="utf-8">
 	<title> Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="I have a tendency of really latching onto very simple ideas. Typically these ideas don&rsquo;t require complex engineering to make them happen. This &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Metrics are obviously a very valuable area for start-ups, if you don&rsquo;t believe in metrics and think you&rsquo;re idea wins just because its &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -100,6 +98,136 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/03/tactical-steps-for-startup-metrics/">
+		
+			Tactical Steps for Startup Metrics</a>
+	</h2>
+	<div class="entry-content">
+		<p>Metrics are obviously a very valuable area for start-ups, if you don&rsquo;t believe in metrics and think you&rsquo;re idea wins just because its great then you better start searching for your next day job. <a href="http://twitter.com/davemcclure">Dave McClure</a> has done a great talk on start-ups several times over, you can check out a video and corresponding slide show at:</p>
+
+<p><a href="http://www.ustream.tv/recorded/5336115"><a href="http://www.ustream.tv/recorded/5336115">http://www.ustream.tv/recorded/5336115</a></a>
+<a href="http://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version"><a href="http://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version">http://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version</a></a></p>
+
+<p>And besides, it&rsquo;s a pirates acronym, so it&rsquo;s got to be great. But translating these from concept to actual technology metrics is also something that needs discussion. You can&rsquo;t exactly say we&rsquo;re going to use Google Analytics and let it magically tell you everything, furthermore all of the web developers out there talking about tweaks on Google Analytics do little to actually tell you what you need to know.</p>
+
+
+		
+		<a href="/2011/02/03/tactical-steps-for-startup-metrics/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-03T19:39:54-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/analytics/'>Analytics</a>, <a class='category' href='/categories/startup/'>Startup</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">
+		
+			Events With Google Analytics and Tricking Pageviews</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond this. There are two key items with tracking that you can do that will let you get a bit further. There&rsquo;s also plenty more on the reporting side, but we&rsquo;ll get to some of that later. On the tracking side the first item is event tracking. This is perhaps most commonly used for tracking various Javascript events that occur during a visit, however it can also be a bit more flexible towards tracking values. A very simple example might be:</p>
+
+<pre>_ga._trackEvent(category, action, opt_label, opt_value)</pre>
+
+
+<p>Or a real life example of this, might be on a FAQ screen, clicking the link to an anchored section of the page:</p>
+
+<pre>_ga._trackEvent('faq', 'anchor click', $(this))</pre>
+
+
+<p>But events by their sheer nature give a bit more flexibility with that value field. In the case of a user sending a message 
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T16:28:56-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/02/converting-bookmarklet-to-chrome-extension/">
+		
+			Converting Bookmarklet to Chrome Extension</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google&rsquo;s documentation is pretty good when it comes to how to create an extension that opens a full page and has large functionality. But if you&rsquo;re more interested in transforming an existing bookmarklet into an extension there&rsquo;s not great quality on it. The steps themselves are really quite simple. The big key that&rsquo;s not heavily documented is creating a background html that creates an event listener. After the jump is a full sample that would then call your javascript to activate the bookmarklet:</p>
+
+
+		
+		<a href="/2011/02/02/converting-bookmarklet-to-chrome-extension/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T00:34:49-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -358,138 +486,6 @@ $(document).ready(
 
 
 <time datetime="2010-01-25T17:30:10-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2010</time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2010/01/21/forget-doing-something-better-do-something-different/">
-		
-			Forget Doing Something Better, Do Something Different</a>
-	</h2>
-	<div class="entry-content">
-		<p>I have a tendency of really latching onto very simple ideas. Typically these ideas don&rsquo;t require complex engineering to make them happen. This is not to say the engineering is not important, but more so that it is some variation of engineering feats that have been done before. The reason I tend to like these over more complex engineering that really makes something better is that making something better is typically a marginal improvement. When it&rsquo;s a marginal improvement it&rsquo;s a lot harder to sell.</p>
-
-<p>With marginal improvements you have to:</p>
-
-<ol>
-    <li>Convince the customer it&#8217;s not good enough today</li>
-    <li>Convince the customer that you&#8217;re better</li>
-    <li>Convince the customer you&#8217;re worth the headache of changing</li>
-</ol>
-
-
-<p>While a lot of companies focus solely on taking an existing problem and solving it better than someone else has, I have my doubts about how reproducible this model is. If I&rsquo;m a large company with lots of resources I&rsquo;m going to keep iterating and improving myself, which means a smaller company really has to have some magic bullet that will displace me.</p>
-
-<p>In contrast if I address a problem that hasn&rsquo;t been solved my life instantly becomes a lot easier. I no longer have an argument of something not being good enough today, it becomes a question of value and how much its worth to solve the problem. Haggling over price is a conversation I&rsquo;d rather have than trying to justify value and convince a customer they&rsquo;ve been wrong in their choice for so many years.</p>
-
-<p>Over the coming days I&rsquo;m going to be posting a few of these examples/ideas and why I like them. Many of them are still being thought through, and while as I sort them out, I&rsquo;m generally happy to publish high points about them. The even bigger key here is that success is typically in the execution and less so in the idea, though even then I&rsquo;d prefer to execute on something that has less battles than something that from the onset has more. By doing something that is being done today you get no advantages of penetrating the market.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-21T14:49:33-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2010/01/20/parallelizing-the-product-process/">
-		
-			Parallelizing the Product Process?</a>
-	</h2>
-	<div class="entry-content">
-		<div id="_mcePaste">A few days ago I was told things needed to be parallelized, not serialized with regards to the process. To me there could not be much more of a detrimental approach.</div>
-
-
-<div></div>
-
-
-<div id="_mcePaste">To give some background there is currently some selling going on, as the case often is with selling you sell the next version of what you&#8217;ll have. Or really sell what you think customers want, and that gives you validation if you should build it or not. I&#8217;m generally quite happy with this process, assuming you&#8217;ll have some time to test the market out, then build it. In fact this is the way a lot of businesses proceed and is a valid process. My problem isn&#8217;t with this process, it&#8217;s that I was told that we have to deviate from this process due to time constraints.</div>
-
-
-<div>
-		
-		<a href="/2010/01/20/parallelizing-the-product-process/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-20T14:42:49-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2010</time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2010/01/19/who-cares-about-visitors/">
-		
-			Who Cares About Visitors?</a>
-	</h2>
-	<div class="entry-content">
-		<p>The web is becoming saturated. It&rsquo;s no longer the pimply faced 20 somethings living in their mom&rsquo;s basements that are the key users and the source of most of the traffic on the web. Now you have communities for pregnant moms, sites for elderly widows looking to date, and social sites for kids from the time they&rsquo;re able to talk. So now that the web is hitting its saturation point of types of people interacting it becomes a critical issue to take advantage of those users and get them to do more.</p>
-
-
-		
-		<a href="/2010/01/19/who-cares-about-visitors/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-19T15:55:22-08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2010</time></div>
 	
 
 

@@ -5,8 +5,6 @@
 	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
-	<script type="text/javascript">
-	</script>
 	<meta charset="utf-8">
 	<title>Documenting your PostgreSQL database Craig Kerstiens</title>
 
@@ -164,12 +162,10 @@ Has OIDs: no
 
 <p>But it doesn&rsquo;t necessarily have to stop there. Which actually brings me to one other item, you should be commenting your SQL just the same. SQL comments can be done easily by just starting a line with <code>--</code>, or you can have it at the end of the line with further info. Here&rsquo;s a nice example:</p>
 
-<pre><code>/* Query aggregates all project names that have open past due tasks grouped by email
-Other details in here
-*/
+<pre><code>-- Query aggregates all project names that have open past due tasks grouped by email
 SELECT 
   users.email,
-  array_to_string(array_agg(projects.name), ',')) as projects -- Aggregate all projects and separate by comma
+  array_to_string(array_agg(projects.name), ',')) as projects # Aggregate all projects and separate by comma
 FROM
   projects,
   tasks,
@@ -183,8 +179,6 @@ WHERE projects.id = tasks.project_id
 GROUP BY 
   users.email
 </code></pre>
-
-<p><em>Of note, multi-line comments within <code>/* */</code> will appear in pg_stat_statements and other logging areas, whereas inline comments via <code>--</code> will not.</em></p>
 
 <p>You comment your code, why shouldn&rsquo;t you comment your database?</p>
 </div>

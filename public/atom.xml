@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-11-30T08:53:21-08:00</updated>
+  <updated>2015-12-27T09:06:05-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,311 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres 9.5 - The feature rundown]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown/"/>
+    <updated>2015-12-27T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown</id>
+    <content type="html"><![CDATA[<p>The headline of Postgres 9.5 is undoubtedly: Insert&hellip; on conflict do nothing/update or more commonly known as Upsert or Merge. This removes one of the last remaining features which other databases had over Postgres. Sure we&rsquo;ll take a look at it, but first let&rsquo;s browse through some of the other features you can look forward to when Postgres 9.5 lands:</p>
+
+<!--more-->
+
+
+<h3>Grouping sets, cube, rollup</h3>
+
+<p>Pivoting in Postgres has <a href="http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres/">sort of been possible</a> as has rolling up data, but it required you to know what those values and what you were projecting to, to be known. With the new functionality to allow you to group various sets together rollups as you&rsquo;d normally expect to do in something like Excel become trivial.</p>
+
+<p>So now instead you simply add the grouping type just as you would on a normal group by:</p>
+
+<pre><code>SELECT department, role, gender, count(*)
+FROM employees
+GROUP BY your_grouping_type_here;
+</code></pre>
+
+<p>By simply selecting the type of rollup you want to do Postgres will do the hard work for you. Let&rsquo;s take a look at the given example of department, role, gender:</p>
+
+<ul>
+<li><code>grouping sets</code> will project out the count for each specific key. As a result you&rsquo;d get each department key, with other keys as null, and the count for each that met that department.</li>
+<li><code>cube</code> will give you the same values as above, but also the rollups of every individual combination. So in addition to the total for each department, you&rsquo;d get breakups by the department and gender, and department and role, and department and role and gender.</li>
+<li><code>rollup</code> will give you a slightly similar version to cube but only give you the detailed groupings in the order they&rsquo;re presented. So if you specified <code>roll (department, role, gender)</code> you&rsquo;d have no rollup for department and gender alone.</li>
+</ul>
+
+
+<p><em>Check the what&rsquo;s new wiki for a bit more clarity on <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#GROUPING_SETS.2C_CUBE_and_ROLLUP">examples and output</a></em></p>
+
+<h3>Import foreign  schemas</h3>
+
+<p>I only use foreign tables about once a month, but when I do use them they&rsquo;ve inevitably saved many hours of creating a one off ETL process. Even still the effort to setup new foreign tables has shown a bit of their infancy in Postgres. Now once you&rsquo;ve setup your foreign database, you can import the schema, either all of it or specific tables you prefer.</p>
+
+<p>It&rsquo;s as simple as:</p>
+
+<pre><code>IMPORT FOREIGN SCHEMA public
+FROM SERVER some_other_db INTO reference_to_other_db;
+</code></pre>
+
+<h3>pg_rewind</h3>
+
+<p>If you&rsquo;re managing your own Postgres instance for some reason and running HA, pg_rewind could become especially handy. Typically to spin up replication you have to first download the physical, also known as base, backup. Then you have to replay the Write-Ahead-Log or WAL–so it&rsquo;s up to date then you actually flip on replication.</p>
+
+<p>Typically with databases when you fail over you shoot the other node in the head or <a href="https://en.wikipedia.org/wiki/STONITH">STONITH</a>. This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and us pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over.</p>
+
+<h3>Upsert</h3>
+
+<p>Upsert of course will be the highlight of Postgres 9.5. I already talked about it some when <a href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/">it initially landed</a>. The short of it is, if you&rsquo;re inserting a record and there&rsquo;s a conflict, you can choose to:</p>
+
+<ul>
+<li>Do nothing</li>
+<li>Do some form of update</li>
+</ul>
+
+
+<p>Essentially this will let you have the typically experience of create or update that most frameworks provide but without a potential race condition of incorrect data.</p>
+
+<h3>JSONB pretty</h3>
+
+<p>There&rsquo;s a few updates <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#JSONB-modifying_operators_and_functions">to JSONB</a>. The one I&rsquo;m most excited about is making JSONB output in psql read much more legibly.</p>
+
+<p>If you&rsquo;ve got a JSONB field just give it a try with:</p>
+
+<pre><code>SELECT jsonb_pretty(jsonb_column)
+FROM foo;
+</code></pre>
+
+<h3>Give it a try</h3>
+
+<p>Just in time for the new year <a href="http://www.postgresql.org/about/news/1631/">the RC is ready</a> and you can get hands on with it. Give it a try, and if there&rsquo;s more you&rsquo;d like to hear about Postgres please feel free to drop me a note <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
+
+<script type="text/javascript">
+  (function() {
+    window._pa = window._pa || {};
+    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
+    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
+    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/517fd07cf1409000020002dc.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+</script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Going from blog posts to full launches]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches/"/>
+    <updated>2015-12-26T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches</id>
+    <content type="html"><![CDATA[<p>I recall extremely early stage where you&rsquo;d build a feature, realize it was awesome, then the next day write a blog post for it. At some point you start to move from that to more coordinated launches. A larger coordinated launch allows you to reach a bigger audience, can lead to bigger deals, and help expand your overall market. But perhaps more importantly by the time you hit full launch you&rsquo;ve message tested and ensured it&rsquo;s going to resonate in the way you expect.</p>
+
+<p><em>The process itself will both help amplify and validate/refine your message</em></p>
+
+<p>This is often a more gradual process than a sudden single change, you&rsquo;ll introduce new parts of this in time. And for many what an entire launch process looks like comes by trial an error, to help shorten that learning curve here&rsquo;s key areas I pay attention for a launch and process followed by a rough timeline.</p>
+
+<!--more-->
+
+
+<h3>Product first</h3>
+
+<p>Making sure the product is in the right shape is key to any big launch. You don&rsquo;t get a second shot and if the product isn&rsquo;t in shape customers often won&rsquo;t take a second look alter when it it. For this reason I strongly prefer to have your product locked and loaded before you even start talking launch times, or at least be in the bug clean up phase. This means you&rsquo;ve built a feature, validated with alpha users or private beta, and are ready to open it up to the world.</p>
+
+<p>If you have to set a launch date without the product or feature being already done allow padding. Sometimes it&rsquo;s good for the team to know the padding, sometimes it isn&rsquo;t. When you have extra time it&rsquo;s not uncommon for your development to magically consume exactly that amount of time and still result in a small scramble towards the end.</p>
+
+<p>A good driver I&rsquo;ve found is needing to have it fully like to demo a few weeks out from the launch itself, such as during <a href="">analyst pre-briefings</a>.</p>
+
+<h3>Crafting your message</h3>
+
+<p>Every launch is an opportunity to tell your core message and value prop. If you miss this opportunity for focusing on a single narrow feature you&rsquo;ve missed the biggest opportunity you had in a launch. You can&rsquo;t relaunch your full product every time though–you do need some big improvements or feature that you can highlight, but you should still hit your core message.</p>
+
+<p>First you should know that your feature solves some specific problem, you should know this from the alpha/beta testing and if it doesn&rsquo;t solve this problem <a href="http://www.craigkerstiens.com/2014/08/13/when-to-ship-when-to-kill/">you&rsquo;re not ready to launch</a>. Yes, some people will launch a product before the product is completely there–this is common in a marketing driven company as opposed to a product/engineering driven company.</p>
+
+<p>Your message should lead with the problem you&rsquo;re solving, not the laundry list of features. The best launches lead with some  broader thematic message, even better if it&rsquo;s an altruistic world changing one. A rough example of this:</p>
+
+<p>To the point to the product, and probably over generalized as boring:</p>
+
+<ul>
+<li>Connectify brings a new way of taking your dumb devices at home and turning them into intelligent connected devices.</li>
+</ul>
+
+
+<p>In contrast, broad thematic message, followed lightly by the product.</p>
+
+<ul>
+<li>We live in a connected world, and with new connected devices there&rsquo;s the opportunity not just give you more data but help you improve how you live your life. Connectify helps you at bringing the devices that matter together with ease.</li>
+</ul>
+
+
+<h3>Testing your message</h3>
+
+<p>You should treat your message just like a product, testing it gradually along the way. Once you&rsquo;ve got some initial framing of it, test it internally, then with friendly customers or community members. Leading up to the launch I usually have a timeline and get all the content and communication rolling about 3 weeks out. I&rsquo;ll give a bit of a timeline below but first some more around message testing</p>
+
+<h4>Analysts</h4>
+
+<p>If you regularly use <a href="http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/">any analysts</a> you should absolutely use them to help with a launch. Several weeks out is a great time to test key messages with them, get feedback, and if you&rsquo;re lucky you may even get them to provide a quote for the launch.</p>
+
+<p>Keep in mind here a inquiry is an opportunity to test your message and get feedback. You should talk roughly half of the time here, they should be talking the other half. In contrast briefings before launch you should have your message fully baked and should simply be pitching your message and possibly demo-ing.</p>
+
+<h4>Friendlies</h4>
+
+<p>This may be more contentious, but at least at early stage sharing drafts with friendly community members is a great way to get feedback and refine your message. Here you should be especially concious of the request of their time and expect to have some delay before they get back to you. Being top secret about your message ahead of time won&rsquo;t add much value to it being a home run, where as better ensuring it resonates will help it to be more successful.</p>
+
+<h4>Customers</h4>
+
+<p>Customers I call out as a separate bucket. Customers have less incentive to leak your news than friendlies, but also fall somewhere on the other spectrum of analysts. A key piece about customers is there is an opportunity for them to be a launch partner. And so on to that topic:</p>
+
+<h3>Launch partners</h3>
+
+<p>Press and others like seeing and knowing you have external validation. Similarly many see the benefit of being part of a launch, after all it&rsquo;s more free press for them. For a launch partner there are various levels, though for most providing some quote is a pretty common level.</p>
+
+<p>The best way to do this is talk to them about what they like about the feature/product and take a first stab at the quote for them from their feedback. Some may very much want to wordsmith their own which is fine, but minimizing the work required of them while–trying to hit something they&rsquo;d say as well–as a message that flows can best be done by you taking a first pass.</p>
+
+<p>Further there&rsquo;s varying levels of value with quotes and references. In descending order:</p>
+
+<ol>
+<li>Customers</li>
+<li>Analysts</li>
+<li>Community Members</li>
+</ol>
+
+
+<h3>The other details</h3>
+
+<p>During launch week I mostly want to be dotting i&rsquo;s and crossing t&rsquo;s, meaning: I want the product done. I want documentation done. I want the blog post finalized. I want to be in the mode of send internal announcements, prep internal teams, talk to media.</p>
+
+<h4>Prepping internal teams</h4>
+
+<p>Obviously the engineering and product people involved will be in the loop. But you need to notify many others some of which should have been in the loop already, some less so:</p>
+
+<ul>
+<li>Support &ndash; There&rsquo;s a new product surface area, support should be top of your list so they can field the tickets and questions that come in</li>
+<li>Sales &ndash; Even if there is no price change or impact, new features allow sales to communicate value to customers</li>
+</ul>
+
+
+<h3>Timeline</h3>
+
+<p>Finally what&rsquo;s the end to end timeline look like with all the little details. Here&rsquo;s a rough one that&rsquo;s fully built out. IF you&rsquo;re smaller and don&rsquo;t have a regular cadence of analysts in hand then just expect that doesn&rsquo;t apply. IF your support team is the product and engineers maybe that&rsquo;s lighter weight. Basically feel free to take out parts, but expect your process to grow to something of this size.</p>
+
+<ul>
+<li>4 weeks out &ndash; Outline of blog post with key messages</li>
+<li>Test that outline internally</li>
+<li>3 weeks out &ndash; Start to get a rough draft in place</li>
+<li>3 weeks out &ndash; Share internally and with friendlies. At this point you&rsquo;re explicitely looking for message feedback. Tell people to not waste time on nitpicks of words or grammar, it will be 98% re-written by the time you&rsquo;re done</li>
+<li>2.5 weeks out &ndash; Analyst inquiries for message testing</li>
+<li>2.5 weeks out &ndash; Start putting together product demo</li>
+<li>2 weeks out &ndash; Start putting together documentation</li>
+<li>2 weeks out &ndash; Start nailing down blog post for final messages</li>
+<li>1 weeks out &ndash; Start to put final touches on blog post for grammar</li>
+<li>1 week out &ndash; Analyst briefings</li>
+<li>1 week out &ndash; Update support</li>
+<li>3-5 days out &ndash; Stage blog post</li>
+<li>3-5 days out &ndash; Stage new documentation</li>
+<li>2-4 days out &ndash; Make sure PRs are ready or feature flags, in short the switch is there or live but not public</li>
+<li>1-3 days out &ndash; Update sales</li>
+<li>1-3 days out &ndash; Interall communication to all@</li>
+<li>1-3 days out &ndash; Media briefings</li>
+<li>LAUNCH DAY &ndash; Sit in a room and watch all the things, engage with twitter/HN/etc.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and Node - Hands on using Postgres as a Document Store with MassiveJS]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/08/massive-json/"/>
+    <updated>2015-12-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/08/massive-json</id>
+    <content type="html"><![CDATA[<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
+
+<ul>
+<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
+<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
+<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
+<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>This is all great, but when it comes to using JSON you need a library that plays well here. As you might have guessed it from <a href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/">my previous post this is where MassiveJS comes in</a>. Most ORMs take a more legacy approach to <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">how they work with the database</a>, in contrast the other side of the world believes in document only storage way is the future. In contrast Postgres believes there is a time and place for everything, just like Massive, except it believes Postgres is the path <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">just as I do</a>.</p>
+
+<p>Alright, enough context, let&rsquo;s take a look.</p>
+
+<h3>Getting all setup</h3>
+
+<p>First go ahead and create a database, let&rsquo;s call it massive, and then let&rsquo;s connect to it and create our example table:</p>
+
+<pre><code>$ createdb massive
+$ psql massive
+# create table posts (id serial primary key, body jsonb);
+</code></pre>
+
+<p>Now that we&rsquo;ve got our database setup let&rsquo;s seed it with some data. If you want you can simple hop over to the github repo and pull it down then run <code>node load_json.js</code> to load the example data. A quick look at it, given an <code>example.json</code> file we&rsquo;re going to iterate over it. For each record in there, we&rsquo;re going to call saveDoc. Based on our table which has a unique id key and a body jsonb field it&rsquo;ll simply save our JSON document into that table:</p>
+
+<pre><code>var parsedJSON = require('./example.json');
+
+for(i = 0; i &lt; parsedJSON.posts.length; i++) {
+    db.saveDoc("posts", parsedJSON.posts[1], function(err,res){});
+};
+</code></pre>
+
+<p><em>If you want to just take a look at this <a href="https://github.com/craigkerstiens/json_node_example">github repo</a>, once you create a database you can run <code>node load_json.js</code> to seed it.</em></p>
+
+<h3>Why JSON at all?</h3>
+
+<p>JSON data is all over the place, in many cases it&rsquo;s fast and flexible and allows you to move more quickly. Yes, much of the time normalizing your data can be useful, but there is something to be said for expediency saving some data and querying across it. Querying across some giant document also used to be much more expensive, but now with JSONB and it&rsquo;s indexes that can be extremely fast.</p>
+
+<h3>Querying</h3>
+
+<p>So how do we go about querying? Well it&rsquo;s pretty simple with Massive, they provide a nice <code>findDoc</code> function to let you just search for contents of a specific key within the document. Let&rsquo;s say I wanted to pull back all posts that are in the Postgres category, well it&rsquo;s as simple as:</p>
+
+<pre><code>db.posts.findDoc({title : 'Postgres'}, function(err,docs){
+    console.log(docs);
+});
+</code></pre>
+
+<p>The real beauty of this is if you added a GIN index (which will index the entire document) this query will be <a href="http://obartunov.livejournal.com/175235.html">quite performant</a>.</p>
+
+<p><em>Just make sure to add your GIN index</em>:</p>
+
+<pre><code>CREATE INDEX idx_posts ON posts USING GIN(body jsonb_path_ops); 
+CREATE INDEX idx_posts_search ON posts USING GIN(search);  
+</code></pre>
+
+<p>But even better, with Massive it&rsquo;ll automatically add these for you if you just start saving docs. It will automatically create the table and appropriate indexes, just doing the correct thing out of the box.</p>
+
+<h3>Full text and JSON</h3>
+
+<p>Cool, so you can do an exact look up. Which is great when you&rsquo;re matching a category&hellip; which could be easily normalized. It&rsquo;s great when you&rsquo;re matching numbers, which also could likely reside in their own column. But what about when you&rsquo;re searching over a large document, or a set of keys within some document which may require several joins, or indeterminate data structure, well you may want to search for the presence of that string at all. As you may have guessed this is quite trivial.</p>
+
+<pre><code>db.posts.searchDoc({
+    keys : ["title", "category"],
+    term : ["Postgres"]
+}, function(err,docs){
+    console.log(docs);
+})
+</code></pre>
+
+<p>Hopefully it&rsquo;s pretty straight forward, but to be very clear. Call out the document table you want to search, then the keys you&rsquo;ll want to include in the search, then the term. This will search for any place the contents that string are found in matching values for those keys.</p>
+
+<p>Which will nicely yield the expected documents:</p>
+
+<pre><code>[ { link: 'http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/',
+    title: 'Upsert Lands in PostgreSQL 9.5 – a First Look',
+    category: 'Postgres',
+    comments: [ [Object] ],
+    id: 2 },
+  { link: 'http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/',
+    title: 'Node, Postgres, MassiveJS - a Better Database Experience',
+    id: 3 } ]
+</code></pre>
+
+<h3>In conclusion</h3>
+
+<p>While Massive isn&rsquo;t perfect, its approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
@@ -50,7 +355,7 @@ $ npm install massive --save
 <p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
 
 <pre><code>var massive = require("massive");
-var connectionString = "postgres://:@localhost/example";
+var connectionString = "postgres://ckerstiens:@localhost/example";
 
 var db = massive.connectSync({connectionString : connectionString});
 
@@ -302,9 +607,9 @@ WHERE email = $1
 
 <p>If it&rsquo;s your first go around, don&rsquo;t stress too much. Have the headlines you want in your mind and key messages, or better yet write them out. <em>Personally I write key things on a whiteboard nice and large before I&rsquo;m on the call</em>. Finally once you&rsquo;re all done, enjoy reading the coverage. <strong>But you&rsquo;re not all done</strong> after you get some coverage look back, run a retrospective just like you would for a software project. What worked well, why did or didn&rsquo;t something work. What can you improve next time.</p>
 
-<p><em>Full disclosure, this is based across interactions with a small sample size of different PR agencies and individuals. Mileage may differ heavily from PR firm to PR firm, but hopefully the above provides at least some roadmap for more clarity vs. flying blind. As always if you&rsquo;ve got feedback/questions, feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></em></p>
+<p>*Full disclosure, this is based across interactions with a small sample size of different PR agencies and individuals. Mileage may differ heavily from PR firm to PR firm, but hopefully the above provides at least some roadmap for more clarity vs. flying blind. As always if you&rsquo;ve got feedback/questions, feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
 
-<p><em>Finally a special thanks to <a href="http://www.twitter.com/pavtalk">Paul Katsen</a> for much of the inspiration on creating this post and to he and <a href="http://www.twitter.com/kboysen">Katie Boysen</a> for review</em></p>
+<p><em>Finally a special thanks to <a href="http://www.twitter.com/pavtalk">Paul Katsen</a> for much of the inspiration on creating this post and to he and <a href="http://www.twitter.com">Katie Boysen</a> for review</em></p>
 ]]></content>
   </entry>
   
@@ -1358,811 +1663,6 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
 <h3>In conclusion</h3>
 
 <p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[PostgreSQL 9.4 - Looking up (with JSONB and logical decoding)]]></title>
-    <link href="http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/"/>
-    <updated>2014-03-24T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up</id>
-    <content type="html"><![CDATA[<p>Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the <a href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">9.4 PostgreSQL release</a>. Since that post a few weeks ago the landscape has already changed, and much more for the positive.</p>
-
-<p><em>The lesson here, is never count Postgres out</em>. As <a href="www.linuxinsider.com/story/Bruce-Momjian-PostrgreSQL-Prefers-the-Scenic-Route-80045.html">Bruce discussed in a recent interview</a>, Postgres is slow and steady, but much like the turtle can win the race.</p>
-
-<p>So onto the actual features:</p>
-
-<!--more-->
-
-
-<h3>JSONB</h3>
-
-<p>JSON has existed for a while in Postgres. Though the JSON that exists today simply validates that your text is valid JSON, then goes on to store it in a text field. This is fine, but not overly performant. If you do need some flexibility of your schema and performance without much effort then hstore may already work for you today, you can of course read more on this in an old post comparing <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore to json</a>.</p>
-
-<p>But let&rsquo;s assume you do want JSON and a full document store, which is perfectly reasonable. Your option today is still best with the JSON datatype. And if you&rsquo;re retrieving full documents this is fine, however if you&rsquo;re searching/filtering on values within those documents then you need to take advantage of some functional indexing. You can do this some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">built-in operators</a> or with full <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JS in Postgres</a>. This is a little more work, but also very possible to get good performance.</p>
-
-<p>Finally, onto the perfect world, where JSON isn&rsquo;t just text in your database. For some time there&rsquo;s been a discussion around hstore and its future progress and of course the future of JSON in Postgres. These two worlds have finally heavily converged for PostgreSQL 9.4 giving you <a href="http://www.postgresql.org/message-id/E1WRpmB-0002et-MT@gemulon.postgresql.org">the best of both worlds</a>. With what was known as hstore2, by <a href="http://obartunov.livejournal.com/177247.html">The Russians</a> under the covers, and collective efforts on JSONB (Binary representation of JSON) which included all the JSON interfaces you&rsquo;d expect. We now have full document storage and awesome performance with little effort.</p>
-
-<p>Digging in a little further, why does it matter that its a binary representation? Well under the covers building on the hstore functionality brings along some of the awesome index types in Postgres. Namely GIN and possibly in the future GIST. These indexes will automatically index all keys and values within a document, meaning you don&rsquo;t have to manually create individual functional indexes. Oh and they&rsquo;re <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">fast and often small</a> on disk as well.</p>
-
-<h3>Logical Decoding</h3>
-
-<p>Logical replication was another feature that I talked about that was likely missing. Here there isn&rsquo;t the same positive news as JSONB, as there&rsquo;s not a 100% usable feature available. Yet there is a big silver lining in it. <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=b89e151054a05f0f6d356ca52e3b725dd0505e53">Committed just over a week ago</a> was logical decoding. This means that we can decode the WAL (Write-Ahead-Log) into logical changes. In layman&rsquo;s terms this means something thats unreadable to anything but Postgres (and version dependent in cases) can be intrepretted to a series of <code>INSERT</code>s, <code>UPDATE</code>s, <code>DELETE</code>s, etc. With logical commands you could then start to get closer to cross version upgrades and eventually multi-master.</p>
-
-<p>With this commit it doesn&rsquo;t mean all the pieces are there in the core of Postgres today. What it does mean is the part thats required of the Postgres core is done. The rest of this, which includes sending the logical replication stream somewhere, and then having something apply it can be developed fully as an extension.</p>
-
-<h3>In Conclusion</h3>
-
-<p>Postgres 9.4 isn&rsquo;t 100% complete yet, as the commitfest is still going on. You can follow along on the <a href="www.postgresql.org/list/pgsql-hackers/2014-03/">postgres hackers mailing list</a> or on the <a href="https://commitfest.postgresql.org/">commitfest app</a> where you can follow specific patches or even chip in on reviewing. And of course I&rsquo;ll do my best to continue to highlight useful features here and surface them on <a href="http://www.postgresweekly.com">Postgres Weekly</a> as well.</p>
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <h2>Sign up to get weekly advice and content on Postgres</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tracking Month over Month Growth in SQL]]></title>
-    <link href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/"/>
-    <updated>2014-02-26T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL</id>
-    <content type="html"><![CDATA[<p><img src="http://f.cl.ly/items/3f1q2N2s2V0d0G2s1T01/Blank.jpg" style="float:right;margin-left:20px;"/> In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
-
-<!--more-->
-
-
-<p>I&rsquo;ll jump write in, first lets assume you have some method of querying your revenue. In this case you may have some basic query similar to:</p>
-
-<pre><code>SELECT date_trunc('month', mydate) as date, 
-       sum(mymoney) as revenue
-FROM foo
-GROUP BY date
-ORDER BY date ASC;
-</code></pre>
-
-<p>This should give you a nice clean result:</p>
-
-<pre><code> date                   | revenue  
-------------------------+----------
- 2013-10-01 00:00:00+00 | 10000    
- 2013-11-01 00:00:00+00 | 11000    
- 2013-12-01 00:00:00+00 | 11500    
-</code></pre>
-
-<p>Now this is great, but the first thing I want to do is start to see what my percentage growth month over month is. Surprise, surprise, I can do this directly in SQL. To do so I&rsquo;ll use a <a href="http://postgresguide.com/tips/window.html">window function</a> and then use the <a href="http://www.postgresql.org/docs/9.3/static/functions-window.html">lag function</a>. According to the Postgres docs</p>
-
-<p><em>lag(value any [, offset integer [, default any ]]) same type as value returns value evaluated at the row that is offset rows before the current row within the partition; if there is no such row, instead return default. Both offset and default are evaluated with respect to the current row. If omitted, offset defaults to 1 and default to null</em></p>
-
-<p>Essentially it orders it based on the <a href="http://www.postgresql.org/docs/9.3/static/tutorial-window.html">window function</a> and then pulls in the value from the row before. So in action it looks something like:</p>
-
-<pre><code>SELECT date_trunc('month', mydate) as date, 
-       sum(mymoney) as revenue,
-       lag(mymoney, 1) over w previous_month_revenue
-FROM foo
-WINDOW w as (order by date)
-GROUP BY date
-ORDER BY date ASC;
-</code></pre>
-
-<p>Combining to actually make it a bit more pretty (with some casting to a numeric and then formatting a bit) in terms of a percentage:</p>
-
-<pre><code>SELECT date_trunc('month', mydate) as date, 
-       sum(mymoney) as revenue,
-       round((1.0 - (cast(mymoney as numeric) / lag(mymoney, 1) over w)) * 100, 1) myVal_growth
-FROM foo
-WINDOW w as (order by date)
-GROUP BY date
-ORDER BY date ASC;
-</code></pre>
-
-<p>And you finally get a nice clean output of your month over month growth directly <a href="http://www.amazon.com/dp/B0043EWUQQ?tag=mypred-20">in SQL</a>:</p>
-
-<pre><code> date                   | revenue  | growth
-------------------------+----------+--------
- 2013-10-01 00:00:00+00 | 10000    |   null 
- 2013-11-01 00:00:00+00 | 11000    |   10.0 
- 2013-12-01 00:00:00+00 | 11500    |   4.5 
-</code></pre>
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <h2>Sign up to get weekly advice and content on Postgres</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[PostgreSQL 9.4 - What I was hoping for]]></title>
-    <link href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/"/>
-    <updated>2014-02-15T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted</id>
-    <content type="html"><![CDATA[<p>Theres no doubt that the <a href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/">9.4 release</a> of PostgreSQL will have some great improvements. However, for all of the improvements it delivering it had the promise of being perhaps the most impactful release of <a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">Postgres</a> yet. Several of the features that would have given it my stamp of best release in at least 5 years are now already not making it and a few others are still on the border. Here&rsquo;s a look at few of the things that were hoped for and not to be at least until another 18 months.</p>
-
-<!--more-->
-
-
-<h3>Upsert</h3>
-
-<p>Upsert, merge, whatever you want to call it, this is been a sore hole for sometime now. Essentially this is insert based on this ID or if that key already exists update other values. This was something being worked on pretty early on in this release, and throughout the process continuing to make progress. Yet as progress was made so were exteneded discussions about syntax, approach, etc. In the end two differing views on how it should be implemented have the patch still sitting there with other thoughts on an implementation but not code ready to commit.</p>
-
-<p>At the same time I&rsquo;ll acknowledge upsert as a hard problem to address. The locking and concurrency issues are non-trivial, but regardless of those having this in there mostly kills the final argument for anyone to chose MySQL.</p>
-
-<h3>Better JSON</h3>
-
-<p>JSON is Postgres is super flexible, powerful, and <strong>generally slow</strong>. Postgres does validation and some parsing of JSON, but without something like <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">PLV8</a>, or <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> you may not get great performance. This is because under the covers the JSON is represented as text and as a result many of the more powerful indexes that could lend benefit, such as GIN or GIST, simply don&rsquo;t apply here.</p>
-
-<p>As a related effort to this <a href="http://postgresguide.com/sexy/hstore.html">hstore</a>, the key/value store, is working on being updated. This new support will add types and nesting making it much more usable overall. However the syntax and matching of how JSON functions isn&rsquo;t guranteed to be part of it. The proposal and actually work is still there and not rejected yet, but looks heavily at risk. Backing a new binary representation of JSON with hstore 2 would deliver so many benefits further building upon the foundation of hstore, JSON, PLV8 that exists today for Postgres.</p>
-
-<h3>apt-get for your extensions</h3>
-
-<p>I&rsquo;m almost not even sure where to start with this one. The notion within a Postgres community is that packaging for distros is super simple and extensions should just be packaged for them. Then there&rsquo;s <a href="http://pgxn.org/">PGXN</a> the Postgres extension network where you can download and compile and muck with annoying settings to get extensions to build. This proposal would have delivered a built in installer much like NPM or rubygems or PyPi and the ability for someone to simply say install extension from this centralized repository. No, it was setting out to solve the issue of having a single repository but would make it much easier for people to run one.</p>
-
-<p>For all the awesome-ness that exists in extensions such as <a href="http://tapoueh.org/blog/2013/02/25-postgresql-hyperloglog">HyperLogLog</a>, <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">foreign data wrappers</a>, <a href="http://madlib.net/">madlib</a> theres hundreds of other extensions that could be written and be valuable. They don&rsquo;t even all require C, they could fully exist in JavaScript with PLV8. Yet I&rsquo;m on the fence encouraging people to write such because if no one uses it then much of the point in the reusability of an extension is lost. Here&rsquo;s hoping that there&rsquo;s a change of opinion in the future that packaging is a solved problem and that creating an ecosystem for others to contribute to the Postgres world without knowing C is a positive thing.</p>
-
-<h3>Logical replication</h3>
-
-<p>When I first heard this might have some shot at making it in 9.4 I was shocked. This is something that while some may not take notice of I&rsquo;ve felt pain of for many years. Logical replication means in short enabling upgrades across PostgreSQL versions without a dump and restore, but even more so laying the ground work for more complicated architectures like perhaps multi-master. Yes, even with logical replication in theres still plenty of work to do, but having the groundwork laid goes a long way. There are options for it today with third party tools, but the management of these is painful at best.</p>
-
-<h3>In conclusion</h3>
-
-<p>The positive of this one is that the building blocks are in and its continuing to make progress. Its just that we&rsquo;ll have to wait about 18 months before the release of PostgreSQL 9.5 before its in our hands.</p>
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <h2>Sign up to get weekly advice and content on Postgres</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
 ]]></content>
   </entry>
   

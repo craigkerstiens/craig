@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-07-21T09:12:15-07:00</updated>
+  <updated>2015-12-08T10:58:36-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,212 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and JSON with Node - hands on with MassiveJS]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/08/massive-json/"/>
+    <updated>2015-12-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/08/massive-json</id>
+    <content type="html"><![CDATA[<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
+
+<ul>
+<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
+<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
+<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
+<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>This is all great, but when it comes to using JSON you need a library that plays well here. As you might have guessed it from <a href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/">my previous post this is where MassiveJS comes in</a>. Most ORMs take a more legacy approach to <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">how they work with the database</a>, in contrast the other side of the world believes in document only storage way is the future. In contrast Postgres believes there is a time and place for everything, just like Massive, except it believes Postgres is the path <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">just as I do</a>.</p>
+
+<p>Alright, enough context, let&rsquo;s take a look.</p>
+
+<h3>Getting all setup</h3>
+
+<p>First go ahead and create a database, let&rsquo;s call it massive, and then let&rsquo;s connect to it and create our example table:</p>
+
+<pre><code>$ createdb massive
+$ psql massive
+# create table posts (id serial primary key, body jsonb);
+</code></pre>
+
+<p>Now that we&rsquo;ve got our database setup let&rsquo;s seed it with some data. If you want you can simple hop over to the github repo and pull it down then run <code>node load_json.js</code> to load the example data. A quick look at it, given an <code>example.json</code> file we&rsquo;re going to iterate over it. For each record in there, we&rsquo;re going to call saveDoc. Based on our table which has a unique id key and a body jsonb field it&rsquo;ll simply save our JSON document into that table:</p>
+
+<pre><code>var parsedJSON = require('./example.json');
+
+for(i = 0; i &lt; parsedJSON.posts.length; i++) {
+    db.saveDoc("posts", parsedJSON.posts[1], function(err,res){});
+};
+</code></pre>
+
+<p><em>If you want to just take a look at this <a href="https://github.com/craigkerstiens/json_node_example">github repo</a>, once you create a database you can run <code>node load_json.js</code> to seed it.</em></p>
+
+<h3>Why JSON at all?</h3>
+
+<p>JSON data is all over the place, in many cases it&rsquo;s fast and flexible and allows you to move more quickly. Yes, much of the time normalizing your data can be useful, but there is something to be said for expediency saving some data and querying across it. Querying across some giant document also used to be much more expensive, but now with JSONB and it&rsquo;s indexes that can be extremely fast.</p>
+
+<h3>Querying</h3>
+
+<p>So how do we go about querying? Well it&rsquo;s pretty simple with Massive, they provide a nice <code>findDoc</code> function to let you just search for contents of a specific key within the document. Let&rsquo;s say I wanted to pull back all posts that are in the Postgres category, well it&rsquo;s as simple as:</p>
+
+<pre><code>db.posts.findDoc({title : 'Postgres'}, function(err,docs){
+    console.log(docs);
+});
+</code></pre>
+
+<p>The real beauty of this is if you added a GIN index (which will index the entire document) this query will be <a href="http://obartunov.livejournal.com/175235.html">quite performant</a>.</p>
+
+<p><em>Just make sure to add your GIN index</em>:</p>
+
+<pre><code>CREATE INDEX idx_posts ON posts USING GIN(body jsonb_path_ops); 
+CREATE INDEX idx_posts_search ON posts USING GIN(search);  
+</code></pre>
+
+<h3>Full text and JSON</h3>
+
+<p>Cool, so you can do an exact look up. Which is great when you&rsquo;re matching a category&hellip; which could be easily normalized. It&rsquo;s great when you&rsquo;re matching numbers, which also could likely reside in their own column. But what about when you&rsquo;re searching over a large document, or a set of keys within some document which may require several joins, or indeterminate data structure, well you may want to search for the presence of that string at all. As you may have guessed this is quite trivial.</p>
+
+<pre><code>db.posts.searchDoc({
+    keys : ["title", "category"],
+    term : ["Postgres"]
+}, function(err,docs){
+    console.log(docs);
+})
+</code></pre>
+
+<p>Hopefully it&rsquo;s pretty straight forward, but to be very clear. Call out the document table you want to search, then the keys you&rsquo;ll want to include in the search, then the term. This will search for any place the contents that string are found in matching values for those keys.</p>
+
+<p>Which will nicely yield the expected documents:</p>
+
+<pre><code>[ { link: 'http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/',
+    title: 'Upsert Lands in PostgreSQL 9.5 – a First Look',
+    category: 'Postgres',
+    comments: [ [Object] ],
+    id: 2 },
+  { link: 'http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/',
+    title: 'Node, Postgres, MassiveJS - a Better Database Experience',
+    id: 3 } ]
+</code></pre>
+
+<h3>In conclusion</h3>
+
+<p>While Massive isn&rsquo;t perfect, it&rsquo;s approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
+    <link href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/"/>
+    <updated>2015-11-30T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro</id>
+    <content type="html"><![CDATA[<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
+
+<ol>
+<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
+<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
+</ol>
+
+
+<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
+
+<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
+
+<!--more-->
+
+
+<h3>Getting setup</h3>
+
+<p>Without further adieu here&rsquo;s a quick tour around it.</p>
+
+<p>First let&rsquo;s pull down the example database from <a href="http://postgresguide.com/setup/example.html">PostgresGuide</a></p>
+
+<p>Then let&rsquo;s setup out Node app:</p>
+
+<pre><code>$ npm init
+$ npm install massive --save
+</code></pre>
+
+<h3>Connecting and querying</h3>
+
+<p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
+
+<pre><code>var massive = require("massive");
+var connectionString = "postgres://ckerstiens:@localhost/example";
+
+var db = massive.connectSync({connectionString : connectionString});
+
+db.users.find(1, function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>Upon first run if you&rsquo;re like me and use the <a href="http://postgresguide.com/setup/example.html">PostgresGuide example database</a> (which I now need to go back and tidy up), you&rsquo;ll get the following:</p>
+
+<pre><code>db.users.find(1, function(err,res){
+        ^
+TypeError: Cannot read property 'find' of undefined
+</code></pre>
+
+<p>I can&rsquo;t describe how awesome it is to see this. What&rsquo;s happening is when Massive loads up it&rsquo;s connecting to your database, checking what tables you have. In this case though because we don&rsquo;t have a proper primary key defined it doesn&rsquo;t load them. It could treat id as some magical field of course like Rails used to and ignore the need for an index, but instead it not only encourages a good database design but requires it.</p>
+
+<p>So let&rsquo;s go back and create our index in our database:</p>
+
+<pre><code>$ psql example
+$ alter table users add primary key (id);
+</code></pre>
+
+<p>Alright now let&rsquo;s run our script again with <code>node index.js</code> and see what we have:</p>
+
+<pre><code>{ id: 1,
+  email: 'john.doe@gmail.com',
+  created_at: Thu Sep 24 2015 03:42:52 GMT-0700 (PDT),
+  deleted_at: null }
+</code></pre>
+
+<p>Perfect! Now we&rsquo;re all connected and it even queried our database for us. Now let&rsquo;s take a few more look at some of the operators.</p>
+
+<h3>Running an arbitrary query</h3>
+
+<p><code>db.run</code> will let me run any arbritrary SQL. An example such as <code>db.run("select 'hello'")</code> will produce [ { &lsquo;?column?&rsquo;: &lsquo;hello&rsquo; } ].</p>
+
+<p>This makes it nice and easier for us to break out of the standard ORM model and just run SQL.</p>
+
+<h3>Find for quick look ups</h3>
+
+<p>Similar to so many other database tools <code>find</code> will offer you the most common quick look ups:</p>
+
+<pre><code>$ db.users.find({email: 'jane.doe@gmail.com'}, function(err, res){console.log(res)});
+$ db.users.find({'created_at &gt;': '2015-09-24'}, function(err, res){console.log(res)});
+</code></pre>
+
+<p>And of course there&rsquo;s a where operator for multiple conditions.</p>
+
+<h3>Structuring queries in your application</h3>
+
+<p>While in the next post I&rsquo;ll dig in deep to JSON, this is perhaps my favorite feature of Massive&hellip; It&rsquo;s design for pulling out queries into individudal SQL files. Simply create a <code>db</code> folder and put your SQL in there. Let&rsquo;s take the most basic example of our user email lookup and put it in <code>user_lookup.sql</code></p>
+
+<pre><code>SELECT *
+FROM users
+WHERE email = $1
+</code></pre>
+
+<p>Now back in our application we can run this and pass in a parameter to it:</p>
+
+<pre><code>db.user_lookup(['jane.doe@gmail.com'], function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>This separation of our queries from our code makes it easier to track them, view diffs, and even more so <a href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/">create very readable SQL</a>.</p>
+
+<h3>Up next</h3>
+
+<p>So sure, you can connect to a database, you can query some things. There were a couple of small but more novel things that we blew through in here. First is the fact I didn&rsquo;t have to define all my schema, it just knew it as <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">it really should</a>. The separation of SQL queries you&rsquo;ll custom write into files is simple, but will make for much more maintainable applications over the long term. And best of all is the JSON support, which I&rsquo;ll get to soon&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
@@ -373,339 +579,6 @@ function mce_success_cb(resp){
 
 <!--End mc_embed_signup-->
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
-    <link href="http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/"/>
-    <updated>2014-05-07T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using</id>
-    <content type="html"><![CDATA[<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let&rsquo;s look at some of these rarer but awesome types.</p>
-
-<h3>hstore</h3>
-
-<p>Yes, I&rsquo;ve talked about <a href="/2013/07/03/hstore-vs-json/">this one before</a>, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. <!--more-->Hstore is a key-value store directly within Postgres. This means you can easily add new keys and values <em>(optionally)</em>, without haveing to run a migration to setup new columns. Further you can still get great performance by using Gin and GiST indexes with them, which automatically index all keys and values for hstore.</p>
-
-<p><em>It&rsquo;s of note that hstore is an extension and not enabled by default. If you want the ins and outs of getting hands on with it, give the article on <a href="http://postgresguide.com/sexy/hstore.html">Postgres Guide</a> a read.</em></p>
-
-<h3>Range types</h3>
-
-<p>If there is ever a time where you have two columns in your database with one being a from, another being a to, you probably want to be using <a href="http://www.postgresql.org/docs/9.2/static/rangetypes.html">range types</a>. Range types are just that a set of ranges. A super common use of them is when doing anything with calendaring. The place where they really become useful is in their ability to apply constraints on those ranges. This means you can make sure you don&rsquo;t have overlapping time issues, and don&rsquo;t have to rebuild heavy application logic to accomplish it.</p>
-
-<h3>Timestamp with Timezone</h3>
-
-<p>Timestamps are annoying, plain and simple. If you&rsquo;ve re-invented handling different timezones within your application you&rsquo;ve wasted plenty of time and likely done it wrong. If you&rsquo;re using plain timestamps within your application further there&rsquo;s a good chance they dont even mean what you think they mean. Timestamps with timezone or timestamptz automatically includes the timezone with the timestamp. This makes it easy to convert between timezones, know exactly what you&rsquo;re dealing with, and will in short save you a ton of time. There&rsquo;s seldom a case you shouldn&rsquo;t be using these.</p>
-
-<h3>UUID</h3>
-
-<p>Integers as primary keys aren&rsquo;t great. Sure if you&rsquo;re running a small blog they work fine, but if you&rsquo;re application has to scale to a large size then integers can create problems. First you can run out of them, second it can make other details such as sharding a little more annoying. At the same time they are super readable. However, using the actual UUID datatype and extension to automatically generate them can be incredibly handy if you have to scale an application.</p>
-
-<p><em>Similar to hstore, there&rsquo;s an <a href="http://www.postgresql.org/docs/9.3/static/uuid-ossp.html">extension</a> that makes the UUID much more useful.</em></p>
-
-<h3>Binary JSON</h3>
-
-<p>This isn&rsquo;t available yet, but will be in Postgres 9.4. <a href="/2014/03/24/Postgres-9.4-Looking-up/">Binary JSON</a> is of course JSON directly within your database, but also lets you add Gin indexes directly onto JSON. This means a much simpler setup in not only inserting JSON, but having fast reads. If you want to learn a bit more about this, <a href="/training/index.html">sign up</a> to <a href="/training/index.html">get notified</a> of training regarding the upcoming PostgreSQL 9.4 release.</p>
-
-<h3>Money</h3>
-
-<p>Please don&rsquo;t use this&hellip; The money datatype assumes a single currency type, and generally brings with it more caveats than simply using a numeric type.</p>
-
-<h3>More</h3>
-
-<p>It&rsquo;s already been pointed out on twitter that I missed a few. To give a quick highlight of some others:</p>
-
-<ul>
-<li><a href="http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres/">Arrays</a></li>
-<li>Interval – time intervals, such as &lsquo;1 hour&rsquo;, &lsquo;1 day&rsquo;</li>
-<li>ISN &ndash; should help for anything with products</li>
-<li>Inet &ndash; Tracking IPs</li>
-</ul>
-
-
-<h3>In conclusion</h3>
-
-<p>What&rsquo;d I miss? What are you&rsquo;re favorite types? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>, or sign-up below to updates on Postgres content and first access to training.</p>
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <h2>Sign up to get weekly advice and content on Postgres</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A year's look at Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
-    <updated>2014-03-26T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
-    <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
-
-<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
-
-<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
-
-<!--more-->
-
-
-<h3>The inagural issue</h3>
-
-<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
-
-<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
-
-<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
-
-<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
-
-<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
-
-<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
-
-<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
-
-<h3>A mix of notable entries</h3>
-
-<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
-
-<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
-
-<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
-
-<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
-
-<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
-
-<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
-
-<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
-
-<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
-
-<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
-
-<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
-
-<h3>In conclusion</h3>
-
-<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
 ]]></content>
   </entry>
   

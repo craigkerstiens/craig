@@ -1,0 +1,287 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Postgres and JSON with Node - hands on with MassiveJS Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Postgres and JSON With Node - Hands on With MassiveJS</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
+
+<ul>
+<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
+<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
+<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
+<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>This is all great, but when it comes to using JSON you need a library that plays well here. As you might have guessed it from <a href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/">my previous post this is where MassiveJS comes in</a>. Most ORMs take a more legacy approach to <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">how they work with the database</a>, in contrast the other side of the world believes in document only storage way is the future. In contrast Postgres believes there is a time and place for everything, just like Massive, except it believes Postgres is the path <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">just as I do</a>.</p>
+
+<p>Alright, enough context, let&rsquo;s take a look.</p>
+
+<h3>Getting all setup</h3>
+
+<p>First go ahead and create a database, let&rsquo;s call it massive, and then let&rsquo;s connect to it and create our example table:</p>
+
+<pre><code>$ createdb massive
+$ psql massive
+# create table posts (id serial primary key, body jsonb);
+</code></pre>
+
+<p>Now that we&rsquo;ve got our database setup let&rsquo;s seed it with some data. If you want you can simple hop over to the github repo and pull it down then run <code>node load_json.js</code> to load the example data. A quick look at it, given an <code>example.json</code> file we&rsquo;re going to iterate over it. For each record in there, we&rsquo;re going to call saveDoc. Based on our table which has a unique id key and a body jsonb field it&rsquo;ll simply save our JSON document into that table:</p>
+
+<pre><code>var parsedJSON = require('./example.json');
+
+for(i = 0; i &lt; parsedJSON.posts.length; i++) {
+    db.saveDoc("posts", parsedJSON.posts[1], function(err,res){});
+};
+</code></pre>
+
+<p><em>If you want to just take a look at this <a href="https://github.com/craigkerstiens/json_node_example">github repo</a>, once you create a database you can run <code>node load_json.js</code> to seed it.</em></p>
+
+<h3>Why JSON at all?</h3>
+
+<p>JSON data is all over the place, in many cases it&rsquo;s fast and flexible and allows you to move more quickly. Yes, much of the time normalizing your data can be useful, but there is something to be said for expediency saving some data and querying across it. Querying across some giant document also used to be much more expensive, but now with JSONB and it&rsquo;s indexes that can be extremely fast.</p>
+
+<h3>Querying</h3>
+
+<p>So how do we go about querying? Well it&rsquo;s pretty simple with Massive, they provide a nice <code>findDoc</code> function to let you just search for contents of a specific key within the document. Let&rsquo;s say I wanted to pull back all posts that are in the Postgres category, well it&rsquo;s as simple as:</p>
+
+<pre><code>db.posts.findDoc({title : 'Postgres'}, function(err,docs){
+    console.log(docs);
+});
+</code></pre>
+
+<p>The real beauty of this is if you added a GIN index (which will index the entire document) this query will be <a href="http://obartunov.livejournal.com/175235.html">quite performant</a>.</p>
+
+<p><em>Just make sure to add your GIN index</em>:</p>
+
+<pre><code>CREATE INDEX idx_posts ON posts USING GIN(body jsonb_path_ops); 
+CREATE INDEX idx_posts_search ON posts USING GIN(search);  
+</code></pre>
+
+<h3>Full text and JSON</h3>
+
+<p>Cool, so you can do an exact look up. Which is great when you&rsquo;re matching a category&hellip; which could be easily normalized. It&rsquo;s great when you&rsquo;re matching numbers, which also could likely reside in their own column. But what about when you&rsquo;re searching over a large document, or a set of keys within some document which may require several joins, or indeterminate data structure, well you may want to search for the presence of that string at all. As you may have guessed this is quite trivial.</p>
+
+<pre><code>db.posts.searchDoc({
+    keys : ["title", "category"],
+    term : ["Postgres"]
+}, function(err,docs){
+    console.log(docs);
+})
+</code></pre>
+
+<p>Hopefully it&rsquo;s pretty straight forward, but to be very clear. Call out the document table you want to search, then the keys you&rsquo;ll want to include in the search, then the term. This will search for any place the contents that string are found in matching values for those keys.</p>
+
+<p>Which will nicely yield the expected documents:</p>
+
+<pre><code>[ { link: 'http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/',
+    title: 'Upsert Lands in PostgreSQL 9.5 – a First Look',
+    category: 'Postgres',
+    comments: [ [Object] ],
+    id: 2 },
+  { link: 'http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/',
+    title: 'Node, Postgres, MassiveJS - a Better Database Experience',
+    id: 3 } ]
+</code></pre>
+
+<h3>In conclusion</h3>
+
+<p>While Massive isn&rsquo;t perfect, it&rsquo;s approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/node/'>Node</a>, <a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

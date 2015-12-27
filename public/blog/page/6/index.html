@@ -5,14 +5,12 @@
 	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
-	<script type="text/javascript">
-	</script>
 	<meta charset="utf-8">
 	<title> Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="On at least a weekly basis and not uncommonly multiple times in a single week I get this question: I&#8217;ve been hunting for a nice PG interface &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Over a year ago I blogged about Heroku&rsquo;s approach to Teams and Tools. Since that time Heroku has grown from around 25 people to over 100, we& &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -100,6 +98,147 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/13/planning-and-prioritizing/">
+		
+			Prioritizing and Planning Within Heroku Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>Over a year ago I blogged about Heroku&rsquo;s approach to <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools</a>. Since that time Heroku has grown from around 25 people to over 100, we&rsquo;ve continued to iterate and find new tools that work for how we do things. For many of the <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">product management</a> and software engineering books I&rsquo;ve read I&rsquo;ve yet to find something that helps a team priorize in a fashion I that feels right.</p>
+
+<p>One process emerged nearly a year ago from within the <a href="https://postgres.heroku.com">Heroku Postgres</a> team and is now followed by many others. Within a team this process is now commonly conducted each 6 months. Lets take a look at how this process looks</p>
+
+
+		
+		<a href="/2013/03/13/planning-and-prioritizing/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/heroku/'>Heroku</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/03/07/Fixing-django-db-connections/">
+		
+			Fixing Database Connections in Django</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;re looking to get better performance from your Django apps you can check out <a href="http://www.amazon.com/Pro-Django-Experts-Voice-Development/dp/1430210478?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Pro Django</a>, <a href="http://www.amazon.com/PostgreSQL-High-Performance-Gregory-Smith/dp/184951030X?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">PostgreSQL High Performance</a>, or read some my earlier posts on <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">Postgres Performance</a>. All of these are of course good things to do – you can also start by correcting an incredibly common but also painful performance issue, that until 1.6 is unaddressed in Django.</p>
+
+<p>Django&rsquo;s current default behavior is to establish a connection for each request within a Django application. In many cases any particularly in distributed cloud environments this is a large time sink of your response time. An example application running on <a href="http://www.heroku.com">Heroku</a> shows a typical connection time of 70ms. A large part of this time is the SSL negotiation that occurs in connecting to your database, <em>which is a good practice to ensure security of your data</em>. Regardless, this is a long time in simply establishing a connection. As a point of comparisson its commonly encourage that most queries to your database are under 10ms.</p>
+
+<p>An example that highlights this in a small lightweight application shows the bulk of a request time being within a connection displayed by <a href="http://www.newrelic.com">New Relic</a>:</p>
+
+<p><img src="http://f.cl.ly/items/0X3u0e3Q3G0L19263k2Z/Screenshot_3_6_13_1_12_PM.png" alt="connection time" /></p>
+
+
+		
+		<a href="/2013/03/07/Fixing-django-db-connections/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/02/21/more-out-of-psql/">
+		
+			Getting More Out of Psql (the PostgreSQL CLI)</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
+
+<h2>Get the most of psql</h2>
+
+<p>Psql, the CLI postgreSQL client, is a powerful tool. Sadly, lot of developers are not aware of the features and instead look for a GUI to provide what they need. Let&rsquo;s fly over what can psql do for you.</p>
+
+
+		
+		<a href="/2013/02/21/more-out-of-psql/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-21T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -460,182 +599,6 @@ pip install djorm-ext-expressions
 <div class="tags">
 
 	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/redis/'>Redis</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/10/01/understanding-postgres-performance/">
-		
-			Understanding Postgres Performance</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
-
-<p>For many application developers their database is a black box. Data goes in, comes back out and in between there developers hope its a pretty short time span. Without becoming a DBA there&rsquo;s a few pieces of data that most application developers can easily grok which will help them understand if their database is performing adequately. This post will provide some quick tips that allow you to determine whether your database performance is slowing down your app, and if so what you can do about it.</p>
-
-<h3>Understanding your Cache and its Hit Rate</h3>
-
-<p>The typical rule for most applications is that only a fraction of its data is regularly accessed. As with many other things data can tend to follow the 80/20 rule with 20% of your data accounting for 80% of the reads and often times its higher than this. Postgres itself actually tracks access patterns of your data and will on its own keep frequently accessed data in cache. Generally you want your database to have a cache hit rate of about 99%. You can find your cache hit rate with:</p>
-
-<pre><code>SELECT 
-  sum(heap_blks_read) as heap_read,
-  sum(heap_blks_hit)  as heap_hit,
-  sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio
-FROM 
-  pg_statio_user_tables;
-</code></pre>
-
-
-		
-		<a href="/2012/10/01/understanding-postgres-performance/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/08/20/arrays-in-postgres/">
-		
-			Arrays in Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p>Postgres out of the box has an abundance of datatypes, from standard <a href="http://www.postgresql.org/docs/9.1/static/datatype.html#DATATYPE-NUMERIC">numeric datatypes</a> to <a href="http://www.postgresql.org/docs/9.1/static/datatype-geometric.html">geometric</a> or even <a href="http://www.postgresql.org/docs/9.1/static/datatype-net-types.html">network datatypes</a>. With extensions you can get even more out of it as earlier discussed with <a href="http://craigkerstiens.com/2012/06/11/schemaless-django/">hStore</a>. Though with all of the datatypes its easy to miss out on some of them that are there, in fact one of my favorites is often missed entirely. The <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> datatype lets you do just as you&rsquo;d expect, store an array inside Postgres. With this you can often get some of the functionality you&rsquo;d want in a single table when you might traditionally have expanded to multiple tables.</p>
-
-<p>The broader question may be why you&rsquo;d actually want to use an array. One good reason may be if you&rsquo;re an application developer its how you think of your data, so why not model it the same way. As you&rsquo;ll see below it can be easier than joining and aggregating across a set of rows. Also depending on your case you performance could be improved, though mileage may vary here as it does depend on the data you&rsquo;re storing.</p>
-
-<p>First a bit of a hacky example&hellip; Lets say you have a basic website that sells stuff, and instead of having a purchase ID and a total you want to include the quantity, id, and price of each item in a single row. With a bit of a messy foreign key (using a decimal) you could store all of this within a single row:</p>
-
-<pre><code>CREATE TABLE purchases (
-    id integer NOT NULL,
-    user_id integer,
-    items decimal(10,2) [100][1],
-    occurred_at timestamp
-);
-</code></pre>
-
-<p>With this table I could have an array that holds multiple records of:</p>
-
-<ul>
-<li>The item purchased</li>
-<li>The quantity</li>
-<li>The price</li>
-</ul>
-
-
-
-		
-		<a href="/2012/08/20/arrays-in-postgres/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-20T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/array/'>Array</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/07/19/supporting-developers/">
-		
-			Rapid API Prototyping With Heroku Postgres Dataclips</a>
-	</h2>
-	<div class="entry-content">
-		<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Often you&rsquo;re unable to tell how you truly feel about your API without fully implementing it, causing this cycle to take longer than it should. Heroku Postgres has Dataclips, which (among other things) can be used for quickly prototyping APIs. Lets take a look at how this would work:</p>
-
-<h2>Given a schema</h2>
-
-<p><img src="http://f.cl.ly/items/0n0k1h3q1I1W1T373q0D/1.%20psql.png" alt="schema" /></p>
-
-<p>We the screen shot of the schema above we can see we have a few tables. These tables are the complete works of Shakespeare. Lets take a couple of hypothetical endpoints we&rsquo;ve decided on that we&rsquo;d like to expose for users and test as an API.</p>
-
-<ul>
-<li>The number of works per year</li>
-<li>Drone factory (this is a fun one courtesy of &hellip;.). Its essentially who has the longest paragraphs on average in his works.</li>
-</ul>
-
-
-
-		
-		<a href="/2012/07/19/supporting-developers/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-19T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/api/'>API</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/mobile/'>Mobile</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/prototype/'>Prototype</a>, <a class='category' href='/categories/ios/'>iOS</a>
 
 </div>
 

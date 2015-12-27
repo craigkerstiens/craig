@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="You&rsquo;ve built your product and you&rsquo;re now ready for your first major launch. Or you&rsquo;ve been through a launch or two, but are &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,196 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/12/08/massive-json/">
+		
+			Postgres and JSON With Node - Hands on With MassiveJS</a>
+	</h2>
+	<div class="entry-content">
+		<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
+
+<ul>
+<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
+<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
+<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
+<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
+</ul>
+
+
+
+		
+		<a href="/2015/12/08/massive-json/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/node/'>Node</a>, <a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/11/30/massive-node-postgres-an-overview-and-intro/">
+		
+			Node, Postgres, MassiveJS - a Better Database Experience</a>
+	</h2>
+	<div class="entry-content">
+		<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
+
+<ol>
+<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
+<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
+</ol>
+
+
+<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
+
+<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
+
+
+		
+		<a href="/2015/11/30/massive-node-postgres-an-overview-and-intro/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-30T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/node/'>Node</a>, <a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/10/02/seeding-a-sharing-economy-or-platform-company/">
+		
+			Seeding a Sharing-economy or Platform Company</a>
+	</h2>
+	<div class="entry-content">
+		<p>These days if you&rsquo;re creating a company you likely hope to accomplish more with less people, two ways of doing this fall to: The sharing economy and creating a platform. It&rsquo;s easy to see the case for this when you have such <a href="http://graphics.wsj.com/billion-dollar-club/">unicorns</a> like AirBnB or Uber. The opportunity for each of those to compete against hotel chains or taxi services which each need to manage their own inventory is incredibly exciting and revolutionary. In a similar fashion platforms can offer much the same, Heroku&rsquo;s platform and marketplace made it easier than ever for developers to click a button and get everything they needed years ago. It&rsquo;s not just their code, it&rsquo;s everything from <a href="https://www.heroku.com/postgres">Postgres</a> to Mongo to <a href="https://elements.heroku.com/addons#logging">Logging</a>. Or take the app store as example. Smart phones weren&rsquo;t a new thing when the iPhone came out, but it was only the saviest of users that had apps installed on their windows smartphone or blackberry. The app store made the iPhone different than any other phone by allowing others to build and improve it, turning the iPhone not into a phone but a platform.</p>
+
+
+		
+		<a href="/2015/10/02/seeding-a-sharing-economy-or-platform-company/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/startups/'>Startups</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/07/25/A-guide-to-analyst-relations-for-startups/">
+		
+			A Guide to Analyst Relations for Startups</a>
+	</h2>
+	<div class="entry-content">
+		<p>When it comes to go to market and marketing there&rsquo;s lots of pieces in a toolchest that all work together. One that comes a bit later, but if used properly (much like a <a href="/2015/07/21/An-intro-PR-guide-for-startups/">PR agency</a>) can be valuable is industry analysts. And while working with a PR agency can quickly start to become clear. How to work with analysts so it is productive on both sides can take a bit longer to figure out, or at least it did for me. Even before you do start working with them there&rsquo;s the question of if or when should you. Here&rsquo;s hoping this primer makes it a bit faster and easier for others.</p>
+
+
+		
+		<a href="/2015/07/25/A-guide-to-analyst-relations-for-startups/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-25T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/startups/'>Startups</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -354,172 +544,6 @@ $(document).ready(
 <div class="tags">
 
 	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/08/13/when-to-ship-when-to-kill/">
-		
-			When to Ship It, When to Kill It</a>
-	</h2>
-	<div class="entry-content">
-		<p>A few weeks ago at lunch I had the opportunity to catch up with a company in the current YC batch, building something very similar to dataclips. While we talked about a lot of things from what we&rsquo;ve learned from dataclips, marketing, and other areas. One area we talked about was product and when to ship vs. when to kill things and I realized I hadn&rsquo;t talked on my fairly simple but clear view on this publicly, so here it is.</p>
-
-<p><em>A large credit to <a href="http://www.twitter.com/hirodusk">Adam Wiggins</a> for giving this model early on in Heroku and his approach to shipping product.</em></p>
-
-
-		
-		<a href="/2014/08/13/when-to-ship-when-to-kill/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/07/14/on-scribing/">
-		
-			Scaling Organizations - Scribing</a>
-	</h2>
-	<div class="entry-content">
-		<p>In the process of growing a company there&rsquo;s several hurdles based on the size of the company. What worked at 5 doesn&rsquo;t work at 20, what works at 20 doesn&rsquo;t work at 50, and what worked at 50 doesn&rsquo;t work at 150. There&rsquo;s a lot of talk about <a href="http://lifehacker.com/5965280/follow-jeff-bezos-two-pizza-rule-to-avoid-the-dangers-of-groupthink">two pizza teams</a> and <a href="http://adam.herokuapp.com/past/2011/4/28/scaling_a_development_team/">scaling development teams</a> out there. One thing I haven&rsquo;t seen quite enough of is details around scribing and documenting things.</p>
-
-
-		
-		<a href="/2014/07/14/on-scribing/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-14T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/05/22/on-connection-pooling/">
-		
-			Postgres and Connection Pooling</a>
-	</h2>
-	<div class="entry-content">
-		<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
-
-<h3>The basics</h3>
-
-<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres <a href="/2013/03/07/Fixing-django-db-connections/">some overhead here</a>. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
-
-
-		
-		<a href="/2014/05/22/on-connection-pooling/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-22T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/05/08/personas-data-science-k-means/">
-		
-			Personas, Data Science, K-means</a>
-	</h2>
-	<div class="entry-content">
-		<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;margin-left:20px;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective.</p>
-
-<p>Personas don&rsquo;t have to be marketing only speak, and data science doesn&rsquo;t have to be only for stats people. My goal here is to simply set a context for the rest of the meat which talks about how you can simply look at your data and let it surface things you may not have known. 
-		
-		<a href="/2014/05/08/personas-data-science-k-means/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-08T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/technology/'>Technology</a>
 
 </div>
 

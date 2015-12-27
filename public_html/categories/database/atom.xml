@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Database | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/database/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-07-21T09:12:15-07:00</updated>
+  <updated>2015-12-08T10:58:36-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,51 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Simple database read scaling without sharding in rails]]></title>
-    <link href="http://www.craigkerstiens.com/2013/03/06/simple-read-scaling-rails/"/>
-    <updated>2013-03-06T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2013/03/06/simple-read-scaling-rails</id>
-    <content type="html"><![CDATA[<p>In an earlier post I provided a high level <a href="http://www.craigkerstiens.com/2012/11/30/sharding-your-database/">overview of sharding</a>. Sharding while a very solid approach to scaling capacity versus simply only relying on vertical scaling can also be a time intensive one. Additionally in some cases certain sites may only need extra capacity for a short lived period of time. Fortunately theres a nice middle ground alternative for scaling capacity that works well in quite a few cases. It even has a benefit that can potentially in place of sharding.</p>
-
-<p>This method results in scaling your reads to replica databases, you can do this on Heroku by taking advantage of followers. A follower is a read only database on Heroku Postgres that receives asynchronous updates of your data usually only lagging a very few commits behind. This means you can write all of your data to the leader (main) database, and then read from another.</p>
-
-<p><em>While you can arbitrarily do this there&rsquo;s some major benefits to doing it based on the models. This is because Postgres maintains a cache on each instance its running on. Though you may have the same dataset, Postgres maintains frequently accessed or queried data in the cache giving you better performance. For more on this you can read earlier posts on <a href="http://www.craigkerstiens.com/2012/11/30/sharding-your-database/">PostgreSQL Performance</a>.</em></p>
-
-<h3>Setting it up with Rails</h3>
-
-<p>With a follower database created you can begin adding support for this to your application. The first thing is to add the gem to your Gemfile:</p>
-
-<pre><code>gem 'ar-octopus', :require =&gt; "octopus"
-</code></pre>
-
-<p>Then of course to install it with <code>bundle install</code>. Now we can actually begin to add the code needed to have specific models access the follower.</p>
-
-<pre><code>octopus:
-shards:
-  shard_sqlite:
-  adapter: sqlite3
-  database: db/db_one.sqlite3
-  pool: 5
-  timeout: 5000
-
-  shard_pgsql:
-    adapter: postgresql
-    username: postgres
-    password:
-    database: db_two
-    encoding: unicode
-</code></pre>
-
-<p>a</p>
-
-<pre><code>class Project &lt; ActiveRecord::Base
-  octopus_establish_connection(:adapter =&gt; "sqlite3", :database =&gt; "db_one")
-end
-</code></pre>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Getting more out of psql (The PostgreSQL CLI)]]></title>
@@ -396,9 +351,7 @@ function mce_success_cb(resp){
     <id>http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres</id>
     <content type="html"><![CDATA[<p>On at least a weekly basis and not uncommonly multiple times in a single week I get this question:</p>
 
-<p>{% blockquote @neilmiddleton <a href="https://twitter.com/neilmiddleton">https://twitter.com/neilmiddleton</a>  %}
-I&rsquo;ve been hunting for a nice PG interface that works within other things. PGAdmin kinda works, except the SQL editor is a piece of shit
-{% endblockquote %}</p>
+<p><blockquote><p>I&rsquo;ve been hunting for a nice PG interface that works within other things. PGAdmin kinda works, except the SQL editor is a piece of shit</p><footer><strong>@neilmiddleton <a href="https://twitter.com/neilmiddleton">https://twitter.com/neilmiddleton</a></strong></footer></blockquote></p>
 
 <p>Sometimes it leans more to, what is the Sequel Pro equivilant for Postgres. My default answer is I just use psql, though I do have to then go on to explain how I use it. For those just interested you can read more below or just get the highlights here:</p>
 
@@ -943,6 +896,346 @@ WHERE
 </code></pre>
 
 <p>While several of the current FDWs are not production ready yet, some are more battle tested including db_link, textfile, ODBC and MySQL ones.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding Postgres Performance]]></title>
+    <link href="http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/"/>
+    <updated>2012-10-01T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance</id>
+    <content type="html"><![CDATA[<p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
+
+<p>For many application developers their database is a black box. Data goes in, comes back out and in between there developers hope its a pretty short time span. Without becoming a DBA there&rsquo;s a few pieces of data that most application developers can easily grok which will help them understand if their database is performing adequately. This post will provide some quick tips that allow you to determine whether your database performance is slowing down your app, and if so what you can do about it.</p>
+
+<h3>Understanding your Cache and its Hit Rate</h3>
+
+<p>The typical rule for most applications is that only a fraction of its data is regularly accessed. As with many other things data can tend to follow the 80/20 rule with 20% of your data accounting for 80% of the reads and often times its higher than this. Postgres itself actually tracks access patterns of your data and will on its own keep frequently accessed data in cache. Generally you want your database to have a cache hit rate of about 99%. You can find your cache hit rate with:</p>
+
+<pre><code>SELECT 
+  sum(heap_blks_read) as heap_read,
+  sum(heap_blks_hit)  as heap_hit,
+  sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio
+FROM 
+  pg_statio_user_tables;
+</code></pre>
+
+<!-- more -->
+
+
+<p>We can see in this <a href="https://postgres.heroku.com/dataclips/jfrtizxdthixfxkcdesxwesiibly">dataclip</a> that the cache rate for <a href="https://postgres.heroku.com?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> is 99.99%. If you find yourself with a ratio significantly lower than 99% then you likely want to consider increasing the cache available to your database, you can do this on Heroku Postgres by <a href="https://devcenter.heroku.com/articles/fast-database-changeovers?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">performing a fast database changeover</a> or on something like EC2 by performing a dump/restore to a larger instance size.</p>
+
+<h3>Understanding Index Usage</h3>
+
+<p>The other primary piece for improving performance is <a href="https://devcenter.heroku.com/articles/postgresql-indexes?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">indexes</a>. Several frameworks will add indexes on your primary keys, though if you&rsquo;re searching on other fields or joining heavily you may need to manually add such indexes.</p>
+
+<p>Indexes are most valuable across large tables as well. While accessing data from cache is faster than disk, even data within memory can be slow if Postgres must parse through hundreds of thousands of rows to identify if they meet a certain condition. To generate a list of your tables in your database with the largest ones first and the percentage of time which they use an index you can run:</p>
+
+<pre><code>SELECT 
+  relname, 
+  100 * idx_scan / (seq_scan + idx_scan) percent_of_times_index_used, 
+  n_live_tup rows_in_table
+FROM 
+  pg_stat_user_tables
+WHERE 
+    seq_scan + idx_scan &gt; 0 
+ORDER BY 
+  n_live_tup DESC;
+</code></pre>
+
+<p>While there is no perfect answer, if you&rsquo;re not somewhere around 99% on any table over 10,000 rows you may want to consider adding an index. When examining where to add an index you should look at what kind of queries you&rsquo;re running. Generally you&rsquo;ll want to add indexes where you&rsquo;re looking up by some other id or on values that you&rsquo;re commonly filtering on such as created_at fields.</p>
+
+<p>Pro tip: If you&rsquo;re adding an index on a production database use <code>CREATE INDEX CONCURRENTLY</code> to have it build your index in the background and not hold a lock on your table. The limitation to creating indexes <a href="http://www.postgresql.org/docs/9.1/static/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY">concurrently</a> is they can typically take 2-3 times longer to create and can&rsquo;t be run within a transaction. Though for any large production site these trade-offs are worth the trade-off in experience to your end users.</p>
+
+<h3>Heroku Dashboard as an Example</h3>
+
+<p>Looking at a real world example of the recently launched Heroku dashboard, we can run this query and see our results:</p>
+
+<pre><code># SELECT relname, 100 * idx_scan / (seq_scan + idx_scan) percent_of_times_index_used, n_live_tup rows_in_table  FROM pg_stat_user_tables ORDER BY n_live_tup DESC;
+       relname       | percent_of_times_index_used | rows_in_table 
+---------------------+-----------------------------+---------------
+ events              |                           0 |        669917
+ app_infos_user_info |                           0 |        198218
+ app_infos           |                          50 |        175640
+ user_info           |                           3 |         46718
+ rollouts            |                           0 |         34078
+ favorites           |                           0 |          3059
+ schema_migrations   |                           0 |             2
+ authorizations      |                           0 |             0
+ delayed_jobs        |                          23 |             0
+</code></pre>
+
+<p>From this we can wee the events table which has around 700,000 rows has no indexes that have been used. From here you could investigate within my application and see some of the common queries that are used, one example is pulling the events for this blog post which you are reaching. You can see your <a href="https://postgresguide.com/performance/explain.html?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">execution plan</a> by running an <a href="https://postgresguide.com/performance/explain.html?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens"><code>EXPLAIN ANALYZE</code></a> which gives you can get a better idea of the performance of a specific query:</p>
+
+<pre><code>EXPLAIN ANALYZE SELECT * FROM events WHERE app_info_id = 7559;                                                 QUERY PLAN
+-------------------------------------------------------------------
+Seq Scan on events  (cost=0.00..63749.03 rows=38 width=688) (actual time=2.538..660.785 rows=89 loops=1)
+  Filter: (app_info_id = 7559)
+Total runtime: 660.885 ms
+</code></pre>
+
+<p>Given there&rsquo;s a sequential scan across all that data this is an area we can optimize with an index. We can add our index concurrently to prevent locking on that table and then see how performance is:</p>
+
+<pre><code>CREATE INDEX CONCURRENTLY idx_events_app_info_id ON events(app_info_id);
+EXPLAIN ANALYZE SELECT * FROM events WHERE app_info_id = 7559;
+
+----------------------------------------------------------------------
+ Index Scan using idx_events_app_info_id on events  (cost=0.00..23.40 rows=38 width=688) (actual time=0.021..0.115 rows=89 loops=1)
+   Index Cond: (app_info_id = 7559)
+ Total runtime: 0.200 ms
+</code></pre>
+
+<p>While we can see the obvious improvement in this single query we can examine the results in <a href="https://addons.heroku.com/newrelic">New Relic</a> and see that we&rsquo;ve significantly reduced our time spent in the database with the addition of this and a few other indexes:</p>
+
+<p><img src="http://f.cl.ly/items/2x3g2h2220162C2M0w0r/Pasted%20Image%2010:1:12%208:55%20AM-2.png" alt="NewRelicGraph" /></p>
+
+<h3>Index Cache Hit Rate</h3>
+
+<p>Finally to combine the two if you&rsquo;re interested in how many of your indexes are within your cache you can run:</p>
+
+<pre><code>SELECT 
+  sum(idx_blks_read) as idx_read,
+  sum(idx_blks_hit)  as idx_hit,
+  (sum(idx_blks_hit) - sum(idx_blks_read)) / sum(idx_blks_hit) as ratio
+FROM 
+  pg_statio_user_indexes;
+</code></pre>
+
+<p>Generally, you should also expect this to be in the 99% similar to your regular cache hit rate.</p>
+
+<p>If you want help with optimizing your DB for performance or getting insights into your data please reach out <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
+
+<!-- Perfect Audience - why postgres - DO NOT MODIFY -->
+
+
+<p><img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" /></p>
+
+<!-- End of Audience Pixel -->
+
+
+
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }    
+    }
+}
+
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+    head.appendChild(script);
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        $('.phonefield-us','#mc_embed_signup').each(
+                            function(){
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
+                                            this.value = '';
+                                        } else {
+                                            this.value = 'filled';
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    }, 
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+      
+      
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+                $('#mce-'+resp.result+'-response').html(msg);            
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+                
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+
+
+<!--End mc_embed_signup-->
+
 ]]></content>
   </entry>
   
