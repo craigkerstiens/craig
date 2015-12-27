@@ -180,7 +180,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2009/06/13/takeaways-from-consulting/</loc>
-        <lastmod>2015-08-29T16:14:56-07:00</lastmod>
+        <lastmod>2015-11-30T08:58:52-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2009/06/16/mentoring/</loc>
@@ -416,7 +416,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/11/30/sharding-your-database/</loc>
@@ -502,7 +502,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/</loc>
-        <lastmod>2015-07-31T10:29:44-07:00</lastmod>
+        <lastmod>2015-11-30T08:58:52-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere/</loc>
@@ -614,7 +614,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/02/18/a-pm-blueprint/</loc>
@@ -622,33 +622,45 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/</loc>
-        <lastmod>2015-07-21T11:03:29-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>
             http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/
         </loc>
-        <lastmod>2015-07-25T10:55:59-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>
             http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company/
         </loc>
-        <lastmod>2015-10-09T12:50:32-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>
             http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/
         </loc>
-        <lastmod>2015-11-30T08:53:15-08:00</lastmod>
+        <lastmod>2015-12-08T10:57:41-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2015/12/08/massive-json/</loc>
+        <lastmod>2015-12-26T14:31:08-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches/</loc>
+        <lastmod>2015-12-26T14:31:45-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown/</loc>
+        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/disneyland.html</loc>
@@ -656,7 +668,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/disneyworld.html</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/huntsville.html</loc>
@@ -708,15 +720,15 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/archives/</loc>
-        <lastmod>2015-11-30T08:53:15-08:00</lastmod>
+        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/archives/</loc>
-        <lastmod>2015-11-30T08:53:15-08:00</lastmod>
+        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/</loc>
-        <lastmod>2015-11-30T08:53:15-08:00</lastmod>
+        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/books/</loc>
@@ -728,7 +740,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/</loc>
-        <lastmod>2015-11-30T08:53:15-08:00</lastmod>
+        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/recommendations/books.html</loc>

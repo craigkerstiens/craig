@@ -5,14 +5,12 @@
 	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
-	<script type="text/javascript">
-	</script>
 	<meta charset="utf-8">
 	<title> Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="The headline of Postgres 9.5 is undoubtedly: Insert&hellip; on conflict do nothing/update or more commonly known as Upsert or Merge. This removes &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -100,6 +98,147 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/12/27/postgres-9-5-feature-rundown/">
+		
+			Postgres 9.5 - the Feature Rundown</a>
+	</h2>
+	<div class="entry-content">
+		<p>The headline of Postgres 9.5 is undoubtedly: Insert&hellip; on conflict do nothing/update or more commonly known as Upsert or Merge. This removes one of the last remaining features which other databases had over Postgres. Sure we&rsquo;ll take a look at it, but first let&rsquo;s browse through some of the other features you can look forward to when Postgres 9.5 lands:</p>
+
+
+		
+		<a href="/2015/12/27/postgres-9-5-feature-rundown/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-27T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/12/26/from-blog-posts-to-launches/">
+		
+			Going From Blog Posts to Full Launches</a>
+	</h2>
+	<div class="entry-content">
+		<p>I recall extremely early stage where you&rsquo;d build a feature, realize it was awesome, then the next day write a blog post for it. At some point you start to move from that to more coordinated launches. A larger coordinated launch allows you to reach a bigger audience, can lead to bigger deals, and help expand your overall market. But perhaps more importantly by the time you hit full launch you&rsquo;ve message tested and ensured it&rsquo;s going to resonate in the way you expect.</p>
+
+<p><em>The process itself will both help amplify and validate/refine your message</em></p>
+
+<p>This is often a more gradual process than a sudden single change, you&rsquo;ll introduce new parts of this in time. And for many what an entire launch process looks like comes by trial an error, to help shorten that learning curve here&rsquo;s key areas I pay attention for a launch and process followed by a rough timeline.</p>
+
+
+		
+		<a href="/2015/12/26/from-blog-posts-to-launches/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-26T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketing/'>Marketing</a>, <a class='category' href='/categories/startup/'>Startup</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2015/12/08/massive-json/">
+		
+			Postgres and Node - Hands on Using Postgres as a Document Store With MassiveJS</a>
+	</h2>
+	<div class="entry-content">
+		<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
+
+<ul>
+<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
+<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
+<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
+<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
+</ul>
+
+
+
+		
+		<a href="/2015/12/08/massive-json/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/node/'>Node</a>, <a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -411,131 +550,6 @@ $(document).ready(
 	<a class='category' href='/categories/product-management/'>Product management</a>
 
 </div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/10/01/a-simple-guide-for-db-migrations/">
-		
-			A Simple Guide for DB Migrations</a>
-	</h2>
-	<div class="entry-content">
-		<p>Most web applications will add/remove columns over time. This is extremely common early on and even mature applications will continue modifying their schemas with new columns. An all too common pitfall when adding new columns is setting a not null constraint in Postgres.</p>
-
-
-		
-		<a href="/2014/10/01/a-simple-guide-for-db-migrations/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/08/15/my-postgres-wishlist-for-9.5/">
-		
-			My Wishlist for Postgres 9.5</a>
-	</h2>
-	<div class="entry-content">
-		<p>As I followed along with the <a href="/2014/03/24/Postgres-9.4-Looking-up/">9.4 release</a> of Postgres I had a few posts of things that I was excited about, some things that missed, and a bit of a wrap-up. I thought this year (year in the sense of PG releases) I&rsquo;d jump the gun and lay out areas I&rsquo;d love to see addressed in PostgreSQL 9.5. And here it goes:</p>
-
-
-		
-		<a href="/2014/08/15/my-postgres-wishlist-for-9.5/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-15T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/08/13/when-to-ship-when-to-kill/">
-		
-			When to Ship It, When to Kill It</a>
-	</h2>
-	<div class="entry-content">
-		<p>A few weeks ago at lunch I had the opportunity to catch up with a company in the current YC batch, building something very similar to dataclips. While we talked about a lot of things from what we&rsquo;ve learned from dataclips, marketing, and other areas. One area we talked about was product and when to ship vs. when to kill things and I realized I hadn&rsquo;t talked on my fairly simple but clear view on this publicly, so here it is.</p>
-
-<p><em>A large credit to <a href="http://www.twitter.com/hirodusk">Adam Wiggins</a> for giving this model early on in Heroku and his approach to shipping product.</em></p>
-
-
-		
-		<a href="/2014/08/13/when-to-ship-when-to-kill/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
 
 
 	

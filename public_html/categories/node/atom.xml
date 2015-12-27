@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Node | Craig Kerstiens]]></title>
+  <link href="http://www.craigkerstiens.com/categories/node/atom.xml" rel="self"/>
+  <link href="http://www.craigkerstiens.com/"/>
+  <updated>2015-12-08T10:58:36-08:00</updated>
+  <id>http://www.craigkerstiens.com/</id>
+  <author>
+    <name><![CDATA[Craig Kerstiens]]></name>
+    <email><![CDATA[craig.kerstiens@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and JSON with Node - hands on with MassiveJS]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/08/massive-json/"/>
+    <updated>2015-12-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/08/massive-json</id>
+    <content type="html"><![CDATA[<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
+
+<ul>
+<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
+<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
+<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
+<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>This is all great, but when it comes to using JSON you need a library that plays well here. As you might have guessed it from <a href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/">my previous post this is where MassiveJS comes in</a>. Most ORMs take a more legacy approach to <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">how they work with the database</a>, in contrast the other side of the world believes in document only storage way is the future. In contrast Postgres believes there is a time and place for everything, just like Massive, except it believes Postgres is the path <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">just as I do</a>.</p>
+
+<p>Alright, enough context, let&rsquo;s take a look.</p>
+
+<h3>Getting all setup</h3>
+
+<p>First go ahead and create a database, let&rsquo;s call it massive, and then let&rsquo;s connect to it and create our example table:</p>
+
+<pre><code>$ createdb massive
+$ psql massive
+# create table posts (id serial primary key, body jsonb);
+</code></pre>
+
+<p>Now that we&rsquo;ve got our database setup let&rsquo;s seed it with some data. If you want you can simple hop over to the github repo and pull it down then run <code>node load_json.js</code> to load the example data. A quick look at it, given an <code>example.json</code> file we&rsquo;re going to iterate over it. For each record in there, we&rsquo;re going to call saveDoc. Based on our table which has a unique id key and a body jsonb field it&rsquo;ll simply save our JSON document into that table:</p>
+
+<pre><code>var parsedJSON = require('./example.json');
+
+for(i = 0; i &lt; parsedJSON.posts.length; i++) {
+    db.saveDoc("posts", parsedJSON.posts[1], function(err,res){});
+};
+</code></pre>
+
+<p><em>If you want to just take a look at this <a href="https://github.com/craigkerstiens/json_node_example">github repo</a>, once you create a database you can run <code>node load_json.js</code> to seed it.</em></p>
+
+<h3>Why JSON at all?</h3>
+
+<p>JSON data is all over the place, in many cases it&rsquo;s fast and flexible and allows you to move more quickly. Yes, much of the time normalizing your data can be useful, but there is something to be said for expediency saving some data and querying across it. Querying across some giant document also used to be much more expensive, but now with JSONB and it&rsquo;s indexes that can be extremely fast.</p>
+
+<h3>Querying</h3>
+
+<p>So how do we go about querying? Well it&rsquo;s pretty simple with Massive, they provide a nice <code>findDoc</code> function to let you just search for contents of a specific key within the document. Let&rsquo;s say I wanted to pull back all posts that are in the Postgres category, well it&rsquo;s as simple as:</p>
+
+<pre><code>db.posts.findDoc({title : 'Postgres'}, function(err,docs){
+    console.log(docs);
+});
+</code></pre>
+
+<p>The real beauty of this is if you added a GIN index (which will index the entire document) this query will be <a href="http://obartunov.livejournal.com/175235.html">quite performant</a>.</p>
+
+<p><em>Just make sure to add your GIN index</em>:</p>
+
+<pre><code>CREATE INDEX idx_posts ON posts USING GIN(body jsonb_path_ops); 
+CREATE INDEX idx_posts_search ON posts USING GIN(search);  
+</code></pre>
+
+<h3>Full text and JSON</h3>
+
+<p>Cool, so you can do an exact look up. Which is great when you&rsquo;re matching a category&hellip; which could be easily normalized. It&rsquo;s great when you&rsquo;re matching numbers, which also could likely reside in their own column. But what about when you&rsquo;re searching over a large document, or a set of keys within some document which may require several joins, or indeterminate data structure, well you may want to search for the presence of that string at all. As you may have guessed this is quite trivial.</p>
+
+<pre><code>db.posts.searchDoc({
+    keys : ["title", "category"],
+    term : ["Postgres"]
+}, function(err,docs){
+    console.log(docs);
+})
+</code></pre>
+
+<p>Hopefully it&rsquo;s pretty straight forward, but to be very clear. Call out the document table you want to search, then the keys you&rsquo;ll want to include in the search, then the term. This will search for any place the contents that string are found in matching values for those keys.</p>
+
+<p>Which will nicely yield the expected documents:</p>
+
+<pre><code>[ { link: 'http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/',
+    title: 'Upsert Lands in PostgreSQL 9.5 – a First Look',
+    category: 'Postgres',
+    comments: [ [Object] ],
+    id: 2 },
+  { link: 'http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/',
+    title: 'Node, Postgres, MassiveJS - a Better Database Experience',
+    id: 3 } ]
+</code></pre>
+
+<h3>In conclusion</h3>
+
+<p>While Massive isn&rsquo;t perfect, it&rsquo;s approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
+    <link href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/"/>
+    <updated>2015-11-30T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro</id>
+    <content type="html"><![CDATA[<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
+
+<ol>
+<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
+<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
+</ol>
+
+
+<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
+
+<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
+
+<!--more-->
+
+
+<h3>Getting setup</h3>
+
+<p>Without further adieu here&rsquo;s a quick tour around it.</p>
+
+<p>First let&rsquo;s pull down the example database from <a href="http://postgresguide.com/setup/example.html">PostgresGuide</a></p>
+
+<p>Then let&rsquo;s setup out Node app:</p>
+
+<pre><code>$ npm init
+$ npm install massive --save
+</code></pre>
+
+<h3>Connecting and querying</h3>
+
+<p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
+
+<pre><code>var massive = require("massive");
+var connectionString = "postgres://ckerstiens:@localhost/example";
+
+var db = massive.connectSync({connectionString : connectionString});
+
+db.users.find(1, function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>Upon first run if you&rsquo;re like me and use the <a href="http://postgresguide.com/setup/example.html">PostgresGuide example database</a> (which I now need to go back and tidy up), you&rsquo;ll get the following:</p>
+
+<pre><code>db.users.find(1, function(err,res){
+        ^
+TypeError: Cannot read property 'find' of undefined
+</code></pre>
+
+<p>I can&rsquo;t describe how awesome it is to see this. What&rsquo;s happening is when Massive loads up it&rsquo;s connecting to your database, checking what tables you have. In this case though because we don&rsquo;t have a proper primary key defined it doesn&rsquo;t load them. It could treat id as some magical field of course like Rails used to and ignore the need for an index, but instead it not only encourages a good database design but requires it.</p>
+
+<p>So let&rsquo;s go back and create our index in our database:</p>
+
+<pre><code>$ psql example
+$ alter table users add primary key (id);
+</code></pre>
+
+<p>Alright now let&rsquo;s run our script again with <code>node index.js</code> and see what we have:</p>
+
+<pre><code>{ id: 1,
+  email: 'john.doe@gmail.com',
+  created_at: Thu Sep 24 2015 03:42:52 GMT-0700 (PDT),
+  deleted_at: null }
+</code></pre>
+
+<p>Perfect! Now we&rsquo;re all connected and it even queried our database for us. Now let&rsquo;s take a few more look at some of the operators.</p>
+
+<h3>Running an arbitrary query</h3>
+
+<p><code>db.run</code> will let me run any arbritrary SQL. An example such as <code>db.run("select 'hello'")</code> will produce [ { &lsquo;?column?&rsquo;: &lsquo;hello&rsquo; } ].</p>
+
+<p>This makes it nice and easier for us to break out of the standard ORM model and just run SQL.</p>
+
+<h3>Find for quick look ups</h3>
+
+<p>Similar to so many other database tools <code>find</code> will offer you the most common quick look ups:</p>
+
+<pre><code>$ db.users.find({email: 'jane.doe@gmail.com'}, function(err, res){console.log(res)});
+$ db.users.find({'created_at &gt;': '2015-09-24'}, function(err, res){console.log(res)});
+</code></pre>
+
+<p>And of course there&rsquo;s a where operator for multiple conditions.</p>
+
+<h3>Structuring queries in your application</h3>
+
+<p>While in the next post I&rsquo;ll dig in deep to JSON, this is perhaps my favorite feature of Massive&hellip; It&rsquo;s design for pulling out queries into individudal SQL files. Simply create a <code>db</code> folder and put your SQL in there. Let&rsquo;s take the most basic example of our user email lookup and put it in <code>user_lookup.sql</code></p>
+
+<pre><code>SELECT *
+FROM users
+WHERE email = $1
+</code></pre>
+
+<p>Now back in our application we can run this and pass in a parameter to it:</p>
+
+<pre><code>db.user_lookup(['jane.doe@gmail.com'], function(err,res){
+  console.log(res);
+});
+</code></pre>
+
+<p>This separation of our queries from our code makes it easier to track them, view diffs, and even more so <a href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/">create very readable SQL</a>.</p>
+
+<h3>Up next</h3>
+
+<p>So sure, you can connect to a database, you can query some things. There were a couple of small but more novel things that we blew through in here. First is the fact I didn&rsquo;t have to define all my schema, it just knew it as <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">it really should</a>. The separation of SQL queries you&rsquo;ll custom write into files is simple, but will make for much more maintainable applications over the long term. And best of all is the JSON support, which I&rsquo;ll get to soon&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>

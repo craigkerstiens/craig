@@ -5,14 +5,12 @@
 	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
-	<script type="text/javascript">
-	</script>
 	<meta charset="utf-8">
 	<title> Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="I&rsquo;m reasonably proficient at SQL – a coworker when pseudocoding some logic for him pointed out that my pseudocode is what he thought was &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="I&rsquo;ve written a bit before about understanding the output from EXPLAIN and EXPLAIN ANALYZE in PostgreSQL. Though understandably getting a grasp &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -100,6 +98,154 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/06/13/explaining-your-data/">
+		
+			Explaining Your PostgreSQL Data</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve written a bit before about <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">understanding the output</a> from <code>EXPLAIN</code> and <code>EXPLAIN ANALYZE</code> in PostgreSQL. Though understandably getting a grasp on execution plans could probably use some more guidance. Yet, this time around I&rsquo;m taking a bit of a cop out and highlighting a few tools instead of documenting myself, which I&rsquo;ve done in a talk I&rsquo;ve frequently given <a href="https://speakerdeck.com/craigkerstiens/postgres-demystified-1">Postgres Demystified</a>.</p>
+
+<p><img src="http://f.cl.ly/items/2Y0A0H2B2q3C0622261C/Screenshot_6_13_13_9_57_AM.png" alt="Explain explained" /></p>
+
+
+		
+		<a href="/2013/06/13/explaining-your-data/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/05/30/a-collection-of-indexing-tips/">
+		
+			Postgres Indexing - a Collection of Indexing Tips</a>
+	</h2>
+	<div class="entry-content">
+		<p>Even from intial reviews of my previous post on expression based indexes I received a lot of questions and feedback around many different parts of indexing in Postgres. Here&rsquo;s a mixed collection of valuable tips and guides around much of that.</p>
+
+<h3>Unused Indexes</h3>
+
+<p>In an earlier tweet I joked about some SQL that would generate the SQL to add an index to every column:</p>
+
+<pre><code># SELECT 'CREATE INDEX idx_' 
+    || table_name || '_' 
+    || column_name || ' ON ' 
+    || table_name || ' ("' 
+    || column_name || '");' 
+  FROM information_schema.columns;
+                      ?column?
+---------------------------------------------------------------------
+ CREATE INDEX idx_pg_proc_proname ON pg_proc ("proname");
+ CREATE INDEX idx_pg_proc_pronamespace ON pg_proc ("pronamespace");
+ CREATE INDEX idx_pg_proc_proowner ON pg_proc ("proowner");
+</code></pre>
+
+
+		
+		<a href="/2013/05/30/a-collection-of-indexing-tips/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/">
+		
+			Postgres Indexes – Expression/Functional Indexing</a>
+	</h2>
+	<div class="entry-content">
+		<p>Postgres is rich with options for indexing. First you&rsquo;ve got a variety of types, and beyond that you can do a variety of things with each of these such as create unique indexes, use conditions to index only a portion of your data, or create indexes based on complex expressions or functions. In cases where you commonly use various PostgreSQL functions in your application or reporting you can get some great gains from this.</p>
+
+
+		
+		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -411,147 +557,6 @@ $(document).ready(
 
 <time datetime="2013-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/03/13/planning-and-prioritizing/">
-		
-			Prioritizing and Planning Within Heroku Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p>Over a year ago I blogged about Heroku&rsquo;s approach to <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools</a>. Since that time Heroku has grown from around 25 people to over 100, we&rsquo;ve continued to iterate and find new tools that work for how we do things. For many of the <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">product management</a> and software engineering books I&rsquo;ve read I&rsquo;ve yet to find something that helps a team priorize in a fashion I that feels right.</p>
-
-<p>One process emerged nearly a year ago from within the <a href="https://postgres.heroku.com">Heroku Postgres</a> team and is now followed by many others. Within a team this process is now commonly conducted each 6 months. Lets take a look at how this process looks</p>
-
-
-		
-		<a href="/2013/03/13/planning-and-prioritizing/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/03/07/Fixing-django-db-connections/">
-		
-			Fixing Database Connections in Django</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you&rsquo;re looking to get better performance from your Django apps you can check out <a href="http://www.amazon.com/Pro-Django-Experts-Voice-Development/dp/1430210478?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Pro Django</a>, <a href="http://www.amazon.com/PostgreSQL-High-Performance-Gregory-Smith/dp/184951030X?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">PostgreSQL High Performance</a>, or read some my earlier posts on <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">Postgres Performance</a>. All of these are of course good things to do – you can also start by correcting an incredibly common but also painful performance issue, that until 1.6 is unaddressed in Django.</p>
-
-<p>Django&rsquo;s current default behavior is to establish a connection for each request within a Django application. In many cases any particularly in distributed cloud environments this is a large time sink of your response time. An example application running on <a href="http://www.heroku.com">Heroku</a> shows a typical connection time of 70ms. A large part of this time is the SSL negotiation that occurs in connecting to your database, <em>which is a good practice to ensure security of your data</em>. Regardless, this is a long time in simply establishing a connection. As a point of comparisson its commonly encourage that most queries to your database are under 10ms.</p>
-
-<p>An example that highlights this in a small lightweight application shows the bulk of a request time being within a connection displayed by <a href="http://www.newrelic.com">New Relic</a>:</p>
-
-<p><img src="http://f.cl.ly/items/0X3u0e3Q3G0L19263k2Z/Screenshot_3_6_13_1_12_PM.png" alt="connection time" /></p>
-
-
-		
-		<a href="/2013/03/07/Fixing-django-db-connections/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/02/21/more-out-of-psql/">
-		
-			Getting More Out of Psql (the PostgreSQL CLI)</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
-
-<h2>Get the most of psql</h2>
-
-<p>Psql, the CLI postgreSQL client, is a powerful tool. Sadly, lot of developers are not aware of the features and instead look for a GUI to provide what they need. Let&rsquo;s fly over what can psql do for you.</p>
-
-
-		
-		<a href="/2013/02/21/more-out-of-psql/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-21T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
 
 
 	

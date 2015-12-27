@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/sql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-07-21T09:12:15-07:00</updated>
+  <updated>2015-12-08T10:58:36-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,61 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Digging in with Foreign Tables]]></title>
-    <link href="http://www.craigkerstiens.com/2013/12/19/digging-in-with-foreign-tables/"/>
-    <updated>2013-12-19T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2013/12/19/digging-in-with-foreign-tables</id>
-    <content type="html"><![CDATA[<p>I wrote a couple months back about exploring FDWs. Its become quite clear to me, despite still having ample room for improvement, they&rsquo;re not getting enough attention. Foreign data wrappers are perhaps better thought of as a foreign table, or even better yet as a view into some remote data source. They don&rsquo;t take care of auto-updating or syncing data, thats all up to you, but it gives you a straight forward mapping to work with remote data easier.</p>
-
-<p>The first step in working with FDWs is getting them setup. I wrote an earlier post on how to do this manually. And if you&rsquo;re on Heroku theres an even easier solution if you want to setup a mapping entirely from one DB to another. The <a href="">pg-extras CLI plugin</a> has a command <code>fdwsql</code> which will generate the SQL to map all the tables for you. To run it simply specify the prefix app and database:</p>
-
-<pre><code>heroku pg:fdwsql yourprefix APP::DATABASE_URL
-</code></pre>
-
-<p>This will generate a lot of SQL. From here you&rsquo;ll want to connect to the database where you want those foreign tables to be visible. Then run all the SQL. This will create all the foreign tables, this will mostly look just like another view or table to you in <code>\d</code>.</p>
-
-<h3>Tips on working with them</h3>
-
-<p>For the most part you can work with your foreign tables just like any other view or table. You can insert into them, read from them, join against them. Though currently foreign tables have some performance limitations, such as when joining it may return a lot more data than you expect then join. To make your performance a bit more ideal you can follow a few basic principles.</p>
-
-<p>Lets look at some example tables to highlight this:</p>
-
-<pre><code>&gt; \d 
- users
- todos
-</code></pre>
-
-<p>In this case users is local and the todos are a foreign table. Looking at each of the schemas we have something like you might expect:</p>
-
-<pre><code>&gt; \d users
-                   Table "public.users"
-    Column    |            Type             | Modifiers
- -------------+-----------------------------+-----------
-  id          | integer                     | not null
-  email       | text                        |
-  created_at  | timestamp without time zone |
- Indexes:
-     "users_pkey" PRIMARY KEY, btree (id)
-     "users_created" btree (created_at)
-
-
-&gt; \d todo
-               Foreign Table "public.todo"
-    Column    |            Type             | Modifiers
- -------------+-----------------------------+-----------
-  id          | integer                     | not null
-  user_id     | integer                     |
-  desc        | text                        |
-  created_at  | timestamp without time zone |
-  status      | boolean                     |
- Indexes:
-     "users_pkey" PRIMARY KEY, btree (id)
-     "todo_created" btree (created_at)
-</code></pre>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[The missing PostgreSQL documentation]]></title>
@@ -196,9 +141,7 @@
     <id>http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere</id>
     <content type="html"><![CDATA[<p>After my most recent post on <a href="/2013/07/29/documenting-your-postgres-database/">documenting your database</a> I had a colleague and friend chime in:</p>
 
-<p>{% blockquote @danfarina <a href="https://twitter.com/danfarina/status/362007008079126528">https://twitter.com/danfarina/status/362007008079126528</a> %}
-@craigkerstiens You may want to mention for another post the generality of dollar quoting: it&rsquo;s not just for CREATE FUNCTION.
-{% endblockquote %}</p>
+<p><blockquote><p>@craigkerstiens You may want to mention for another post the generality of dollar quoting: it&rsquo;s not just for CREATE FUNCTION.</p><footer><strong>@danfarina <a href="https://twitter.com/danfarina/status/362007008079126528">https://twitter.com/danfarina/status/362007008079126528</a></strong></footer></blockquote></p>
 
 <p>Luckily I was able to convince him to create the post. You can read a bit more on him below, but without further adieu here&rsquo;s a bit on dollar quoting within Postgres:</p>
 
@@ -347,6 +290,91 @@ GROUP BY
 </code></pre>
 
 <p>You comment your code, why shouldn&rsquo;t you comment your database?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hstore vs. JSON - Which to use in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/"/>
+    <updated>2013-07-03T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2013/07/03/hstore-vs-json</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re deciding what to put in <a href="http://www.amazon.com/Seven-Databases-Weeks-Modern-Movement/dp/1934356921?tag=mypred-20">Postgres and what not to</a>, consider that Postgres can be a <a href="/2012/06/11/schemaless-django/">perfectly good schema-less database</a>. Of course as soon as people realized this then the common comes a question, is hstore or JSON better. Which do I use and in what cases. Well first, if you&rsquo;re not familiar check out some previous material on them:</p>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore on PostgresGuide</a></li>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore in Postgres docs</a></li>
+<li><a href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/">hstore with Django</a></li>
+<li><a href="http://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.2#JSON_datatype">JSON datatype</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JavaScript support in Postgres</a></li>
+</ul>
+
+
+<p>If you&rsquo;re already up to date with both of them, but still wondering which to use lets dig in.</p>
+
+<!--more-->
+
+
+<h3>hstore</h3>
+
+<p>hstore is a key value store directly within your database. Its been a common favorite of mine and has been for some time. hstore gives you flexibility when working with your schema, as you don&rsquo;t have to define models ahead of time. Though its two big limitations are that 1. it only deals with text and 2. its not a full document store meaning you can&rsquo;t nest objects.</p>
+
+<p>Though major benefits of hstore include the ability to index on it, robust support for various operators, and of course the obvious of flexibility with your data. Some of the basic operators available include:</p>
+
+<p>Return the value from column<code>foo</code> for key <code>bar</code>:</p>
+
+<pre><code>foo-&gt;'bar'
+</code></pre>
+
+<p>Does the specified column <code>foo</code> contain a key <code>bar</code>:</p>
+
+<pre><code>foo?'bar'
+</code></pre>
+
+<p>Does the specified column <code>foo</code> contain a value of <code>baz</code> for key <code>bar</code>:</p>
+
+<pre><code>foo@&gt;'bar-&gt;baz'
+</code></pre>
+
+<p>Perhaps one of the best parts of hstore is that you can index on it. In particular Postgres <code>gin</code> and <code>gist</code> indexes allow you to index all keys and values within an hstore. A talk by <a href="http://www.twitter.com/XoF">Christophe Pettus</a> of PgExperts actually highlights some <a href="http://thebuild.com/presentations/pg-as-nosql-pgday-fosdem-2013.pdf">performance details of hstore with indexes</a>. To give away the big punchline in several cases hstore with gin/gist beats mongodb in performance.</p>
+
+<h3>json</h3>
+
+<p>JSON in contrast to hstore is a full document datatype. In addition to nesting objects you have support for more than just text (read numbers). As you insert JSON into Postgres it will automatically ensure its valid JSON and error if its well not. JSON gets a lot better come Postgres 9.3 as well with <a href="http://www.postgresql.org/docs/devel/static/functions-json.html">some built in operators</a>. Though if you need more functionality in it today you should look at <a href="https://code.google.com/p/plv8js/wiki/PLV8">PLV8</a>.</p>
+
+<h3>Which to Use</h3>
+
+<p>So which do you actually want to use in your application? If you&rsquo;re already using JSON and simply want to store it in your database then the JSON datatype is often the correct pick. However, if you&rsquo;re just looking for flexibility with your data model then hstore is likely the path you want to take. hstore will give you much of the flexibility you want as well as a good ability to query your data in a performant manner. Of course much of this starts to change in Postgres 9.3.</p>
+
+<!-- Begin MailChimp Signup Form -->
+
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
+
+
+
+<div id="mc_embed_signup">
+<form action="http://postgresweekly.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <h2>Sign up to get weekly advice and content on Postgres</h2>
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+
+
+
+
+<!--End mc_embed_signup-->
+
 ]]></content>
   </entry>
   

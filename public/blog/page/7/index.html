@@ -5,14 +5,12 @@
 	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
-	<script type="text/javascript">
-	</script>
 	<meta charset="utf-8">
 	<title> Craig Kerstiens</title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Update theres a more recent post that expands further on where to start optimizing specific queries, and of course if you want to dig into &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -100,6 +98,182 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/10/01/understanding-postgres-performance/">
+		
+			Understanding Postgres Performance</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>Update theres a more <a href="/2013/01/10/more-on-postgres-performance/">recent post that expands further on where to start optimizing</a> specific queries, and of course if you want to dig into optimizing your infrastructure <a href="http://www.amazon.com/dp/184951030X?tag=mypred-20">High Performance PostgreSQL is still a great read</a></em></p>
+
+<p>For many application developers their database is a black box. Data goes in, comes back out and in between there developers hope its a pretty short time span. Without becoming a DBA there&rsquo;s a few pieces of data that most application developers can easily grok which will help them understand if their database is performing adequately. This post will provide some quick tips that allow you to determine whether your database performance is slowing down your app, and if so what you can do about it.</p>
+
+<h3>Understanding your Cache and its Hit Rate</h3>
+
+<p>The typical rule for most applications is that only a fraction of its data is regularly accessed. As with many other things data can tend to follow the 80/20 rule with 20% of your data accounting for 80% of the reads and often times its higher than this. Postgres itself actually tracks access patterns of your data and will on its own keep frequently accessed data in cache. Generally you want your database to have a cache hit rate of about 99%. You can find your cache hit rate with:</p>
+
+<pre><code>SELECT 
+  sum(heap_blks_read) as heap_read,
+  sum(heap_blks_hit)  as heap_hit,
+  sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) as ratio
+FROM 
+  pg_statio_user_tables;
+</code></pre>
+
+
+		
+		<a href="/2012/10/01/understanding-postgres-performance/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-01T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/08/20/arrays-in-postgres/">
+		
+			Arrays in Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>Postgres out of the box has an abundance of datatypes, from standard <a href="http://www.postgresql.org/docs/9.1/static/datatype.html#DATATYPE-NUMERIC">numeric datatypes</a> to <a href="http://www.postgresql.org/docs/9.1/static/datatype-geometric.html">geometric</a> or even <a href="http://www.postgresql.org/docs/9.1/static/datatype-net-types.html">network datatypes</a>. With extensions you can get even more out of it as earlier discussed with <a href="http://craigkerstiens.com/2012/06/11/schemaless-django/">hStore</a>. Though with all of the datatypes its easy to miss out on some of them that are there, in fact one of my favorites is often missed entirely. The <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> datatype lets you do just as you&rsquo;d expect, store an array inside Postgres. With this you can often get some of the functionality you&rsquo;d want in a single table when you might traditionally have expanded to multiple tables.</p>
+
+<p>The broader question may be why you&rsquo;d actually want to use an array. One good reason may be if you&rsquo;re an application developer its how you think of your data, so why not model it the same way. As you&rsquo;ll see below it can be easier than joining and aggregating across a set of rows. Also depending on your case you performance could be improved, though mileage may vary here as it does depend on the data you&rsquo;re storing.</p>
+
+<p>First a bit of a hacky example&hellip; Lets say you have a basic website that sells stuff, and instead of having a purchase ID and a total you want to include the quantity, id, and price of each item in a single row. With a bit of a messy foreign key (using a decimal) you could store all of this within a single row:</p>
+
+<pre><code>CREATE TABLE purchases (
+    id integer NOT NULL,
+    user_id integer,
+    items decimal(10,2) [100][1],
+    occurred_at timestamp
+);
+</code></pre>
+
+<p>With this table I could have an array that holds multiple records of:</p>
+
+<ul>
+<li>The item purchased</li>
+<li>The quantity</li>
+<li>The price</li>
+</ul>
+
+
+
+		
+		<a href="/2012/08/20/arrays-in-postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-20T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/array/'>Array</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/07/19/supporting-developers/">
+		
+			Rapid API Prototyping With Heroku Postgres Dataclips</a>
+	</h2>
+	<div class="entry-content">
+		<p>For small and large applications there often comes a time where you&rsquo;re busy creating an API. The API creation process usually takes the form of something like: Design your API, Implement your API, Test and Evaluate, Rinse and Repeat. Often you&rsquo;re unable to tell how you truly feel about your API without fully implementing it, causing this cycle to take longer than it should. Heroku Postgres has Dataclips, which (among other things) can be used for quickly prototyping APIs. Lets take a look at how this would work:</p>
+
+<h2>Given a schema</h2>
+
+<p><img src="http://f.cl.ly/items/0n0k1h3q1I1W1T373q0D/1.%20psql.png" alt="schema" /></p>
+
+<p>We the screen shot of the schema above we can see we have a few tables. These tables are the complete works of Shakespeare. Lets take a couple of hypothetical endpoints we&rsquo;ve decided on that we&rsquo;d like to expose for users and test as an API.</p>
+
+<ul>
+<li>The number of works per year</li>
+<li>Drone factory (this is a fun one courtesy of &hellip;.). Its essentially who has the longest paragraphs on average in his works.</li>
+</ul>
+
+
+
+		
+		<a href="/2012/07/19/supporting-developers/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-19T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/api/'>API</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/mobile/'>Mobile</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/prototype/'>Prototype</a>, <a class='category' href='/categories/ios/'>iOS</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -517,148 +691,6 @@ connection.product.insert(django_pony)
 <div class="tags">
 
 	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/01/25/sphinx-buildpack/">
-		
-			Sphinx Build Pack on Heroku</a>
-	</h2>
-	<div class="entry-content">
-		<p>Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via <a href="http://github.com/heroku/">Heroku&rsquo;s github</a>, you can view several of them at:</p>
-
-<ul>
-<li><a href="https://github.com/heroku/heroku-buildpack-python">Python Build Pack</a></li>
-<li><a href="https://github.com/heroku/heroku-buildpack-ruby">Ruby Build Pack</a></li>
-<li><a href="https://github.com/heroku/heroku-buildpack-scala">Scala Build Pack</a></li>
-</ul>
-
-
-<p><em>There have even been some created as fun weekend hacks such as the <a href="http://github.com/hone/heroku-buildpack-jsnes">NES Rom Buildpack</a>.</em></p>
-
-
-		
-		<a href="/2012/01/25/sphinx-buildpack/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-25T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/01/23/securing-your-organization/">
-		
-			Securing Your Internal Organization With OpenID</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
-
-<p>In our personal lives we use email as our keys to the kingdom. In fact I now almost refuse to sign up for any service that doesn&rsquo;t let me use oauth, so why should a work place be much different. So I inquired with a few companies to see if they were fine with securing things like documentation or wiki&rsquo;s being google auth, they indeed were. Yet they still seem to have users keep one more username and password for their VPN to be able to login to access internal docs/tools.</p>
-
-
-		
-		<a href="/2012/01/23/securing-your-organization/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-23T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/startup/'>Startup</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/12/02/how-heroku-works-hiring/">
-		
-			How Heroku Works - Hiring</a>
-	</h2>
-	<div class="entry-content">
-		<p>I alluded in earlier posts of <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">How Heroku Works</a> that we have talented engineers. In fact I would venture to say that there is not a weak link when it comes to our engineers at Heroku. Ensuring we have talented engineers makes it easier for us to find other talented engineers and maintains a level of quality in our product. This means we must be very careful about not diluting our pool of engineering talent, which is where our hiring process becomes especially key. By the time we hire a new employee, we know without a doubt they&rsquo;re a fit within our organization.</p>
-
-<p><em>Our goal in hiring is seldom to fill a role, but more commonly to find more talented people share our goal (changing the world for developers).</em></p>
-
-
-		
-		<a href="/2011/12/02/how-heroku-works-hiring/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-02T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
 
 </div>
 

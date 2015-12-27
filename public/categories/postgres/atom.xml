@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-11-30T08:53:21-08:00</updated>
+  <updated>2015-12-27T09:06:05-08:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,192 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres 9.5 - The feature rundown]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown/"/>
+    <updated>2015-12-27T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown</id>
+    <content type="html"><![CDATA[<p>The headline of Postgres 9.5 is undoubtedly: Insert&hellip; on conflict do nothing/update or more commonly known as Upsert or Merge. This removes one of the last remaining features which other databases had over Postgres. Sure we&rsquo;ll take a look at it, but first let&rsquo;s browse through some of the other features you can look forward to when Postgres 9.5 lands:</p>
+
+<!--more-->
+
+
+<h3>Grouping sets, cube, rollup</h3>
+
+<p>Pivoting in Postgres has <a href="http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres/">sort of been possible</a> as has rolling up data, but it required you to know what those values and what you were projecting to, to be known. With the new functionality to allow you to group various sets together rollups as you&rsquo;d normally expect to do in something like Excel become trivial.</p>
+
+<p>So now instead you simply add the grouping type just as you would on a normal group by:</p>
+
+<pre><code>SELECT department, role, gender, count(*)
+FROM employees
+GROUP BY your_grouping_type_here;
+</code></pre>
+
+<p>By simply selecting the type of rollup you want to do Postgres will do the hard work for you. Let&rsquo;s take a look at the given example of department, role, gender:</p>
+
+<ul>
+<li><code>grouping sets</code> will project out the count for each specific key. As a result you&rsquo;d get each department key, with other keys as null, and the count for each that met that department.</li>
+<li><code>cube</code> will give you the same values as above, but also the rollups of every individual combination. So in addition to the total for each department, you&rsquo;d get breakups by the department and gender, and department and role, and department and role and gender.</li>
+<li><code>rollup</code> will give you a slightly similar version to cube but only give you the detailed groupings in the order they&rsquo;re presented. So if you specified <code>roll (department, role, gender)</code> you&rsquo;d have no rollup for department and gender alone.</li>
+</ul>
+
+
+<p><em>Check the what&rsquo;s new wiki for a bit more clarity on <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#GROUPING_SETS.2C_CUBE_and_ROLLUP">examples and output</a></em></p>
+
+<h3>Import foreign  schemas</h3>
+
+<p>I only use foreign tables about once a month, but when I do use them they&rsquo;ve inevitably saved many hours of creating a one off ETL process. Even still the effort to setup new foreign tables has shown a bit of their infancy in Postgres. Now once you&rsquo;ve setup your foreign database, you can import the schema, either all of it or specific tables you prefer.</p>
+
+<p>It&rsquo;s as simple as:</p>
+
+<pre><code>IMPORT FOREIGN SCHEMA public
+FROM SERVER some_other_db INTO reference_to_other_db;
+</code></pre>
+
+<h3>pg_rewind</h3>
+
+<p>If you&rsquo;re managing your own Postgres instance for some reason and running HA, pg_rewind could become especially handy. Typically to spin up replication you have to first download the physical, also known as base, backup. Then you have to replay the Write-Ahead-Log or WAL–so it&rsquo;s up to date then you actually flip on replication.</p>
+
+<p>Typically with databases when you fail over you shoot the other node in the head or <a href="https://en.wikipedia.org/wiki/STONITH">STONITH</a>. This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and us pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over.</p>
+
+<h3>Upsert</h3>
+
+<p>Upsert of course will be the highlight of Postgres 9.5. I already talked about it some when <a href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/">it initially landed</a>. The short of it is, if you&rsquo;re inserting a record and there&rsquo;s a conflict, you can choose to:</p>
+
+<ul>
+<li>Do nothing</li>
+<li>Do some form of update</li>
+</ul>
+
+
+<p>Essentially this will let you have the typically experience of create or update that most frameworks provide but without a potential race condition of incorrect data.</p>
+
+<h3>JSONB pretty</h3>
+
+<p>There&rsquo;s a few updates <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#JSONB-modifying_operators_and_functions">to JSONB</a>. The one I&rsquo;m most excited about is making JSONB output in psql read much more legibly.</p>
+
+<p>If you&rsquo;ve got a JSONB field just give it a try with:</p>
+
+<pre><code>SELECT jsonb_pretty(jsonb_column)
+FROM foo;
+</code></pre>
+
+<h3>Give it a try</h3>
+
+<p>Just in time for the new year <a href="http://www.postgresql.org/about/news/1631/">the RC is ready</a> and you can get hands on with it. Give it a try, and if there&rsquo;s more you&rsquo;d like to hear about Postgres please feel free to drop me a note <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
+
+<script type="text/javascript">
+  (function() {
+    window._pa = window._pa || {};
+    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
+    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
+    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/517fd07cf1409000020002dc.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+</script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres and Node - Hands on using Postgres as a Document Store with MassiveJS]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/08/massive-json/"/>
+    <updated>2015-12-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/08/massive-json</id>
+    <content type="html"><![CDATA[<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
+
+<ul>
+<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
+<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
+<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
+<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>This is all great, but when it comes to using JSON you need a library that plays well here. As you might have guessed it from <a href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/">my previous post this is where MassiveJS comes in</a>. Most ORMs take a more legacy approach to <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">how they work with the database</a>, in contrast the other side of the world believes in document only storage way is the future. In contrast Postgres believes there is a time and place for everything, just like Massive, except it believes Postgres is the path <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">just as I do</a>.</p>
+
+<p>Alright, enough context, let&rsquo;s take a look.</p>
+
+<h3>Getting all setup</h3>
+
+<p>First go ahead and create a database, let&rsquo;s call it massive, and then let&rsquo;s connect to it and create our example table:</p>
+
+<pre><code>$ createdb massive
+$ psql massive
+# create table posts (id serial primary key, body jsonb);
+</code></pre>
+
+<p>Now that we&rsquo;ve got our database setup let&rsquo;s seed it with some data. If you want you can simple hop over to the github repo and pull it down then run <code>node load_json.js</code> to load the example data. A quick look at it, given an <code>example.json</code> file we&rsquo;re going to iterate over it. For each record in there, we&rsquo;re going to call saveDoc. Based on our table which has a unique id key and a body jsonb field it&rsquo;ll simply save our JSON document into that table:</p>
+
+<pre><code>var parsedJSON = require('./example.json');
+
+for(i = 0; i &lt; parsedJSON.posts.length; i++) {
+    db.saveDoc("posts", parsedJSON.posts[1], function(err,res){});
+};
+</code></pre>
+
+<p><em>If you want to just take a look at this <a href="https://github.com/craigkerstiens/json_node_example">github repo</a>, once you create a database you can run <code>node load_json.js</code> to seed it.</em></p>
+
+<h3>Why JSON at all?</h3>
+
+<p>JSON data is all over the place, in many cases it&rsquo;s fast and flexible and allows you to move more quickly. Yes, much of the time normalizing your data can be useful, but there is something to be said for expediency saving some data and querying across it. Querying across some giant document also used to be much more expensive, but now with JSONB and it&rsquo;s indexes that can be extremely fast.</p>
+
+<h3>Querying</h3>
+
+<p>So how do we go about querying? Well it&rsquo;s pretty simple with Massive, they provide a nice <code>findDoc</code> function to let you just search for contents of a specific key within the document. Let&rsquo;s say I wanted to pull back all posts that are in the Postgres category, well it&rsquo;s as simple as:</p>
+
+<pre><code>db.posts.findDoc({title : 'Postgres'}, function(err,docs){
+    console.log(docs);
+});
+</code></pre>
+
+<p>The real beauty of this is if you added a GIN index (which will index the entire document) this query will be <a href="http://obartunov.livejournal.com/175235.html">quite performant</a>.</p>
+
+<p><em>Just make sure to add your GIN index</em>:</p>
+
+<pre><code>CREATE INDEX idx_posts ON posts USING GIN(body jsonb_path_ops); 
+CREATE INDEX idx_posts_search ON posts USING GIN(search);  
+</code></pre>
+
+<p>But even better, with Massive it&rsquo;ll automatically add these for you if you just start saving docs. It will automatically create the table and appropriate indexes, just doing the correct thing out of the box.</p>
+
+<h3>Full text and JSON</h3>
+
+<p>Cool, so you can do an exact look up. Which is great when you&rsquo;re matching a category&hellip; which could be easily normalized. It&rsquo;s great when you&rsquo;re matching numbers, which also could likely reside in their own column. But what about when you&rsquo;re searching over a large document, or a set of keys within some document which may require several joins, or indeterminate data structure, well you may want to search for the presence of that string at all. As you may have guessed this is quite trivial.</p>
+
+<pre><code>db.posts.searchDoc({
+    keys : ["title", "category"],
+    term : ["Postgres"]
+}, function(err,docs){
+    console.log(docs);
+})
+</code></pre>
+
+<p>Hopefully it&rsquo;s pretty straight forward, but to be very clear. Call out the document table you want to search, then the keys you&rsquo;ll want to include in the search, then the term. This will search for any place the contents that string are found in matching values for those keys.</p>
+
+<p>Which will nicely yield the expected documents:</p>
+
+<pre><code>[ { link: 'http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/',
+    title: 'Upsert Lands in PostgreSQL 9.5 – a First Look',
+    category: 'Postgres',
+    comments: [ [Object] ],
+    id: 2 },
+  { link: 'http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/',
+    title: 'Node, Postgres, MassiveJS - a Better Database Experience',
+    id: 3 } ]
+</code></pre>
+
+<h3>In conclusion</h3>
+
+<p>While Massive isn&rsquo;t perfect, its approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
@@ -50,7 +236,7 @@ $ npm install massive --save
 <p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
 
 <pre><code>var massive = require("massive");
-var connectionString = "postgres://:@localhost/example";
+var connectionString = "postgres://ckerstiens:@localhost/example";
 
 var db = massive.connectSync({connectionString : connectionString});
 
@@ -200,85 +386,6 @@ ON CONFLICT DO UPDATE SET description=excluded.description;
 </code></pre>
 
 <p>It’s been a long time coming for this, and it makes building applications that need this kind of behavior even easier. While it would have been great for this to be available years ago, kudos to Postgres and its community for taking the approach that is safe for your data. The result we have now both provides the desired behavior of create or update, <strong>and</strong> is performant without the risk of race conditions for your data.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
-    <link href="http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations/"/>
-    <updated>2014-10-01T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations</id>
-    <content type="html"><![CDATA[<p>Most web applications will add/remove columns over time. This is extremely common early on and even mature applications will continue modifying their schemas with new columns. An all too common pitfall when adding new columns is setting a not null constraint in Postgres.</p>
-
-<!--more-->
-
-
-<h3>Not null constraints</h3>
-
-<p>What happens when you have a not null constraint on a table is it will re-write the entire table. Under the cover Postgres is really just an append only log. So when you update or delete data it&rsquo;s really just writing new data. This means when you add a column with a new value it has to write a new record. If you do this requiring columns to not be null then you&rsquo;re re-writing your entire table.</p>
-
-<p>Where this becomes problematic for larger applications is it will hold a lock preventing you from writing new data during this time.</p>
-
-<h3>A better way</h3>
-
-<p>Of course you may want to not allow nulls and you may want to set a default value, the problem simply comes when you try to do this all at once. The safest approach at least in terms of uptime for your table &ndash;> data &ndash;> application is to break apart these steps.</p>
-
-<ol>
-<li>Start by simply adding the column with allowing nulls but setting a default value</li>
-<li>Run a background job that will go and retroactively update the new column to your default value</li>
-<li>Add your not null constraint.</li>
-</ol>
-
-
-<p>Yes it&rsquo;s a few extra steps, but I can say from having walked through this with a number of developers and their apps it makes for a much smoother process for making changes to your apps.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My wishlist for Postgres 9.5]]></title>
-    <link href="http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5/"/>
-    <updated>2014-08-15T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5</id>
-    <content type="html"><![CDATA[<p>As I followed along with the <a href="/2014/03/24/Postgres-9.4-Looking-up/">9.4 release</a> of Postgres I had a few posts of things that I was excited about, some things that missed, and a bit of a wrap-up. I thought this year (year in the sense of PG releases) I&rsquo;d jump the gun and lay out areas I&rsquo;d love to see addressed in PostgreSQL 9.5. And here it goes:</p>
-
-<!--more-->
-
-
-<h3>Upsert</h3>
-
-<p>Merge/Upsert/Insert or Update whatever you want to call it this is still a huge wart that it doesn&rsquo;t exist. There&rsquo;s been a few implementations show up on mailing lists, and to the best of my understanding there&rsquo;s been debate on if it&rsquo;s performant enough or that some people would prefer another implementation or I don&rsquo;t know what other excuse. The short is this really needs to happen, until that time you can always <a href="http://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql/8702291#8702291">implement it with a CTE</a> which can have a race condition.</p>
-
-<h3>Foreign Data Wrappers</h3>
-
-<p>There&rsquo;s so much opportunity here, and this has easily been my <a href="/2013/08/05/a-look-at-FDWs/">favorite feature of the past 2-3 years in Postgres</a>. Really any improvement is good here, but a hit list of a few valuable things:</p>
-
-<ul>
-<li>Pushdown of conditions</li>
-<li>Ability to accept a DSN to a utility function to create foreign user and tables.</li>
-<li>Better security around creds of foreign tables</li>
-<li>More out of the box FDWs</li>
-</ul>
-
-
-<h3>Stats/Analytics</h3>
-
-<p>Today there&rsquo;s <a href="http://madlib.net/">madlib</a> for machine learning, and 9.4 got support for <a href="http://www.depesz.com/2014/01/11/waiting-for-9-4-support-ordered-set-within-group-aggregates/">ordered set aggregates</a>, but even still Postgres needs to keep moving forward here. PL-R and PL-Python can help a good bit as well, but having more out of the <a href="http://www.postgresql.org/docs/9.3/static/functions-aggregate.html">box functions</a> for stats can continue to keep it at the front of the pack for a database that&rsquo;s not only safe for your data, but powerful to do analysis with.</p>
-
-<h3>Multi-master</h3>
-
-<p>This is definitely more of a dream than not. Full multi-master replication would be amazing, and it&rsquo;s getting closer to possible. The sad truth is even once it lands it will probably require a year of maturing, so even more reason for it to hopefully hit in 9.5</p>
-
-<h3>Logical Replication</h3>
-
-<p>The foundation made it in for 9.4 which is huge. This means we&rsquo;ll probably see a good working out of the box logical replication in 9.5. For those less familiar this means the replication is SQL based vs. the binary WAL stream. This means things like using replication to upgrade across versions is possible. So not quite 0 downtime, but ~ a minute or two to upgrade versions. Even of large DBs.</p>
-
-<h3>An official GUI</h3>
-
-<p>Alright this one is probably a pipe dream. And to kick it off, no pgAdmin doesn&rsquo;t cut it. A good end user tool for connecting/querying would be huge. Fortunately the ecosystem is improving here with <a href="http://www.jackdb.com">JackDB</a> (web based) and <a href="https://eggerapps.at/pgcommander/">PG Commander</a> (mac app), but these still aren&rsquo;t discoverable enough for most users.</p>
-
-<h3>What do you want?</h3>
-
-<p>So there&rsquo;s my wishlist, what&rsquo;s yours for 9.5? Let me know &ndash; <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
 ]]></content>
   </entry>
   

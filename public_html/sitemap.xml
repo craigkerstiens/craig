@@ -180,7 +180,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2009/06/13/takeaways-from-consulting/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
+        <lastmod>2015-11-30T08:58:52-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2009/06/16/mentoring/</loc>
@@ -351,27 +351,7 @@
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
-        <loc>http://www.craigkerstiens.com/2011/11/05/oldmakersday/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2011/11/06/hackernews-api/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2011/11/06/how-heroku-works-dashboards/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
         <loc>http://www.craigkerstiens.com/2011/11/07/how-heroku-works-maker-day/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2011/11/08/Postgres-the-death-of-nosql/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2011/11/12/startingwithdjango/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
@@ -403,14 +383,6 @@
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
-        <loc>http://www.craigkerstiens.com/2012/05/12/why-not-postgres/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2012/06/10/schemaless-django/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
         <loc>http://www.craigkerstiens.com/2012/06/11/schemaless-django/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
@@ -435,10 +407,6 @@
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
-        <loc>http://www.craigkerstiens.com/2012/10/02/Postgres-pooling-with-django/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
         <loc>http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
@@ -448,7 +416,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2012/11/30/sharding-your-database/</loc>
@@ -456,10 +424,6 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2013/01/21/example-dataclips/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
@@ -472,10 +436,6 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/02/21/more-out-of-psql/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2013/03/06/simple-read-scaling-rails/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
@@ -503,23 +463,11 @@
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
-        <loc>http://www.craigkerstiens.com/2013/04/18/heroku-two-years/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
         <loc>http://www.craigkerstiens.com/2013/04/27/cx_conference_experience_talks/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/04/29/cx_conference_experience_communicate/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2013/04/29/cx_conference_experience_people/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2013/05/02/rack-referral-middleware/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
@@ -549,16 +497,12 @@
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
-        <loc>http://www.craigkerstiens.com/2013/06/28/schema-on-read-the-future/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
         <loc>http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
+        <lastmod>2015-11-30T08:58:52-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2013/08/02/use-dollar-quoting-anywhere/</loc>
@@ -595,17 +539,9 @@
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
-        <loc>http://www.craigkerstiens.com/2013/12/19/digging-in-with-foreign-tables/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
         <loc>
             http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/
         </loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2014/01/21/content-distribution/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
@@ -614,10 +550,6 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2014/01/31/postgres-gui-roundup/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
@@ -634,10 +566,6 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/</loc>
-        <lastmod>2015-07-20T19:25:44-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://www.craigkerstiens.com/2014/03/15/my-home-automation-setup/</loc>
         <lastmod>2015-07-20T19:25:44-07:00</lastmod>
     </url>
     <url>
@@ -686,7 +614,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/02/18/a-pm-blueprint/</loc>
@@ -694,15 +622,37 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql/</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/</loc>
-        <lastmod>2015-07-20T22:06:36-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/
+        </loc>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company/
+        </loc>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/
+        </loc>
+        <lastmod>2015-12-08T10:57:41-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2015/12/08/massive-json/</loc>
+        <lastmod>2015-12-08T10:32:24-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/disneyland.html</loc>
@@ -710,7 +660,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/disneyworld.html</loc>
-        <lastmod>2015-07-20T20:02:12-07:00</lastmod>
+        <lastmod>2015-11-30T09:00:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/huntsville.html</loc>
@@ -762,15 +712,15 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/archives/</loc>
-        <lastmod>2015-07-20T22:06:36-07:00</lastmod>
+        <lastmod>2015-12-08T10:57:41-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/archives/</loc>
-        <lastmod>2015-07-20T22:06:36-07:00</lastmod>
+        <lastmod>2015-12-08T10:57:41-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/</loc>
-        <lastmod>2015-07-20T22:06:36-07:00</lastmod>
+        <lastmod>2015-12-08T10:57:41-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/books/</loc>
@@ -782,7 +732,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/</loc>
-        <lastmod>2015-07-20T22:06:36-07:00</lastmod>
+        <lastmod>2015-12-08T10:57:41-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/recommendations/books.html</loc>
