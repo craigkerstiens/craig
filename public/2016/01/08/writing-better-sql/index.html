@@ -1,0 +1,267 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Writing more legible SQL Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="A number of times in a crowd I&rsquo;ve asked how many people enjoy writing SQL, and often there&rsquo;s a person or two. The follow up is how many &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Writing More Legible SQL</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>A number of times in a crowd I&rsquo;ve asked how many people enjoy writing SQL, and often there&rsquo;s a person or two. The follow up is how many people enjoy reading other people&rsquo;s SQL and that&rsquo;s unanimously 0. The reason for this is that so many people write bad SQL. It&rsquo;s not that it doesn&rsquo;t do the job, it&rsquo;s just that people don&rsquo;t tend to treat SQL the same as other languages and don&rsquo;t follow strong code formatting guidelines. So, of course here&rsquo;s some of my own recommendations on how to make SQL more readable.</p>
+
+<!--more-->
+
+
+<h3>One thing per line</h3>
+
+<p>Only put a single column/table/join per line. This is going to make for slightly more verbose SQL, but it will be easier to read and edit.. Here&rsquo;s a basic example:</p>
+
+<pre><code>SELECT foo,
+       bar
+FROM baz
+</code></pre>
+
+<h3>Align your projections and conditions</h3>
+
+<p>You can somewhat see this in the above with <code>foo</code> and <code>bar</code> being on the same line. This is reasonably common for columns you&rsquo;re selecting, but it&rsquo;s not applied as often in <code>AND</code> or <code>GROUP BY</code> clauses. As you can see there is a difference though between:</p>
+
+<pre><code>SELECT foo,
+       bar
+FROM baz
+WHERE foo &gt; 3
+AND baz = 'craig.kerstiens@gmail.com'
+</code></pre>
+
+<p>And a cleaner version:</p>
+
+<pre><code>SELECT foo,
+       bar
+FROM baz
+WHERE foo &gt; 3
+  AND baz = 'craig.kerstiens@gmail.com'
+</code></pre>
+
+<h3>Use column names when grouping/ordering</h3>
+
+<p>This is personally an awful habit of mine, but it is extremely convenient to just order by the column number. In the above query we could just <code>ORDER BY 1</code>. This is especially easy when column 1 may be something like SUM(foo). However, ensuring you explicitly <code>ORDER BY SUM(foo)</code> will help limit any misunderstanding of the data.</p>
+
+<h3>Comments</h3>
+
+<p>You comment your code all the time, yet so few seem to comment their queries. A simple <code>--</code> allows you to inline a comment, perhaps where there&rsquo;s some oddities to what you&rsquo;re joining or just anywhere it may need clarification. You can of course <a href="/2013/07/29/documenting-your-postgres-database/">go much further</a>, but at least some basic level of commenting should be required.</p>
+
+<h3>Casing</h3>
+
+<p>As highlighted in these examples, having a standard for how you case your queries is especially handy. Sticking with all SQL keywords in caps allows you to easily parse what is SQL and what are columns or literals that you&rsquo;re using in queries.</p>
+
+<h3>CTEs</h3>
+
+<p>First, yes they can be an optimisation boundary. But they can also make your query much more read-able and prevent you from doing the wrong thing because you couldn&rsquo;t reason about a query.</p>
+
+<p>For those unfamiliar CTEs are like a view that exist just for the duration of that query being executed. You can have them reference previous CTEs so you can gradually build on them, much like you would code blocks. I won&rsquo;t repeat too much of what <a href="/2013/11/18/best-postgres-feature-youre-not-using/">I&rsquo;ve already written about them</a>, but if you&rsquo;re unfamiliar with them or not using them <a href="/2013/11/18/best-postgres-feature-youre-not-using/">they are a must</a>. CTEs are easily one of the few pieces of SQL that I use on a daily basis.</p>
+
+<h3>Conclusion</h3>
+
+<p>Of course this isn&rsquo;t the only way to make your SQL more readable and this isn&rsquo;t an exhaustive list. But hopefully you find these tips helpful, and for your favorite tip that I missed&hellip; let me know about it <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
+
+<p><em>A special thanks to <a href="http://www.twitter.com/Case">@Case</a> for reviewing.</em></p>
+
+<script type="text/javascript">
+  (function() {
+    window._pa = window._pa || {};
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/517fd07cf1409000020002dc.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+</script>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-01-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2016
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

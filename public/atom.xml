@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-12-27T09:06:05-08:00</updated>
+  <updated>2016-06-07T10:27:45-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,538 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Five mistakes beginners make when working with databases]]></title>
+    <link href="http://www.craigkerstiens.com/2016/06/07/five-mistakes-databases/"/>
+    <updated>2016-06-07T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2016/06/07/five-mistakes-databases</id>
+    <content type="html"><![CDATA[<p>When you start out as a developer there&rsquo;s an overwhelming amount of things to grasp. First there&rsquo;s the language itself, then all the quirks of the specific framework you&rsquo;re using,and after that (or maybe before) we&rsquo;ll throw front-end development into the mix, and somewhere along the line you have to decide to store your data somewhere.</p>
+
+<p>Early on, with so many things to quickly master, the database tends to be an after-though in application design (perhaps because it doesn&rsquo;t make an impact to end user experience). As a result there&rsquo;s a number of bad practices that tend to get picked up when working with databases, here&rsquo;s a rundown of just a few.</p>
+
+<!--more-->
+
+
+<h3>1. Storing images</h3>
+
+<p>Images don&rsquo;t belong in your database. Just because you can do something, it doesn&rsquo;t mean you should.Images take up a massive amount of space in databases, and slow applications down by unnecessarily eating your database&rsquo;s IO resources. The most common way this mistake occurs is when new developers base64 encode an image and store it in a database large text/blob field.</p>
+
+<p>The better approach is to upload your images directly to a service like Amazon S3, then store the image URL (hosted by Amazon) in your database as a text field. This way, each time you need to load an image, you need to simply output the image URL into a valid <img> tag. This will greatly improve website responsiveness, and generally help scale web applications.</p>
+
+<h3>2. Limit/Offset</h3>
+
+<p>Pagination is extremely common in a number of applications.As soon as you start to learn SQL, the most straight-forward way to handle pagination is to <code>ORDER BY</code> some column then <code>LIMIT</code> the number of results returned, and for each extra page you&rsquo;ll <code>OFFSET</code> by so many records. This all seems entirely logical, until you realize at any moderate scale:</p>
+
+<ol>
+<li>The load this exerts on your database will be painful.</li>
+<li>It isn&rsquo;t deterministic, should records change as the user flips between pages.</li>
+</ol>
+
+
+<p>The unfortunate part is: pagination is quite complex, and there isn&rsquo;t a one-size-fits-all solution. For more information on solving pagination problems, you can check <a href="https://www.citusdata.com/blog/1872-joe-nelson/409-five-ways-paginate-postgres-basic-exotic">out numerous options</a></p>
+
+<h3>3. Integer primary keys</h3>
+
+<p>The default for almost all ORMs when creating a primary key is to create a serial field. This is a sequence that auto-increments and then you use that number as your primary key. This seems straight forward as an admin, because you can browse from /users/1 to /users/2, etc. And for most applications this can often be fine. And for most applications, this is fine. But, you&rsquo;ll soon realize as you start to scale that integers primary keys can be exhausted, and are not ideal for large-scale systems. The better approach is to start <a href="https://til.hashrocket.com/posts/31a5135e19-generate-a-uuid-in-postgresql">taking advantage of UUIDs</a> from the start.</p>
+
+<p><em>There&rsquo;s also the bonus advantage of not secretly showcasing how many users/listings/whatever the key references directly to users on accident.</em></p>
+
+<h3>4. Default values on new columns</h3>
+
+<p>No matter how long you&rsquo;ve been at it you won&rsquo;t get the perfect schema on day 1. It&rsquo;s better to think of database schemas as continuously evolving documents. Fortunately, it&rsquo;s easy to add a column to your database, but: it&rsquo;s also easy to do this in a horrific way. By default, if you just add a column it&rsquo;ll generally allow NULL values. This operation is fast, but most applications don&rsquo;t truly want null values in their data, instead they want to set the default value.</p>
+
+<p>If you do add a column with a default value on the table, this will trigger a full re-write of your table. <em>Note: this is very bad for any sizable table on an application.</em> Instead, it&rsquo;s far better to allow null values at first so the operation is instant, then set your default, and then, with a background process go and retroactively update the data.</p>
+
+<p>This is more complicated than it should be, but fortunately there are some <a href="http://pedro.herokuapp.com/past/2011/7/13/rails_migrations_with_no_downtime/">handy guides</a> to help.</p>
+
+<h3>5. Over normalization</h3>
+
+<p>As you start to learn about normalization it feels like the right thing to do. You create a <code>posts</code> table, which contains <code>authors</code>, and each post belongs in a category. So you create a <code>categories</code> table, and then you create a join table <code>post_categories</code>. At the real root of it there&rsquo;s not anything fundamentally wrong with normalizing your data, but at a certain point there are diminishing returns.</p>
+
+<p>In the above case categories could very easily just be an array of varchar fields on a post. Normalization makes plenty of sense, but thinking through it a bit more every time you have a many to many table and wondering if you really need a full table on both sides is worth giving a second thought.</p>
+
+<h3>Conclusion</h3>
+
+<p>When I asked about this on twitter I got a pretty great responses, but they were all over the map. From the basics of never looking at the queries the ORM is generating, to much more advanced topics such as isolation levels. The one I didn&rsquo;t hit on that does seem to be a worthwhile one for anyone building a real world app is indexing. Knowing how <a href="http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/">indexing works</a>, and understanding <a href="http://www.craigkerstiens.com/2013/05/30/a-collection-of-indexing-tips/">what indexes</a> you need to create is a critical part of getting good database performance. There&rsquo;s a number of posts on indexing that teach the basics, as well as <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">practical steps</a> for analyzing performance with Postgres.</p>
+
+<p>In general, I encourage you to treat the database as another tool in your chest as opposed to a necessary evil, but hopefully, the above tips will at least prevent you from making some initial mistakes as you dig in as a beginner.</p>
+
+<p><em>Special thanks to <a href="https://twitter.com/mdeggies">@mdeggies</a> and <a href="https://twitter.com/rdegges">@rdegges</a> for the initial conversation to spark the post at PyCon.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hands On Postgres Sharding]]></title>
+    <link href="http://www.craigkerstiens.com/2016/02/28/Hands-on-postgres-sharding/"/>
+    <updated>2016-02-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/02/28/Hands-on-postgres-sharding</id>
+    <content type="html"><![CDATA[<p>Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency over the last two months. As a result I thought I&rsquo;d do a deeper dive with some actual hands on for sharding. Though for this hands on, because I do value my time I&rsquo;m going to take advantage of <code>pg_shard</code> rather than creating mechanisms from scratch.</p>
+
+<p>For those unfamiliar <a href="https://github.com/citusdata/pg_shard/">pg_shard</a> is an open source extension from <a href="http://citusdata.com">Citus data</a> who has a commerical product that you can think of is pg_shard++ (and probably much more). Pg_shard adds a little extra to let data automatically distribute to other Postgres tables (logical shards) and Postgres databases/instances (physical shards) thus letting you outgrow a single Postgres node pretty simply.</p>
+
+<p>Alright, enough talk about it, let&rsquo;s get things up and running.</p>
+
+<!--more-->
+
+
+<h3>Build, install</h3>
+
+<p><em>The rest assume you have Postgres.app, version 9.5 setup and are on a Mac, much of these steps could be easily adapted for other Postgres installs or OSes.</em></p>
+
+<p>PATH=/Applications/Postgres.app/Contents/Versions/latest/bin/:$PATH make</p>
+
+<p>sudo PATH=/Applications/Postgres.app/Contents/Versions/latest/bin/:$PATH make install</p>
+
+<p>cp /Applications/Postgres.app/Contents/Versions/9.5/share/postgresql/postgresql.conf.sample /Applications/Postgres.app/Contents/Versions/9.5/share/postgresql/postgresql.conf.sample</p>
+
+<p>Edit your <code>postgresql.conf</code>:</p>
+
+<pre><code>#shared_preload_libraries = ''
+</code></pre>
+
+<p>TO:</p>
+
+<pre><code>shared_preload_libraries = 'pg_shard'
+</code></pre>
+
+<p>Then create a file in <code>/Users/craig/Library/Application\ Support/Postgres/var-9.5/pg_worker_list.conf</code> where <code>craig</code> is your username:</p>
+
+<pre><code># hostname port-number
+localhost  5432
+localhost  5433
+</code></pre>
+
+<p>You&rsquo;ll also need to create a new Postgres instance:</p>
+
+<pre><code>initdb -D /Users/craig/Library/Application\ Support/Postgres/var-9.5-2
+</code></pre>
+
+<p>Then edit that <code>postgresql.conf</code> inside that newly created folder with two main edits:</p>
+
+<pre><code>port = 5432
+</code></pre>
+
+<p>To</p>
+
+<pre><code>port = 5433
+</code></pre>
+
+<p>Finally setup our database then start it up:</p>
+
+<pre><code>createdb instagram
+postgres -D /Users/craig/Library/Application\ Support/Postgres/var-9.5-2
+</code></pre>
+
+<h3>Setup</h3>
+
+<p>Now you should have two running instances of Postgres, now let&rsquo;s finally turn on the pg_shard extension, create some tables and see what we have. First connect to your main running Postgres instance, so in this case the the instagram database we first created <code>psql instagram</code>, then let&rsquo;s set things up:</p>
+
+<pre><code>CREATE EXTENSION pg_shard;
+CREATE TABLE customer_reviews (customer_id TEXT NOT NULL, review_date DATE, review_rating INTEGER, product_id CHAR(10));
+
+ CREATE TABLE
+ Time: 4.734 ms
+
+SELECT master_create_distributed_table(table_name := 'customer_reviews',                                                                                                     partition_column := 'customer_id');
+
+ master_create_distributed_table
+ ---------------------------------
+
+ (1 row)
+
+SELECT master_create_worker_shards(table_name := 'customer_reviews',                                                                                                     shard_count := 16,                                                                                                                                        replication_factor := 2);
+
+ master_create_worker_shards
+ -----------------------------
+
+ (1 row)
+</code></pre>
+
+<h3>Understanding and using</h3>
+
+<p>So that was a lot of initial setup. But now we have an application that could in theory scale to a shared application across 16 instances. If you want a refresher, there&rsquo;s a difference between physical and logical shards. In this case above we have 16 logical ones and it&rsquo;s replicated across 2 physical Postgres instances albeit on the same instance.</p>
+
+<p>Alright so a little more poking under the covers to see what happened before we actually start doing something with our data. If you&rsquo;re still connected go ahead and run <code>\d</code>, and you should see:</p>
+
+<pre><code>                List of relations
+ Schema |          Name          | Type  | Owner
+--------+------------------------+-------+-------
+ public | customer_reviews       | table | craig
+ public | customer_reviews_10000 | table | craig
+ public | customer_reviews_10001 | table | craig
+ public | customer_reviews_10002 | table | craig
+ public | customer_reviews_10003 | table | craig
+ public | customer_reviews_10004 | table | craig
+ public | customer_reviews_10005 | table | craig
+ public | customer_reviews_10006 | table | craig
+ public | customer_reviews_10007 | table | craig
+ public | customer_reviews_10008 | table | craig
+ public | customer_reviews_10009 | table | craig
+ public | customer_reviews_10010 | table | craig
+ public | customer_reviews_10011 | table | craig
+ public | customer_reviews_10012 | table | craig
+ public | customer_reviews_10013 | table | craig
+ public | customer_reviews_10014 | table | craig
+ public | customer_reviews_10015 | table | craig
+(17 rows)
+</code></pre>
+
+<p>You can see that under the cover there&rsquo;s a lot more <code>customer_reviews</code> tables, in reality you don&rsquo;t have to think about these or do anything with them. But just for reference they&rsquo;re just plain ole Postgres tables under the cover. You can query them and poke at the data. The now mystical <code>customer_reviews</code> will actually roll up the data across all your logical shards (tables) and physical shards (spanning across machines).</p>
+
+<p><em>It&rsquo;s also of note that in production you might not actually use your primary DB as a worker, we did this more for expediency in setting it up on a local Mac. More typically you&rsquo;d have 2 or more workers which are not the same a the primary, these were the ports we setup in our <code>pg_worker_list.conf</code>.</em>    A common setup would look something more like:</p>
+
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/3T2N2Q1K041g0a0L0j03/Untitled.png?v=7df00f6b" alt="" /></p>
+
+<p>So now start inserting away:</p>
+
+<pre><code>INSERT INTO customer_reviews (customer_id, review_rating) VALUES ('HN802', 5);
+INSERT INTO customer_reviews (customer_id, review_rating) VALUES ('FA2K1', 10);
+</code></pre>
+
+<p>For extra homework on your own you can now go and poke at where the underlying data actually surfaced.</p>
+
+<h3>Conclusion</h3>
+
+<p>Yes, there&rsquo;s a number of limitations that you can learn a bit more about over on the <a href="https://github.com/citusdata/pg_shard#limitations">github repo for pg_shard</a>. Though even with those it&rsquo;s very usable as is, and let&rsquo;s you get quite far in prepping an app for sharding. While I will say that all apps think they&rsquo;ll need sharding and few actually do, given <code>pg_shard</code> it&rsquo;s minimal extra effort now to plan for such scaling should you need it.</p>
+
+<p>Up next we&rsquo;ll look at how it&rsquo;d work with a few languages, so you can get an idea of the end to end experience.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What being a PM is really like - Software is easy, People are hard]]></title>
+    <link href="http://www.craigkerstiens.com/2016/01/28/On-being-a-PM-software-is-easy-people-are-hard/"/>
+    <updated>2016-01-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/01/28/On-being-a-PM-software-is-easy-people-are-hard</id>
+    <content type="html"><![CDATA[<p>In recent months I&rsquo;ve had the question nearly once a week about advice/tips for becoming a Product Manager or more commonly referred to as PM. These are generally coming from people that are either currently engineers, or previously were and are in some engineer/customer role such as a sales engineer or solution architect. There&rsquo;s a number of <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?tag=mypred-20">high level</a> pieces talking about PM and it often feels glorious, I mean you get to make product decisions right? You get to call some shots. Well that sometimes may be true, but don&rsquo;t assume it&rsquo;s all rainbows and sparkles.</p>
+
+<p>Especially as a first time PM what your day to day will look like won&rsquo;t be debating strategy all day long. Here&rsquo;s a few of the good and the bad sides of being a PM.</p>
+
+<!--more-->
+
+
+<h3>Plenty of grunt work</h3>
+
+<p>While you may get to make a decision or two, the bulk of your time will not be thinking about grandiose visions, instead you&rsquo;ll be doing a lot to gather data. There&rsquo;s a lot of means for gathering data across lots of sources, the more you use the better you&rsquo;ll be. Knowing the ones you steer towards, as well as ones you steer away from is useful so you can balance a bias more fairly. For myself SQL is a go-to, then customer interactions both qualitative and quantitative such as surveys, following what media is saying about your space is important as well. And while user studies are often relegated to design and UX, as a PM you need to make sure it at least happens (<a href="http://www.invisionapp.com/">Invision App</a> is a favorite for lightweight tests).</p>
+
+<p>In a given week I probably spend 10 hrs interacting with customers, looking at data, and sadly that&rsquo;s probably not enough.</p>
+
+<p><em>A few practical examples of this</em></p>
+
+<p>Each morning I send emails to 10-20 users who used the product for the first time, yes this is automated but carving out 30 minutes of my day to actually follow-up with each of them is less automated.</p>
+
+<p>Another example is keeping a health of business dashboard up to date. Personally I use google sheets for this. Within one spreadsheet I have monthly and weekly targets as well as how we’re tracking against them. These are all updated on actual real time data, powered by Heroku’s dataclips with a simple <code>=importCSV(‘http://dataclips.heroku.com/abcdefghij….csv’)</code>. In total my google spreadsheets has 1 high level overview, with about 20 underlying sheets that do all of the computations. In any given month 1 of my key 4-5 goals may be missed, which then spawns digging in deeper to figure out why and what we can do about it.</p>
+
+<h3>Dictating vs. consensus</h3>
+
+<p>From a product decision making perspective you can force alignment by explicitly making every decision, or you can allow decisions to be made as a group voting if needed. Expect to use some balance of both of these among the team, and neither is never perfect. When it comes to outside the team you may still use both, but steer more strongly one way or the other. For example with the executive team it may be more consensus, with marketing it may be dictating your product roadmap which they can help support.</p>
+
+<p>Even within the team there will be times a decision must be made and there will be some people that don&rsquo;t align. It&rsquo;s key that you make the decision clearly and explicitly. Even though some individuals don&rsquo;t like it, they won&rsquo;t fight against it&hellip; unless you make a habit of taking the input, then discarding it and going along your &lsquo;intuition&rsquo;. Even when there&rsquo;s a strong case based on the data it may not be as clear as you think.</p>
+
+<p>In contrast, decision making by consensus most people will feel happier that they provided input into the product. If you take everyone&rsquo;s input expect to end up with a product that feels like 10 people designed it, needless to say incoherent.</p>
+
+<p>As a PM expect to do a lot of listening, a good bit of convincing, and some occasional big decision making.</p>
+
+<h3>The pain you feel inside the building doesn&rsquo;t matter</h3>
+
+<p>You may think you&rsquo;re solving a problem that exists for users, when in reality there was no problem at all. This is just a reminder that you need to keep empathy in mind above so much else.</p>
+
+<p>As an example, once a data team put in place a tool, supposedly for me. I looked at the tool and more or less didn&rsquo;t understand why it was in place. They proceeded to explain that my problem was it took me too long to write SQL, so this tool will help me get the reports I need without SQL. At that point I proceeded to actually list off all the issues I did have, none of which <a href="http://www.craigkerstiens.com/categories/postgres/">were SQL</a>.</p>
+
+<p>Prescribing a solution without knowing clearly <strong>from customers</strong> what the problem is will leave you in a bad spot. All this means you have to set aside building the tool you want to use, and make sure you know what the <a href="http://headrush.typepad.com/creating_passionate_users/2005/01/keeping_users_e.html">customer wants</a>.</p>
+
+<h3>Marketing is your job</h3>
+
+<p>Not external marketing, though often that work may still fall to you, but rather internal marketing.</p>
+
+<p>It’s important that you internally market the wins for your <em>team</em>. These wins should very much be for the team, and not for your own benefit. The best PMs seem to disappear into the background, this is because you’re more surfacing all the work your team is doing than any of the details you helped coordinate. This is often counter to our natural instinct to tout our own accomplishments. This is only exaggerated in PM role, one where things can still ship if you’re not there, so there can often be a tendency to try to highlight the roles value. Fight that urge to self market.</p>
+
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/412j330z173E1d432M05/Untitled.png?v=4ceec9d2" style="float:right; width:50%; margin-left:20px;" /></p>
+
+<p>Rest assured though–getting the team focused on solving the right problems, and then surfacing their wins will only help you go faster.</p>
+
+<h3>On leading</h3>
+
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/3E2c3k1p1j2g2O1O0b0L/Untitled.png?v=9daf9e58" style="float:right; width:50%; margin-left:20px;margin-bottom:15px;" />
+You’ll have to lead at times, follow at others, and all of this will likely be with no reports. Don’t confuse a lack of engineers reporting to you (which they should not, a common team structure can be seen on the right) for not needing to lead the team at times. <em>For those less familiar it’s very rare for a PM to have engineers report to them, though occasionally designers will. It’s typically the cross-reporting structure you’ll find talked about by Andy Grove in <a href="http://www.amazon.com/High-Output-Management-Andrew-Grove/dp/0679762884?tag=mypred-20">High output management</a>.</em> If the team is firing on all cylinders, knows the direction, and executing then step back and let things roll forward. If that’s not the case and leadership around direction or otherwise is needed be prepared to step up.</p>
+
+<p>At the end of the day ensuring the product is advancing is your job, so be prepared to do what you need to whether it’s leading or not to accomplish that.</p>
+
+<h3>It’s not all rainbows, but it is fun</h3>
+
+<p>The range of things you’ll have to focus on can be diverse and complex. In the end if you get a rush out of shipping and launching products, then all the work that goes into it can make it all worthwhile. It’s as much about figuring out what customers want and then getting your team building the right thing. For a first time PM it can be summed up by the notion that software is easy, people are hard.</p>
+
+<p><em>Special thanks to <a href="http://www.twitter.com/lukasfittl">Lukas Fittl</a> and <a href="http://www.twitter.com/iamclovin">Arun Thampi</a> for reviews and feedback on this post.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Marketing definitions for developers]]></title>
+    <link href="http://www.craigkerstiens.com/2016/01/17/marketing-definitions-for-developers/"/>
+    <updated>2016-01-17T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/01/17/marketing-definitions-for-developers</id>
+    <content type="html"><![CDATA[<p>Marketing often feels like a dirty-icky thing to many developers. Well until you feel like you have a great product, but no one using it then you have to get a crash course in all of that. And while I might cover some of the actual basics in the future, just knowing what marketing people actually mean when they’re talking can be a huge jump start. Here&rsquo;s a guide that distills many of the acronyms and terms down to what they actually mean in reality.</p>
+
+<!--more-->
+
+
+<p><strong>SEO &ndash; Search engine optimization.</strong> There&rsquo;s two sides to this, one where you&rsquo;re attempting to game the system known known as black hat. The other is simply creating good content.</p>
+
+<p>Tip: Now, unlike several years ago social sharing helps impact this.</p>
+
+<p><strong>SEM &ndash; Search engine marketing.</strong> The short of this is adwords, but broadly it&rsquo;s any search engine.</p>
+
+<p>Tip: Be wary here, you can spend a lot of money quickly. Properly managing it takes time and effort otherwise you&rsquo;re wasting money.</p>
+
+<p><strong>Display ads</strong> &ndash; Banner ads on websites. There&rsquo;s a few common form factors in this world, so you&rsquo;ll create a few then reuse them across lots of properties.</p>
+
+<p>Tip: Results may vary here, there are some hidden gems when advertising on various long tail sites.</p>
+
+<p><strong>Retargeting</strong> &ndash; This is where you&rsquo;re serving an ad (most commonly display) to someone that&rsquo;s previously visited your site. The process happens due to you &lsquo;pixeling&rsquo; them, and a cookie being set so the ad server knows they&rsquo;ve seen you.</p>
+
+<p>Tip: Generally good bang for the buck here, but you still need initial visitors to even retarget to.</p>
+
+<p><strong>Funnel</strong> &ndash; The process of someone going from finding you to paying to paying more. Generally a process will look something like: Anonymous visitor by referral, sign ups, low money bucket, big money bucket.</p>
+
+<p><strong>Top of the funnel</strong> &ndash; Hopefully clear from the previous one, top of the funnel would be the max of users you reach out to or get to your site, usually down to getting them to sign up.</p>
+
+<p><strong>Bottom of the funnel</strong> &ndash; This is usually going from time you have a user to customer and then growing that customer via cross-selling and upselling.</p>
+
+<p><strong>Drip marketing</strong> &ndash; This is the process of gradually sending emails/notifications to your customers to get them to engage and learn about the product. Think of it as a welcome email on day 1, an intro on day 3, and on day 5 a different email based on what they&rsquo;ve done so far. Really good drip marketing will create a different email for the user based on what they have or haven&rsquo;t done.</p>
+
+<p><strong>Attribution (last/first/multi)</strong> &ndash; Attribution relates to how you got the user or customer (via web referral). There&rsquo;s a few different ways of looking at this, last touch is the last website they visited before signing up, first touch is the first referral they were sent from, and multi touch (often more complicated to put in place) attributes something to all referrals they&rsquo;ve come from.</p>
+
+<p><strong>AR &ndash; Analyst relations</strong>. Analysts cover particular products or areas in an industry, write reports, and often consult with large enterprises when making buying decisions. Analyst relations or AR is the common term for interacting with them, you can <a href="http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/">learn more here</a></p>
+
+<p><strong>PR &ndash; Public relations</strong>. This is generally the press/media side. It often involves launches, press releases, pitching media etc. You can read more of a <a href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/">guide on it here</a></p>
+
+<p><strong>Briefing</strong> &ndash; This is normally with an analyst or press, and is typically a quick 30 minute call occasionally a demo of an upcoming launch.Usually</p>
+
+<p><strong>Inquiry</strong> &ndash; This refers more to the analyst side. Where a briefing is often more one sided for you to pitch/update them on what you’ve been doing, an inquiry is more a back and forth where you can ask what they’re seeing in the market and for input on direction.</p>
+
+<p><strong>Campaign</strong> &ndash; A collection of activities that go on around a certain thing focused on specific keywords or theme. This can be as little as a search engine marketing campaign which is the most common, or much larger and coordinated with billboards, webinars, etc.</p>
+
+<p><strong>Lead Gen</strong> &ndash; The sales funnel usually goes from just getting an email, to talking to them, to getting them to try a demo or run a POC, to eventually buying. Lead gen is the activity of just getting that initial contact so you can then further engage with them. In practice this can often involve giving something away, like a t-shirt in exchange for an email.</p>
+
+<h3>Conclusion</h3>
+
+<p>While this doesn&rsquo;t cover every marketing activity under the sun, hopefully it&rsquo;s a good primer on things you may have heard but been confused by. If there&rsquo;s important ones I&rsquo;ve missed please feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Writing more legible SQL]]></title>
+    <link href="http://www.craigkerstiens.com/2016/01/08/writing-better-sql/"/>
+    <updated>2016-01-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/01/08/writing-better-sql</id>
+    <content type="html"><![CDATA[<p>A number of times in a crowd I&rsquo;ve asked how many people enjoy writing SQL, and often there&rsquo;s a person or two. The follow up is how many people enjoy reading other people&rsquo;s SQL and that&rsquo;s unanimously 0. The reason for this is that so many people write bad SQL. It&rsquo;s not that it doesn&rsquo;t do the job, it&rsquo;s just that people don&rsquo;t tend to treat SQL the same as other languages and don&rsquo;t follow strong code formatting guidelines. So, of course here&rsquo;s some of my own recommendations on how to make SQL more readable.</p>
+
+<!--more-->
+
+
+<h3>One thing per line</h3>
+
+<p>Only put a single column/table/join per line. This is going to make for slightly more verbose SQL, but it will be easier to read and edit.. Here&rsquo;s a basic example:</p>
+
+<pre><code>SELECT foo,
+       bar
+FROM baz
+</code></pre>
+
+<h3>Align your projections and conditions</h3>
+
+<p>You can somewhat see this in the above with <code>foo</code> and <code>bar</code> being on the same line. This is reasonably common for columns you&rsquo;re selecting, but it&rsquo;s not applied as often in <code>AND</code> or <code>GROUP BY</code> clauses. As you can see there is a difference though between:</p>
+
+<pre><code>SELECT foo,
+       bar
+FROM baz
+WHERE foo &gt; 3
+AND baz = 'craig.kerstiens@gmail.com'
+</code></pre>
+
+<p>And a cleaner version:</p>
+
+<pre><code>SELECT foo,
+       bar
+FROM baz
+WHERE foo &gt; 3
+  AND baz = 'craig.kerstiens@gmail.com'
+</code></pre>
+
+<h3>Use column names when grouping/ordering</h3>
+
+<p>This is personally an awful habit of mine, but it is extremely convenient to just order by the column number. In the above query we could just <code>ORDER BY 1</code>. This is especially easy when column 1 may be something like SUM(foo). However, ensuring you explicitly <code>ORDER BY SUM(foo)</code> will help limit any misunderstanding of the data.</p>
+
+<h3>Comments</h3>
+
+<p>You comment your code all the time, yet so few seem to comment their queries. A simple <code>--</code> allows you to inline a comment, perhaps where there&rsquo;s some oddities to what you&rsquo;re joining or just anywhere it may need clarification. You can of course <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">go much further</a>, but at least some basic level of commenting should be required.</p>
+
+<h3>Casing</h3>
+
+<p>As highlighted in these examples, having a standard for how you case your queries is especially handy. Sticking with all SQL keywords in caps allows you to easily parse what is SQL and what are columns or literals that you&rsquo;re using in queries.</p>
+
+<h3>CTEs</h3>
+
+<p>First, yes they can be an optimisation boundary. But they can also make your query much more read-able and prevent you from doing the wrong thing because you couldn&rsquo;t reason about a query.</p>
+
+<p>For those unfamiliar CTEs are like a view that exist just for the duration of that query being executed. You can have them reference previous CTEs so you can gradually build on them, much like you would code blocks. I won&rsquo;t repeat too much of what <a href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/">I&rsquo;ve already written about them</a>, but if you&rsquo;re unfamiliar with them or not using them <a href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/">they are a must</a>. CTEs are easily one of the few pieces of SQL that I use on a daily basis.</p>
+
+<h3>Conclusion</h3>
+
+<p>Of course this isn&rsquo;t the only way to make your SQL more readable and this isn&rsquo;t an exhaustive list. But hopefully you find these tips helpful, and for your favorite tip that I missed&hellip; let me know about it <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
+
+<p><em>A special thanks to <a href="http://www.twitter.com/Case">@Case</a> for reviewing.</em></p>
+
+<script type="text/javascript">
+  (function() {
+    window._pa = window._pa || {};
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/517fd07cf1409000020002dc.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+</script>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My top 10 Postgres features and tips for 2016]]></title>
+    <link href="http://www.craigkerstiens.com/2015/12/29/my-postgres-top-10-for-2016/"/>
+    <updated>2015-12-29T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2015/12/29/my-postgres-top-10-for-2016</id>
+    <content type="html"><![CDATA[<p>I find during the holiday season many pick up <a href="http://www.amazon.com/Hard-Thing-About-Things-Building/dp/0062273205/ref=sr_1_1?ie=UTF8&amp;qid=1451407536&amp;sr=8-1&amp;keywords=hard+thing+about&amp;tag=mypred-20">new books</a>, learn a <a href="http://crystal-lang.org/">new language</a>, or brush up on some other skill in general. Here&rsquo;s my contribution to hopefully giving you a few new things to learn about Postgres and ideally utilize in the new year. It&rsquo;s not in a top 10 list as much as 10 tips and tricks you should be aware of as when you need them they become incredibly handy. But, first a shameless plug if you find any of the following helpful, consider subscribing to <a href="http://www.postgresweekly.com">Postgres weekly</a> a weekly newsletter with interesting Postgres content.</p>
+
+<!--more-->
+
+
+<h3>1. CTEs &ndash; Common Table Expressions</h3>
+
+<p>CTEs allow you to do crazy awesome things like recursive queries but even the most simple form of them I don&rsquo;t go a day without using. Think of a CTE or commonly known as with clause as a view inside the time that query is running. This lets you more easily create readable query. Any query that&rsquo;s constructed that&rsquo;s even <a href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/">100 lines long</a>, but with 4-5 CTEs is undoubtedly going to be easier for someone new to come in and understand than a 20 line query that does the same thing. A few people like writing SQL, but no one likes reading someone else&rsquo;s so do them a favor and read up on CTEs.</p>
+
+<h3>2. Setup a .psqlrc</h3>
+
+<p>You setup a bashrc, vimrc, etc. Why not do the same for Postgres. Some of the great things you can do:</p>
+
+<ul>
+<li>Setup pretty formatting by default with <code>\x auto</code></li>
+<li>Set nulls to actually look like something <code>\pset null ¤</code></li>
+<li>Turn timing on by default <code>\timing on</code></li>
+<li>Customize your prompt <code>\set PROMPT1 '%[%033[33;1m%]%x%[%033[0m%]%[%033[1m%]%/%[%033[0m%]%R%# '</code></li>
+<li>Save commonly run queries that you can run by name</li>
+</ul>
+
+
+<p>Here&rsquo;s an example of my own <code>psqlrc</code>:</p>
+
+<pre><code>\set QUIET 1
+\pset null '¤'
+
+-- Customize prompts
+\set PROMPT1 '%[%033[1m%][%/] # '
+\set PROMPT2 '... # '
+
+-- Show how long each query takes to execute
+\timing
+
+-- Use best available output format
+\x auto
+\set VERBOSITY verbose
+\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTCONTROL ignoredups
+\set COMP_KEYWORD_CASE upper
+\unset QUIET
+</code></pre>
+
+<h3>3. pg_stat_statements for where to index</h3>
+
+<p><code>pg_stat_statements</code> is probably the single most valuable tool for improving performance on your database. Once enabled (with <code>create extension pg_stat_statements</code>) it automatically records all queries run against your database and records often and how long they took. This allows you to then go and find areas you can optimize to get overall time back with one simple query:</p>
+
+<pre><code>SELECT 
+  (total_time / 1000 / 60) as total_minutes, 
+  (total_time/calls) as average_time, 
+  query 
+FROM pg_stat_statements 
+ORDER BY 1 DESC 
+LIMIT 100;
+</code></pre>
+
+<p><em>Yes, there is some performance cost to leaving this always on, but it&rsquo;s pretty small. I&rsquo;ve found it&rsquo;s far more useful to be on and get major performance wins vs. the small cost of it always recording.</em></p>
+
+<p>You can read much more on Postgres performance on a <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">previous post</a></p>
+
+<h3>4. Slow down with ETL, use FDWs</h3>
+
+<p>If you have a lot of <em>microservices</em> or different apps then you likely have a lot of different databases backing them. The default for about anything you want to do is do create some data warehouse and ETL it all together. This often goes a bit too far to the extreme of aggregating <strong>everything</strong> together.</p>
+
+<p>For the times you just need to pull something together once or on rare occasion <a href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/">foreign data wrappers</a> will let you query from one Postgres database to another, or potentially from Postgres to anything else such as <a href="https://github.com/citusdata/mongo_fdw">Mongo</a> or Redis.</p>
+
+<h3>5. array and array_agg</h3>
+
+<p>There&rsquo;s little chance if you&rsquo;re building an app you&rsquo;re not using arrays somewhere within it. There&rsquo;s no reason you shouldn&rsquo;t be doing the same within your database as well. Arrays can be just another datatype within Postgres and have some great use cases like tags for blog posts directly in a single column.</p>
+
+<p>But, even if you&rsquo;re not using arrays as a datatype there&rsquo;s often a time when you want to rollup something like an array in a query then comma separate it. Something similar to the following could allow you to easily roll up a comma separated list of projects per user:</p>
+
+<pre><code>SELECT 
+  users.email,
+  array_to_string(array_agg(projects.name), ',')) as projects
+FROM
+  projects,
+  tasks,
+  users
+WHERE projects.id = tasks.project_id
+  AND tasks.due_at &gt; tasks.completed_at
+  AND tasks.due_at &gt; now()
+  AND users.id = projects.user_id
+GROUP BY 
+  users.email
+</code></pre>
+
+<h3>6. Use materialized views cautiously</h3>
+
+<p>If you&rsquo;re not familiar with materialized view they&rsquo;re a query that has been actually created as a table. So it&rsquo;s a materialized or basically snapshotted version of some query or &ldquo;view&rdquo;. In their initial version materialized versions, which were long requested in Postgres, were entirely unusuable because when you it was a locking transaction which could hold up other reads and acticities avainst that view.</p>
+
+<p>They&rsquo;ve since gotten much better, but there&rsquo;s no tooling for refreshing them out of the box. This means you have to setup some scheduler job or cron job to regularly refresh your materialized views. If you&rsquo;re building some reporting or BI app you may undoubtedly need them, but their usability could still be advanced so that Postgres knew how to more automatically refresh them.</p>
+
+<p><em>If you&rsquo;re on Postgres 9.3, the above caveats about preventing reads still does exist</em></p>
+
+<h3>7. Window functions</h3>
+
+<p>Window functions are perhaps still one of the more complex things of SQL to understand. In short they let you order the results of a query, then compute something from one row to the next, something generally hard to do without procedural SQL. You can do some very basic things with them such as rank where <a href="http://postgresguide.com/sql/window.html">each result appears</a> ordered by some value, or something more complex like compute <a href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/">MoM growth directly in SQL</a>.</p>
+
+<h3>8. A simpler method for pivot tables</h3>
+
+<p>Table_func is often referenced as the way to compute a pivot table in Postgres. Sadly though it&rsquo;s pretty difficult to use, and the more basic method would be to just do it with raw SQL. This will get much better with <a href="http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown/">Postgres 9.5</a>, but until then something where you sum up each condition where it&rsquo;s true or false and then totals is much simpler to reason about:</p>
+
+<pre><code>select date,
+       sum(case when type = 'OSX' then val end) as osx,
+       sum(case when type = 'Windows' then val end) as windows,
+       sum(case when type = 'Linux' then val end) as linux
+from daily_visits_per_os
+group by date
+order by date
+limit 4;
+</code></pre>
+
+<p><em>Example query courtesy of <a href="http://www.twitter.com/tapoueh">Dimitri Fontaine</a> and <a href="http://tapoueh.org/blog/2013/07/04-Simple-case-for-pivoting">his blog</a>.</em></p>
+
+<h3>9. PostGIS</h3>
+
+<p>Sadly on this one I&rsquo;m far from an expert. PostGIS is arguably the best option of any GIS database options. The fact that you get all of the standard Postgres benefits with it makes it even more powerful–a great example of this is GiST indexes which came to Postgres in recent years and offers great performance gains for PostGIS.</p>
+
+<p>If you&rsquo;re doing something with geospatial data and need something more than the easy to use <code>earth_distance</code> extension then crack open PostGIS.</p>
+
+<h3>10. JSONB</h3>
+
+<p>I almost debated leaving this one off the list, ever since Postgres 9.2 JSON has been at least one of the marquees in each Postgres release. JSON arrived with much hype, and JSONB fulfilled on the initial hype of Postgres starting to truly compete as a document database. JSONB only continues to become more powerful with <a href="http://www.craigkerstiens.com/2015/12/08/massive-json/">better libraries</a> for taking advantage of it, and it&rsquo;s <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#JSONB-modifying_operators_and_functions">functions improving</a> with each release.</p>
+
+<p>If you&rsquo;re doing anything with JSON or playing with another document database and ignoring JSONB you&rsquo;re missing out, of course don&rsquo;t forget the GIN and GiST indexes to really get the benefits of it.</p>
+
+<h3>The year ahead</h3>
+
+<p>Postgres 9.5/9.6 should continue to improve and bring many new features in the years ahead, what&rsquo;s your preference for something that doesn&rsquo;t exist yet but you do want to see land in Postgres. Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postgres 9.5 - The feature rundown]]></title>
@@ -59,7 +591,7 @@ FROM SERVER some_other_db INTO reference_to_other_db;
 
 <p>If you&rsquo;re managing your own Postgres instance for some reason and running HA, pg_rewind could become especially handy. Typically to spin up replication you have to first download the physical, also known as base, backup. Then you have to replay the Write-Ahead-Log or WAL–so it&rsquo;s up to date then you actually flip on replication.</p>
 
-<p>Typically with databases when you fail over you shoot the other node in the head or <a href="https://en.wikipedia.org/wiki/STONITH">STONITH</a>. This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and us pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over.</p>
+<p>Typically with databases when you fail over you shoot the other node in the head or <a href="https://en.wikipedia.org/wiki/STONITH">STONITH</a>. This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and use pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over.</p>
 
 <h3>Upsert</h3>
 
@@ -118,7 +650,7 @@ FROM foo;
 
 <h3>Product first</h3>
 
-<p>Making sure the product is in the right shape is key to any big launch. You don&rsquo;t get a second shot and if the product isn&rsquo;t in shape customers often won&rsquo;t take a second look alter when it it. For this reason I strongly prefer to have your product locked and loaded before you even start talking launch times, or at least be in the bug clean up phase. This means you&rsquo;ve built a feature, validated with alpha users or private beta, and are ready to open it up to the world.</p>
+<p>Making sure the product is in the right shape is key to any big launch. You don&rsquo;t get a second shot and if the product isn&rsquo;t in shape customers often won&rsquo;t take a second look at it later. For this reason I strongly prefer to have your product locked and loaded before you even start talking launch times, or at least be in the bug clean up phase. This means you&rsquo;ve built a feature, validated with alpha users or private beta, and are ready to open it up to the world.</p>
 
 <p>If you have to set a launch date without the product or feature being already done allow padding. Sometimes it&rsquo;s good for the team to know the padding, sometimes it isn&rsquo;t. When you have extra time it&rsquo;s not uncommon for your development to magically consume exactly that amount of time and still result in a small scramble towards the end.</p>
 
@@ -906,763 +1438,6 @@ ON CONFLICT DO UPDATE SET description=excluded.description;
 <p>Emails are great for highlighting the things people absolutely need to know about. Short and concise emails will also help to improve reach. Be careful to make these emails have a high ratio of information size to value. If you have a lot of extra follow on content send them somewhere else to read.</p>
 
 <p>Finally don’t overuse email. If you’re sending the same thing every week people will become numb to this. <a href="http://www.yesware.com">Monitoring if your emails are being opened/responded</a> to can help to know if you&rsquo;re over-broadcasting.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres and Connection Pooling]]></title>
-    <link href="http://www.craigkerstiens.com/2014/05/22/on-connection-pooling/"/>
-    <updated>2014-05-22T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/05/22/on-connection-pooling</id>
-    <content type="html"><![CDATA[<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
-
-<h3>The basics</h3>
-
-<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres <a href="http://www.craigkerstiens.com/2013/03/07/Fixing-django-db-connections/">some overhead here</a>. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
-
-<!--more-->
-
-
-<h3>The options</h3>
-
-<p>There&rsquo;s really two major options when it comes to connection pooling:</p>
-
-<ul>
-<li>Framework pooling</li>
-<li>Standalone pooler</li>
-<li><em>Persistent connections</em></li>
-</ul>
-
-
-<h4>Framework pooling</h4>
-
-<p>Today many modern application frameworks have at least some basic level of connection pooling. This means as your application server starts up it will create a pool of connections to use. It&rsquo;s worth noting that while most modern frameworks have pooling, not all do, and further it may not be enabled by default.</p>
-
-<p>If you&rsquo;re using the Sequel ORM for Ruby or SQLAlchemy for Python you&rsquo;re well covered here. Further <a href="https://devcenter.heroku.com/articles/concurrency-and-database-connections">Rails</a> is in pretty good shape also, though you may want to configure the pool size. For Django it&rsquo;s a bit of a mixed story. For some time <a href="http://www.craigkerstiens.com/2013/03/07/Fixing-django-db-connections/">Django</a> did not have pooling at all. As of Django 1.6 you now have persistent connections by default and the ability to enable a pool.</p>
-
-<h4>Persistent connections</h4>
-
-<p>Persistent connections don&rsquo;t offer all of the benefits of pooling, but can often work well enough. Persistent connections is the act of maintaining a connection to your database once it&rsquo;s connected. In the case where you have overhead of 30-50 ms each time you connect this can be quite helpful. At the same time you&rsquo;re limited to the number of things that can be interacting with your databases as you&rsquo;re limited to 1 connection per entry point to your webserver.</p>
-
-<h4>Standalone pooling</h4>
-
-<p>Postgres can be a bit of a sore spot when it comes to handling a ton of connections. For Postgres each connection you have to your database assumes some overhead of memory. Casual observations have seen it be between 5 and 10 MB assuming some basic query workload. And even if you have the memory overhead on your Postgres instance there becomes a point where management of connections becomes a limiting factor, we&rsquo;ve seen this somewhere in the hundreds. While framework level connection poolers can give some better performance and lengthen the time before you have to deal with something more complex if you&rsquo;re successful that time may come.</p>
-
-<p><em>A rule of thumb I&rsquo;d use is if you have over 100 connections you want to look at something more robust</em></p>
-
-<p>In this case that something more robust is a standalone pooler specifically for Postgres. A standalone pooler can be much more configurable overall letting you specify how it works for Postgres sessions, transactions, or statements. Further these are very specifically designed to work with Postgres handling a very large pool of connections without adding too much overhead. In contrast to the 5MB-ish standard connection to Postgres PG Bouncer has a 2kb per connection.</p>
-
-<p>So once you&rsquo;re at the point of needing one there&rsquo;s really two options.</p>
-
-<ol>
-<li><a href="http://pgfoundry.org/projects/pgbouncer">PG Bouncer</a></li>
-<li><a href="http://www.pgpool.net/mediawiki/index.php/Main_Page">PG Pool</a></li>
-</ol>
-
-
-<h3>PG Bouncer</h3>
-
-<p>My short and sweet recomendation is towards PG Bouncer. Contrary to how it&rsquo;s named PG Pool is a multi purpose tool that does a lot of things (pooling, load balancing, replication, more). PG Bouncer takes the philosophy of doing one thing and doing it extremely well. I tend to favor these types of tools, which is the same reason I lean towards <a href="https://github.com/wal-e/wal-e">WAL-E</a> to help with Postgres replication.</p>
-
-<h3>Need more?</h3>
-
-<p>Need more guidance with setting up and running PGBouncer? Give this <a href="http://datachomp.com/archives/getting-started-with-pgbouncer/">guide</a> a look or try the <a href="https://github.com/gregburek/heroku-buildpack-pgbouncer">pgbouncer buildpack</a> if running on Heroku. If you&rsquo;re still interested in a deeper guide let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> and I&rsquo;ll work on getting it into the queue.</p>
-
-<p>Finally, make sure to sign-up below to get updates on Postgres content and first access to training.</p>
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Personas, data science, k-means]]></title>
-    <link href="http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means/"/>
-    <updated>2014-05-08T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/05/08/personas-data-science-k-means</id>
-    <content type="html"><![CDATA[<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;margin-left:20px;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective.</p>
-
-<p>Personas don&rsquo;t have to be marketing only speak, and data science doesn&rsquo;t have to be only for stats people. My goal here is to simply set a context for the rest of the meat which talks about how you can simply look at your data and let it surface things you may not have known. <!--more--></p>
-
-<h3>Personas</h3>
-
-<p>I most commonly hear this term from &ldquo;business people&rdquo;. In fact not too long ago I recall interacting with someone that wanted to define personas for a company. They wanted to give them names, Joe and Mary. Joe is a father of 2, he works between 8 and 5, because he has to pick kids up from school, he&rsquo;s always worked at fortune 100 companies. Mary is single, she&rsquo;s a small business owner, she likes using tools instead of building things herself. If you think this is overly exaggerated on what you might expect that&rsquo;s fair. Lets take a company I&rsquo;m fond of <a href="http://www.travisci.com">Travis CI</a>, if someone were to do this for them it might look like:</p>
-
-<ul>
-<li>Enterprise QA developer</li>
-<li>Startup full stack engineer</li>
-<li>Open source contributor</li>
-</ul>
-
-
-<p><em>While this is all fine and good, a name and what they do doesn&rsquo;t help in the substantial way I&rsquo;d like.</em> Sure use personas if it helps you think about who you&rsquo;re building the product for, but don&rsquo;t expect customers to say yes I fit into only this bucket by trying to create classifications like this.</p>
-
-<p><strong>Let&rsquo;s rephrase this to be super simple, groupings of people, no groupings of something that have a likely outcome based on some various inputs. Perhaps a better term for it is archtype</strong></p>
-
-<h3>Data science</h3>
-
-<p>The application of math or statistics to learn something about your business. It doesn&rsquo;t have to be big data, or NoSQL, simply the application of an algorithm to learn something. Extending it a bit, let&rsquo;s assume it&rsquo;s to do something actionable. This is a bit of a chicken and egg, because you can&rsquo;t look at different data the same way everytime and have a valuable intrepretation. Sometimes it requires using several methods and examining the quality of the results. We can apply a little more clarity and judgement to ease this process though.</p>
-
-<h3>k-means</h3>
-
-<p>Alright onto the meat of what I was hoping to dig into here, well actually first a little more of a detour. Tracking key data for your business should be extremely clear. Hopefully you&rsquo;re already doing this, if you&rsquo;re not already tracking <a href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/">month over month growth</a> then go implement it today. If you don&rsquo;t know your lifetime value or attrition rate then get on those too. But if you do have that and still are unclear how to move the needle on some goal, maybe that goal is increasing lifetime value then we&rsquo;re at the right place.</p>
-
-<p>An extremely old algorithm for grouping things together and fairly commonly known in stats communities is <a href="http://en.wikipedia.org/wiki/K-means_clustering">k-means</a>. It will group things together based on their likeness into some set, thats where the k comes from, of groups. It&rsquo;s also known as an unsupervised clustering method, because you simply put the data in, and let it create these groupings for you. But why or how is it useful, you know you want to influence lifetime value so you should just find what makes people increase it and move that, well&hellip; we may be able to get there with k-means.</p>
-
-<h3>Practicality</h3>
-
-<p>Most commonly when you search for k-means you&rsquo;ll find some image similar to the one at the top of the post. This image graphically represents the clustering and the center of those clusters. And while visually interesting doesn&rsquo;t actually tell you how to act upon it. A clearer way is actually often by examing the clusters and whats common, this tells you how to actually treat that archtype differently.</p>
-
-<p>In his book <a href="http://www.amazon.com/dp/B00F0WRXI0?tag=mypred-20">Data Smart</a> John Foreman actually does a great job of laying this out in a pratical way. I&rsquo;m particularly partial to his example also because it uses wine as an example. His example generates a variety of groupings, looking at the surrouding meta data its then possible to discover that:</p>
-
-<ul>
-<li>Grouping 1 likes Pinot</li>
-<li>Grouping 2 likes buying in bulk</li>
-<li>Grouping 3 likes buying small volume</li>
-<li>Grouping 4 likes bubbly</li>
-</ul>
-
-
-<p>From here you can then start to get some idea of what you&rsquo;d do with this. Perhaps you&rsquo;d create a deal each month so that it appeals to all groups, or target them with different deals. Or maybe you&rsquo;d simply not send an email to them if you didn&rsquo;t have a deal that month. If course you could go more granular down into a recommendation engine to get a personalized recommendation for each customer, but for a lot of smaller apps/sites that&rsquo;s simply not feasible.</p>
-
-<p>So in this case the output would look less like the image at the top and more like a set of 4 groups, then a CSV of every user and which grouping they fall in. Yes, its a less sexy graph, but a much more applicable CSV or excel output.</p>
-
-<p>In the end what we&rsquo;ve really done is define personas or archtypes based on whats similar between customers vs. arbitrary perceptions we may come in with.</p>
-
-<h3>Whats next</h3>
-
-<p>Up next I&rsquo;ll actually dig in on a real world example here. <a href="http://www.twitter.com/alexbaldwin">Alex</a> over at <a href="https://hackdesign.org/">HackDesign</a> was kind enough to give me access to their data to create a more practical example of this. While I&rsquo;m just now digging in, there should be a tangible example of this to follow.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Datatypes – The ones you're not using.]]></title>
-    <link href="http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/"/>
-    <updated>2014-05-07T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/05/07/Postgres-datatypes-the-ones-youre-not-using</id>
-    <content type="html"><![CDATA[<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let&rsquo;s look at some of these rarer but awesome types.</p>
-
-<h3>hstore</h3>
-
-<p>Yes, I&rsquo;ve talked about <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">this one before</a>, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. <!--more-->Hstore is a key-value store directly within Postgres. This means you can easily add new keys and values <em>(optionally)</em>, without haveing to run a migration to setup new columns. Further you can still get great performance by using Gin and GiST indexes with them, which automatically index all keys and values for hstore.</p>
-
-<p><em>It&rsquo;s of note that hstore is an extension and not enabled by default. If you want the ins and outs of getting hands on with it, give the article on <a href="http://postgresguide.com/sexy/hstore.html">Postgres Guide</a> a read.</em></p>
-
-<h3>Range types</h3>
-
-<p>If there is ever a time where you have two columns in your database with one being a from, another being a to, you probably want to be using <a href="http://www.postgresql.org/docs/9.2/static/rangetypes.html">range types</a>. Range types are just that a set of ranges. A super common use of them is when doing anything with calendaring. The place where they really become useful is in their ability to apply constraints on those ranges. This means you can make sure you don&rsquo;t have overlapping time issues, and don&rsquo;t have to rebuild heavy application logic to accomplish it.</p>
-
-<h3>Timestamp with Timezone</h3>
-
-<p>Timestamps are annoying, plain and simple. If you&rsquo;ve re-invented handling different timezones within your application you&rsquo;ve wasted plenty of time and likely done it wrong. If you&rsquo;re using plain timestamps within your application further there&rsquo;s a good chance they dont even mean what you think they mean. Timestamps with timezone or timestamptz automatically includes the timezone with the timestamp. This makes it easy to convert between timezones, know exactly what you&rsquo;re dealing with, and will in short save you a ton of time. There&rsquo;s seldom a case you shouldn&rsquo;t be using these.</p>
-
-<h3>UUID</h3>
-
-<p>Integers as primary keys aren&rsquo;t great. Sure if you&rsquo;re running a small blog they work fine, but if you&rsquo;re application has to scale to a large size then integers can create problems. First you can run out of them, second it can make other details such as sharding a little more annoying. At the same time they are super readable. However, using the actual UUID datatype and extension to automatically generate them can be incredibly handy if you have to scale an application.</p>
-
-<p><em>Similar to hstore, there&rsquo;s an <a href="http://www.postgresql.org/docs/9.3/static/uuid-ossp.html">extension</a> that makes the UUID much more useful.</em></p>
-
-<h3>Binary JSON</h3>
-
-<p>This isn&rsquo;t available yet, but will be in Postgres 9.4. <a href="http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/">Binary JSON</a> is of course JSON directly within your database, but also lets you add Gin indexes directly onto JSON. This means a much simpler setup in not only inserting JSON, but having fast reads. If you want to learn a bit more about this, <a href="http://www.craigkerstiens.com/training/index.html">sign up</a> to <a href="http://www.craigkerstiens.com/training/index.html">get notified</a> of training regarding the upcoming PostgreSQL 9.4 release.</p>
-
-<h3>Money</h3>
-
-<p>Please don&rsquo;t use this&hellip; The money datatype assumes a single currency type, and generally brings with it more caveats than simply using a numeric type.</p>
-
-<h3>More</h3>
-
-<p>It&rsquo;s already been pointed out on twitter that I missed a few. To give a quick highlight of some others:</p>
-
-<ul>
-<li><a href="http://www.craigkerstiens.com/2012/08/20/arrays-in-postgres/">Arrays</a></li>
-<li>Interval – time intervals, such as &lsquo;1 hour&rsquo;, &lsquo;1 day&rsquo;</li>
-<li>ISN &ndash; should help for anything with products</li>
-<li>Inet &ndash; Tracking IPs</li>
-</ul>
-
-
-<h3>In conclusion</h3>
-
-<p>What&rsquo;d I miss? What are you&rsquo;re favorite types? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>, or sign-up below to updates on Postgres content and first access to training.</p>
-
-<!-- Begin MailChimp Signup Form -->
-
-
-<p><link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css"></p>
-
-
-
-<div id="mc_embed_signup">
-<form action="http://craigkerstiens.us5.list-manage.com/subscribe/post?u=0bb2ad96ec10236507971efdc&amp;id=dacc2c6d9a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <h2>Sign up to get weekly advice and content on Postgres</h2>
-<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-<div class="mc-field-group">
-    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-</label>
-    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-</div>
-    <div id="mce-responses" class="clear">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;"><input type="text" name="b_0bb2ad96ec10236507971efdc_dacc2c6d9a" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</form>
-</div>
-
-
-<script type="text/javascript">
-var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';
-try {
-    var jqueryLoaded=jQuery;
-    jqueryLoaded=true;
-} catch(err) {
-    var jqueryLoaded=false;
-}
-var head= document.getElementsByTagName('head')[0];
-if (!jqueryLoaded) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = '//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
-    head.appendChild(script);
-    if (script.readyState && script.onload!==null){
-        script.onreadystatechange= function () {
-              if (this.readyState == 'complete') mce_preload_check();
-        }    
-    }
-}
-
-var err_style = '';
-try{
-    err_style = mc_custom_error_style;
-} catch(e){
-    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
-}
-var head= document.getElementsByTagName('head')[0];
-var style= document.createElement('style');
-style.type= 'text/css';
-if (style.styleSheet) {
-  style.styleSheet.cssText = err_style;
-} else {
-  style.appendChild(document.createTextNode(err_style));
-}
-head.appendChild(style);
-setTimeout('mce_preload_check();', 250);
-
-var mce_preload_checks = 0;
-function mce_preload_check(){
-    if (mce_preload_checks>40) return;
-    mce_preload_checks++;
-    try {
-        var jqueryLoaded=jQuery;
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
-    head.appendChild(script);
-    try {
-        var validatorLoaded=jQuery("#fake-form").validate({});
-    } catch(err) {
-        setTimeout('mce_preload_check();', 250);
-        return;
-    }
-    mce_init_form();
-}
-function mce_init_form(){
-    jQuery(document).ready( function($) {
-      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
-      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
-      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
-      options = { url: 'http://craigkerstiens.us5.list-manage.com/subscribe/post-json?u=0bb2ad96ec10236507971efdc&id=dacc2c6d9a&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
-                    beforeSubmit: function(){
-                        $('#mce_tmp_error_msg').remove();
-                        $('.datefield','#mc_embed_signup').each(
-                            function(){
-                                var txt = 'filled';
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        var bday = false;
-                                        if (fields.length == 2){
-                                            bday = true;
-                                            fields[2] = {'value':1970};//trick birthdays into having years
-                                        }
-                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
-                                            this.value = '';
-                                        } else {
-                                            if (/\[day\]/.test(fields[0].name)){
-                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;                                           
-                                            } else {
-                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
-                                            }
-                                        }
-                                    });
-                            });
-                        $('.phonefield-us','#mc_embed_signup').each(
-                            function(){
-                                var fields = new Array();
-                                var i = 0;
-                                $(':text', this).each(
-                                    function(){
-                                        fields[i] = this;
-                                        i++;
-                                    });
-                                $(':hidden', this).each(
-                                    function(){
-                                        if ( fields[0].value.length != 3 || fields[1].value.length!=3 || fields[2].value.length!=4 ){
-                                            this.value = '';
-                                        } else {
-                                            this.value = 'filled';
-                                        }
-                                    });
-                            });
-                        return mce_validator.form();
-                    }, 
-                    success: mce_success_cb
-                };
-      $('#mc-embedded-subscribe-form').ajaxForm(options);
-      
-      
-    });
-}
-function mce_success_cb(resp){
-    $('#mce-success-response').hide();
-    $('#mce-error-response').hide();
-    if (resp.result=="success"){
-        $('#mce-'+resp.result+'-response').show();
-        $('#mce-'+resp.result+'-response').html(resp.msg);
-        $('#mc-embedded-subscribe-form').each(function(){
-            this.reset();
-        });
-    } else {
-        var index = -1;
-        var msg;
-        try {
-            var parts = resp.msg.split(' - ',2);
-            if (parts[1]==undefined){
-                msg = resp.msg;
-            } else {
-                i = parseInt(parts[0]);
-                if (i.toString() == parts[0]){
-                    index = parts[0];
-                    msg = parts[1];
-                } else {
-                    index = -1;
-                    msg = resp.msg;
-                }
-            }
-        } catch(e){
-            index = -1;
-            msg = resp.msg;
-        }
-        try{
-            if (index== -1){
-                $('#mce-'+resp.result+'-response').show();
-                $('#mce-'+resp.result+'-response').html(msg);            
-            } else {
-                err_id = 'mce_tmp_error_msg';
-                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
-                
-                var input_id = '#mc_embed_signup';
-                var f = $(input_id);
-                if (ftypes[index]=='address'){
-                    input_id = '#mce-'+fnames[index]+'-addr1';
-                    f = $(input_id).parent().parent().get(0);
-                } else if (ftypes[index]=='date'){
-                    input_id = '#mce-'+fnames[index]+'-month';
-                    f = $(input_id).parent().parent().get(0);
-                } else {
-                    input_id = '#mce-'+fnames[index];
-                    f = $().parent(input_id).get(0);
-                }
-                if (f){
-                    $(f).append(html);
-                    $(input_id).focus();
-                } else {
-                    $('#mce-'+resp.result+'-response').show();
-                    $('#mce-'+resp.result+'-response').html(msg);
-                }
-            }
-        } catch(e){
-            $('#mce-'+resp.result+'-response').show();
-            $('#mce-'+resp.result+'-response').html(msg);
-        }
-    }
-}
-
-</script>
-
-
-<!--End mc_embed_signup-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[What you need to know about April 7 and your security on the web.]]></title>
-    <link href="http://www.craigkerstiens.com/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/"/>
-    <updated>2014-04-08T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/04/08/What-you-need-to-know-about-april-7-and-the-web</id>
-    <content type="html"><![CDATA[<p><img src="http://heartbleed.com/heartbleed.png" style="float:right;margin-left:20px;height:300px;"/>
-On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In the most basic sense this library allowed intentional external parties to acquire data that was thought to be safe and secure from whomever was running a vulnerable website. There was little to know one that was except from this due to their security practices, major examples of sites that were affected include:</p>
-
-<ul>
-<li>Yahoo</li>
-<li>Amazon.com</li>
-<li>Netflix</li>
-<li>Various banks</li>
-<li>Many more</li>
-</ul>
-
-
-<p>If you&rsquo;re interested in more technical details you can <a href="http://www.heartbleed.com">follow along</a> or on the <a href="https://blog.heroku.com/archives/2014/4/8/openssl_heartbleed_security_update">Heroku blog</a>.</p>
-
-<p>The short of it is you, yes you as in everyone, should rotate your passwords once all websites are safe. For further details please continue reading.</p>
-
-<!--more-->
-
-
-<h3>What does the vulnerability mean</h3>
-
-<p><img src="https://pbs.twimg.com/media/Bks0vXLIUAAaexR.jpg" style="float:right;margin-left:10px;"/> In this case it allowed an external party to acquire a moderate amount of data from some computer running your website. Extremely clear examples (such as shown on the right) highlight an example of random third parties easily acquiring most recently logged in Yahoo mail usernames and passwords.</p>
-
-<h3>The first step</h3>
-
-<p>The first step in resolving this is actually not a step required by you at all, unless you&rsquo;re running a production website online. The first step requires the developers running the site to update their site so they are no longer vulnerable. This as available to happen as early as April 7, and many major sites were fully updated and again safe as of April 8.</p>
-
-<h3>Still area for concern</h3>
-
-<p>With security vulnerabilities there are two key things to consider. First is the vulnerability itself, second is whether its therotical or can be simply acted upon. Yes, there&rsquo;s a range here. One of the most unfortunate pieces from talking to those that know about security is this was extremely trivial to act upon.</p>
-
-<p><em>This is made even worse in that this vulnerability has existed for 2 years without many knowing about it, meaning people have had an ability to snoop and collect parts of your data for two years</em></p>
-
-<h3>What to do?</h3>
-
-<p>First things first, be extremely cautious with any major website you connect with anything important. Any account that you have a password and you care about the account you should cease logging into it <strong>until you know its safe</strong>. As of the morning of April 8 here is a <a href="https://gist.github.com/dberkholz/10169691">list of sites that were safe and ones that were vulnerable</a>. You can check any site today <a href="http://filippo.io/Heartbleed/">here</a>.</p>
-
-<p>Once it&rsquo;s clear that a site you know is now updated and safe either via that list of the latter tool you should change your password. For the time that this has existed and ease of comprimising its safe to assume all of your internet passwords and data within those accounts could have been comprimised. This means any website you have logged into within the last two years you should change the password for. Changing your passwords limits anyone being able to access that again.</p>
-
-<p><em>I am not a security expert or analyst, but have heavily interacted with many that are in dealing with this incident. This advice is high level intended at non technical experts, if you have any questions or feedback please let me know on twitter <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Some non-traditional marketing tips]]></title>
-    <link href="http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips/"/>
-    <updated>2014-03-31T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips</id>
-    <content type="html"><![CDATA[<p>Marketing is generally unexciting to a ton of engineers, until it brings eyeballs which bring feedback and dollars. Marketing doesn&rsquo;t have to always be cheesy campaigns or ads, it can often just be surfacing the things your customers actually do want to care about. My favorite type of marketing is when a service sells me on something at the exact time I want it. Here&rsquo;s a few short tips on some non-traditional marketing that won&rsquo;t seem sleezy but still can work quite well.</p>
-
-<!--more-->
-
-
-<h3>Email subscriptions to your blog</h3>
-
-<p>RSS is pretty dead, google went and killed it with google reader. Sure there&rsquo;s some decent replacements if you&rsquo;re really tied to it. In particular <a href="http://newsblur.com/">newsblur</a> by <a href="http://www.twitter.com/samuelclay">@samuelclay</a> is a great reader. But now days content emerges on twitter, fb, and ranking services, then later is discovered via search. Both of these work pretty well, but twitter is ephemeral for so many. Email still converts incredibly well, if people are abandoning rss but still care about your content give them the ability for it to be put right in front of their face via email.</p>
-
-<h3>Market in transactional emails</h3>
-
-<p>Have emails that include receipts? Account confirmations? General notices? No not a monthly newsletter! Transactional emails are obviously valuable to your users. Why not include a small call out to your latest announcement? Have a central hook that your emails can check from and simply include a small call to action within there.</p>
-
-<p><em>Credit to <a href="http://www.twitter.com/stevenbristol">@stevenbristol</a> on <a href="http://strongbusinessespodcast.com/16571/149964-episode-17-security-authy-and-disney">strong business podcast</a> for this one</em></p>
-
-<h3>Retarget to your existing users</h3>
-
-<p>In a similar vein of notifying your existing customers in transactional emails about news, you should be doing this all over the web. Retargeting is great to convert people once you&rsquo;ve already got them on a landing page, but its also incredibly useful to get existing users to <a href="http://insideintercom.io/talk-product-strategy-saying/">use a specific feature</a>. If you track if they&rsquo;ve never used a feature retargeting is a great way to make them aware of it, and once they&rsquo;ve used it just count it as a conversion.</p>
-
-<p><em>My favorite retargeting provider <a href="http://www.perfectaudience.com/">perfect audience</a> makes this quite convenient as they allow a bit more control than most retargeting services</em></p>
-
-<h3>In conclusion</h3>
-
-<p>Marketing doesn&rsquo;t have to be throwing your product and messaging in someones face, but you should make your users aware of it. The more engaged they are they more they&rsquo;ll stick around and be happy about using you&rsquo;re product, assuming you&rsquo;ve built a good one. What are some of your favorite tips?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A year's look at Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres/"/>
-    <updated>2014-03-26T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/03/26/a-year-of-postgres</id>
-    <content type="html"><![CDATA[<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
-
-<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
-
-<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
-
-<!--more-->
-
-
-<h3>The inagural issue</h3>
-
-<h4><a href="http://postgres-bits.herokuapp.com/?utm_source=craigkerstiens&amp;utm_medium=blog">Postgres: The Bits You Haven&rsquo;t Found</a></h4>
-
-<p>A slide-deck from a presentation at Heroku&rsquo;s Waza conference that highlights many of the more unknown and rare features within Postgres, including &lsquo;WITH&rsquo;, arrays, pub/sub, and hstore.</p>
-
-<h4><a href="http://blog.aggregateknowledge.com/2013/02/04/open-source-release-postgresql-hll/?utm_source=craigkerstiens&amp;utm_medium=blog">Open Source Release:postgresql-hll</a></h4>
-
-<p>Aggregate Knowledge released Postgres HyperLogLog, which is a new Postgres datatype hll that strikes a balance between HyperLogLog and a simple set. This data type solves the problem of calculating uniques for a given data set efficiently both in performance and storage.</p>
-
-<p><em>The above is still one of my favorite extensions that most of the world doesn&rsquo;t know about</em></p>
-
-<h4><a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/?utm_source=craigkerstiens&amp;utm_medium=bloga">How I Work with Postgres &ndash; Psql, My PostgreSQL Admin</a></h4>
-
-<p>A common question for anyone new or even experienced with Postgres is whats the best editor out there? Most when they are asking this are asking for a GUI editor, this post highlights much of the power in the CLI &lsquo;psql&rsquo; editor.</p>
-
-<h3>A mix of notable entries</h3>
-
-<h4><a href="http://postgresweekly.com/issues/6">Issue 6</a> <a href="http://blog.blackwinghq.com/2013/04/08/2/?utm_source=craigkerstiens&amp;utm_medium=blog">Dissecting PostgreSQL CVE-2013-1899</a></h4>
-
-<p>After the heavily publicized and very serious security vulnerability was patched last week Blackwing intelligence took the chance to dig in. Read more on the details of the vulnerability such as what damage can be done and the basics of how its exploitable.</p>
-
-<h4><a href="http://postgresweekly.com/issues/16">Issue 16</a> <a href="http://www.justin.tv/sfpug/b/419326732?utm_source=craigkerstiens&amp;utm_medium=blog">Tom Lane Explains Query Planner video</a></h4>
-
-<p>Tom Lane, one of the major contributors to Postgres and on the Postgres core team, was in San Francisco last week and gave a talk at the SF Postgres Users Group. Here&rsquo;s the video from the talk where Tom explains the innards of the PostgreSQL query planner. Whether you&rsquo;re a noob or a knowledgable Postgres user this is a must watch.</p>
-
-<h4><a href="http://postgresweekly.com/issues/35">Issue 35</a> <a href="http://www.chesnok.com/daily/2013/11/06/top-10-psql-commands-i-use/">Top 10 psql ‘\’ commands I use</a></h4>
-
-<p>Psql is incredibly powerful, but the list of options within it can be overwhelming. Heres a straight forward list of @selenamarie’s top 10 commands.</p>
-
-<h4><a href="http://postgresweekly.com/issues/38">Issue 38</a> <a href="http://www.chesnok.com/daily/2013/11/13/everyday-postgres-tuning-a-brand-new-server-the-10-minute-edition/?utm_source=craigkerstiens&amp;utm_medium=blog">Everyday Postgres: Tuning a brand-new server &ndash; the 10 minute edition</a></h4>
-
-<p>After a fresh install, there are probably a few knobs you want to tweak on Postgres. If you’re new to doing this, it can be a bit overwhelming. Here’s a quick primer on tuning a brand new server to be more properly configured.</p>
-
-<h3><a href="http://postgresweekly.com/issues/51">And the latest issue</a></h3>
-
-<p>Which highlights a wealth of information on <a href="http://postgresweekly.com/issues/51">jsonb</a>, and a bit of various knowledge touching on <a href="http://hans.io/blog/2014/03/25/postgresql_cluster/index.html?utm_source=craigkerstiens&amp;utm_medium=blog">cluster</a>, <a href="http://practiceovertheory.com/blog/2013/07/12/recursive-query-is-recursive/?utm_source=craigkerstiens&amp;utm_medium=blog">recursive queries with CTEs</a>, and <a href="http://www.davidhampgonsalves.com/Postgres-ranges/?utm_source=craigkerstiens&amp;utm_medium=blog">range types</a>.</p>
-
-<h3>In conclusion</h3>
-
-<p>What did you like? Any favorites I missed? What would you like to see more of? Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a> or at <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens at gmail.com</a></p>
 ]]></content>
   </entry>
   

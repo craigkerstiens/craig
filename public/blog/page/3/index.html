@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the 9.4 PostgreSQL release. Since that post a &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I& &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,288 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/05/22/on-connection-pooling/">
+		
+			Postgres and Connection Pooling</a>
+	</h2>
+	<div class="entry-content">
+		<p>Connection pooling is quickly becoming one of the more frequent questions I hear. So here&rsquo;s a primer on it. If there&rsquo;s enough demand I&rsquo;ll follow up a bit further with some detail on specific Postgres connection poolers and setting them up.</p>
+
+<h3>The basics</h3>
+
+<p>For those unfamiliar, a connection pool is a group of database connections sitting around that are waiting to be handed out and used. This means when a request comes in a connection is already there whether in your framework or some other pooling process, and then given to your application for that specific request or transaction.  In contrast, without any connection pooling your application will have to reach out to your database to establish a connection. While in the most basic sense you may thinking connecting to a database is quick, often theres <a href="/2013/03/07/Fixing-django-db-connections/">some overhead here</a>. An example is SSL negotiation that may have to occur which means you&rsquo;re looking at not 1-2 ms but often closer to 30-50.</p>
+
+
+		
+		<a href="/2014/05/22/on-connection-pooling/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-22T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/05/08/personas-data-science-k-means/">
+		
+			Personas, Data Science, K-means</a>
+	</h2>
+	<div class="entry-content">
+		<p><img src="http://cl.ly/image/183R2i1i2946/Untitled.png" style="float:right;margin-left:20px;"> If one of the industry lingo terms in title  didn&rsquo;t make your skin crawl a little then I need to try harder. At the same time you&rsquo;ve probably heard someone use one of them in a non-trolling way in the last month. All three of these can often actually mean the same or similar things, it&rsquo;s just people approach them differently from their world perspective.</p>
+
+<p>Personas don&rsquo;t have to be marketing only speak, and data science doesn&rsquo;t have to be only for stats people. My goal here is to simply set a context for the rest of the meat which talks about how you can simply look at your data and let it surface things you may not have known. 
+		
+		<a href="/2014/05/08/personas-data-science-k-means/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-08T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/technology/'>Technology</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/">
+		
+			Postgres Datatypes – the Ones You&#8217;re Not Using.</a>
+	</h2>
+	<div class="entry-content">
+		<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let&rsquo;s look at some of these rarer but awesome types.</p>
+
+<h3>hstore</h3>
+
+<p>Yes, I&rsquo;ve talked about <a href="/2013/07/03/hstore-vs-json/">this one before</a>, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. 
+		
+		<a href="/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/">
+		
+			What You Need to Know About April 7 and Your Security on the Web.</a>
+	</h2>
+	<div class="entry-content">
+		<p><img src="http://heartbleed.com/heartbleed.png" style="float:right;margin-left:20px;height:300px;"/>
+On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In the most basic sense this library allowed intentional external parties to acquire data that was thought to be safe and secure from whomever was running a vulnerable website. There was little to know one that was except from this due to their security practices, major examples of sites that were affected include:</p>
+
+<ul>
+<li>Yahoo</li>
+<li>Amazon.com</li>
+<li>Netflix</li>
+<li>Various banks</li>
+<li>Many more</li>
+</ul>
+
+
+<p>If you&rsquo;re interested in more technical details you can <a href="http://www.heartbleed.com">follow along</a> or on the <a href="https://blog.heroku.com/archives/2014/4/8/openssl_heartbleed_security_update">Heroku blog</a>.</p>
+
+<p>The short of it is you, yes you as in everyone, should rotate your passwords once all websites are safe. For further details please continue reading.</p>
+
+
+		
+		<a href="/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-08T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/technology/'>Technology</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/03/31/some-short-untypical-marketing-tips/">
+		
+			Some Non-traditional Marketing Tips</a>
+	</h2>
+	<div class="entry-content">
+		<p>Marketing is generally unexciting to a ton of engineers, until it brings eyeballs which bring feedback and dollars. Marketing doesn&rsquo;t have to always be cheesy campaigns or ads, it can often just be surfacing the things your customers actually do want to care about. My favorite type of marketing is when a service sells me on something at the exact time I want it. Here&rsquo;s a few short tips on some non-traditional marketing that won&rsquo;t seem sleezy but still can work quite well.</p>
+
+
+		
+		<a href="/2014/03/31/some-short-untypical-marketing-tips/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/03/26/a-year-of-postgres/">
+		
+			A Year&#8217;s Look at Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
+
+<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
+
+<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
+
+
+		
+		<a href="/2014/03/26/a-year-of-postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-26T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -277,276 +559,6 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/02/02/Examining-PostgreSQL-9.4/">
-		
-			Examining Postgres 9.4 - a First Look</a>
-	</h2>
-	<div class="entry-content">
-		<p><a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">PostgreSQL</a> is currently entering its final commit fest. While its still going, which means there could still be more great features to come, we can start to take a look at what you can expect from it now. This release seems to bring a lot of minor increments versus some bigger highlights of previous ones. At the same time there&rsquo;s still a lot on the bubble that may or may not make it which could entirely change the shape of this one. For a peek back of some of the past ones:</p>
-
-
-		
-		<a href="/2014/02/02/Examining-PostgreSQL-9.4/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-02T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/01/28/where-to-go-developer-content/">
-		
-			Where to Go With Developer Content</a>
-	</h2>
-	<div class="entry-content">
-		<p>Last week I wrote up some <a href="/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
-
-<p>Perhaps the easiest way to do this is by highlighting some examples of it.</p>
-
-
-		
-		<a href="/2014/01/28/where-to-go-developer-content/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-28T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/developers/'>Developers</a>, <a class='category' href='/categories/marketing/'>Marketing</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/01/24/rethinking-limits-on-relational/">
-		
-			Rethinking the Limits on Relational Databases</a>
-	</h2>
-	<div class="entry-content">
-		<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
-
-<h3>Forget migrations</h3>
-
-<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
-
-
-		
-		<a href="/2014/01/24/rethinking-limits-on-relational/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-24T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/01/16/developer-marketing-where-to-start-with-content/">
-		
-			Where to Start With Developer Content</a>
-	</h2>
-	<div class="entry-content">
-		<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
-
-<h3>Stop marketing</h3>
-
-<p>Forget trying to &ldquo;market&rdquo; to developers. Hopefully you at least have developers that believe in the product their building, if thats not the case then find a new product or a new team. If you&rsquo;ve got a product targetted at developers and a team that believes in it then you&rsquo;re already half way there to marketing it. Now back to the first point, forget trying to market it. Start with building some form of an audience, reputation, respect among other developers. This isn&rsquo;t done through ads, email marketing, SEO or any of that. Its done by creating content that developers find interesting, as a first step forget your product entirely, but don&rsquo;t worry we&rsquo;ll get there soon enough.</p>
-
-
-		
-		<a href="/2014/01/16/developer-marketing-where-to-start-with-content/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-16T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/developers/'>Developers</a>, <a class='category' href='/categories/marketing/'>Marketing</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/11/18/best-postgres-feature-youre-not-using/">
-		
-			The Best Postgres Feature You&#8217;re Not Using – CTEs Aka WITH Clauses</a>
-	</h2>
-	<div class="entry-content">
-		<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
-
-<p>The feature itself is known as CTEs or common table expressions, you may also here it referred to as <code>WITH</code> clauses. The general idea is that it allows you to create something somewhat equivilant to a view that only exists during that transaction. You can create multiple of these which then allow for clear building blocks and make it simple to follow what you&rsquo;re doing.</p>
-
-
-		
-		<a href="/2013/11/18/best-postgres-feature-youre-not-using/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-18T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/10/13/simple-but-informative-emails/">
-		
-			Tooling for Simple but Informative Emails</a>
-	</h2>
-	<div class="entry-content">
-		<p>Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some->many-> all. Its still highly effective even as much noise as we receive in our inboxes. Over the years I&rsquo;ve tried a lot of email tools from custom built solutions, to newer entrants that help around drip actions (<a href="http://www.intercom.io">intercom.io</a> and <a href="http://www.customer.io">customer.io</a>), to more &ldquo;enterprise&rdquo; tools such as Marketo. While I have varying opinions on all of those, I still find myself coming back to a simple one off script setup to deliver clear concise emails.</p>
-
-
-		
-		<a href="/2013/10/13/simple-but-informative-emails/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
-
-</div>
-
-
-	
-</div></article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/2/" class="prev">Prev</a>
@@ -556,7 +568,7 @@ $(document).ready(
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Craig Kerstiens
 

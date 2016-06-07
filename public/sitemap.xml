@@ -652,15 +652,41 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/12/08/massive-json/</loc>
-        <lastmod>2015-12-26T14:31:08-08:00</lastmod>
+        <lastmod>2015-12-27T09:12:00-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches/</loc>
-        <lastmod>2015-12-26T14:31:45-08:00</lastmod>
+        <lastmod>2015-12-28T08:40:16-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown/</loc>
-        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
+        <lastmod>2015-12-28T10:08:06-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2015/12/29/my-postgres-top-10-for-2016/</loc>
+        <lastmod>2015-12-29T15:43:38-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2016/01/08/writing-better-sql/</loc>
+        <lastmod>2016-01-08T08:58:15-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2016/01/17/marketing-definitions-for-developers/</loc>
+        <lastmod>2016-01-17T10:16:56-08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://www.craigkerstiens.com/2016/01/28/On-being-a-PM-software-is-easy-people-are-hard/
+        </loc>
+        <lastmod>2016-01-28T09:14:58-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2016/02/28/Hands-on-postgres-sharding/</loc>
+        <lastmod>2016-05-30T13:35:43-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.craigkerstiens.com/2016/06/07/five-mistakes-databases/</loc>
+        <lastmod>2016-06-07T10:27:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/about/disneyland.html</loc>
@@ -720,15 +746,15 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/archives/</loc>
-        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
+        <lastmod>2016-06-07T10:27:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/archives/</loc>
-        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
+        <lastmod>2016-06-07T10:27:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/blog/</loc>
-        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
+        <lastmod>2016-06-07T10:27:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/books/</loc>
@@ -740,7 +766,7 @@
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/</loc>
-        <lastmod>2015-12-27T09:06:01-08:00</lastmod>
+        <lastmod>2016-06-07T10:27:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.craigkerstiens.com/recommendations/books.html</loc>

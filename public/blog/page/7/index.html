@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Update theres a more recent post that expands further on where to start optimizing specific queries, and of course if you want to dig into &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,296 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/02/08/django-read-only-mode/">
+		
+			Introducing Django-db-tools</a>
+	</h2>
+	<div class="entry-content">
+		<p>For any successful web application there is likely to come a time when you need to conduct some large migration on the backend. I dont mean simple add a <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">column here or add an index there</a>, but rather truly sizeable migrations&hellip; Going from <a href="http://lanyrd.com/blog/2012/lanyrds-big-move/">MySQL to Postgres</a> or migrating from an older version of Postgres such as a <a href="http://blog.sendhub.com/post/30041247598/how-to-upgrade-a-legacy-heroku-database">32 bit instance</a> to a newer 64 bit instance. In these cases the default approach is to just schedule downtime often throwing up a splash screen saying so.</p>
+
+<p>For many sites this approach is simply wrong and lazy, with little effort you can improve the experience and there by ease the burden in conducting these types of migrations. By having the ability to turn your site into a read only mode which <a href="http://twitter.com/simonw">Simon Wilson</a> talked about in his post on Lanyrd you can still continue to operate just in a limited capacity. <a href="http://www.aeracode.org/2012/11/13/one-change-not-enough/">Andrew Godwin</a> further talks about some of this as well in regards to the Lanyrd move and even includes  the script they used to <a href="https://github.com/lanyrd/mysql-postgresql-converter/">migrate data from MySQL to Postgres</a>. Though just in talking with Simon about this a week ago it occurred to me they had not released the code for their read-only mode.</p>
+
+<p>Finally onto the announcing, today I&rsquo;m releasing <a href="https://github.com/craigkerstiens/django-db-tools">django-db-tools</a>. This is currently a very lightweight utility that allows you to flip your site into two modes.</p>
+
+
+		
+		<a href="/2013/02/08/django-read-only-mode/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/01/10/more-on-postgres-performance/">
+		
+			More on Postgres Performance</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you missed my previous post on <a href="/2012/10/01/understanding-postgres-performance/">Understanding Postgres Performance</a> its a great starting point. On this particular post I&rsquo;m going to dig in to some real life examples of optimizing queries and indexes.</p>
+
+<h3>It all starts with stats</h3>
+
+<p>I wrote about some of the <a href="https://postgres.heroku.com/blog/past/2012/12/6/postgres_92_now_available/">great new features in Postgres 9.2</a> in the recent announcement on support of Postgres 9.2 on <a href="https://www.heroku.com">Heroku</a>. One of those awesome features, is <a href="http://www.postgresql.org/docs/9.2/static/pgstatstatements.html">pg_stat_statements</a>. Its not commonly known how much information Postgres keeps about your database (beyond the data of course), but in reality it keeps a great deal. Ranging from basic stuff like table size to cardinality of joins to distribution of indexes, and with pg_stat_statments it keeps a normalized record of when queries are run.</p>
+
+
+		
+		<a href="/2013/01/10/more-on-postgres-performance/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/11/30/sharding-your-database/">
+		
+			Sharding Your Database</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
+
+
+		
+		<a href="/2012/11/30/sharding-your-database/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-30T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/development/'>Development</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/11/17/how-i-write-sql/">
+		
+			How I Write SQL</a>
+	</h2>
+	<div class="entry-content">
+		<p>I recently got asked by <a href="http://rzrsharp.net/">a friend</a> and former co-worker how I write SQL. At first this caught me by surprise and I assumed there was nothing different, but after a few additional comments on it, it became clear most people have no concept for creating clean readable SQL. So without further adieu here&rsquo;s how I write SQL, with a built up example query.</p>
+
+
+		
+		<a href="/2012/11/17/how-i-write-sql/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-17T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/development/'>Development</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/11/06/django-and-arrays/">
+		
+			Using Postgres Arrays in Django</a>
+	</h2>
+	<div class="entry-content">
+		<p>A few weeks back I did a brief <a href="/2012/08/20/arrays-in-postgres/">feature highlight on Postgres arrays</a>. Since that time I&rsquo;ve found myself using them with increasing regularity on small side projects. Much of this time I&rsquo;m using Django and of course not opting to write raw SQL to be able to use arrays. Django actually makes it quite simple to work with Arrays in Postgres with a package by <a href="http://www.niwi.be/about.html">Andrey Antukh</a>. Lets get started by installing two libraries:</p>
+
+<pre><code>pip install djorm-ext-pgarray
+pip install djorm-ext-expressions
+</code></pre>
+
+<p>The first library is for support for the array field type, the second allows us to more easily mix bits of SQL within the Django ORM.</p>
+
+
+		
+		<a href="/2012/11/06/django-and-arrays/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-06T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/array/'>Array</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2012/10/18/connecting_to_redis_from_postgres/">
+		
+			Redis in My Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>Yesterday there was a post which hit <a href="http://news.ycombinator.com/item?id=4664178">Hacker News</a> that talked about using <a href="http://www.citusdata.com/blog/51-run-sql-on-mongodb">SQL to access Mongo</a>. While this is powerful I think much of the true value was entirely missed within the post.</p>
+
+<p>SQL is an expressive language, though people are often okay with accessing Mongo data through its own ORM. The real value is that you could actually query the data from within Postgres then join across your data stores, without having to do some ETL process to move data around.  Think&hellip; joining sales data from Postgres with user reviews stored in Mongo or searching for visits to a website (retained in redis) against purchases by user in Postgres.</p>
+
+<p>The mechanism pointed out was a MongoDB Foreign Data Wrapper. A Foreign Data Wrapper or FDW essentially lets you connect to an external datastore from within a Postgres database. In addition to the Mongo FDW released the other day there&rsquo;s  many others. For example Postgres 9.0 and up ships with one called <code>db_link</code>, which lets you query and join across two different Postgres databases. Beyond that there&rsquo;s support for a variety of other data stores including some you may have never expected:</p>
+
+<ul>
+<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
+<li><a href="http://pgxn.org/dist/file_textarray_fdw/">Textfile</a></li>
+<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
+<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
+<li><a href="http://pgxn.org/dist/odbc_fdw/">ODBC</a></li>
+<li><a href="http://pgxn.org/dist/ldap_fdw/">LDAP</a></li>
+<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
+<li><a href="http://pgxn.org/tag/fdw/">More</a></li>
+</ul>
+
+
+<p>Lets look at actually getting the Redis one running then see what some of the power of it really looks like. First we have to get the code then build it:</p>
+
+
+		
+		<a href="/2012/10/18/connecting_to_redis_from_postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-18T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/redis/'>Redis</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -330,374 +620,6 @@ FROM
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/06/19/pro-tips-for-conference-talks/">
-		
-			Protips for Conference Talks</a>
-	</h2>
-	<div class="entry-content">
-		<p>A few weeks ago I was sitting at the hotel in Zurich with <a href="http://www.twitter.com/jacobian">Jacob Kaplan Moss</a> prior to <a href="http://klewel.com/conferences/djangocon-2012/">DjangoCon EU</a> enjoying a beer, talking about Django, and discussing a bit about our upcoming talks for the conference. He talked briefly about his upcoming <a href="http://klewel.com/conferences/djangocon-2012/index.php?talkID=2">keynote</a> and how he was doing something different, including essentially 5 mini-talks. This seemed interesting enough, but the part that surprised me was when Jacob said, &ldquo;I&rsquo;m among friends here so it&rsquo;ll be a good place to test this format.&rdquo; Many if not all in the community know who Jacob is as one of the creators of Django, though still to be &ldquo;among friends&rdquo; at a roughly 300 person conference surprised me. However, as someone thats keynoted several times, spoken at conferences for many years, and familiar with many people in the community; for the 150-200 people there he had not met before, he was still truly among friends. While giving a keynote is never an easy feat, it seems to ease the worry ahead of time of doing such.</p>
-
-<p>Saturday night there was a bit of conversation on twitter that had some related discussion. In the last minute rush for DjangoCon US talk submissions a few that have been involved in the community for some time discussed submitting their first talk proposals. In parallel to that was some discussion around diversity, I volunteered the idea of not including presenters name&rsquo;s in the list when reviewing and voting on talks. While both of the above are controversial topics alone, I hope that can be left to another later time. The key idea that emerged that can be helpful to anyone looking to submit a talk to a conference is how the &ldquo;pro&rsquo;s do it&rdquo;, as <a href="http://www.twitter.com/jdunck">Jeremy Dunck</a> put it.</p>
-
-<p>So without further adieu, hopefully without speaking too much for him here&rsquo;s likely why Jacob viewed his 300 person keynote as being among friends:</p>
-
-<h2>1. Start small</h2>
-
-<p>Whether its practicing the talk itself or writing the abstract for a proposal practicing each step lets you refine this well ahead of time. In my experience, providing a talk description for a meetup can often be far harder than for a conference. For a meetup I feel confined to 2-3 sentences, versus an abstract a solid paragraph or two. Yet, I still have to make it as exciting, because of course I don&rsquo;t want 4 people to show up to the meetup because it sounds uninteresting. In the case I&rsquo;m most familiar with <a href="http://www.djangocon.us/">DjangoCon</a> and DjangoCon.eu both happen once a year, though many smaller regional conferences related to Python exist and especially meetup groups:</p>
-
-
-		
-		<a href="/2012/06/19/pro-tips-for-conference-talks/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-19T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/conference/'>Conference</a>, <a class='category' href='/categories/developer/'>Developer</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>, <a class='category' href='/categories/speaking/'>Speaking</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/06/11/schemaless-django/">
-		
-			Schemaless Postgres in Django</a>
-	</h2>
-	<div class="entry-content">
-		<p>Earlier this week while I was at <a href="http://lanyrd.com/2012/djangocon-europe/">DjangoCon EU</a> there seemed to be a surprising amount of talk about MongoDB. My problem with this isn&rsquo;t with MongoDB, but in  the assumption that only Mongo can solve what you&rsquo;re looking for. By and far the most common feature is people want schemaless. It gives them flexibility in their data model and lets them iterate quickly. While I still opt for relational models that map cleanly to a relational database, there are cases where developers may want schemaless. I gave a quick lightning talk on this with slides <a href="https://speakerdeck.com/u/craigkerstiens/p/django-and-hstore">here</a>, but it is worth recapping.</p>
-
-<p>The example given by <a href="http://www.twitter.com/pydanny">pydanny</a> was a product catalog. You may have different items you want to store for a catalog. Lets take an example below:</p>
-
-<pre><code>django_pony = {'name': 'Django Pony', 'rating': '5'}
-pink_pony = {'name': 'Pink Pony', 'rating': '4', 'color': 'pink'}
-</code></pre>
-
-<p>In the case of a product catalog it could be understandable you don&rsquo;t want to normalize every possible spec for the product. The argument for Mongo is so commonly that you can easily work with this data model. Admittedly it is quite simple:</p>
-
-<pre><code>from pymongo import Connection
-connection = Connection()
-django_pony = {'name': 'Django Pony', 'rating': '5'}
-connection.product.insert(django_pony)
-</code></pre>
-
-<p>The problem is that this assumes other schemaless options don&rsquo;t exist or are inferior.</p>
-
-<h2>Enter hStore</h2>
-
-<p><a href="http://www.postgresql.org/docs/8.4/static/hstore.html">hStore</a> is a column type within Postgres. It is a key value store that allows you to store a dictionary, with text values. It alone is not a full document store replacement, but allows for flexibility in your data model where you need it while letting you use relational models elsewhere. Its not exactly new within Postgres either, as its been available since 8.4, however its recently become easier to work with and is supported in some form or another by more frameworks.</p>
-
-<p>To do the same as above we only need to do a few steps:</p>
-
-
-		
-		<a href="/2012/06/11/schemaless-django/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/05/07/why-postgres-part-2/">
-		
-			Why PostgreSQL Part 2</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
-
-<p>Last week I did a post on the <a href="/2012/04/30/why-postgres/">many reasons to use Postgres</a>. My goal with the post was two fold:</p>
-
-<ul>
-<li>Call out some of the historical arguments against it that don&rsquo;t hold any more</li>
-<li>Highlight some of the awesome but more unique features that are less commonly found in databases.</li>
-</ul>
-
-
-<p>Once I published the post it was clear and was immediately pointed out in the comments and on <a href="http://news.ycombinator.com/item?id=3910743">hacker news</a> that I missed quite a few features that I&rsquo;d mostly come to take for granted. <em>Perhaps this is due to so much awesomeness existing within Postgres.</em> A large thanks to everyone for calling these out. To help consolidate many of these, here&rsquo;s a second list of the many reasons to use PostgreSQL:</p>
-
-<h2>Create Index Concurrently</h2>
-
-<p>On most traditional databases when you create an index it holds a lock on the table while it creates the index. This means that the table is more or less useless during that time. When you&rsquo;re starting out this isn&rsquo;t a problem, but as your data grows and you then add indexes later to improve performance it could mean downtime just to add an index. Not surprisingly Postgres has a great means of adding an index without holding that lock. Simply doing <a href="http://www.postgresql.org/docs/9.1/static/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY"><code>CREATE INDEX CONCURRENTLY</code></a> instead of <code>CREATE INDEX</code> will create your index without holding the lock.</p>
-
-<p><em>Of course with many features there are caveats, in the case of creating your index concurrently it does take somewhere on the order of 2-3 times longer, and cannot be done within a transaction</em></p>
-
-<h2>Transactional DDL</h2>
-
-<p>If you&rsquo;ve ever run a migration had something break mid-way, either due to a constraint or some other means you understand what pain can come of quickly untangling such. Typically migrations on a schema are intended to be run holistically and if they fail you want to fully rollback. Some other databases such as Oracle in recent versions and SQL server do support, this. And of course Postgres supports wrapping your DDL inside a transaction. This means if an error does occur you can simply rollback and have the previous DDL statements rolled back with it, leaving your schema migrations as safe as your data, and your application in a consistent state.</p>
-
-<h2>Foreign Data Wrappers</h2>
-
-<p>I talked before about other languages within your database such as Ruby or Python, but what if you wanted to talk to other databases from your database. Postgres&rsquo;s Foreign Data Wrapper allows you to fully wrap external data systems and join on them in a similar fashion to as if they existed locally within the database. Here&rsquo;s a sampling of just a few of the foreign data wrappers that exist:</p>
-
-<ul>
-<li><a href="http://pgxn.org/dist/oracle_fdw/">Oracle</a></li>
-<li><a href="http://pgxn.org/dist/mysql_fdw/">MySQL</a></li>
-<li><a href="http://pgxn.org/dist/redis_fdw/">Redis</a></li>
-<li><a href="http://pgxn.org/dist/twitter_fdw/">Twitter</a></li>
-</ul>
-
-
-<p>In fact you can even use <a href="http://multicorn.org/">Multicorn</a> to allow you to write other foreign data wrappers in Python. An example of how this can be done, in this case with Database.com/Force.com can be found <a href="http://blog.database.com/blog/2011/11/21/a-database-comforce-com-foreign-data-wrapper-for-postgresql/">here</a></p>
-
-
-		
-		<a href="/2012/05/07/why-postgres-part-2/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/05/04/feedback-for-conference-organizers/">
-		
-			Feedback for Conference Organizers</a>
-	</h2>
-	<div class="entry-content">
-		<p>First a huge thanks to all organizers of conferences, but especially for those that organize not-for-profit conferences. I do understand its a great amount of work, and in nearly all cases have greatly appreciated the experience made available by the work they put into it.</p>
-
-<p>As for some guidance. I&rsquo;ve been on nearly all sides of the conference with the exception of organizing, so again organizers please don&rsquo;t take offense to the feedback.</p>
-
-<h2>First on timeline</h2>
-
-<p><em>Please publish this early on your site and on <a href="http://www.lanyrd.com">lanyrd</a></em></p>
-
-<ul>
-<li>Deadline for CFP</li>
-<li>Deadline for Call for Sponsorship</li>
-<li>Publish speaker list</li>
-<li>Early bird registration ends</li>
-<li>Regular registration ends</li>
-</ul>
-
-
-
-		
-		<a href="/2012/05/04/feedback-for-conference-organizers/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-04T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/conferences/'>Conferences</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/04/30/why-postgres/">
-		
-			Why Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>This post is a list of many of the reasons to use Postgres, much this content as well as how to use these features will later be curated within <a href="http://www.postgresguide.com">PostgresGuide.com</a>. If you need to get started check out <a href="http://postgresapp.com">Postgres.app</a> for Mac, or get a Cloud instance at <a href="https://postgres.heroku.com/?utm_source=referral&amp;utm_medium=content&amp;utm_campaign=craigkerstiens">Heroku Postgres</a> for free</em></p>
-
-<p><em>UPDATE: A <a href="/2012/05/07/why-postgres-part-2/">part 2</a> has been posted on <a href="/2012/05/07/why-postgres-part-2/">Why Use Postgres</a></em></p>
-
-<p>Very often recently I find myself explaining why Postgres is so great. In an effort to save myself a bit of time in repeating this, I though it best to consolidate why Postgres is so great and dispel some of the historical arguments against it.</p>
-
-<h2>Replication</h2>
-
-<p>For some time the biggest argument for MySQL over Postgres was the lack of a good replication story for Postgres. With the release of <a href="http://www.postgresql.org/docs/8.4/static/high-availability.html">8.4 Postgres&rsquo;s</a> story around replication quickly became much better.</p>
-
-<p><em>While replication is indeed very important, are users actually setting up replication each time with MySQL or is it to only have the option later?</em></p>
-
-<h2>Window functions</h2>
-
-<p>This is a feature those familiar with Oracle greatly missed in Postgres. In fact even SQL Server had some form of them, though it was with T-SQL, which adds a bit more complexity to the feature. This is a feature that once you have you can&rsquo;t live without; the other options that existed before were slower and much more complicated. With the release of <a href="http://www.postgresql.org/docs/9.1/static/tutorial-window.html">8.4</a> window functions were added to bring Postgres on par with Oracle in this area. For more info on using them check the Postgres docs above or <a href="http://postgresguide.com/tips/window.html">PostgresGuide.com</a>.</p>
-
-<h2>Flexible Datatypes</h2>
-
-<p>Creating a custom column is simpler in Postgres than any other database I&rsquo;ve used by far. Excluding custom datatypes, even Postgres&rsquo;s out of the box datatypes make Postgres stand out far ahead of other databases. In particular the ability to create a column as an <a href="http://www.postgresql.org/docs/9.1/static/arrays.html">Array</a> of some datatype. Want to store a game of tic-tac-toe in a database, or an array of 1 user&rsquo;s phone numbers? It simply becomes a single column that can contain multiple phone numbers for a user.</p>
-
-
-		
-		<a href="/2012/04/30/why-postgres/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/04/13/apps_to_services/">
-		
-			Apps to Services</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>Update the talk for this is now viewable on YouTube <a href="http://www.youtube.com/watch?v=ztGpK-v2Oow">here</a></em></p>
-
-<p>When I first came across Django I was an immediate fan. It featured:</p>
-
-<ul>
-<li>Good documentation</li>
-<li>Steady but stable progress</li>
-<li>Community around apps which encouraged <em>DRY</em></li>
-</ul>
-
-
-<p>I&rsquo;ve been a user off and on depending on my needs for nearly four years since discovering it, and throughout that time all of the above have remained true. However, as I&rsquo;ve worked on and encountered more complex applications there&rsquo;s one thing that has time and again broke down for me, which is the Django apps model. It hasn&rsquo;t broken down due to Django only though, I&rsquo;ve seen it break down in Ruby (Rails), Java, .Net, take you&rsquo;re pick of language or framework.</p>
-
-<p>The breakdown of this model is due to several things:</p>
-
-
-		
-		<a href="/2012/04/13/apps_to_services/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/6/" class="prev">Prev</a>
@@ -707,7 +629,7 @@ connection.product.insert(django_pony)
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Craig Kerstiens
 

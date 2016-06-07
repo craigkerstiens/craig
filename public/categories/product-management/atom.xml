@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Product management | Craig Kerstiens]]></title>
+  <title><![CDATA[Category: Product Management | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/product-management/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-12-27T09:06:05-08:00</updated>
+  <updated>2016-06-07T10:27:45-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -14,56 +14,69 @@
 
   
   <entry>
-    <title type="html"><![CDATA[A product management blueprint]]></title>
-    <link href="http://www.craigkerstiens.com/2015/02/18/a-pm-blueprint/"/>
-    <updated>2015-02-18T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/02/18/a-pm-blueprint</id>
-    <content type="html"><![CDATA[<p>I find myself having more conversations with startups – both small and large – about product management. I&rsquo;ve blogged about some of <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">the tools</a> in my chest here but I haven&rsquo;t talked much about my “blueprint” for product management, which I find myself laying out in many conversations over coffee. What follows is this process I’ve used a few times over with new teams to get product and engineering moving together, shipping in a predictable manner, and tackling bigger and more strategic projects.</p>
+    <title type="html"><![CDATA[What being a PM is really like - Software is easy, People are hard]]></title>
+    <link href="http://www.craigkerstiens.com/2016/01/28/On-being-a-PM-software-is-easy-people-are-hard/"/>
+    <updated>2016-01-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/01/28/On-being-a-PM-software-is-easy-people-are-hard</id>
+    <content type="html"><![CDATA[<p>In recent months I&rsquo;ve had the question nearly once a week about advice/tips for becoming a Product Manager or more commonly referred to as PM. These are generally coming from people that are either currently engineers, or previously were and are in some engineer/customer role such as a sales engineer or solution architect. There&rsquo;s a number of <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?tag=mypred-20">high level</a> pieces talking about PM and it often feels glorious, I mean you get to make product decisions right? You get to call some shots. Well that sometimes may be true, but don&rsquo;t assume it&rsquo;s all rainbows and sparkles.</p>
+
+<p>Especially as a first time PM what your day to day will look like won&rsquo;t be debating strategy all day long. Here&rsquo;s a few of the good and the bad sides of being a PM.</p>
 
 <!--more-->
 
 
-<h3>Trust</h3>
+<h3>Plenty of grunt work</h3>
 
-<p>I need to know how to work with my team, what their working styles are, and how we interact. This starts by simply interacting – specifically, outside of the office. I heard a similar opinion recently from Chris Fry (who ran engineering at Salesforce and Twitter) when he remarked something to the effect of: “you can tell a good PM from a bad one based on if he goes to drinks with his team.” Without getting hung up on whether it’s beers or coffee, it’s more about socialization with your team and time outside the office. My personal approach: expect a dinner invite over to my place when I take on running product for a new team.</p>
+<p>While you may get to make a decision or two, the bulk of your time will not be thinking about grandiose visions, instead you&rsquo;ll be doing a lot to gather data. There&rsquo;s a lot of means for gathering data across lots of sources, the more you use the better you&rsquo;ll be. Knowing the ones you steer towards, as well as ones you steer away from is useful so you can balance a bias more fairly. For myself SQL is a go-to, then customer interactions both qualitative and quantitative such as surveys, following what media is saying about your space is important as well. And while user studies are often relegated to design and UX, as a PM you need to make sure it at least happens (<a href="http://www.invisionapp.com/">Invision App</a> is a favorite for lightweight tests).</p>
 
-<h3>Velocity</h3>
+<p>In a given week I probably spend 10 hrs interacting with customers, looking at data, and sadly that&rsquo;s probably not enough.</p>
 
-<p>Once you&rsquo;ve started to build some rapport, it&rsquo;s time to get down to business. If being able to quickly commit and ship something isn’t a problem for you, then it’s easy to just assume this is working. In reality most teams I encounter that need PM support don’t have shipping nailed down. You probably already know if you fall into that category of feeling like you can commit and ship vs. not, so if you’re not able to do that a few tips:</p>
+<p><em>A few practical examples of this</em></p>
 
-<ul>
-<li>There’s some projects that everyone wants to ship that’s been tried over and over, <strong>don’t tackle that first</strong>.</li>
-<li>Shipping something is better than nothing. It doesn&rsquo;t have to be the right thing.</li>
-<li>Sometimes you don&rsquo;t have to ship something to get velocity, you can launch things you already have</li>
-<li><del>Kill scope</del> Test things earlier and more iteratively, the more you can validate or try something without requiring a large investment the more everyone feels better about the direction you’re heading.</li>
-</ul>
+<p>Each morning I send emails to 10-20 users who used the product for the first time, yes this is automated but carving out 30 minutes of my day to actually follow-up with each of them is less automated.</p>
 
+<p>Another example is keeping a health of business dashboard up to date. Personally I use google sheets for this. Within one spreadsheet I have monthly and weekly targets as well as how we’re tracking against them. These are all updated on actual real time data, powered by Heroku’s dataclips with a simple <code>=importCSV(‘http://dataclips.heroku.com/abcdefghij….csv’)</code>. In total my google spreadsheets has 1 high level overview, with about 20 underlying sheets that do all of the computations. In any given month 1 of my key 4-5 goals may be missed, which then spawns digging in deeper to figure out why and what we can do about it.</p>
 
-<p>The key here is to commit to projects, deliver, and move on. Your velocity depends solely on delivery, not tasks, not sprints, not projects, etc.  If you haven’t shipped anything in a year, then your velocity for the year is zero. At a later point you should move from the focus on shipping anything to shipping the right things, it’s more important to ship 1 thing that moves the needle than 10 that don’t, but that’s a later concern.</p>
+<h3>Dictating vs. consensus</h3>
 
-<h3>Killing things</h3>
+<p>From a product decision making perspective you can force alignment by explicitly making every decision, or you can allow decisions to be made as a group voting if needed. Expect to use some balance of both of these among the team, and neither is never perfect. When it comes to outside the team you may still use both, but steer more strongly one way or the other. For example with the executive team it may be more consensus, with marketing it may be dictating your product roadmap which they can help support.</p>
 
-<p>On the note of killing scope&hellip; I&rsquo;ve heard it articulated at times, that some engineers are happy when certain PMs show up because it means less work for them. When you go over to an engineer’s desk are you creating more or less work? The answer should be less some large percentage of the time. If you can find a way to accomplish your goals with less effort, it&rsquo;s always a win. Every project everywhere always needs more time or money, what’s more innovative is how you can help a project to ship without one of those two.</p>
+<p>Even within the team there will be times a decision must be made and there will be some people that don&rsquo;t align. It&rsquo;s key that you make the decision clearly and explicitly. Even though some individuals don&rsquo;t like it, they won&rsquo;t fight against it&hellip; unless you make a habit of taking the input, then discarding it and going along your &lsquo;intuition&rsquo;. Even when there&rsquo;s a strong case based on the data it may not be as clear as you think.</p>
 
-<p>At a broader perspective than just scope – one of the biggest ways product can help engineering is by pushing harder for killing off features and the scope of a product. There&rsquo;s a good test on if something is ready to ship: if you <a href="http://www.craigkerstiens.com/2014/08/13/when-to-ship-when-to-kill/">tell beta users you&rsquo;re killing it</a> and they yell at you that you shouldn’t kill it, then it’s ready to ship.</p>
+<p>In contrast, decision making by consensus most people will feel happier that they provided input into the product. If you take everyone&rsquo;s input expect to end up with a product that feels like 10 people designed it, needless to say incoherent.</p>
 
-<p>If you’ve already shipped things, but they’re not delivering value or not being used, kill them. It’s that simple, it may have been a great idea at the time, but either invest in making sure it’s used or kill it so you don’t have to maintain it.</p>
+<p>As a PM expect to do a lot of listening, a good bit of convincing, and some occasional big decision making.</p>
 
-<h3>Roadmap planning</h3>
+<h3>The pain you feel inside the building doesn&rsquo;t matter</h3>
 
-<p>Usually getting velocity and killing things takes 3-6 months to really take full effect. At this point a team feels like they&rsquo;re not under a pile of technical debt, and they can commit to shipping projects. This is the point when product and engineering are melding and you can really start to have fun about where you&rsquo;re headed. At this point I&rsquo;ve seen a huge mix of where engineers are more actively or less actively engaged in this process. And the reality is this is everyone’s job to be thinking about where you&rsquo;re headed as a company – at least that&rsquo;s the case for any company that classifies itself as a startup.</p>
+<p>You may think you&rsquo;re solving a problem that exists for users, when in reality there was no problem at all. This is just a reminder that you need to keep empathy in mind above so much else.</p>
 
-<p>My favorite tool for this is a team gridding exercise, you can read more about this <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">here</a> and <a href="http://www.craigkerstiens.com/2013/08/13/rule-of-thirds/">here</a>. This is often best conducted at an off-site where you have an opportunity for casual conversation which can foster broader thinking beyond the obvious bug fixes or smaller product improvements.</p>
+<p>As an example, once a data team put in place a tool, supposedly for me. I looked at the tool and more or less didn&rsquo;t understand why it was in place. They proceeded to explain that my problem was it took me too long to write SQL, so this tool will help me get the reports I need without SQL. At that point I proceeded to actually list off all the issues I did have, none of which <a href="http://www.craigkerstiens.com/categories/postgres/">were SQL</a>.</p>
 
-<p><em>One item of note I&rsquo;ve heard from teams that have done this or similar exercises is they still have trouble deciding what to do after the fact. The role of product is to get to that decision. The most important part is getting to a decision and not the perfect one, gather data, decide, revisit as you go along. All of this isn’t to say that it’s an arbitrary decision, customers, data all inform that as well as the effort to impact matrix exercise, but in the end a clear direction isn’t executed on consensus.</em></p>
+<p>Prescribing a solution without knowing clearly <strong>from customers</strong> what the problem is will leave you in a bad spot. All this means you have to set aside building the tool you want to use, and make sure you know what the <a href="http://headrush.typepad.com/creating_passionate_users/2005/01/keeping_users_e.html">customer wants</a>.</p>
 
-<h3>In conclusion</h3>
+<h3>Marketing is your job</h3>
 
-<p>There’s really no end or done when it comes to the role and the work.</p>
+<p>Not external marketing, though often that work may still fall to you, but rather internal marketing.</p>
 
-<p>There’s always another milestone and the market is always moving around you. But once you’re able to execute predictably and think in an ordered sense about your roadmap, you’re in a position to be able to monitor and adapt to the market, and even more so experiment and shape the market yourself. At that point you have to keep doing it and then the hard part becomes finding ways of keeping a fresh perspective <em>protip: customers are an important part of that equation</em></p>
+<p>It’s important that you internally market the wins for your <em>team</em>. These wins should very much be for the team, and not for your own benefit. The best PMs seem to disappear into the background, this is because you’re more surfacing all the work your team is doing than any of the details you helped coordinate. This is often counter to our natural instinct to tout our own accomplishments. This is only exaggerated in PM role, one where things can still ship if you’re not there, so there can often be a tendency to try to highlight the roles value. Fight that urge to self market.</p>
 
-<p>Have tips/tricks/practices that I completely missed here or that you disagree with? I’m always happy to talk with others so drop me a note <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/412j330z173E1d432M05/Untitled.png?v=4ceec9d2" style="float:right; width:50%; margin-left:20px;" /></p>
+
+<p>Rest assured though–getting the team focused on solving the right problems, and then surfacing their wins will only help you go faster.</p>
+
+<h3>On leading</h3>
+
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/3E2c3k1p1j2g2O1O0b0L/Untitled.png?v=9daf9e58" style="float:right; width:50%; margin-left:20px;margin-bottom:15px;" />
+You’ll have to lead at times, follow at others, and all of this will likely be with no reports. Don’t confuse a lack of engineers reporting to you (which they should not, a common team structure can be seen on the right) for not needing to lead the team at times. <em>For those less familiar it’s very rare for a PM to have engineers report to them, though occasionally designers will. It’s typically the cross-reporting structure you’ll find talked about by Andy Grove in <a href="http://www.amazon.com/High-Output-Management-Andrew-Grove/dp/0679762884?tag=mypred-20">High output management</a>.</em> If the team is firing on all cylinders, knows the direction, and executing then step back and let things roll forward. If that’s not the case and leadership around direction or otherwise is needed be prepared to step up.</p>
+
+<p>At the end of the day ensuring the product is advancing is your job, so be prepared to do what you need to whether it’s leading or not to accomplish that.</p>
+
+<h3>It’s not all rainbows, but it is fun</h3>
+
+<p>The range of things you’ll have to focus on can be diverse and complex. In the end if you get a rush out of shipping and launching products, then all the work that goes into it can make it all worthwhile. It’s as much about figuring out what customers want and then getting your team building the right thing. For a first time PM it can be summed up by the notion that software is easy, people are hard.</p>
+
+<p><em>Special thanks to <a href="http://www.twitter.com/lukasfittl">Lukas Fittl</a> and <a href="http://www.twitter.com/iamclovin">Arun Thampi</a> for reviews and feedback on this post.</em></p>
 ]]></content>
   </entry>
   

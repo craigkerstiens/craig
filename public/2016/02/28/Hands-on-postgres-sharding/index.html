@@ -1,0 +1,330 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Hands On Postgres Sharding Craig Kerstiens</title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Hands on Postgres Sharding</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency over the last two months. As a result I thought I&rsquo;d do a deeper dive with some actual hands on for sharding. Though for this hands on, because I do value my time I&rsquo;m going to take advantage of <code>pg_shard</code> rather than creating mechanisms from scratch.</p>
+
+<p>For those unfamiliar <a href="https://github.com/citusdata/pg_shard/">pg_shard</a> is an open source extension from <a href="http://citusdata.com">Citus data</a> who has a commerical product that you can think of is pg_shard++ (and probably much more). Pg_shard adds a little extra to let data automatically distribute to other Postgres tables (logical shards) and Postgres databases/instances (physical shards) thus letting you outgrow a single Postgres node pretty simply.</p>
+
+<p>Alright, enough talk about it, let&rsquo;s get things up and running.</p>
+
+<!--more-->
+
+
+<h3>Build, install</h3>
+
+<p><em>The rest assume you have Postgres.app, version 9.5 setup and are on a Mac, much of these steps could be easily adapted for other Postgres installs or OSes.</em></p>
+
+<p>PATH=/Applications/Postgres.app/Contents/Versions/latest/bin/:$PATH make</p>
+
+<p>sudo PATH=/Applications/Postgres.app/Contents/Versions/latest/bin/:$PATH make install</p>
+
+<p>cp /Applications/Postgres.app/Contents/Versions/9.5/share/postgresql/postgresql.conf.sample /Applications/Postgres.app/Contents/Versions/9.5/share/postgresql/postgresql.conf.sample</p>
+
+<p>Edit your <code>postgresql.conf</code>:</p>
+
+<pre><code>#shared_preload_libraries = ''
+</code></pre>
+
+<p>TO:</p>
+
+<pre><code>shared_preload_libraries = 'pg_shard'
+</code></pre>
+
+<p>Then create a file in <code>/Users/craig/Library/Application\ Support/Postgres/var-9.5/pg_worker_list.conf</code> where <code>craig</code> is your username:</p>
+
+<pre><code># hostname port-number
+localhost  5432
+localhost  5433
+</code></pre>
+
+<p>You&rsquo;ll also need to create a new Postgres instance:</p>
+
+<pre><code>initdb -D /Users/craig/Library/Application\ Support/Postgres/var-9.5-2
+</code></pre>
+
+<p>Then edit that <code>postgresql.conf</code> inside that newly created folder with two main edits:</p>
+
+<pre><code>port = 5432
+</code></pre>
+
+<p>To</p>
+
+<pre><code>port = 5433
+</code></pre>
+
+<p>Finally setup our database then start it up:</p>
+
+<pre><code>createdb instagram
+postgres -D /Users/craig/Library/Application\ Support/Postgres/var-9.5-2
+</code></pre>
+
+<h3>Setup</h3>
+
+<p>Now you should have two running instances of Postgres, now let&rsquo;s finally turn on the pg_shard extension, create some tables and see what we have. First connect to your main running Postgres instance, so in this case the the instagram database we first created <code>psql instagram</code>, then let&rsquo;s set things up:</p>
+
+<pre><code>CREATE EXTENSION pg_shard;
+CREATE TABLE customer_reviews (customer_id TEXT NOT NULL, review_date DATE, review_rating INTEGER, product_id CHAR(10));
+
+ CREATE TABLE
+ Time: 4.734 ms
+
+SELECT master_create_distributed_table(table_name := 'customer_reviews',                                                                                                     partition_column := 'customer_id');
+
+ master_create_distributed_table
+ ---------------------------------
+
+ (1 row)
+
+SELECT master_create_worker_shards(table_name := 'customer_reviews',                                                                                                     shard_count := 16,                                                                                                                                        replication_factor := 2);
+
+ master_create_worker_shards
+ -----------------------------
+
+ (1 row)
+</code></pre>
+
+<h3>Understanding and using</h3>
+
+<p>So that was a lot of initial setup. But now we have an application that could in theory scale to a shared application across 16 instances. If you want a refresher, there&rsquo;s a difference between physical and logical shards. In this case above we have 16 logical ones and it&rsquo;s replicated across 2 physical Postgres instances albeit on the same instance.</p>
+
+<p>Alright so a little more poking under the covers to see what happened before we actually start doing something with our data. If you&rsquo;re still connected go ahead and run <code>\d</code>, and you should see:</p>
+
+<pre><code>                List of relations
+ Schema |          Name          | Type  | Owner
+--------+------------------------+-------+-------
+ public | customer_reviews       | table | craig
+ public | customer_reviews_10000 | table | craig
+ public | customer_reviews_10001 | table | craig
+ public | customer_reviews_10002 | table | craig
+ public | customer_reviews_10003 | table | craig
+ public | customer_reviews_10004 | table | craig
+ public | customer_reviews_10005 | table | craig
+ public | customer_reviews_10006 | table | craig
+ public | customer_reviews_10007 | table | craig
+ public | customer_reviews_10008 | table | craig
+ public | customer_reviews_10009 | table | craig
+ public | customer_reviews_10010 | table | craig
+ public | customer_reviews_10011 | table | craig
+ public | customer_reviews_10012 | table | craig
+ public | customer_reviews_10013 | table | craig
+ public | customer_reviews_10014 | table | craig
+ public | customer_reviews_10015 | table | craig
+(17 rows)
+</code></pre>
+
+<p>You can see that under the cover there&rsquo;s a lot more <code>customer_reviews</code> tables, in reality you don&rsquo;t have to think about these or do anything with them. But just for reference they&rsquo;re just plain ole Postgres tables under the cover. You can query them and poke at the data. The now mystical <code>customer_reviews</code> will actually roll up the data across all your logical shards (tables) and physical shards (spanning across machines).</p>
+
+<p><em>It&rsquo;s also of note that in production you might not actually use your primary DB as a worker, we did this more for expediency in setting it up on a local Mac. More typically you&rsquo;d have 2 or more workers which are not the same a the primary, these were the ports we setup in our <code>pg_worker_list.conf</code>.</em>    A common setup would look something more like:</p>
+
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/3T2N2Q1K041g0a0L0j03/Untitled.png?v=7df00f6b" alt="" /></p>
+
+<p>So now start inserting away:</p>
+
+<pre><code>INSERT INTO customer_reviews (customer_id, review_rating) VALUES ('HN802', 5);
+INSERT INTO customer_reviews (customer_id, review_rating) VALUES ('FA2K1', 10);
+</code></pre>
+
+<p>For extra homework on your own you can now go and poke at where the underlying data actually surfaced.</p>
+
+<h3>Conclusion</h3>
+
+<p>Yes, there&rsquo;s a number of limitations that you can learn a bit more about over on the <a href="https://github.com/citusdata/pg_shard#limitations">github repo for pg_shard</a>. Though even with those it&rsquo;s very usable as is, and let&rsquo;s you get quite far in prepping an app for sharding. While I will say that all apps think they&rsquo;ll need sharding and few actually do, given <code>pg_shard</code> it&rsquo;s minimal extra effort now to plan for such scaling should you need it.</p>
+
+<p>Up next we&rsquo;ll look at how it&rsquo;d work with a few languages, so you can get an idea of the end to end experience.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-28T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2016
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
