@@ -1,26 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RedCloth (4.2.9)
     chunky_png (1.3.5)
     classifier (1.3.4)
       fast-stemmer (>= 1.0.0)
-    compass (1.0.3)
+    compass (0.12.2)
       chunky_png (~> 1.2)
-      compass-core (~> 1.0.2)
-      compass-import-once (~> 1.0.5)
-      rb-fsevent (>= 0.9.3)
-      rb-inotify (>= 0.9)
-      sass (>= 3.3.13, < 3.5)
-    compass-core (1.0.3)
-      multi_json (~> 1.0)
-      sass (>= 3.3.0, < 3.5)
-    compass-import-once (1.0.5)
-      sass (>= 3.2, < 3.5)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
     daemons (1.1.9)
     directory_watcher (1.4.1)
-    eventmachine (1.0.3)
+    eventmachine (1.0.9)
     fast-stemmer (1.0.2)
-    ffi (1.9.10)
+    fssm (0.2.10)
     haml (3.1.8)
     jekyll (0.12.1)
       classifier (~> 1.3)
@@ -32,7 +25,6 @@ GEM
     kramdown (0.14.2)
     liquid (2.3.0)
     maruku (0.7.1)
-    multi_json (1.11.2)
     posix-spawn (0.3.8)
     pygments.rb (0.3.7)
       posix-spawn (~> 0.3.6)
@@ -44,13 +36,13 @@ GEM
     rack-protection (1.5.2)
       rack
     rack-rewrite (1.5.1)
-    rake (11.1.2)
+    rake (0.9.6)
     rb-fsevent (0.9.7)
-    rb-inotify (0.9.7)
-      ffi (>= 0.5.0)
     rdiscount (2.0.7.3)
     rubypants (0.2.0)
     sass (3.4.22)
+    sass-globbing (1.0.0)
+      sass (>= 3.1)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -67,17 +59,27 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  compass
-  haml
+  RedCloth (~> 4.2.9)
+  compass (~> 0.12.2)
+  directory_watcher (= 1.4.1)
+  haml (~> 3.1.7)
   jekyll (~> 0.12)
+  liquid (~> 2.3.0)
+  pygments.rb (~> 0.3.4)
   rack-jekyll
   rack-rewrite
-  rake
-  rdiscount
-  rubypants
+  rake (~> 0.9)
+  rb-fsevent (~> 0.9)
+  rdiscount (~> 2.0.7)
+  rubypants (~> 0.2.0)
+  sass (~> 3.2)
+  sass-globbing (~> 1.0.0)
   sinatra (~> 1.4.2)
-  stringex
+  stringex (~> 1.4.0)
   thin
 
+RUBY VERSION
+   ruby 2.3.0p0
+
 BUNDLED WITH
-   1.11.2
+   1.15.1

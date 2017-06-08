@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Django | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/django/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-06-08T11:19:34-07:00</updated>
+  <updated>2017-06-08T11:45:52-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -215,6 +215,36 @@ class Post(models.Model):
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Postgres Pooling with Django]]></title>
+    <link href="http://www.craigkerstiens.com/2012/10/02/Postgres-pooling-with-django/"/>
+    <updated>2012-10-02T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/10/02/Postgres-pooling-with-django</id>
+    <content type="html"><![CDATA[<p>A feature thats glaringly missing within Django and common in many other frameworks including many Java frameworks and Rails is connection pooling for your database connection. As most Django users are Postgres users the default answer is to use something like pgPool or pgBouncer. This are tools that you can run that will persist a connection to your Postgres database intended to offer:</p>
+
+<ul>
+<li>Connection Pooling</li>
+<li>Replication</li>
+<li>Load Balancing</li>
+</ul>
+
+
+<p><em>Its of not that PgBouncer is intended very specifically for pooling while pgPool does much more.</em></p>
+
+<p>Each of these in many cases can come with caveats though. If there are issues within your network they may not re-establish the connection properly. They also are not known to handle SSL renegotiation very well. Finally given running one more piece of software to reduce connection times it seems like a lot of overhead to simply reduce the connection time to your database.</p>
+
+<h2>Is connection time a real problem?</h2>
+
+<p>Given a well refined app, with a well refined schema with appropriate indexes your view should be doing things pretty quickly. If this is the case without some form of connection pooling and running in a cloud environment (in this case Heroku) your application performance looks like:</p>
+
+<p>If you&rsquo;ll notice that about 50% of our request time was in Postgres. The hard part to see is how much of this is actually doing something. In this case its issuing some very basic queries then rendering a very basic view.</p>
+
+<h2>The solution</h2>
+
+<p>By using something in <em>the other Python ORM</em>, SQLAlchemy, we can take advantage of its connection pooling. Large thanks to <a href="https://twitter.com/kennethreitz">Kenneth Reitz</a> for packaging this up into an easy to install and easy to use format as a Django DB backend. Using django_postgrespool it will take advantage of connection pooling and we can then see the performance after:</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Protips for Conference Talks]]></title>
     <link href="http://www.craigkerstiens.com/2012/06/19/pro-tips-for-conference-talks/"/>
     <updated>2012-06-19T00:00:00-07:00</updated>
@@ -295,91 +325,6 @@ Talks are great, but there's a good chance you'll miss something in the process.
 
 -->
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Schemaless Postgres in Django]]></title>
-    <link href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/"/>
-    <updated>2012-06-11T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2012/06/11/schemaless-django</id>
-    <content type="html"><![CDATA[<p>Earlier this week while I was at <a href="http://lanyrd.com/2012/djangocon-europe/">DjangoCon EU</a> there seemed to be a surprising amount of talk about MongoDB. My problem with this isn&rsquo;t with MongoDB, but in  the assumption that only Mongo can solve what you&rsquo;re looking for. By and far the most common feature is people want schemaless. It gives them flexibility in their data model and lets them iterate quickly. While I still opt for relational models that map cleanly to a relational database, there are cases where developers may want schemaless. I gave a quick lightning talk on this with slides <a href="https://speakerdeck.com/u/craigkerstiens/p/django-and-hstore">here</a>, but it is worth recapping.</p>
-
-<p>The example given by <a href="http://www.twitter.com/pydanny">pydanny</a> was a product catalog. You may have different items you want to store for a catalog. Lets take an example below:</p>
-
-<pre><code>django_pony = {'name': 'Django Pony', 'rating': '5'}
-pink_pony = {'name': 'Pink Pony', 'rating': '4', 'color': 'pink'}
-</code></pre>
-
-<p>In the case of a product catalog it could be understandable you don&rsquo;t want to normalize every possible spec for the product. The argument for Mongo is so commonly that you can easily work with this data model. Admittedly it is quite simple:</p>
-
-<pre><code>from pymongo import Connection
-connection = Connection()
-django_pony = {'name': 'Django Pony', 'rating': '5'}
-connection.product.insert(django_pony)
-</code></pre>
-
-<p>The problem is that this assumes other schemaless options don&rsquo;t exist or are inferior.</p>
-
-<h2>Enter hStore</h2>
-
-<p><a href="http://www.postgresql.org/docs/8.4/static/hstore.html">hStore</a> is a column type within Postgres. It is a key value store that allows you to store a dictionary, with text values. It alone is not a full document store replacement, but allows for flexibility in your data model where you need it while letting you use relational models elsewhere. Its not exactly new within Postgres either, as its been available since 8.4, however its recently become easier to work with and is supported in some form or another by more frameworks.</p>
-
-<p>To do the same as above we only need to do a few steps:</p>
-
-<!-- more -->
-
-
-<p>Within your Postgres 9.1 or higher database:</p>
-
-<pre><code>create extension hstore;
-</code></pre>
-
-<p><em>If you don&rsquo;t have Postgres already if you&rsquo;re on a Mac quickly grab and install <a href="http://postgresapp.com">Postgres.app</a>.</em></p>
-
-<p>Now for actually using it within your Django application. You first need to install django-hstore to your project:</p>
-
-<pre><code>pip install django-hstore
-</code></pre>
-
-<p>Then you can add it to your models:</p>
-
-<pre><code>from django.db import models
-from django_hstore import hstore
-
-class Product(models.Model):
-    name = models.CharField(max_length=250)
-    data = hstore.DictionaryField(db_index=True)
-    objects = hstore.Manager()
-
-    def __unicode__(self):
-        return self.name
-</code></pre>
-
-<p>Once you&rsquo;ve sync'ed your database models you can now add your products in a very similar form to above:</p>
-
-<pre><code>Product.objects.create(name='Django Pony', data={'rating': '5'})
-Product.objects.create(name='Pony', data={'color': 'pink', 'rating': '4'})
-</code></pre>
-
-<p>At this point you&rsquo;ve got your schemaless data into Postgres and can interact with it. However, this is where the benefits of Postgres quickly start to come into play. In addition to the schemaless model you&rsquo;re able to add indexes and filter on keys/values just as you would expect. In fact within Django it maps similarly to how it would within the ORM:</p>
-
-<pre><code>colored_ponies = Product.objects.filter(data__contains='color')
-print colored_ponies[0].data['color']
-
-favorite_ponies = Product.objects.filter(data__contains={'rating': '5'})
-print colored_ponies[0]
-</code></pre>
-
-<p>To add indexes within postgres we could index on the same items that we&rsquo;re filtering above:</p>
-
-<pre><code>create index on product(((data-&gt;'color')::int)) where ((data-&gt;'size') is not null);
-create index on product(((data-&gt;'rating')::int)) where ((data-&gt;'rating') = '5');
-</code></pre>
-
-<p>If you need a sample project to start with immediately check out this one on <a href="https://github.com/craigkerstiens/hstore-demo">github</a>.</p>
-
-<p>When evaluating any database its important to choose the features you&rsquo;re evaluating it on, then examine further. Mongo may be great because its schemaless, this doesn&rsquo;t mean an RDMS can&rsquo;t be schemaless as well (and do a good job of it). In the long run, schemaless is likely to just become another feature in databases, but more on that later.</p>
 ]]></content>
   </entry>
   

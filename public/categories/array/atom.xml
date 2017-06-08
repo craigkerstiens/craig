@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Array | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/array/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-06-08T11:19:34-07:00</updated>
+  <updated>2017-06-08T11:45:52-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -121,7 +121,7 @@ class Post(models.Model):
 <p>An insert to this table would look something like:</p>
 
 <pre><code>INSERT INTO purchases VALUES (1, 37, '\{\{15.0, 1.0, 25.0\}, \{15.0, 1.0, 25.0\}\}', now());
-INSERT INTO purchases VALUES (2, 2, '11.0', now());
+INSERT INTO purchases VALUES (2, 2, '{{11.0, 1.0, 4.99}}', now());
 </code></pre>
 
 <p>You can see a full example with UDF&rsquo;s to compute total <a href="https://github.com/craigkerstiens/postgres-demo">here</a></p>
