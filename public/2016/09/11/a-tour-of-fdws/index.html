@@ -1,0 +1,320 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="google-site-verification" content="hKvGTVuUObK9oCHVB0Hg5jTgwRsTdGVZvpJfDJbwevY" />
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>A tour of Postgres' Foreign Data Wrappers - Craig Kerstiens </title>
+
+<meta name="author" content="Craig Kerstiens"> 
+
+<meta name="description" content="SQL can be a powerful language for reporting. Whether you&rsquo;re just exploring some data, or generating reports that show month over month revenue &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Craig Kerstiens" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Craig Kerstiens</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/about/">About</a></li>
+	<li><a href="/about/travel_wine.html">Travel & Wine</a></li>
+	<li><a href="/recommendations">My Recommendations</a></li>
+	<li><a href="/content">Top Content</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.craigkerstiens.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">A Tour of Postgres' Foreign Data Wrappers</h2>
+	<div class="sharing">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+	</div>
+	<div class="entry-content"><p>SQL can be a powerful language for reporting. Whether you&rsquo;re just exploring some data, or generating reports that show <a href="/2014/02/26/Tracking-MoM-growth-in-SQL/">month over month revenue growth</a> it&rsquo;s the <a href="https://www.amazon.com/SQL-Relational-Theory-Write-Accurate/dp/1491941170/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1473612603&amp;sr=1-1&amp;keywords=sql+relational&amp;tag=mypred-20">lingua franca</a> for data analysis. But, your data isn&rsquo;t always in a SQL database, even then if you&rsquo;re using Postgres you can still likely use SQL to analyze, query, even joing with that data. Foreign data wrappers have been around for years in Postgres, but are continuing to mature and be a great option for joining disparate systems.</p>
+
+<h3>Overview of foreign data wrappers</h3>
+
+<p>If you&rsquo;re unfamiliar, foreign data wrappers, or FDW, allow you to connect from within Postgres to a remote system. Then you can query them from directly within Postgres. While there is an official Postgres FDW that ships with Postgres itself, that allows you to connect from one Postgres DB to another, there&rsquo;s also a broad community of others.</p>
+
+<p>At the core of it Postgres provides certain APIs under the covers which each FDW extension can implement. This can include the ability to map SQL to whatever makes sense for a given system, push down various operators like where clauses, and as of Postgres 9.3 can even write data. <!--more--></p>
+
+<p>To setup a FDW you first would install the extension, then provide the connection to the remote system, setup your schema/tables, and then you&rsquo;re off to the races–or well ready to query. If you&rsquo;ve got more than 2-3 databases or systems in your infrastructure, you&rsquo;ll often benefit from FDWs as opposed to introducing a heavyweight ETL pipeline. Don&rsquo;t mistake FDWs as the most performant method for joining data, but they are often the developer time efficient means of joining these data sets.</p>
+
+<p>Let&rsquo;s look at just a few of the more popular and interesting ones.</p>
+
+<h3>Postgres FDW</h3>
+
+<p>The Postgres one is the easiest to get started with. First you&rsquo;ll just enable it with <code>CREATE EXTENSION</code>, then you&rsquo;ll setup your remote server:</p>
+
+<pre><code>CREATE EXTENSION postgres_fdw;
+
+CREATE SERVER core_db 
+ FOREIGN DATA WRAPPER postgres_fdw 
+ OPTIONS (host 'foo', dbname 'core_db', port '5432');
+</code></pre>
+
+<p>Then you&rsquo;ll create the user that has access to that database:</p>
+
+<pre><code>CREATE USER MAPPING FOR bi SERVER core OPTIONS (user 'bi', password 'secret');
+</code></pre>
+
+<p>Finally, create your foreign table:</p>
+
+<pre><code>CREATE FOREIGN TABLE core_users (
+  id          integer NOT NULL,
+  username    varchar(255),
+  password    varchar(255),
+  last_login  timestamptz
+)
+SERVER core;
+</code></pre>
+
+<p>Now you&rsquo;ll see a new table in the database you created this in called <code>core_users</code>. You can query this table just like you&rsquo;d expect:</p>
+
+<pre><code>SELECT *
+FROM core_users
+WHERE last_login &gt;= now() - '1 day'::interval;
+</code></pre>
+
+<p>You can also join against local tables, such as getting all the invoices for users that have logged in within the last month:</p>
+
+<pre><code>SELECT *
+FROM invoices, core_users
+WHERE core_users.last_login &gt;= now() - '1 month::interval'
+  AND invoices.user_id = core_users.id
+</code></pre>
+
+<p>Hopefully this is all straight forward enough, but let&rsquo;s also take a quick look at some of the other interesting ones:</p>
+
+<h3>MySQL FDW</h3>
+
+<p>For MySQL you&rsquo;ll also have to <a href="https://github.com/EnterpriseDB/mysql_fdw">download it</a> and install it as well since it doesn&rsquo;t ship directly with Postgres. This should be fairly straight forward:</p>
+
+<pre><code>$ export PATH=/usr/local/pgsql/bin/:$PATH
+$ export PATH=/usr/local/mysql/bin/:$PATH
+$ make USE_PGXS=1
+$ make USE_PGXS=1 install
+</code></pre>
+
+<p>Now that you&rsquo;ve built it you&rsquo;d follow a very similar path to setting it up as we did for Postgres:</p>
+
+<pre><code>CREATE EXTENSION mysql_fdw;
+
+CREATE SERVER mysql_server
+ FOREIGN DATA WRAPPER mysql_fdw
+ OPTIONS (host '127.0.0.1', port '3306');
+
+CREATE USER MAPPING FOR postgres
+ SERVER mysql_server
+ OPTIONS (username 'foo', password 'bar');
+
+CREATE FOREIGN TABLE core_users (
+  id          integer NOT NULL,
+  username    varchar(255),
+  password    varchar(255),
+  last_login  timestamptz
+ )
+ SERVER mysql_server;
+</code></pre>
+
+<p>But MySQL while different than Postgres is also more similar in SQL support than say a more exotic NoSQL store. How well do they work as a foreign data wrapper? Let&rsquo;s look at our next one:</p>
+
+<h3>MongoDB</h3>
+
+<p>First you&rsquo;ll go through much of the <a href="https://github.com/EnterpriseDB/mongo_fdw">same setup</a> as you did for MySQL. The one major difference though is in the final step to setup the <code>table</code>. Since a table doesn&rsquo;t quite map in the same way with Mongo you have the ability to set two items: 1. the database and 2. the collection name.</p>
+
+<pre><code>CREATE FOREIGN TABLE core_users(
+     _id NAME,
+     user_id int,
+     user_username text,
+     user_last_login timestamptz)
+SERVER mongo_server
+     OPTIONS (database 'db', collection 'users');
+</code></pre>
+
+<p>With this you can do some basic level of filtering as well:</p>
+
+<pre><code>SELECT * 
+FROM core_users
+WHERE user_last_login &gt;= now() - '1 day'::interval;
+</code></pre>
+
+<p>You can also write and delete data as well now just using SQL:</p>
+
+<pre><code>DELETE FROM core_users 
+WHERE user_id = 100;
+</code></pre>
+
+<p>Of course just putting SQL on top of Mongo doesn&rsquo;t mean you get all the flexibility of analysis that you&rsquo;d have directly within Postgres, this does go a long way towards allowing you to analyze data that lives across two different systems.</p>
+
+<h3>Many more</h3>
+
+<p>A few years ago there were some key ones which already made FDWs useful. Now there&rsquo;s a rich list covering probably every system you could want. Whether it&rsquo;s <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">Redis</a>, a simple <a href="https://www.postgresql.org/docs/9.5/static/file-fdw.html">CSV</a> one, or something newer like <a href="https://github.com/snaga/monetdb_fdw">MonetDB</a> chances are you can find an <a href="https://wiki.postgresql.org/wiki/Foreign_data_wrappers#NoSQL_Database_Wrappers">FDW</a> for the system you need that makes your life easier.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2017
+
+    Craig Kerstiens
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<!--<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>  Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-4670852-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
