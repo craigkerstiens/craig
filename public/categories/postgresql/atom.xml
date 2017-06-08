@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-06-08T15:30:18-07:00</updated>
+  <updated>2017-06-08T15:51:20-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -70,7 +70,7 @@ SELECT generate_series('2017-01-01'::date, now()::date, '1 week'::interval) week
 with weeks as (
   select week as week
   from generate_series(&lsquo;2017-01-01&rsquo;::date, now()::date, &lsquo;1 week&rsquo;::interval) weeks
-),</p>
+)</p>
 
 <p>SELECT weeks.week,</p>
 

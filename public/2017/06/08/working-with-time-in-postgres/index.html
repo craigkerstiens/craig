@@ -185,7 +185,7 @@ $(document).ready(
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">with</span> <span class="n">weeks</span> <span class="k">as</span> <span class="p">(</span>
 </span><span class='line'>  <span class="k">select</span> <span class="n">week</span> <span class="k">as</span> <span class="n">week</span>
 </span><span class='line'>  <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">::</span><span class="nb">date</span><span class="p">,</span> <span class="n">now</span><span class="p">()::</span><span class="nb">date</span><span class="p">,</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span> <span class="n">weeks</span>
-</span><span class='line'><span class="p">),</span>
+</span><span class='line'><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">SELECT</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span><span class="p">,</span>
 </span><span class='line'>       <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>

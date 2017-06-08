@@ -55,7 +55,7 @@ Then we're going to join this against the actual users table and check that the 
 with weeks as (
   select week as week
   from generate_series('2017-01-01'::date, now()::date, '1 week'::interval) weeks
-),
+)
 
 SELECT weeks.week,
        count(*)
