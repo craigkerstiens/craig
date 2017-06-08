@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2016-06-07T10:27:45-07:00</updated>
+  <updated>2017-06-08T09:14:22-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,662 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Working with time in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/06/08/working-with-time-in-postgres/"/>
+    <updated>2017-06-08T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/06/08/working-with-time-in-postgres</id>
+    <content type="html"><![CDATA[<p>A massive amount of reporting queries, whether really intensive data analysis, or just basic insights into your business involving looking at data over a certain time period. Postgres has really rich support for dealing with time out of the box, something that&rsquo;s often very underweighted when dealing with a database. Sure, if you have a time-series database it&rsquo;s implied, but even then how flexible and friendly is it from a query perspective? With Postgres there&rsquo;s a lot of key items available to you, let&rsquo;s dig in at the things that make your life easier when querying. <!--more--></p>
+
+<h3>Date math</h3>
+
+<p>The most common thing I find myself doing is looking at users that have done something within some specific time window. If I&rsquo;m executing this all from my app I can easily inject specific dates, but Postgres makes this really easy for you. Within Postgres you have a type called and interval that is some window of time. And fortunately Postgres takes care of the heavy lifting of how might something translate to or from hours/seconds/milliseconds/etc. Here&rsquo;s just a few examples of things you could do with interals:</p>
+
+<ul>
+<li>&lsquo;1 day&rsquo;::interval</li>
+<li>&lsquo;5 days&rsquo;::interval</li>
+<li>&lsquo;1 week&rsquo;::interval</li>
+<li>&lsquo;30 days&rsquo;::interval</li>
+<li>&lsquo;1 month&rsquo;::interval</li>
+</ul>
+
+
+<p><em>A note that if you&rsquo;re looking to remove something like a full month, you actually want to use 1 month instead of trying to calculate yourself.</em></p>
+
+<p>With a given interval you can easily shift some window of time, such as finding all users that have signed up for your service within the past week:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">users</span>
+</span><span class='line'><span class="k">WHERE</span> <span class="n">created_at</span> <span class="o">&gt;=</span> <span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Date functions</h3>
+
+<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you worth with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">date_trunc</span><span class="p">(</span><span class="s1">&#39;week&#39;</span><span class="p">,</span> <span class="n">created_at</span><span class="p">),</span>
+</span><span class='line'>       <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">users</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+</span><span class='line'><span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span> <span class="k">DESC</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This gives us a nice roll-up of how many users signed up each week. What&rsquo;s missing here though is if you have a week that has no users. In that case because no users signed up there is no count of 0, it just simply doesn&rsquo;t exist. If you did want something like this you could generate some range of time and then do a cross join with it against users to see which week they fell into. To do this first you&rsquo;d generate a series of dates:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">generate_series</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">::</span><span class="nb">date</span><span class="p">,</span> <span class="n">now</span><span class="p">()::</span><span class="nb">date</span><span class="p">,</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span> <span class="n">weeks</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we&rsquo;re going to join this against the actual users table and check that the <code>created_at</code> falls within the right range.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">with</span> <span class="n">weeks</span> <span class="k">as</span> <span class="p">(</span>
+</span><span class='line'>  <span class="k">select</span> <span class="n">week</span> <span class="k">as</span> <span class="n">week</span>
+</span><span class='line'>  <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">::</span><span class="nb">date</span><span class="p">,</span> <span class="n">now</span><span class="p">()::</span><span class="nb">date</span><span class="p">,</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span> <span class="n">weeks</span>
+</span><span class='line'><span class="p">),</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span><span class="p">,</span>
+</span><span class='line'>       <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">weeks</span><span class="p">,</span>
+</span><span class='line'>     <span class="n">users</span>
+</span><span class='line'><span class="k">WHERE</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&gt;</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span>
+</span><span class='line'>  <span class="k">AND</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&lt;=</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span> <span class="o">-</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Timestamp vs. Timestamptz</h3>
+
+<p>What about storing the times themselves? Postgres has two types of timestamps. It has a generic timestamp and one with timezone embedded in it. In most cases you should generally opt for timestamptz. Why not timestamp? What happens if you move a server, or your server somehow swaps its configuration. Or perhaps more practically what about daylight savings time? In general you might think that you can simply just put in the time as you see it, but when different countries around the world observe things like daylight savings time differently it introduces complexities into your application.</p>
+
+<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone and store your dates correctly. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
+
+<h3>More</h3>
+
+<p>There&rsquo;s a number of other functions and capabilities when it comes to dealing with time in Postrges. You can <code>extract</code> various parts of a timesetamp or interval such as hour of the day or the month. You can grab the day of the week with <code>dow</code>. And one of my favorites which is when we celebrate happy hour at Citus, there&rsquo;s a literal for UTC 00:00:00 00:00:00 which is <a href="https://www.postgresql.org/message-id/20050124200645.GA6126%40winnie.fuhr.org"><code>allsballs()</code></a>. If you need to work with dates and times in Postgres I encourage you to check out the <a href="https://www.postgresql.org/docs/current/static/functions-datetime.html">docs</a> before you try to re-write something of your own, chances are what you need may already be there.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why use Postgres (Updated for last 5 years)]]></title>
+    <link href="http://www.craigkerstiens.com/2017/04/30/why-postgres-five-years-later/"/>
+    <updated>2017-04-30T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/04/30/why-postgres-five-years-later</id>
+    <content type="html"><![CDATA[<p>Five years ago <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">I wrote a post</a> that got some good attention on why you should use Postgres. Almost a year later I <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">added a bunch of things</a> I missed. Many of those items bear repeating, and I&rsquo;ll recap a few of those in the latter half of this post. But in the last 4-5 years there&rsquo;s been a lot of improvements and more reasons added to the list of why you should use Postgres. Here&rsquo;s the rundown of the things that make Postgres a great database you should consider using. <!--more--></p>
+
+<h3>Datatypes, including JSONB and range types</h3>
+
+<p>Postgres has long had an open and friendly attitude for adding datatypes. It&rsquo;s had arrays, geospatical and more for some time. A few years ago it got two datatypes worth thinking about using:</p>
+
+<h4>JSONB</h4>
+
+<p>JSONB is a binary representation of JSON. It&rsquo;s capable of being indexed on with <code>GIN</code> and <code>GIST</code> index types. You can also query into your full JSON document for quick lookups.</p>
+
+<h4>Range types</h4>
+
+<p>While it didn&rsquo;t arrive to the same fame as JSONB, <a href="https://wiki.postgresql.org/images/7/73/Range-types-pgopen-2012.pdf">range types</a> can be especially handy if they&rsquo;re what you need. Within a single column you can have a range from one value to another–this is especially helpful for time ranges. If you&rsquo;re building a calendaring application or often have a from and to of timestamps then range types can let you put that in a single column. The real benefit is that you can then have constraints that certain time stamps can&rsquo;t overlap or other constraints that may make sense for your application.</p>
+
+<h3>Extensions</h3>
+
+<p>It&rsquo;d be hard to talk about Postgres without all the ecosystem around it. Extensions are increasingly quite key when it comes to the community and growth of Postgres. Extensions allow you to hook into Postgres very natively without requiring them to be committed back to the core of Postgres. This means they can add rich functionality without being tied to a Postgres release and review cycle. Some great examples of this are:</p>
+
+<h4>Citus</h4>
+
+<p><a href="https://www.citusdata.com">Citus</a> (who I work for) turns Postgres into a distributed database allowing you to easily shard your database across multiple nodes. To your application it still looks like a single database, but then under the covers it&rsquo;s spread across multiple physical machines and Postgres instances.</p>
+
+<h4>HyperLogLog</h4>
+
+<p>This is a personal favorite of mine that allows you to easily have close-enough distinct counts pre-aggregated, but then also do various operations on them across days such as unions, intersections, and more. <a href="https://www.citusdata.com/blog/2017/04/04/distributed_count_distinct_with_postgresql/">HyperLogLog and other sketch algorithms</a> can be extremely common across large datasets and distributed systems, but it&rsquo;s especially exciting to find them pretty close to out of the box in Postgres.</p>
+
+<h4>PostGIS</h4>
+
+<p>PostGIS isn&rsquo;t new, but it&rsquo;s worth highlighting again. It&rsquo;s commonly regarded as the most advanced geospatial database. PostGIS adds new advanced geospatial datatypes, operators, and makes it easy to do many of the location based activities you need if you&rsquo;re dealing with mapping or routing.</p>
+
+<h3>Logical replication</h3>
+
+<p>For many years the biggest knock against Postgres was the difficulty in setting up replication. Originally this was any form of replication, but then streaming replication came along (this is streaming of the binary WAL or write-ahead-log format). Tools like <a href="https://github.com/wal-e/wal-e">wal-e</a> help leverage much of the Postgres mechanisms for things like disaster recovery.</p>
+
+<p>Then we had the foundation for logical replication in recent releases, though it still required an <a href="https://github.com/2ndQuadrant/pglogical">extension</a> to Postgres so it wasn&rsquo;t 100% out of the box. And, then finally we got full logical replication. Logical replication allows the sending of more or less actual commands, this means you could replicate only certain commands or certain tables.</p>
+
+<h3>Scale</h3>
+
+<p>In addition to all of the usability featuers we&rsquo;ve seen Postgres continue to get better and better at <a href="https://www.slideshare.net/fuzzycz/postgresql-performance-improvements-in-95-and-96">performance</a>. In particular we now have the foundations for <a href="https://www.postgresql.org/docs/current/static/parallel-query.html">parallelism</a> and on some queries you&rsquo;ll see much better performance. Then if you need even greater scale than single node Postgres (such as 122 or 244 GB of RAM on RDS or Heroku) you have options like <a href="https://www.citusdata.com">Citus</a> which was mentioned earlier that can help you scale out.</p>
+
+<h3>Richer indexing</h3>
+
+<p>Postgres already had some pretty powerful indexing before with <a href="https://www.postgresql.org/docs/9.5/static/textsearch-indexes.html">GIN and GiST</a>, those are now useful for JSONB. But we&rsquo;ve also seen the arrival of KNN indexes and Sp-GiST and have even more on the way.</p>
+
+<h3>Upsert</h3>
+
+<p>Upsert was a work in progress for several years. It was one of those features that most people hacked around with <a href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/">CTEs</a>, but that could create race conditions. It was also one of the few features MySQL had over Postgres. And just over a year ago we got <a href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/">official upsert</a> support.</p>
+
+<h3>Foreign Data Wrappers</h3>
+
+<p>Okay, yes foreign data wrappers did exist many years ago. If you&rsquo;re not familiar with foreign data wrappers, they allow you map an external data system to tables directly in Postgres. This means could could for example interact and query your <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">Redis</a> database from directly in Postgres with SQL. They&rsquo;ve continued to be improved more and more from what we had over 5 years ago. In particular we got support for write-able foreign data wrappers, meaning you can write data to other systems from directly in Postgres. There&rsquo;s also now an official Postgres FDW which comes out of the box with Postgres and it by itself is quite useful when querying across various Postgres instances.</p>
+
+<h3>Much more</h3>
+
+<p>And if you missed the <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">earlier editions</a> of this, please feel free to <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">check them out</a>. The cliff notes of them include:</p>
+
+<ul>
+<li>Window functions</li>
+<li>Functions</li>
+<li>Custom languages (PLV8 anyone?)</li>
+<li>NoSQL datatypes</li>
+<li>Custom functions</li>
+<li>Common table expressions</li>
+<li>Concurrent index creation</li>
+<li>Transactional DDL</li>
+<li>Foreign Data Wrappers</li>
+<li>Conditional and functional indexes</li>
+<li>Listen/Notify</li>
+<li>Table inheritance</li>
+<li>Per transaction synchronous replication</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Getting started with JSONB in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/03/12/getting-started-with-jsonb-in-postgres/"/>
+    <updated>2017-03-12T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2017/03/12/getting-started-with-jsonb-in-postgres</id>
+    <content type="html"><![CDATA[<p>JSONB is an awesome datatype in Postgres. I find myself using it on a weekly basis these days. Often in using some API (such as <a href="https://www.clearbit.com">clearbit</a>) I&rsquo;ll get a JSON response back, instead of parsing that out into a table structure it&rsquo;s really easy to throw it into a JSONB then query for various parts of it.</p>
+
+<p><em>If you&rsquo;re not familiar with JSONB, it&rsquo;s a binary representation of JSON in your database. You can read a bit more about it vs. JSON <a href="https://www.citusdata.com/blog/2016/07/14/choosing-nosql-hstore-json-jsonb/">here</a>.</em></p>
+
+<p>In working with JSONB here&rsquo;s a few quick tips to get up and running with it even faster: <!--more--></p>
+
+<h3>Indexing</h3>
+
+<p>For the most part you don&rsquo;t have to think to much about this. With Postgres powerful indexing types you can add one index and have everything within the JSON document, all the keys and all the values, automatically indexed. The key here is to add a <code>GIN</code> index. Once this is done queries should be much faster where you&rsquo;re searching for some value:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx_data</span> <span class="k">ON</span> <span class="n">companies</span> <span class="k">USING</span> <span class="n">GIN</span> <span class="p">(</span><span class="k">data</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Querying</h3>
+
+<p>Querying is a little bit more work, but once you get the basics it can be pretty straight forward. There&rsquo;s a few new operators you&rsquo;ll want to quickly ramp up on and from there querying becomes easy.</p>
+
+<p>For the most basic part you now have an operator so traverse down the various keys. First let&rsquo;s get some idea of what the JSON looks like so we can have something to work with. Here&rsquo;s a sample set of data that we get back from Clearbit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="err">{</span>
+</span><span class='line'>  <span class="ss">&quot;domain&quot;</span><span class="p">:</span> <span class="ss">&quot;citusdata.com&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">&quot;company&quot;</span><span class="p">:</span> <span class="err">{</span>
+</span><span class='line'>    <span class="ss">&quot;id&quot;</span><span class="p">:</span> <span class="ss">&quot;b1ff2bdf-0d8d-4d6d-8bcc-313f6d45996a&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;url&quot;</span><span class="p">:</span> <span class="ss">&quot;http:\/\/citusdata.com&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;logo&quot;</span><span class="p">:</span> <span class="ss">&quot;https:\/\/logo.clearbit.com\/citusdata.com&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;name&quot;</span><span class="p">:</span> <span class="ss">&quot;Citus Data&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;site&quot;</span><span class="p">:</span> <span class="err">{</span>
+</span><span class='line'>      <span class="ss">&quot;h1&quot;</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;url&quot;</span><span class="p">:</span> <span class="ss">&quot;http:\/\/citusdata.com&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;title&quot;</span><span class="p">:</span> <span class="ss">&quot;Citus Data&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="err">}</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>      <span class="ss">&quot;SAAS&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;Enterprise&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;B2B&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;Information Technology &amp; Services&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;Technology&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;Software&quot;</span>
+</span><span class='line'>    <span class="p">],</span>
+</span><span class='line'>    <span class="ss">&quot;domain&quot;</span><span class="p">:</span> <span class="ss">&quot;citusdata.com&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;twitter&quot;</span><span class="p">:</span> <span class="err">{</span>
+</span><span class='line'>      <span class="ss">&quot;id&quot;</span><span class="p">:</span> <span class="ss">&quot;304455171&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;bio&quot;</span><span class="p">:</span> <span class="ss">&quot;Builders of Citus, the extremely scalable PostgreSQL database.&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;site&quot;</span><span class="p">:</span> <span class="ss">&quot;https:\/\/t.co\/hKpZjIy7Ej&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;avatar&quot;</span><span class="p">:</span> <span class="ss">&quot;https:\/\/pbs.twimg.com\/profile_images\/630900468995108865\/GJFCCXrv_normal.png&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;handle&quot;</span><span class="p">:</span> <span class="ss">&quot;citusdata&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;location&quot;</span><span class="p">:</span> <span class="ss">&quot;San Francisco, CA&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;followers&quot;</span><span class="p">:</span> <span class="mi">3770</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;following&quot;</span><span class="p">:</span> <span class="mi">570</span>
+</span><span class='line'>    <span class="err">}</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;category&quot;</span><span class="p">:</span> <span class="err">{</span>
+</span><span class='line'>      <span class="ss">&quot;sector&quot;</span><span class="p">:</span> <span class="ss">&quot;Information Technology&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;industry&quot;</span><span class="p">:</span> <span class="ss">&quot;Internet Software &amp; Services&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;subIndustry&quot;</span><span class="p">:</span> <span class="ss">&quot;Internet Software &amp; Services&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">&quot;industryGroup&quot;</span><span class="p">:</span> <span class="ss">&quot;Software &amp; Services&quot;</span>
+</span><span class='line'>    <span class="err">}</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">&quot;emailProvider&quot;</span><span class="p">:</span> <span class="k">false</span>
+</span><span class='line'>  <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sorry it&rsquo;s a bit long, but it gives us a good example to work with.</p>
+
+<h3>Basic lookups</h3>
+
+<p>Now let&rsquo;s query something fairly basic, the domain:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">#</span> <span class="k">SELECT</span> <span class="k">data</span><span class="o">-&gt;</span><span class="s1">&#39;domain&#39;</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">companies</span>
+</span><span class='line'><span class="k">WHERE</span> <span class="k">domain</span><span class="o">=</span><span class="s1">&#39;citusdata.com&#39;</span>
+</span><span class='line'><span class="k">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+</span><span class='line'><span class="c1">-----------------</span>
+</span><span class='line'> <span class="ss">&quot;citusdata.com&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>-&gt;</code> is likely the first operator you&rsquo;ll use in JSONB. It&rsquo;s helpful to traverse the JSON. Though of you&rsquo;re looking to get the value as text you&rsquo;ll actually want to use <code>-&gt;&gt;</code>. Instead of giving you some quoted response back or JSON object you&rsquo;re going to get it as text which will be a bit cleaner:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">#</span> <span class="k">SELECT</span> <span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;domain&#39;</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">companies</span>
+</span><span class='line'><span class="k">WHERE</span> <span class="k">domain</span><span class="o">=</span><span class="s1">&#39;citusdata.com&#39;</span>
+</span><span class='line'><span class="k">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+</span><span class='line'><span class="c1">-----------------</span>
+</span><span class='line'> <span class="n">citusdata</span><span class="p">.</span><span class="n">com</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Filtering for values</h3>
+
+<p>Now with something like clearbit you may want to filter out for only certain type of companies. We can see in the example data that there&rsquo;s a bunch of tags. If we wanted to find only companies that had the tag B2B we could use the <code>?</code> operator once we&rsquo;ve targetted down to that part of the JSON. The <code>?</code> operator will tell us if some part of JSON has a top level key:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">companies</span>
+</span><span class='line'><span class="k">WHERE</span> <span class="k">data</span><span class="o">-&gt;</span><span class="s1">&#39;company&#39;</span><span class="o">-&gt;</span><span class="s1">&#39;tags&#39;</span> <span class="o">?</span> <span class="s1">&#39;B2B&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>JSONB but pretty</h3>
+
+<p>In querying JSONB you&rsquo;ll typically get a nice compressed set of JSON back. While this is all fine if you&rsquo;re putting it into your application, if you&rsquo;re manually debugging and testing things you probably want something a bit more readable. Of course Postgres has your back here and you can wrap your JSONB with a pretty print function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">jsonb_pretty</span><span class="p">(</span><span class="k">data</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">companies</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Much more</h3>
+
+<p>There&rsquo;s a lot more in the <a href="https://www.postgresql.org/docs/9.5/static/functions-json.html">docs</a> that you can find handy for the specialized cases when you need them. <code>jsonb_each</code> will expand a JSONB document into individual rows. So if you wanted to count the number of occurences of every tag for a company, this would help. Want to parse out a JSONB to a row/record in Postgres there&rsquo;s <code>jsonb_to_record</code>. The docs are your friends for about everything you want to do but hopefully these few steps help kick start things if you want to get started with <code>JSONB</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Simple but handy Postgres features]]></title>
+    <link href="http://www.craigkerstiens.com/2017/01/08/simple-but-handy-postgresql-features/"/>
+    <updated>2017-01-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2017/01/08/simple-but-handy-postgresql-features</id>
+    <content type="html"><![CDATA[<p>It seems each week when I&rsquo;m reviewing data with someone a feature comes up that they had no idea existed within Postgres. In an effort to continue documenting many of the features and functionality that are useful, here&rsquo;s a list of just a few that you may find handy the next time your working with your data.</p>
+
+<h3>Psql, and \e</h3>
+
+<p>This one I&rsquo;ve <a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/">covered before</a>, but it&rsquo;s worth restating. Psql is a great editor that already comes with Postgres. If you&rsquo;re comfortable on the CLI you should consider giving it a try. You can even setup you&rsquo;re own <code>.psqlrc</code> for it so that it&rsquo;s well customized to your liking. In particular turning <code>\timing</code> on is especially useful. But even with all sorts of customization if you&rsquo;re not aware that you can use your preferred editor by using <code>\e</code> then you&rsquo;re missing out. This will allow you to open up the last run query, edit it, save–and then it&rsquo;ll run for you. Vim, Emacs, even Sublime text works just take your pick by setting your <code>$EDITOR</code> variable.</p>
+
+<!--more-->
+
+
+<h3>Watch</h3>
+
+<p>Ever sit at a terminal running a query over and over to see if something on your system changed? If you&rsquo;re debugging something whether locally or even live in production, watching data change can be key to figuring out. Instead of re-running your query you could simply use the <code>\watch</code> command in Postgres, this will re-run your query automatically every few seconds.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">now</span><span class="p">()</span> <span class="o">-</span>
+</span><span class='line'>       <span class="n">query_start</span><span class="p">,</span>
+</span><span class='line'>       <span class="k">state</span><span class="p">,</span>
+</span><span class='line'>       <span class="n">query</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">pg_stat_activity</span>
+</span><span class='line'><span class="err">\</span><span class="n">watch</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>JSONB pretty print</h3>
+
+<p>I love <a href="https://www.citusdata.com/blog/2016/07/14/choosing-nosql-hstore-json-jsonb/">JSONB</a> as a datatype. Yes, in cases it won&rsquo;t be the <a href="http://blog.heapanalytics.com/when-to-avoid-jsonb-in-a-postgresql-schema/">optimal</a> for performance (though at times it can be perfectly fine). If I&rsquo;m hitting some API that returns a ton of data, I&rsquo;m usually not using all of it right away. But, you never know when you&rsquo;ll want to use the rest of it. I use <a href="https://www.clearbit.com">Clearbit</a> this way today, and for safety sake I save all the JSON result instead of de-normalizing it. Unfortunately, when you query this in Postgres you get one giant compressed text of JSON. Yes, you could pipe out to something like jq, or you could simply use Postgres built in function to make it legible:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">jsonb_pretty</span><span class="p">(</span><span class="n">clearbit_response</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">lookup_data</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>                                <span class="n">jsonb_pretty</span>
+</span><span class='line'><span class="c1">-------------------------------------------------------------------------------</span>
+</span><span class='line'> <span class="err">{</span>
+</span><span class='line'>     <span class="ss">&quot;person&quot;</span><span class="p">:</span> <span class="err">{</span>
+</span><span class='line'>         <span class="ss">&quot;id&quot;</span><span class="p">:</span> <span class="ss">&quot;063f6192-935b-4f31-af6b-b24f63287a60&quot;</span><span class="p">,</span>
+</span><span class='line'>         <span class="ss">&quot;bio&quot;</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span>
+</span><span class='line'>         <span class="ss">&quot;geo&quot;</span><span class="p">:</span> <span class="err">{</span>
+</span><span class='line'>             <span class="ss">&quot;lat&quot;</span><span class="p">:</span> <span class="mi">37</span><span class="p">.</span><span class="mi">7749295</span><span class="p">,</span>
+</span><span class='line'>             <span class="ss">&quot;lng&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">122</span><span class="p">.</span><span class="mi">4194155</span><span class="p">,</span>
+</span><span class='line'>             <span class="ss">&quot;city&quot;</span><span class="p">:</span> <span class="ss">&quot;San Francisco&quot;</span><span class="p">,</span>
+</span><span class='line'>             <span class="ss">&quot;state&quot;</span><span class="p">:</span> <span class="ss">&quot;California&quot;</span><span class="p">,</span>
+</span><span class='line'>             <span class="ss">&quot;country&quot;</span><span class="p">:</span> <span class="ss">&quot;United States&quot;</span><span class="p">,</span>
+</span><span class='line'>             <span class="ss">&quot;stateCode&quot;</span><span class="p">:</span> <span class="ss">&quot;CA&quot;</span><span class="p">,</span>
+</span><span class='line'>             <span class="ss">&quot;countryCode&quot;</span><span class="p">:</span> <span class="ss">&quot;US&quot;</span>
+</span><span class='line'>         <span class="err">}</span><span class="p">,</span>
+</span><span class='line'>         <span class="ss">&quot;name&quot;</span><span class="p">:</span> <span class="err">{</span>
+</span><span class='line'>         <span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Importing my data into Google</h3>
+
+<p>This one isn&rsquo;t Postgres specific, but I use it on a weekly basis and it&rsquo;s key for us at <a href="https://www.citusdata.com">Citus</a>. If you use something like Heroku Postgres, dataclips is an extremely handy feature that lets you have a real-time view of a query and the results of it, including an anonymous URL you can it for it. At Citus much like we did at Heroku Postgres we have a dashboard in google sheets which pulls in this data in real-time. To do this simple select a cell then put in: <code>=importdata("pathtoyourdataclip.csv")</code>. Google will import any data using this as long as it&rsquo;s in CSV form. It&rsquo;s a great lightweight way to build out a dashboard for your business without rolling your own complicated dashboarding or building out a complex ETL pipeline.</p>
+
+<p>I&rsquo;m sure I&rsquo;m missing a ton of the smaller features that you use on a daily basis. Let me know <a href="https://www.twitter.com/craigkerstiens">@craigkerstiens</a> the ones I forgot that you feel should be listed.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Syncing from Postgres to Salesforce - Data Mappings]]></title>
+    <link href="http://www.craigkerstiens.com/2016/11/23/syncing-from-postgres-to-salesforce-part-1/"/>
+    <updated>2016-11-23T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/11/23/syncing-from-postgres-to-salesforce-part-1</id>
+    <content type="html"><![CDATA[<p>For the second time now I&rsquo;ve had to implement a system that syncs from my system of record into Salesforce.com, the first at Heroku and now at <a href="https://www.citusdata.com">Citus Data</a>. The case here is pretty simple, I have a software-as-a-service, B2B product. It&rsquo;s a homegrown application in these cases in Ruby, but could be Python, .Net, any language of your choosing. The problem is I don&rsquo;t want to have to be rebuilding my own CRM, reporting, etc. on top of all of my internal database. And as soon as you&rsquo;re at some reasonable size (sales guy of 1 or more) you need to be able to provide insights on what&rsquo;s in that system of record database to others.</p>
+
+<p>While my tooling isn&rsquo;t a full fledged product by any means, here&rsquo;s a bit of how I&rsquo;ve developed this process a few times over and some of the annoying bits of code to help get you started. In this post I&rsquo;ll walk through some of the basic datatypes, then we&rsquo;ll follow-up with the overall architecture and tweaks you need to make to Salesforce, and finally we&rsquo;ll provide some example code to help you create this setup yourself.<!--more--></p>
+
+<h3>Leads, Contacts, Accounts oh my</h3>
+
+<p>Despite being some of the largest as-a-service vendors in the world, Salesforce is still primarily setup for traditional high touch sales. What this means is some of the data you&rsquo;ll commonly have, or in this case not have, can make it difficult to figure out what maps from your internal system to Salesforce. Within Salesforce there&rsquo;s really 4 key data models you&rsquo;re going to care about.</p>
+
+<h3>Lead vs. Contact</h3>
+
+<p>In every as a service product you&rsquo;ll have some user that creates and account which usually has an email address tied to it. This seems simple enough to load up to Salesforce as there is a clear email field. Within Salesforce there are two key data types which have a default field for this lead and contact, in Salesforce terms a lead is someone <a href="https://success.salesforce.com/answers?id=90630000000gvTiAAI">considering doing business with you</a>, a contact someone who more so is doing business with you. If you have a freemium or timed trial model you might think to start classifying everyone that they&rsquo;re a lead. Then, when they convert to a paying customer you turn them into a contact.</p>
+
+<p>If you&rsquo;re anything like me, in running your SaaS business, you want a sign-up process that&rsquo;s frictionless. This means give me an email address, password, and you&rsquo;re off and running. Salesforce immediately starts to breakdown a bit in this regard. First you&rsquo;re required for both lead and contact to provide a first and last name. In my case I do ask for name, and do a little bit of work on the code side to get values into both. You&rsquo;ll see later that our process does result in some regular cleanup work needing to happen, but in our case we&rsquo;re optimizing to get them signed up more than capturing every detail perfectly about them from the start.</p>
+
+<p>Leads are even more broken than contacts though. Leads require you to enter a company. While you may be able to just drop a company form field onto your sign-up page you&rsquo;re likely to end up with junk data at least, if not actually driving some sign-ups away. Some of my favorite pieces of junk data I&rsquo;ve seen users enter for company name: &ldquo;pissed off developer&rdquo;, &ldquo;Acme Inc.&rdquo;, and the all too common &ldquo;Test Co.&rdquo;. In reality these are often real developers, with real problems, and real budget, they just don&rsquo;t want to share details before they&rsquo;re ready.</p>
+
+<p>So in this case the TLDR; is that leads require:</p>
+
+<ul>
+<li>First name</li>
+<li>Last name</li>
+<li>Email</li>
+<li>Company name</li>
+</ul>
+
+
+<p>This results in contacts being a more favorable datatype because it only requires:</p>
+
+<ul>
+<li>First name</li>
+<li>Last name</li>
+<li>Email</li>
+</ul>
+
+
+<h3>Accounts vs. Opportunities</h3>
+
+<p>We have in some ways a similar but different dichotomy with Accounts and Opportunities as we did Leads and Contacts. Though this one can often map a bit more cleanly than we saw with leads. From a <a href="https://success.salesforce.com/answers?id=90630000000gnvcAAA">pretty straight forward definition</a>:</p>
+
+<ul>
+<li>Account &ndash; A business entity. Contacts work for Accounts.</li>
+<li>Opportunities &ndash; Sales events related to an Account and one or more Contacts.</li>
+</ul>
+
+
+<p>This again can become problematic if you have no notion of Accounts at all in your system of record. Though if you are building a B2B application there is a good chance you may have something that makes sense. If you let uses free-form enter this instead of AT&amp;T they may put &ldquo;interactive team&rdquo;, but you at least have some logical team that in their mind they roll up to.</p>
+
+<p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
+
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x62;&#105;&#108;&#x6c;&#105;&#110;&#x67;&#x40;&#x6d;&#121;&#99;&#111;&#x6d;&#x70;&#x61;&#x6e;&#121;&#46;&#x63;&#x6f;&#x6d;">&#98;&#105;&#108;&#108;&#105;&#110;&#103;&#64;&#x6d;&#x79;&#x63;&#x6f;&#x6d;&#x70;&#x61;&#x6e;&#121;&#46;&#99;&#111;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#106;&#x61;&#110;&#x65;&#64;&#109;&#x79;&#99;&#x6f;&#x6d;&#112;&#97;&#110;&#x79;&#x2e;&#99;&#111;&#x6d;">&#x6a;&#97;&#x6e;&#101;&#x40;&#109;&#x79;&#x63;&#x6f;&#x6d;&#112;&#x61;&#110;&#121;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo; who logged in yesterday.</p>
+
+<h3>In summary</h3>
+
+<p>For the most part Salesforce doesn&rsquo;t quite let you map to what many of you&rsquo;ll want to do in terms of mapping your data from your system of record to Salesforce. Expect to have to contort a bit and likely pump Salesforce with some garbage data. In general you&rsquo;ll want to skip leads and go straight for contacts as contacts don&rsquo;t require the same restrictions. Tying contacts to an account is the right level anyway, and from there up to you on how you&rsquo;ll more manage the opportunities.</p>
+
+<p><img src="https://craig-pixeltracker.herokuapp.com/pixel.gif"/></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Open DNS for when DNS outages occur]]></title>
+    <link href="http://www.craigkerstiens.com/2016/10/21/opendns/"/>
+    <updated>2016-10-21T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2016/10/21/opendns</id>
+    <content type="html"><![CDATA[<p>Open DNS is a DNS resolver that caches records beyond their TTL if the upstream DNS server cannot be found. In cases like today&rsquo;s major outage it can be handy to swap your DNS settings out for this, or it may be worth using as a standard default. Resolution may be a bit slow as it will try to see if the upstream server cannot be found, but it at least can get you back to a working state.</p>
+
+<p>If you know what you&rsquo;re doing then all you need to do is configure your DNS settings to: <code>208.67.220.220</code> and <code>208.67.222.222</code>.</p>
+
+<p>If you need a little more guidance you can go into your System Preferences on Mac, select Network, then Advanced and finally the DNS tab. You should set it up to look as follows:</p>
+
+<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/0c2T1M251T0D3r1D2Q3x/Network.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&amp;v=cd767ce0" alt="DNS Configuration" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A tour of Postgres' Foreign Data Wrappers]]></title>
+    <link href="http://www.craigkerstiens.com/2016/09/11/a-tour-of-fdws/"/>
+    <updated>2016-09-11T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2016/09/11/a-tour-of-fdws</id>
+    <content type="html"><![CDATA[<p>SQL can be a powerful language for reporting. Whether you&rsquo;re just exploring some data, or generating reports that show <a href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/">month over month revenue growth</a> it&rsquo;s the <a href="https://www.amazon.com/SQL-Relational-Theory-Write-Accurate/dp/1491941170/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1473612603&amp;sr=1-1&amp;keywords=sql+relational&amp;tag=mypred-20">lingua franca</a> for data analysis. But, your data isn&rsquo;t always in a SQL database, even then if you&rsquo;re using Postgres you can still likely use SQL to analyze, query, even joing with that data. Foreign data wrappers have been around for years in Postgres, but are continuing to mature and be a great option for joining disparate systems.</p>
+
+<h3>Overview of foreign data wrappers</h3>
+
+<p>If you&rsquo;re unfamiliar, foreign data wrappers, or FDW, allow you to connect from within Postgres to a remote system. Then you can query them from directly within Postgres. While there is an official Postgres FDW that ships with Postgres itself, that allows you to connect from one Postgres DB to another, there&rsquo;s also a broad community of others.</p>
+
+<p>At the core of it Postgres provides certain APIs under the covers which each FDW extension can implement. This can include the ability to map SQL to whatever makes sense for a given system, push down various operators like where clauses, and as of Postgres 9.3 can even write data. <!--more--></p>
+
+<p>To setup a FDW you first would install the extension, then provide the connection to the remote system, setup your schema/tables, and then you&rsquo;re off to the races–or well ready to query. If you&rsquo;ve got more than 2-3 databases or systems in your infrastructure, you&rsquo;ll often benefit from FDWs as opposed to introducing a heavyweight ETL pipeline. Don&rsquo;t mistake FDWs as the most performant method for joining data, but they are often the developer time efficient means of joining these data sets.</p>
+
+<p>Let&rsquo;s look at just a few of the more popular and interesting ones.</p>
+
+<h3>Postgres FDW</h3>
+
+<p>The Postgres one is the easiest to get started with. First you&rsquo;ll just enable it with <code>CREATE EXTENSION</code>, then you&rsquo;ll setup your remote server:</p>
+
+<pre><code>CREATE EXTENSION postgres_fdw;
+
+CREATE SERVER core_db 
+ FOREIGN DATA WRAPPER postgres_fdw 
+ OPTIONS (host 'foo', dbname 'core_db', port '5432');
+</code></pre>
+
+<p>Then you&rsquo;ll create the user that has access to that database:</p>
+
+<pre><code>CREATE USER MAPPING FOR bi SERVER core OPTIONS (user 'bi', password 'secret');
+</code></pre>
+
+<p>Finally, create your foreign table:</p>
+
+<pre><code>CREATE FOREIGN TABLE core_users (
+  id          integer NOT NULL,
+  username    varchar(255),
+  password    varchar(255),
+  last_login  timestamptz
+)
+SERVER core;
+</code></pre>
+
+<p>Now you&rsquo;ll see a new table in the database you created this in called <code>core_users</code>. You can query this table just like you&rsquo;d expect:</p>
+
+<pre><code>SELECT *
+FROM core_users
+WHERE last_login &gt;= now() - '1 day'::interval;
+</code></pre>
+
+<p>You can also join against local tables, such as getting all the invoices for users that have logged in within the last month:</p>
+
+<pre><code>SELECT *
+FROM invoices, core_users
+WHERE core_users.last_login &gt;= now() - '1 month::interval'
+  AND invoices.user_id = core_users.id
+</code></pre>
+
+<p>Hopefully this is all straight forward enough, but let&rsquo;s also take a quick look at some of the other interesting ones:</p>
+
+<h3>MySQL FDW</h3>
+
+<p>For MySQL you&rsquo;ll also have to <a href="https://github.com/EnterpriseDB/mysql_fdw">download it</a> and install it as well since it doesn&rsquo;t ship directly with Postgres. This should be fairly straight forward:</p>
+
+<pre><code>$ export PATH=/usr/local/pgsql/bin/:$PATH
+$ export PATH=/usr/local/mysql/bin/:$PATH
+$ make USE_PGXS=1
+$ make USE_PGXS=1 install
+</code></pre>
+
+<p>Now that you&rsquo;ve built it you&rsquo;d follow a very similar path to setting it up as we did for Postgres:</p>
+
+<pre><code>CREATE EXTENSION mysql_fdw;
+
+CREATE SERVER mysql_server
+ FOREIGN DATA WRAPPER mysql_fdw
+ OPTIONS (host '127.0.0.1', port '3306');
+
+CREATE USER MAPPING FOR postgres
+ SERVER mysql_server
+ OPTIONS (username 'foo', password 'bar');
+
+CREATE FOREIGN TABLE core_users (
+  id          integer NOT NULL,
+  username    varchar(255),
+  password    varchar(255),
+  last_login  timestamptz
+ )
+ SERVER mysql_server;
+</code></pre>
+
+<p>But MySQL while different than Postgres is also more similar in SQL support than say a more exotic NoSQL store. How well do they work as a foreign data wrapper? Let&rsquo;s look at our next one:</p>
+
+<h3>MongoDB</h3>
+
+<p>First you&rsquo;ll go through much of the <a href="https://github.com/EnterpriseDB/mongo_fdw">same setup</a> as you did for MySQL. The one major difference though is in the final step to setup the <code>table</code>. Since a table doesn&rsquo;t quite map in the same way with Mongo you have the ability to set two items: 1. the database and 2. the collection name.</p>
+
+<pre><code>CREATE FOREIGN TABLE core_users(
+     _id NAME,
+     user_id int,
+     user_username text,
+     user_last_login timestamptz)
+SERVER mongo_server
+     OPTIONS (database 'db', collection 'users');
+</code></pre>
+
+<p>With this you can do some basic level of filtering as well:</p>
+
+<pre><code>SELECT * 
+FROM core_users
+WHERE user_last_login &gt;= now() - '1 day'::interval;
+</code></pre>
+
+<p>You can also write and delete data as well now just using SQL:</p>
+
+<pre><code>DELETE FROM core_users 
+WHERE user_id = 100;
+</code></pre>
+
+<p>Of course just putting SQL on top of Mongo doesn&rsquo;t mean you get all the flexibility of analysis that you&rsquo;d have directly within Postgres, this does go a long way towards allowing you to analyze data that lives across two different systems.</p>
+
+<h3>Many more</h3>
+
+<p>A few years ago there were some key ones which already made FDWs useful. Now there&rsquo;s a rich list covering probably every system you could want. Whether it&rsquo;s <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">Redis</a>, a simple <a href="https://www.postgresql.org/docs/9.5/static/file-fdw.html">CSV</a> one, or something newer like <a href="https://github.com/snaga/monetdb_fdw">MonetDB</a> chances are you can find an <a href="https://wiki.postgresql.org/wiki/Foreign_data_wrappers#NoSQL_Database_Wrappers">FDW</a> for the system you need that makes your life easier.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Five mistakes beginners make when working with databases]]></title>
@@ -29,7 +685,7 @@
 
 <p>Images don&rsquo;t belong in your database. Just because you can do something, it doesn&rsquo;t mean you should.Images take up a massive amount of space in databases, and slow applications down by unnecessarily eating your database&rsquo;s IO resources. The most common way this mistake occurs is when new developers base64 encode an image and store it in a database large text/blob field.</p>
 
-<p>The better approach is to upload your images directly to a service like Amazon S3, then store the image URL (hosted by Amazon) in your database as a text field. This way, each time you need to load an image, you need to simply output the image URL into a valid <img> tag. This will greatly improve website responsiveness, and generally help scale web applications.</p>
+<p>The better approach is to upload your images directly to a service like Amazon S3, then store the image URL (hosted by Amazon) in your database as a text field. This way, each time you need to load an image, you need to simply output the image URL into a valid <code>&lt;img&gt;</code> tag. This will greatly improve website responsiveness, and generally help scale web applications.</p>
 
 <h3>2. Limit/Offset</h3>
 
@@ -45,7 +701,7 @@
 
 <h3>3. Integer primary keys</h3>
 
-<p>The default for almost all ORMs when creating a primary key is to create a serial field. This is a sequence that auto-increments and then you use that number as your primary key. This seems straight forward as an admin, because you can browse from /users/1 to /users/2, etc. And for most applications this can often be fine. And for most applications, this is fine. But, you&rsquo;ll soon realize as you start to scale that integers primary keys can be exhausted, and are not ideal for large-scale systems. The better approach is to start <a href="https://til.hashrocket.com/posts/31a5135e19-generate-a-uuid-in-postgresql">taking advantage of UUIDs</a> from the start.</p>
+<p>The default for almost all ORMs when creating a primary key is to create a serial field. This is a sequence that auto-increments and then you use that number as your primary key. This seems straight forward as an admin, because you can browse from /users/1 to /users/2, etc. And for most applications this can often be fine. And for most applications, this is fine. But, you&rsquo;ll soon realize as you start to scale that integers primary keys can be exhausted, and are not ideal for large-scale systems. Further you&rsquo;re reliant on that single system generating your keys. If a time comes when you have to scale the pain here will be huge. The better approach is to start <a href="https://til.hashrocket.com/posts/31a5135e19-generate-a-uuid-in-postgresql">taking advantage of UUIDs</a> from the start.</p>
 
 <p><em>There&rsquo;s also the bonus advantage of not secretly showcasing how many users/listings/whatever the key references directly to users on accident.</em></p>
 
@@ -63,6 +719,8 @@
 
 <p>In the above case categories could very easily just be an array of varchar fields on a post. Normalization makes plenty of sense, but thinking through it a bit more every time you have a many to many table and wondering if you really need a full table on both sides is worth giving a second thought.</p>
 
+<p><em>Edit: It&rsquo;s probably worth saying that under-normalization is also a problem as well. There isn&rsquo;t a one size fits all here. In general there are times where it does make sense to have a completely de-normalized and a completely normalized approach. As <a href="https://twitter.com/fuzzychef/status/740248400243785728">@fuzzychef</a> described: &ldquo;use an appropriate amount of normalization i.e. The goldilocks principle&rdquo;</em></p>
+
 <h3>Conclusion</h3>
 
 <p>When I asked about this on twitter I got a pretty great responses, but they were all over the map. From the basics of never looking at the queries the ORM is generating, to much more advanced topics such as isolation levels. The one I didn&rsquo;t hit on that does seem to be a worthwhile one for anyone building a real world app is indexing. Knowing how <a href="http://www.craigkerstiens.com/2012/10/01/understanding-postgres-performance/">indexing works</a>, and understanding <a href="http://www.craigkerstiens.com/2013/05/30/a-collection-of-indexing-tips/">what indexes</a> you need to create is a critical part of getting good database performance. There&rsquo;s a number of posts on indexing that teach the basics, as well as <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">practical steps</a> for analyzing performance with Postgres.</p>
@@ -78,7 +736,9 @@
     <link href="http://www.craigkerstiens.com/2016/02/28/Hands-on-postgres-sharding/"/>
     <updated>2016-02-28T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2016/02/28/Hands-on-postgres-sharding</id>
-    <content type="html"><![CDATA[<p>Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency over the last two months. As a result I thought I&rsquo;d do a deeper dive with some actual hands on for sharding. Though for this hands on, because I do value my time I&rsquo;m going to take advantage of <code>pg_shard</code> rather than creating mechanisms from scratch.</p>
+    <content type="html"><![CDATA[<p><em><strong>Notice</strong>: Much of this post still applies, but now applies more directly to <a href="https://www.citusdata.com">Citus</a>. Since this post originally published, pg_shard is now deprecated. Citus now has an open source version which offer a superset of the features of pg_shard, as well as a <a href="https://www.citusdata.com/products/cloud">cloud</a> offering. Finally you can find some further guidance for sharding on the <a href="https://www.citusdata.com/blog/">Citus blog</a> and <a href="http://docs.citusdata.com">docs</a></em></p>
+
+<p>Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency over the last two months. As a result I thought I&rsquo;d do a deeper dive with some actual hands on for sharding. Though for this hands on, because I do value my time I&rsquo;m going to take advantage of <code>pg_shard</code> rather than creating mechanisms from scratch.</p>
 
 <p>For those unfamiliar <a href="https://github.com/citusdata/pg_shard/">pg_shard</a> is an open source extension from <a href="http://citusdata.com">Citus data</a> who has a commerical product that you can think of is pg_shard++ (and probably much more). Pg_shard adds a little extra to let data automatically distribute to other Postgres tables (logical shards) and Postgres databases/instances (physical shards) thus letting you outgrow a single Postgres node pretty simply.</p>
 
@@ -359,7 +1019,7 @@ FROM baz
        bar
 FROM baz
 WHERE foo &gt; 3
-AND baz = 'craig.kerstiens@gmail.com'
+AND bar = 'craig.kerstiens@gmail.com'
 </code></pre>
 
 <p>And a cleaner version:</p>
@@ -368,7 +1028,7 @@ AND baz = 'craig.kerstiens@gmail.com'
        bar
 FROM baz
 WHERE foo &gt; 3
-  AND baz = 'craig.kerstiens@gmail.com'
+  AND bar = 'craig.kerstiens@gmail.com'
 </code></pre>
 
 <h3>Use column names when grouping/ordering</h3>
@@ -1142,302 +1802,6 @@ WHERE email = $1
 <p>*Full disclosure, this is based across interactions with a small sample size of different PR agencies and individuals. Mileage may differ heavily from PR firm to PR firm, but hopefully the above provides at least some roadmap for more clarity vs. flying blind. As always if you&rsquo;ve got feedback/questions, feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
 
 <p><em>Finally a special thanks to <a href="http://www.twitter.com/pavtalk">Paul Katsen</a> for much of the inspiration on creating this post and to he and <a href="http://www.twitter.com">Katie Boysen</a> for review</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Moving past averages in SQL (Postgres) – Percentiles]]></title>
-    <link href="http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql/"/>
-    <updated>2015-06-07T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2015/06/07/Moving-past-averages-in-sql</id>
-    <content type="html"><![CDATA[<p>Often when you&rsquo;re tracking a metric for the first time you take a look at your average. For example what is your ARPU &ndash; Average Revenue Per User. In theory this tells you if you can acquire new user how much you&rsquo;ll make off that user. Or maybe what&rsquo;s your average life time value of a customer. Yet, many that are more familiar looking and extracting meaning from data median or a few different looks at <a href="http://apmblog.dynatrace.com/2012/11/14/why-averages-suck-and-percentiles-are-great/">percentiles can be much more meaningful</a>.</p>
-
-<!--more-->
-
-
-<p>And while you can very easily get the <code>AVG</code> in Postgres, with a small amount more effort you can report on percentiles as well. Window functions have been around for some time in Postgres. They allow you to order your result set over a certain group. The most basic example is if you want to order by date, but know which one falls at place 10 in order you can use a window function and project out the <code>rank()</code>.</p>
-
-<p>Beyond outputting the rank yourself and doing extra manipulation Postgres has some great utilities to make the most common uses even easier. Being able to compute things such as the perc 95 directly on the data, or lay out for every record in the result where it falls within a percentile is hugely useful. Let&rsquo;s take a look:</p>
-
-<p>Assuming you have a table called purchases, which has a total in it we could try:</p>
-
-<pre><code>SELECT id,
-       total,
-       ntile(100) OVER (ORDER BY total) AS perc_rank
-FROM purchases
-</code></pre>
-
-<p>This would give us something like:</p>
-
-<pre><code>    id    |  total  | perc_rank
-----------|---------|-----------
-   264    |  12034  |    100
-   643    |  11830  |    100
-...
-...
-   304    |   751   |     95
-</code></pre>
-
-<p>What this would tell us is we have less than 5% of our purchases that have a total over 751. From here you can start to dig in and extract all sorts of different meanings, and by doing directly in SQL you&rsquo;re closer to the data and have one less processing step.</p>
-
-<p>Percentiles get even more fun with the ordered set functions that came out in <a href="http://www.craigkerstiens.com/2014/02/02/Examining-PostgreSQL-9.4/">Postgres 9.4</a>. They even allow you to project out hypothetical values in certain cases. For now I&rsquo;d encourage adding ntile to your toolbox anytime you&rsquo;re analyzing average or medians it will make your world a bit better, and then consider exploring further on the <a href="http://www.postgresql.org/docs/9.4/static/functions-aggregate.html#FUNCTIONS-ORDEREDSET-TABLE">ordered set functions</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Upsert lands in PostgreSQL 9.5 – A first look]]></title>
-    <link href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/"/>
-    <updated>2015-05-08T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5</id>
-    <content type="html"><![CDATA[<p>If you’ve followed anything I’ve <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">written about Postgres</a>, you know that I’m a fan. At the same time you know that there’s been one feature that so many other databases have, which Postgres lacks and it <a href="http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5/">causes a huge amount of angst for not being in Postgres</a>… Upsert. Well the day has come, it’s finally committed and will be available <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=168d5805e4c08bed7b95d351bf097cff7c07dd65">in Postgres 9.5</a>.</p>
-
-<p>Sure we’re still several months away from Postgres 9.5 being released, anywhere from 3-6 months as a best guess. That doesn’t mean we can’t take a first look at this feature. Though before we get into it a few special call outs of thanks to Peter Geoghegan of the <a href="http://www.heroku.com/postgres">Heroku Postgres</a> team for being the primary author on it, Andres Freund who recently just joined <a href="https://www.citusdata.com">Citus Data</a> for his heavy contributions, and Heikki Linnakangas as well for his contributions.</p>
-
-<!-- more -->
-
-
-<p>And now onto the exploration. Upsert is the common name, but if you’re unfamiliar upsert is essentially create or update – Create this new record, but if a conflict exists update it. Let’s take a practical example.</p>
-
-<p>Assume you have a web scraper that imports product information into a table. Each product has a UPC code, title, description, and link. There’s a unique constraint on the UPC code. Now, if your web scraper tries to insert a new product, and a product with the same UPC already exists, you’d usually get an error. But you don’t want the query to fail, you’d want to update the existing product instead. Maybe with a new image, maybe a new description, whatever have you, but I don’t want it to blow up… I simply want to capture the new data and save it.</p>
-
-<p><strong>So before</strong>: Insert a record… Exception this violates a unique constraint… Let your app figure out what to do. <em>protip: often applications would try to work around this, but you can run a chance of a race condition and duplicate records if there’s a conflict. TLDR; it’s not a perfect solution.</em></p>
-
-<p><strong>Now</strong>: Insert a record… There’s a unique constraint violation… Okay, let’s just update all the new record’s fields <strong>inside a single transaction</strong></p>
-
-<p>So enough explanation, here’s how it actually looks in the syntax:</p>
-
-<pre><code>INSERT INTO products (
-    upc, 
-    title, 
-    description, 
-    link) 
-VALUES (
-    123456789, 
-    ‘Figment #1 of 5’, 
-    ‘THE NEXT DISNEY ADVENTURE IS HERE - STARRING ONE OF DISNEY'S MOST POPULAR CHARACTERS! ’, 
-    ‘http://www.amazon.com/dp/B00KGJVRNE?tag=mypred-20’
-    )
-ON CONFLICT DO UPDATE SET description=excluded.description;
-</code></pre>
-
-<p>It’s been a long time coming for this, and it makes building applications that need this kind of behavior even easier. While it would have been great for this to be available years ago, kudos to Postgres and its community for taking the approach that is safe for your data. The result we have now both provides the desired behavior of create or update, <strong>and</strong> is performant without the risk of race conditions for your data.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A product management blueprint]]></title>
-    <link href="http://www.craigkerstiens.com/2015/02/18/a-pm-blueprint/"/>
-    <updated>2015-02-18T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/02/18/a-pm-blueprint</id>
-    <content type="html"><![CDATA[<p>I find myself having more conversations with startups – both small and large – about product management. I&rsquo;ve blogged about some of <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">the tools</a> in my chest here but I haven&rsquo;t talked much about my “blueprint” for product management, which I find myself laying out in many conversations over coffee. What follows is this process I’ve used a few times over with new teams to get product and engineering moving together, shipping in a predictable manner, and tackling bigger and more strategic projects.</p>
-
-<!--more-->
-
-
-<h3>Trust</h3>
-
-<p>I need to know how to work with my team, what their working styles are, and how we interact. This starts by simply interacting – specifically, outside of the office. I heard a similar opinion recently from Chris Fry (who ran engineering at Salesforce and Twitter) when he remarked something to the effect of: “you can tell a good PM from a bad one based on if he goes to drinks with his team.” Without getting hung up on whether it’s beers or coffee, it’s more about socialization with your team and time outside the office. My personal approach: expect a dinner invite over to my place when I take on running product for a new team.</p>
-
-<h3>Velocity</h3>
-
-<p>Once you&rsquo;ve started to build some rapport, it&rsquo;s time to get down to business. If being able to quickly commit and ship something isn’t a problem for you, then it’s easy to just assume this is working. In reality most teams I encounter that need PM support don’t have shipping nailed down. You probably already know if you fall into that category of feeling like you can commit and ship vs. not, so if you’re not able to do that a few tips:</p>
-
-<ul>
-<li>There’s some projects that everyone wants to ship that’s been tried over and over, <strong>don’t tackle that first</strong>.</li>
-<li>Shipping something is better than nothing. It doesn&rsquo;t have to be the right thing.</li>
-<li>Sometimes you don&rsquo;t have to ship something to get velocity, you can launch things you already have</li>
-<li><del>Kill scope</del> Test things earlier and more iteratively, the more you can validate or try something without requiring a large investment the more everyone feels better about the direction you’re heading.</li>
-</ul>
-
-
-<p>The key here is to commit to projects, deliver, and move on. Your velocity depends solely on delivery, not tasks, not sprints, not projects, etc.  If you haven’t shipped anything in a year, then your velocity for the year is zero. At a later point you should move from the focus on shipping anything to shipping the right things, it’s more important to ship 1 thing that moves the needle than 10 that don’t, but that’s a later concern.</p>
-
-<h3>Killing things</h3>
-
-<p>On the note of killing scope&hellip; I&rsquo;ve heard it articulated at times, that some engineers are happy when certain PMs show up because it means less work for them. When you go over to an engineer’s desk are you creating more or less work? The answer should be less some large percentage of the time. If you can find a way to accomplish your goals with less effort, it&rsquo;s always a win. Every project everywhere always needs more time or money, what’s more innovative is how you can help a project to ship without one of those two.</p>
-
-<p>At a broader perspective than just scope – one of the biggest ways product can help engineering is by pushing harder for killing off features and the scope of a product. There&rsquo;s a good test on if something is ready to ship: if you <a href="http://www.craigkerstiens.com/2014/08/13/when-to-ship-when-to-kill/">tell beta users you&rsquo;re killing it</a> and they yell at you that you shouldn’t kill it, then it’s ready to ship.</p>
-
-<p>If you’ve already shipped things, but they’re not delivering value or not being used, kill them. It’s that simple, it may have been a great idea at the time, but either invest in making sure it’s used or kill it so you don’t have to maintain it.</p>
-
-<h3>Roadmap planning</h3>
-
-<p>Usually getting velocity and killing things takes 3-6 months to really take full effect. At this point a team feels like they&rsquo;re not under a pile of technical debt, and they can commit to shipping projects. This is the point when product and engineering are melding and you can really start to have fun about where you&rsquo;re headed. At this point I&rsquo;ve seen a huge mix of where engineers are more actively or less actively engaged in this process. And the reality is this is everyone’s job to be thinking about where you&rsquo;re headed as a company – at least that&rsquo;s the case for any company that classifies itself as a startup.</p>
-
-<p>My favorite tool for this is a team gridding exercise, you can read more about this <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">here</a> and <a href="http://www.craigkerstiens.com/2013/08/13/rule-of-thirds/">here</a>. This is often best conducted at an off-site where you have an opportunity for casual conversation which can foster broader thinking beyond the obvious bug fixes or smaller product improvements.</p>
-
-<p><em>One item of note I&rsquo;ve heard from teams that have done this or similar exercises is they still have trouble deciding what to do after the fact. The role of product is to get to that decision. The most important part is getting to a decision and not the perfect one, gather data, decide, revisit as you go along. All of this isn’t to say that it’s an arbitrary decision, customers, data all inform that as well as the effort to impact matrix exercise, but in the end a clear direction isn’t executed on consensus.</em></p>
-
-<h3>In conclusion</h3>
-
-<p>There’s really no end or done when it comes to the role and the work.</p>
-
-<p>There’s always another milestone and the market is always moving around you. But once you’re able to execute predictably and think in an ordered sense about your roadmap, you’re in a position to be able to monitor and adapt to the market, and even more so experiment and shape the market yourself. At that point you have to keep doing it and then the hard part becomes finding ways of keeping a fresh perspective <em>protip: customers are an important part of that equation</em></p>
-
-<p>Have tips/tricks/practices that I completely missed here or that you disagree with? I’m always happy to talk with others so drop me a note <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A simple guide for DB migrations]]></title>
-    <link href="http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations/"/>
-    <updated>2014-10-01T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/10/01/a-simple-guide-for-db-migrations</id>
-    <content type="html"><![CDATA[<p>Most web applications will add/remove columns over time. This is extremely common early on and even mature applications will continue modifying their schemas with new columns. An all too common pitfall when adding new columns is setting a not null constraint in Postgres.</p>
-
-<!--more-->
-
-
-<h3>Not null constraints</h3>
-
-<p>What happens when you have a not null constraint on a table is it will re-write the entire table. Under the cover Postgres is really just an append only log. So when you update or delete data it&rsquo;s really just writing new data. This means when you add a column with a new value it has to write a new record. If you do this requiring columns to not be null then you&rsquo;re re-writing your entire table.</p>
-
-<p>Where this becomes problematic for larger applications is it will hold a lock preventing you from writing new data during this time.</p>
-
-<h3>A better way</h3>
-
-<p>Of course you may want to not allow nulls and you may want to set a default value, the problem simply comes when you try to do this all at once. The safest approach at least in terms of uptime for your table &ndash;> data &ndash;> application is to break apart these steps.</p>
-
-<ol>
-<li>Start by simply adding the column with allowing nulls but setting a default value</li>
-<li>Run a background job that will go and retroactively update the new column to your default value</li>
-<li>Add your not null constraint.</li>
-</ol>
-
-
-<p>Yes it&rsquo;s a few extra steps, but I can say from having walked through this with a number of developers and their apps it makes for a much smoother process for making changes to your apps.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My wishlist for Postgres 9.5]]></title>
-    <link href="http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5/"/>
-    <updated>2014-08-15T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/08/15/my-postgres-wishlist-for-9.5</id>
-    <content type="html"><![CDATA[<p>As I followed along with the <a href="http://www.craigkerstiens.com/2014/03/24/Postgres-9.4-Looking-up/">9.4 release</a> of Postgres I had a few posts of things that I was excited about, some things that missed, and a bit of a wrap-up. I thought this year (year in the sense of PG releases) I&rsquo;d jump the gun and lay out areas I&rsquo;d love to see addressed in PostgreSQL 9.5. And here it goes:</p>
-
-<!--more-->
-
-
-<h3>Upsert</h3>
-
-<p>Merge/Upsert/Insert or Update whatever you want to call it this is still a huge wart that it doesn&rsquo;t exist. There&rsquo;s been a few implementations show up on mailing lists, and to the best of my understanding there&rsquo;s been debate on if it&rsquo;s performant enough or that some people would prefer another implementation or I don&rsquo;t know what other excuse. The short is this really needs to happen, until that time you can always <a href="http://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql/8702291#8702291">implement it with a CTE</a> which can have a race condition.</p>
-
-<h3>Foreign Data Wrappers</h3>
-
-<p>There&rsquo;s so much opportunity here, and this has easily been my <a href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/">favorite feature of the past 2-3 years in Postgres</a>. Really any improvement is good here, but a hit list of a few valuable things:</p>
-
-<ul>
-<li>Pushdown of conditions</li>
-<li>Ability to accept a DSN to a utility function to create foreign user and tables.</li>
-<li>Better security around creds of foreign tables</li>
-<li>More out of the box FDWs</li>
-</ul>
-
-
-<h3>Stats/Analytics</h3>
-
-<p>Today there&rsquo;s <a href="http://madlib.net/">madlib</a> for machine learning, and 9.4 got support for <a href="http://www.depesz.com/2014/01/11/waiting-for-9-4-support-ordered-set-within-group-aggregates/">ordered set aggregates</a>, but even still Postgres needs to keep moving forward here. PL-R and PL-Python can help a good bit as well, but having more out of the <a href="http://www.postgresql.org/docs/9.3/static/functions-aggregate.html">box functions</a> for stats can continue to keep it at the front of the pack for a database that&rsquo;s not only safe for your data, but powerful to do analysis with.</p>
-
-<h3>Multi-master</h3>
-
-<p>This is definitely more of a dream than not. Full multi-master replication would be amazing, and it&rsquo;s getting closer to possible. The sad truth is even once it lands it will probably require a year of maturing, so even more reason for it to hopefully hit in 9.5</p>
-
-<h3>Logical Replication</h3>
-
-<p>The foundation made it in for 9.4 which is huge. This means we&rsquo;ll probably see a good working out of the box logical replication in 9.5. For those less familiar this means the replication is SQL based vs. the binary WAL stream. This means things like using replication to upgrade across versions is possible. So not quite 0 downtime, but ~ a minute or two to upgrade versions. Even of large DBs.</p>
-
-<h3>An official GUI</h3>
-
-<p>Alright this one is probably a pipe dream. And to kick it off, no pgAdmin doesn&rsquo;t cut it. A good end user tool for connecting/querying would be huge. Fortunately the ecosystem is improving here with <a href="http://www.jackdb.com">JackDB</a> (web based) and <a href="https://eggerapps.at/pgcommander/">PG Commander</a> (mac app), but these still aren&rsquo;t discoverable enough for most users.</p>
-
-<h3>What do you want?</h3>
-
-<p>So there&rsquo;s my wishlist, what&rsquo;s yours for 9.5? Let me know &ndash; <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[When to ship it, when to kill it]]></title>
-    <link href="http://www.craigkerstiens.com/2014/08/13/when-to-ship-when-to-kill/"/>
-    <updated>2014-08-13T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/08/13/when-to-ship-when-to-kill</id>
-    <content type="html"><![CDATA[<p>A few weeks ago at lunch I had the opportunity to catch up with a company in the current YC batch, building something very similar to dataclips. While we talked about a lot of things from what we&rsquo;ve learned from dataclips, marketing, and other areas. One area we talked about was product and when to ship vs. when to kill things and I realized I hadn&rsquo;t talked on my fairly simple but clear view on this publicly, so here it is.</p>
-
-<p><em>A large credit to <a href="http://www.twitter.com/hirodusk">Adam Wiggins</a> for giving this model early on in Heroku and his approach to shipping product.</em></p>
-
-<!--more-->
-
-
-<h3>A precursor to shipping</h3>
-
-<p>First a little background on shipping, in shipping something I&rsquo;m going to assume you have some process of alpha/beta testing with users. This is actually fairly key, if you&rsquo;re not testing it with users then well the rest of this is all moot. Alpha and beta testing is pretty simple, you need some early users. These can be friends, people within a network, or random users you select from. There&rsquo;s different value to how you select these but that&rsquo;s a topic for another time and place.</p>
-
-<h3>On to shipping</h3>
-
-<p>So how do you know it&rsquo;s ready. The basic idea is super simple. Give it to some users in alpha/beta testing. Or start to roll it out following a one &ndash;> some &ndash;> many all principle (maybe to 5% or 10% of your userbase). Then take that brand new feature away.</p>
-
-<p>There&rsquo;s a couple of ways to do this as far as mechanics. If you&rsquo;re in contact with users such as alpha/beta users that you were higher touch with just email them. Tell them you&rsquo;re removing the feature, or if you want to approach it more softly ask them how much they&rsquo;d miss it if it were gone tomorrow. If you&rsquo;re rolling it out more broadly perhaps behind a feature flag, flip it off and watch for feedback.</p>
-
-<p><em>Once you take the feature away or threaten to if you don&rsquo;t have users with pitchforks almost immediately then it&rsquo;s not ready to ship</em>.</p>
-
-<p>Go back to the drawing board and work more on it or simply kill it. As <a href="http://www.twitter.com/james_heroku">@james_heroku</a> would say: &ldquo;So you&rsquo;re saying the reason to ship the shitty thing now is becase you&rsquo;ve spent a lot of time on it?&rdquo;. Stepping back it&rsquo;s all logical, but all too often it&rsquo;s not put in practice when shipping it.</p>
-
-<h3>Your metrics can lie</h3>
-
-<p>Relying on just seeing a user spend some time on the new feature can often be misleading vs. the above approach. There&rsquo;s a great talk by Des Traynor over at <a href="http://insideintercom.io/talk-product-strategy-saying/">intercom.io</a> that hits on this in part, the basic premise in there is that users shifting time from feature X to Y doesn&rsquo;t mean it was a success it just means they&rsquo;re spending time on something different. In launching new things you want to increase the overall value of your product, not simply shift users focus to the new flavor of the week.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scaling Organizations - Scribing]]></title>
-    <link href="http://www.craigkerstiens.com/2014/07/14/on-scribing/"/>
-    <updated>2014-07-14T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/07/14/on-scribing</id>
-    <content type="html"><![CDATA[<p>In the process of growing a company there&rsquo;s several hurdles based on the size of the company. What worked at 5 doesn&rsquo;t work at 20, what works at 20 doesn&rsquo;t work at 50, and what worked at 50 doesn&rsquo;t work at 150. There&rsquo;s a lot of talk about <a href="http://lifehacker.com/5965280/follow-jeff-bezos-two-pizza-rule-to-avoid-the-dangers-of-groupthink">two pizza teams</a> and <a href="http://adam.herokuapp.com/past/2011/4/28/scaling_a_development_team/">scaling development teams</a> out there. One thing I haven&rsquo;t seen quite enough of is details around scribing and documenting things.</p>
-
-<!--more-->
-
-
-<h3>Planning</h3>
-
-<p>At teams of 2 and 3 you get everyone in a room. Perhaps 1 person says what you&rsquo;re going to do and you all rally around it, or maybe it&rsquo;s a day of debate and persuasion from all sides.</p>
-
-<p>In the end though you all leave, get heads down, but all know what goal you&rsquo;re working towards. At a larger company planning doesn&rsquo;t scale quite this way. I&rsquo;ve seen roadmapping and planning done a variety of ways as companies scale, but most times the thing they miss for far too long is documenting what comes out of it. Many may produce some level of artifact, but a cohesive wrap-up is often missed. Such an artifact should be easily digestible within a couple minutes, but also deep enough to answer many of the initial questions raised by the high level pieces.</p>
-
-<h3>Meetings</h3>
-
-<p>Meetings are a smaller level item than broader planning, and tend to go without thorough note taking than higher level planning. With growth you&rsquo;ll have more meetings, trust me you will. The more meetings you have the more likely you may miss one or two you&rsquo;re interested in. Or perhaps its as simple as some team members being out. Summer is especially hard around this. For a team of 10 it&rsquo;s not uncommon that you may go all summer with at least 1 person not in the meeting and often two.</p>
-
-<p>Keeping those that miss the meeting well informed of what happened at it is critical as you scale. This is slightly less important at an extremely large company, though still valuable, but critical <em>as you scale to larger</em>. As you&rsquo;re scaling things are changing faster, and context can more easily get lost.</p>
-
-<p>So how do you improve this?</p>
-
-<p>Some practical tips:</p>
-
-<ul>
-<li>Have a set of running notes with someone consistently scribing is a great standard to set. <em>If you missed a meeting you know where to go for it.</em></li>
-<li>Recording who was and was not at the meeting can be incredibly valuable. I&rsquo;ve heard statements &ldquo;I said X at Y meeting&rdquo;, the only problem with that statement is I wasn&rsquo;t at Y meeting.</li>
-<li>Not only recording the meeting notes, but explicitly calling out who&rsquo;s not there can help to know if that information should be explicitly passed along vs. just missed.</li>
-<li>Within your long running document have a summary to wrap it up. While scribing is great it can lead to not seeing the forest for the trees at times.</li>
-</ul>
-
-
-<p>And a few from others:</p>
-
-<ul>
-<li>Meetings need a <strong>purpose</strong> and an <strong>agenda</strong>. If I don&rsquo;t know why I&rsquo;m having a meeting, or what will be covered, I won&rsquo;t go. If I&rsquo;m organizing a meeting and can&rsquo;t spare the time to produce an agenda and goal, I shouldn&rsquo;t waste other people&rsquo;s time with the meeting – <a href="http://www.twitter.com/jacobian">@jacobian</a></li>
-<li>Any meeting over about 15-20 isn&rsquo;t a meeting, it&rsquo;s a presentation (which is OK too but make it clear that it&rsquo;s a download, not a discussion). – <a href="http://www.twitter.com/jacobian">@jacobian</a></li>
-</ul>
-
-
-<h3>Email</h3>
-
-<p>If you aren&rsquo;t aware I&rsquo;m a <a href="http://www.craigkerstiens.com/2014/02/07/my-email-hacks/">big fan of email</a>. Email is almost guaranteed that someone will at least open it (at least if its to them or a clear enough list). If you have something you want someone to read – email it. You can have a canonical wiki, or Trello board, or a variety of tools, but email will get more eyeballs than any of these. At the same time don&rsquo;t email things that are already documented elsewhere.</p>
-
-<p>Emails are great for highlighting the things people absolutely need to know about. Short and concise emails will also help to improve reach. Be careful to make these emails have a high ratio of information size to value. If you have a lot of extra follow on content send them somewhere else to read.</p>
-
-<p>Finally don’t overuse email. If you’re sending the same thing every week people will become numb to this. <a href="http://www.yesware.com">Monitoring if your emails are being opened/responded</a> to can help to know if you&rsquo;re over-broadcasting.</p>
 ]]></content>
   </entry>
   

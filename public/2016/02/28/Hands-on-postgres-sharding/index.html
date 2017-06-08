@@ -6,11 +6,11 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title>Hands On Postgres Sharding Craig Kerstiens</title>
+	<title>Hands On Postgres Sharding - Craig Kerstiens </title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Notice: Much of this post still applies, but now applies more directly to Citus. Since this post originally published, pg_shard is now deprecated. &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -117,7 +117,9 @@ $(document).ready(
 </div>
 
 	</div>
-	<div class="entry-content"><p>Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency over the last two months. As a result I thought I&rsquo;d do a deeper dive with some actual hands on for sharding. Though for this hands on, because I do value my time I&rsquo;m going to take advantage of <code>pg_shard</code> rather than creating mechanisms from scratch.</p>
+	<div class="entry-content"><p><em><strong>Notice</strong>: Much of this post still applies, but now applies more directly to <a href="https://www.citusdata.com">Citus</a>. Since this post originally published, pg_shard is now deprecated. Citus now has an open source version which offer a superset of the features of pg_shard, as well as a <a href="https://www.citusdata.com/products/cloud">cloud</a> offering. Finally you can find some further guidance for sharding on the <a href="https://www.citusdata.com/blog/">Citus blog</a> and <a href="http://docs.citusdata.com">docs</a></em></p>
+
+<p>Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency over the last two months. As a result I thought I&rsquo;d do a deeper dive with some actual hands on for sharding. Though for this hands on, because I do value my time I&rsquo;m going to take advantage of <code>pg_shard</code> rather than creating mechanisms from scratch.</p>
 
 <p>For those unfamiliar <a href="https://github.com/citusdata/pg_shard/">pg_shard</a> is an open source extension from <a href="http://citusdata.com">Citus data</a> who has a commerical product that you can think of is pg_shard++ (and probably much more). Pg_shard adds a little extra to let data automatically distribute to other Postgres tables (logical shards) and Postgres databases/instances (physical shards) thus letting you outgrow a single Postgres node pretty simply.</p>
 
@@ -294,7 +296,7 @@ INSERT INTO customer_reviews (customer_id, review_rating) VALUES ('FA2K1', 10);
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2016
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Craig Kerstiens
 

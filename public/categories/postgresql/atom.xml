@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2016-06-07T10:27:45-07:00</updated>
+  <updated>2017-06-08T09:14:22-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,378 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Working with time in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/06/08/working-with-time-in-postgres/"/>
+    <updated>2017-06-08T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/06/08/working-with-time-in-postgres</id>
+    <content type="html"><![CDATA[<p>A massive amount of reporting queries, whether really intensive data analysis, or just basic insights into your business involving looking at data over a certain time period. Postgres has really rich support for dealing with time out of the box, something that&rsquo;s often very underweighted when dealing with a database. Sure, if you have a time-series database it&rsquo;s implied, but even then how flexible and friendly is it from a query perspective? With Postgres there&rsquo;s a lot of key items available to you, let&rsquo;s dig in at the things that make your life easier when querying. <!--more--></p>
+
+<h3>Date math</h3>
+
+<p>The most common thing I find myself doing is looking at users that have done something within some specific time window. If I&rsquo;m executing this all from my app I can easily inject specific dates, but Postgres makes this really easy for you. Within Postgres you have a type called and interval that is some window of time. And fortunately Postgres takes care of the heavy lifting of how might something translate to or from hours/seconds/milliseconds/etc. Here&rsquo;s just a few examples of things you could do with interals:</p>
+
+<ul>
+<li>&lsquo;1 day&rsquo;::interval</li>
+<li>&lsquo;5 days&rsquo;::interval</li>
+<li>&lsquo;1 week&rsquo;::interval</li>
+<li>&lsquo;30 days&rsquo;::interval</li>
+<li>&lsquo;1 month&rsquo;::interval</li>
+</ul>
+
+
+<p><em>A note that if you&rsquo;re looking to remove something like a full month, you actually want to use 1 month instead of trying to calculate yourself.</em></p>
+
+<p>With a given interval you can easily shift some window of time, such as finding all users that have signed up for your service within the past week:</p>
+
+<p><code>sql
+SELECT *
+FROM users
+WHERE created_at &gt;= now() - '1 week'::interval
+</code></p>
+
+<h3>Date functions</h3>
+
+<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you worth with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
+
+<p>```
+SELECT date_trunc(&lsquo;week&rsquo;, created_at),</p>
+
+<pre><code>   count(*)
+</code></pre>
+
+<p>FROM users
+GROUP BY 1
+ORDER BY 1 DESC;
+```</p>
+
+<p>This gives us a nice roll-up of how many users signed up each week. What&rsquo;s missing here though is if you have a week that has no users. In that case because no users signed up there is no count of 0, it just simply doesn&rsquo;t exist. If you did want something like this you could generate some range of time and then do a cross join with it against users to see which week they fell into. To do this first you&rsquo;d generate a series of dates:</p>
+
+<p><code>sql
+SELECT generate_series('2017-01-01'::date, now()::date, '1 week'::interval) weeks
+</code></p>
+
+<p>Then we&rsquo;re going to join this against the actual users table and check that the <code>created_at</code> falls within the right range.</p>
+
+<p>```
+with weeks as (
+  select week as week
+  from generate_series(&lsquo;2017-01-01&rsquo;::date, now()::date, &lsquo;1 week&rsquo;::interval) weeks
+),</p>
+
+<p>SELECT weeks.week,</p>
+
+<pre><code>   count(*)
+</code></pre>
+
+<p>FROM weeks,</p>
+
+<pre><code> users
+</code></pre>
+
+<p>WHERE users.created_at > weeks.week
+  AND users.created_at &lt;= weeks.week &ndash; &lsquo;1 week&rsquo;::interval
+```</p>
+
+<h3>Timestamp vs. Timestamptz</h3>
+
+<p>What about storing the times themselves? Postgres has two types of timestamps. It has a generic timestamp and one with timezone embedded in it. In most cases you should generally opt for timestamptz. Why not timestamp? What happens if you move a server, or your server somehow swaps its configuration. Or perhaps more practically what about daylight savings time? In general you might think that you can simply just put in the time as you see it, but when different countries around the world observe things like daylight savings time differently it introduces complexities into your application.</p>
+
+<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone and store your dates correctly. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
+
+<h3>More</h3>
+
+<p>There&rsquo;s a number of other functions and capabilities when it comes to dealing with time in Postrges. You can <code>extract</code> various parts of a timesetamp or interval such as hour of the day or the month. You can grab the day of the week with <code>dow</code>. And one of my favorites which is when we celebrate happy hour at Citus, there&rsquo;s a literal for UTC 00:00:00 00:00:00 which is <a href="https://www.postgresql.org/message-id/20050124200645.GA6126%40winnie.fuhr.org"><code>allsballs()</code></a>. If you need to work with dates and times in Postgres I encourage you to check out the <a href="https://www.postgresql.org/docs/current/static/functions-datetime.html">docs</a> before you try to re-write something of your own, chances are what you need may already be there.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why use Postgres (Updated for last 5 years)]]></title>
+    <link href="http://www.craigkerstiens.com/2017/04/30/why-postgres-five-years-later/"/>
+    <updated>2017-04-30T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/04/30/why-postgres-five-years-later</id>
+    <content type="html"><![CDATA[<p>Five years ago <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">I wrote a post</a> that got some good attention on why you should use Postgres. Almost a year later I <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">added a bunch of things</a> I missed. Many of those items bear repeating, and I&rsquo;ll recap a few of those in the latter half of this post. But in the last 4-5 years there&rsquo;s been a lot of improvements and more reasons added to the list of why you should use Postgres. Here&rsquo;s the rundown of the things that make Postgres a great database you should consider using. <!--more--></p>
+
+<h3>Datatypes, including JSONB and range types</h3>
+
+<p>Postgres has long had an open and friendly attitude for adding datatypes. It&rsquo;s had arrays, geospatical and more for some time. A few years ago it got two datatypes worth thinking about using:</p>
+
+<h4>JSONB</h4>
+
+<p>JSONB is a binary representation of JSON. It&rsquo;s capable of being indexed on with <code>GIN</code> and <code>GIST</code> index types. You can also query into your full JSON document for quick lookups.</p>
+
+<h4>Range types</h4>
+
+<p>While it didn&rsquo;t arrive to the same fame as JSONB, <a href="https://wiki.postgresql.org/images/7/73/Range-types-pgopen-2012.pdf">range types</a> can be especially handy if they&rsquo;re what you need. Within a single column you can have a range from one value to another–this is especially helpful for time ranges. If you&rsquo;re building a calendaring application or often have a from and to of timestamps then range types can let you put that in a single column. The real benefit is that you can then have constraints that certain time stamps can&rsquo;t overlap or other constraints that may make sense for your application.</p>
+
+<h3>Extensions</h3>
+
+<p>It&rsquo;d be hard to talk about Postgres without all the ecosystem around it. Extensions are increasingly quite key when it comes to the community and growth of Postgres. Extensions allow you to hook into Postgres very natively without requiring them to be committed back to the core of Postgres. This means they can add rich functionality without being tied to a Postgres release and review cycle. Some great examples of this are:</p>
+
+<h4>Citus</h4>
+
+<p><a href="https://www.citusdata.com">Citus</a> (who I work for) turns Postgres into a distributed database allowing you to easily shard your database across multiple nodes. To your application it still looks like a single database, but then under the covers it&rsquo;s spread across multiple physical machines and Postgres instances.</p>
+
+<h4>HyperLogLog</h4>
+
+<p>This is a personal favorite of mine that allows you to easily have close-enough distinct counts pre-aggregated, but then also do various operations on them across days such as unions, intersections, and more. <a href="https://www.citusdata.com/blog/2017/04/04/distributed_count_distinct_with_postgresql/">HyperLogLog and other sketch algorithms</a> can be extremely common across large datasets and distributed systems, but it&rsquo;s especially exciting to find them pretty close to out of the box in Postgres.</p>
+
+<h4>PostGIS</h4>
+
+<p>PostGIS isn&rsquo;t new, but it&rsquo;s worth highlighting again. It&rsquo;s commonly regarded as the most advanced geospatial database. PostGIS adds new advanced geospatial datatypes, operators, and makes it easy to do many of the location based activities you need if you&rsquo;re dealing with mapping or routing.</p>
+
+<h3>Logical replication</h3>
+
+<p>For many years the biggest knock against Postgres was the difficulty in setting up replication. Originally this was any form of replication, but then streaming replication came along (this is streaming of the binary WAL or write-ahead-log format). Tools like <a href="https://github.com/wal-e/wal-e">wal-e</a> help leverage much of the Postgres mechanisms for things like disaster recovery.</p>
+
+<p>Then we had the foundation for logical replication in recent releases, though it still required an <a href="https://github.com/2ndQuadrant/pglogical">extension</a> to Postgres so it wasn&rsquo;t 100% out of the box. And, then finally we got full logical replication. Logical replication allows the sending of more or less actual commands, this means you could replicate only certain commands or certain tables.</p>
+
+<h3>Scale</h3>
+
+<p>In addition to all of the usability featuers we&rsquo;ve seen Postgres continue to get better and better at <a href="https://www.slideshare.net/fuzzycz/postgresql-performance-improvements-in-95-and-96">performance</a>. In particular we now have the foundations for <a href="https://www.postgresql.org/docs/current/static/parallel-query.html">parallelism</a> and on some queries you&rsquo;ll see much better performance. Then if you need even greater scale than single node Postgres (such as 122 or 244 GB of RAM on RDS or Heroku) you have options like <a href="https://www.citusdata.com">Citus</a> which was mentioned earlier that can help you scale out.</p>
+
+<h3>Richer indexing</h3>
+
+<p>Postgres already had some pretty powerful indexing before with <a href="https://www.postgresql.org/docs/9.5/static/textsearch-indexes.html">GIN and GiST</a>, those are now useful for JSONB. But we&rsquo;ve also seen the arrival of KNN indexes and Sp-GiST and have even more on the way.</p>
+
+<h3>Upsert</h3>
+
+<p>Upsert was a work in progress for several years. It was one of those features that most people hacked around with <a href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/">CTEs</a>, but that could create race conditions. It was also one of the few features MySQL had over Postgres. And just over a year ago we got <a href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/">official upsert</a> support.</p>
+
+<h3>Foreign Data Wrappers</h3>
+
+<p>Okay, yes foreign data wrappers did exist many years ago. If you&rsquo;re not familiar with foreign data wrappers, they allow you map an external data system to tables directly in Postgres. This means could could for example interact and query your <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">Redis</a> database from directly in Postgres with SQL. They&rsquo;ve continued to be improved more and more from what we had over 5 years ago. In particular we got support for write-able foreign data wrappers, meaning you can write data to other systems from directly in Postgres. There&rsquo;s also now an official Postgres FDW which comes out of the box with Postgres and it by itself is quite useful when querying across various Postgres instances.</p>
+
+<h3>Much more</h3>
+
+<p>And if you missed the <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">earlier editions</a> of this, please feel free to <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">check them out</a>. The cliff notes of them include:</p>
+
+<ul>
+<li>Window functions</li>
+<li>Functions</li>
+<li>Custom languages (PLV8 anyone?)</li>
+<li>NoSQL datatypes</li>
+<li>Custom functions</li>
+<li>Common table expressions</li>
+<li>Concurrent index creation</li>
+<li>Transactional DDL</li>
+<li>Foreign Data Wrappers</li>
+<li>Conditional and functional indexes</li>
+<li>Listen/Notify</li>
+<li>Table inheritance</li>
+<li>Per transaction synchronous replication</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Getting started with JSONB in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/03/12/getting-started-with-jsonb-in-postgres/"/>
+    <updated>2017-03-12T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2017/03/12/getting-started-with-jsonb-in-postgres</id>
+    <content type="html"><![CDATA[<p>JSONB is an awesome datatype in Postgres. I find myself using it on a weekly basis these days. Often in using some API (such as <a href="https://www.clearbit.com">clearbit</a>) I&rsquo;ll get a JSON response back, instead of parsing that out into a table structure it&rsquo;s really easy to throw it into a JSONB then query for various parts of it.</p>
+
+<p><em>If you&rsquo;re not familiar with JSONB, it&rsquo;s a binary representation of JSON in your database. You can read a bit more about it vs. JSON <a href="https://www.citusdata.com/blog/2016/07/14/choosing-nosql-hstore-json-jsonb/">here</a>.</em></p>
+
+<p>In working with JSONB here&rsquo;s a few quick tips to get up and running with it even faster: <!--more--></p>
+
+<h3>Indexing</h3>
+
+<p>For the most part you don&rsquo;t have to think to much about this. With Postgres powerful indexing types you can add one index and have everything within the JSON document, all the keys and all the values, automatically indexed. The key here is to add a <code>GIN</code> index. Once this is done queries should be much faster where you&rsquo;re searching for some value:</p>
+
+<p><code>sql
+CREATE INDEX idx_data ON companies USING GIN (data);
+</code></p>
+
+<h3>Querying</h3>
+
+<p>Querying is a little bit more work, but once you get the basics it can be pretty straight forward. There&rsquo;s a few new operators you&rsquo;ll want to quickly ramp up on and from there querying becomes easy.</p>
+
+<p>For the most basic part you now have an operator so traverse down the various keys. First let&rsquo;s get some idea of what the JSON looks like so we can have something to work with. Here&rsquo;s a sample set of data that we get back from Clearbit:</p>
+
+<p>```
+{
+  &ldquo;domain&rdquo;: &ldquo;citusdata.com&rdquo;,
+  &ldquo;company&rdquo;: {</p>
+
+<pre><code>"id": "b1ff2bdf-0d8d-4d6d-8bcc-313f6d45996a",
+"url": "http:\/\/citusdata.com",
+"logo": "https:\/\/logo.clearbit.com\/citusdata.com",
+"name": "Citus Data",
+"site": {
+  "h1": null,
+  "url": "http:\/\/citusdata.com",
+  "title": "Citus Data",
+},
+"tags": [
+  "SAAS",
+  "Enterprise",
+  "B2B",
+  "Information Technology &amp; Services",
+  "Technology",
+  "Software"
+],
+"domain": "citusdata.com",
+"twitter": {
+  "id": "304455171",
+  "bio": "Builders of Citus, the extremely scalable PostgreSQL database.",
+  "site": "https:\/\/t.co\/hKpZjIy7Ej",
+  "avatar": "https:\/\/pbs.twimg.com\/profile_images\/630900468995108865\/GJFCCXrv_normal.png",
+  "handle": "citusdata",
+  "location": "San Francisco, CA",
+  "followers": 3770,
+  "following": 570
+},
+"category": {
+  "sector": "Information Technology",
+  "industry": "Internet Software &amp; Services",
+  "subIndustry": "Internet Software &amp; Services",
+  "industryGroup": "Software &amp; Services"
+},
+"emailProvider": false
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Sorry it&rsquo;s a bit long, but it gives us a good example to work with.</p>
+
+<h3>Basic lookups</h3>
+
+<p>Now let&rsquo;s query something fairly basic, the domain:</p>
+
+<p>```sql</p>
+
+<h1>SELECT data->&lsquo;domain&rsquo;</h1>
+
+<p>FROM companies
+WHERE domain=&lsquo;citusdata.com&rsquo;
+LIMIT 1;</p>
+
+<pre><code>?column?
+</code></pre>
+
+<hr />
+
+<p> &ldquo;citusdata.com&rdquo;
+```</p>
+
+<p>The <code>-&gt;</code> is likely the first operator you&rsquo;ll use in JSONB. It&rsquo;s helpful to traverse the JSON. Though of you&rsquo;re looking to get the value as text you&rsquo;ll actually want to use <code>-&gt;&gt;</code>. Instead of giving you some quoted response back or JSON object you&rsquo;re going to get it as text which will be a bit cleaner:</p>
+
+<p>```sql</p>
+
+<h1>SELECT data->>&lsquo;domain&rsquo;</h1>
+
+<p>FROM companies
+WHERE domain=&lsquo;citusdata.com&rsquo;
+LIMIT 1;</p>
+
+<pre><code>?column?
+</code></pre>
+
+<hr />
+
+<p> citusdata.com
+```</p>
+
+<h3>Filtering for values</h3>
+
+<p>Now with something like clearbit you may want to filter out for only certain type of companies. We can see in the example data that there&rsquo;s a bunch of tags. If we wanted to find only companies that had the tag B2B we could use the <code>?</code> operator once we&rsquo;ve targetted down to that part of the JSON. The <code>?</code> operator will tell us if some part of JSON has a top level key:</p>
+
+<p><code>sql
+SELECT *
+FROM companies
+WHERE data-&gt;'company'-&gt;'tags' ? 'B2B'
+</code></p>
+
+<h3>JSONB but pretty</h3>
+
+<p>In querying JSONB you&rsquo;ll typically get a nice compressed set of JSON back. While this is all fine if you&rsquo;re putting it into your application, if you&rsquo;re manually debugging and testing things you probably want something a bit more readable. Of course Postgres has your back here and you can wrap your JSONB with a pretty print function:</p>
+
+<p><code>sql
+SELECT jsonb_pretty(data)
+FROM companies;
+</code></p>
+
+<h3>Much more</h3>
+
+<p>There&rsquo;s a lot more in the <a href="https://www.postgresql.org/docs/9.5/static/functions-json.html">docs</a> that you can find handy for the specialized cases when you need them. <code>jsonb_each</code> will expand a JSONB document into individual rows. So if you wanted to count the number of occurences of every tag for a company, this would help. Want to parse out a JSONB to a row/record in Postgres there&rsquo;s <code>jsonb_to_record</code>. The docs are your friends for about everything you want to do but hopefully these few steps help kick start things if you want to get started with <code>JSONB</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Simple but handy Postgres features]]></title>
+    <link href="http://www.craigkerstiens.com/2017/01/08/simple-but-handy-postgresql-features/"/>
+    <updated>2017-01-08T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2017/01/08/simple-but-handy-postgresql-features</id>
+    <content type="html"><![CDATA[<p>It seems each week when I&rsquo;m reviewing data with someone a feature comes up that they had no idea existed within Postgres. In an effort to continue documenting many of the features and functionality that are useful, here&rsquo;s a list of just a few that you may find handy the next time your working with your data.</p>
+
+<h3>Psql, and \e</h3>
+
+<p>This one I&rsquo;ve <a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/">covered before</a>, but it&rsquo;s worth restating. Psql is a great editor that already comes with Postgres. If you&rsquo;re comfortable on the CLI you should consider giving it a try. You can even setup you&rsquo;re own <code>.psqlrc</code> for it so that it&rsquo;s well customized to your liking. In particular turning <code>\timing</code> on is especially useful. But even with all sorts of customization if you&rsquo;re not aware that you can use your preferred editor by using <code>\e</code> then you&rsquo;re missing out. This will allow you to open up the last run query, edit it, save–and then it&rsquo;ll run for you. Vim, Emacs, even Sublime text works just take your pick by setting your <code>$EDITOR</code> variable.</p>
+
+<!--more-->
+
+
+<h3>Watch</h3>
+
+<p>Ever sit at a terminal running a query over and over to see if something on your system changed? If you&rsquo;re debugging something whether locally or even live in production, watching data change can be key to figuring out. Instead of re-running your query you could simply use the <code>\watch</code> command in Postgres, this will re-run your query automatically every few seconds.</p>
+
+<p>```sql
+SELECT now() &ndash;</p>
+
+<pre><code>   query_start, 
+   state, 
+   query 
+</code></pre>
+
+<p>FROM pg_stat_activity
+\watch
+```</p>
+
+<h3>JSONB pretty print</h3>
+
+<p>I love <a href="https://www.citusdata.com/blog/2016/07/14/choosing-nosql-hstore-json-jsonb/">JSONB</a> as a datatype. Yes, in cases it won&rsquo;t be the <a href="http://blog.heapanalytics.com/when-to-avoid-jsonb-in-a-postgresql-schema/">optimal</a> for performance (though at times it can be perfectly fine). If I&rsquo;m hitting some API that returns a ton of data, I&rsquo;m usually not using all of it right away. But, you never know when you&rsquo;ll want to use the rest of it. I use <a href="https://www.clearbit.com">Clearbit</a> this way today, and for safety sake I save all the JSON result instead of de-normalizing it. Unfortunately, when you query this in Postgres you get one giant compressed text of JSON. Yes, you could pipe out to something like jq, or you could simply use Postgres built in function to make it legible:</p>
+
+<p>```sql
+SELECT jsonb_pretty(clearbit_response)
+FROM lookup_data;</p>
+
+<pre><code>                            jsonb_pretty
+</code></pre>
+
+<hr />
+
+<p> {</p>
+
+<pre><code> "person": { 
+     "id": "063f6192-935b-4f31-af6b-b24f63287a60", 
+     "bio": null, 
+     "geo": { 
+         "lat": 37.7749295, 
+         "lng": -122.4194155,                                              
+         "city": "San Francisco", 
+         "state": "California", 
+         "country": "United States", 
+         "stateCode": "CA", 
+         "countryCode": "US" 
+     }, 
+     "name": { 
+     ...
+</code></pre>
+
+<p>```</p>
+
+<h3>Importing my data into Google</h3>
+
+<p>This one isn&rsquo;t Postgres specific, but I use it on a weekly basis and it&rsquo;s key for us at <a href="https://www.citusdata.com">Citus</a>. If you use something like Heroku Postgres, dataclips is an extremely handy feature that lets you have a real-time view of a query and the results of it, including an anonymous URL you can it for it. At Citus much like we did at Heroku Postgres we have a dashboard in google sheets which pulls in this data in real-time. To do this simple select a cell then put in: <code>=importdata("pathtoyourdataclip.csv")</code>. Google will import any data using this as long as it&rsquo;s in CSV form. It&rsquo;s a great lightweight way to build out a dashboard for your business without rolling your own complicated dashboarding or building out a complex ETL pipeline.</p>
+
+<p>I&rsquo;m sure I&rsquo;m missing a ton of the smaller features that you use on a daily basis. Let me know <a href="https://www.twitter.com/craigkerstiens">@craigkerstiens</a> the ones I forgot that you feel should be listed.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Writing more legible SQL]]></title>
@@ -40,7 +412,7 @@ FROM baz
        bar
 FROM baz
 WHERE foo &gt; 3
-AND baz = 'craig.kerstiens@gmail.com'
+AND bar = 'craig.kerstiens@gmail.com'
 </code></pre>
 
 <p>And a cleaner version:</p>
@@ -49,7 +421,7 @@ AND baz = 'craig.kerstiens@gmail.com'
        bar
 FROM baz
 WHERE foo &gt; 3
-  AND baz = 'craig.kerstiens@gmail.com'
+  AND bar = 'craig.kerstiens@gmail.com'
 </code></pre>
 
 <h3>Use column names when grouping/ordering</h3>
@@ -85,441 +457,6 @@ WHERE foo &gt; 3
   })();
 </script>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My top 10 Postgres features and tips for 2016]]></title>
-    <link href="http://www.craigkerstiens.com/2015/12/29/my-postgres-top-10-for-2016/"/>
-    <updated>2015-12-29T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/12/29/my-postgres-top-10-for-2016</id>
-    <content type="html"><![CDATA[<p>I find during the holiday season many pick up <a href="http://www.amazon.com/Hard-Thing-About-Things-Building/dp/0062273205/ref=sr_1_1?ie=UTF8&amp;qid=1451407536&amp;sr=8-1&amp;keywords=hard+thing+about&amp;tag=mypred-20">new books</a>, learn a <a href="http://crystal-lang.org/">new language</a>, or brush up on some other skill in general. Here&rsquo;s my contribution to hopefully giving you a few new things to learn about Postgres and ideally utilize in the new year. It&rsquo;s not in a top 10 list as much as 10 tips and tricks you should be aware of as when you need them they become incredibly handy. But, first a shameless plug if you find any of the following helpful, consider subscribing to <a href="http://www.postgresweekly.com">Postgres weekly</a> a weekly newsletter with interesting Postgres content.</p>
-
-<!--more-->
-
-
-<h3>1. CTEs &ndash; Common Table Expressions</h3>
-
-<p>CTEs allow you to do crazy awesome things like recursive queries but even the most simple form of them I don&rsquo;t go a day without using. Think of a CTE or commonly known as with clause as a view inside the time that query is running. This lets you more easily create readable query. Any query that&rsquo;s constructed that&rsquo;s even <a href="/2013/11/18/best-postgres-feature-youre-not-using/">100 lines long</a>, but with 4-5 CTEs is undoubtedly going to be easier for someone new to come in and understand than a 20 line query that does the same thing. A few people like writing SQL, but no one likes reading someone else&rsquo;s so do them a favor and read up on CTEs.</p>
-
-<h3>2. Setup a .psqlrc</h3>
-
-<p>You setup a bashrc, vimrc, etc. Why not do the same for Postgres. Some of the great things you can do:</p>
-
-<ul>
-<li>Setup pretty formatting by default with <code>\x auto</code></li>
-<li>Set nulls to actually look like something <code>\pset null ¤</code></li>
-<li>Turn timing on by default <code>\timing on</code></li>
-<li>Customize your prompt <code>\set PROMPT1 '%[%033[33;1m%]%x%[%033[0m%]%[%033[1m%]%/%[%033[0m%]%R%# '</code></li>
-<li>Save commonly run queries that you can run by name</li>
-</ul>
-
-
-<p>Here&rsquo;s an example of my own <code>psqlrc</code>:</p>
-
-<pre><code>\set QUIET 1
-\pset null '¤'
-
--- Customize prompts
-\set PROMPT1 '%[%033[1m%][%/] # '
-\set PROMPT2 '... # '
-
--- Show how long each query takes to execute
-\timing
-
--- Use best available output format
-\x auto
-\set VERBOSITY verbose
-\set HISTFILE ~/.psql_history- :DBNAME
-\set HISTCONTROL ignoredups
-\set COMP_KEYWORD_CASE upper
-\unset QUIET
-</code></pre>
-
-<h3>3. pg_stat_statements for where to index</h3>
-
-<p><code>pg_stat_statements</code> is probably the single most valuable tool for improving performance on your database. Once enabled (with <code>create extension pg_stat_statements</code>) it automatically records all queries run against your database and records often and how long they took. This allows you to then go and find areas you can optimize to get overall time back with one simple query:</p>
-
-<pre><code>SELECT 
-  (total_time / 1000 / 60) as total_minutes, 
-  (total_time/calls) as average_time, 
-  query 
-FROM pg_stat_statements 
-ORDER BY 1 DESC 
-LIMIT 100;
-</code></pre>
-
-<p><em>Yes, there is some performance cost to leaving this always on, but it&rsquo;s pretty small. I&rsquo;ve found it&rsquo;s far more useful to be on and get major performance wins vs. the small cost of it always recording.</em></p>
-
-<p>You can read much more on Postgres performance on a <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">previous post</a></p>
-
-<h3>4. Slow down with ETL, use FDWs</h3>
-
-<p>If you have a lot of <em>microservices</em> or different apps then you likely have a lot of different databases backing them. The default for about anything you want to do is do create some data warehouse and ETL it all together. This often goes a bit too far to the extreme of aggregating <strong>everything</strong> together.</p>
-
-<p>For the times you just need to pull something together once or on rare occasion <a href="http://www.craigkerstiens.com/2013/08/05/a-look-at-FDWs/">foreign data wrappers</a> will let you query from one Postgres database to another, or potentially from Postgres to anything else such as <a href="https://github.com/citusdata/mongo_fdw">Mongo</a> or Redis.</p>
-
-<h3>5. array and array_agg</h3>
-
-<p>There&rsquo;s little chance if you&rsquo;re building an app you&rsquo;re not using arrays somewhere within it. There&rsquo;s no reason you shouldn&rsquo;t be doing the same within your database as well. Arrays can be just another datatype within Postgres and have some great use cases like tags for blog posts directly in a single column.</p>
-
-<p>But, even if you&rsquo;re not using arrays as a datatype there&rsquo;s often a time when you want to rollup something like an array in a query then comma separate it. Something similar to the following could allow you to easily roll up a comma separated list of projects per user:</p>
-
-<pre><code>SELECT 
-  users.email,
-  array_to_string(array_agg(projects.name), ',')) as projects
-FROM
-  projects,
-  tasks,
-  users
-WHERE projects.id = tasks.project_id
-  AND tasks.due_at &gt; tasks.completed_at
-  AND tasks.due_at &gt; now()
-  AND users.id = projects.user_id
-GROUP BY 
-  users.email
-</code></pre>
-
-<h3>6. Use materialized views cautiously</h3>
-
-<p>If you&rsquo;re not familiar with materialized view they&rsquo;re a query that has been actually created as a table. So it&rsquo;s a materialized or basically snapshotted version of some query or &ldquo;view&rdquo;. In their initial version materialized versions, which were long requested in Postgres, were entirely unusuable because when you it was a locking transaction which could hold up other reads and acticities avainst that view.</p>
-
-<p>They&rsquo;ve since gotten much better, but there&rsquo;s no tooling for refreshing them out of the box. This means you have to setup some scheduler job or cron job to regularly refresh your materialized views. If you&rsquo;re building some reporting or BI app you may undoubtedly need them, but their usability could still be advanced so that Postgres knew how to more automatically refresh them.</p>
-
-<p><em>If you&rsquo;re on Postgres 9.3, the above caveats about preventing reads still does exist</em></p>
-
-<h3>7. Window functions</h3>
-
-<p>Window functions are perhaps still one of the more complex things of SQL to understand. In short they let you order the results of a query, then compute something from one row to the next, something generally hard to do without procedural SQL. You can do some very basic things with them such as rank where <a href="http://postgresguide.com/sql/window.html">each result appears</a> ordered by some value, or something more complex like compute <a href="http://www.craigkerstiens.com/2014/02/26/Tracking-MoM-growth-in-SQL/">MoM growth directly in SQL</a>.</p>
-
-<h3>8. A simpler method for pivot tables</h3>
-
-<p>Table_func is often referenced as the way to compute a pivot table in Postgres. Sadly though it&rsquo;s pretty difficult to use, and the more basic method would be to just do it with raw SQL. This will get much better with <a href="http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown/">Postgres 9.5</a>, but until then something where you sum up each condition where it&rsquo;s true or false and then totals is much simpler to reason about:</p>
-
-<pre><code>select date,
-       sum(case when type = 'OSX' then val end) as osx,
-       sum(case when type = 'Windows' then val end) as windows,
-       sum(case when type = 'Linux' then val end) as linux
-from daily_visits_per_os
-group by date
-order by date
-limit 4;
-</code></pre>
-
-<p><em>Example query courtesy of <a href="http://www.twitter.com/tapoueh">Dimitri Fontaine</a> and <a href="http://tapoueh.org/blog/2013/07/04-Simple-case-for-pivoting">his blog</a>.</em></p>
-
-<h3>9. PostGIS</h3>
-
-<p>Sadly on this one I&rsquo;m far from an expert. PostGIS is arguably the best option of any GIS database options. The fact that you get all of the standard Postgres benefits with it makes it even more powerful–a great example of this is GiST indexes which came to Postgres in recent years and offers great performance gains for PostGIS.</p>
-
-<p>If you&rsquo;re doing something with geospatial data and need something more than the easy to use <code>earth_distance</code> extension then crack open PostGIS.</p>
-
-<h3>10. JSONB</h3>
-
-<p>I almost debated leaving this one off the list, ever since Postgres 9.2 JSON has been at least one of the marquees in each Postgres release. JSON arrived with much hype, and JSONB fulfilled on the initial hype of Postgres starting to truly compete as a document database. JSONB only continues to become more powerful with <a href="http://www.craigkerstiens.com/2015/12/08/massive-json/">better libraries</a> for taking advantage of it, and it&rsquo;s <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#JSONB-modifying_operators_and_functions">functions improving</a> with each release.</p>
-
-<p>If you&rsquo;re doing anything with JSON or playing with another document database and ignoring JSONB you&rsquo;re missing out, of course don&rsquo;t forget the GIN and GiST indexes to really get the benefits of it.</p>
-
-<h3>The year ahead</h3>
-
-<p>Postgres 9.5/9.6 should continue to improve and bring many new features in the years ahead, what&rsquo;s your preference for something that doesn&rsquo;t exist yet but you do want to see land in Postgres. Let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres 9.5 - The feature rundown]]></title>
-    <link href="http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown/"/>
-    <updated>2015-12-27T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/12/27/postgres-9-5-feature-rundown</id>
-    <content type="html"><![CDATA[<p>The headline of Postgres 9.5 is undoubtedly: Insert&hellip; on conflict do nothing/update or more commonly known as Upsert or Merge. This removes one of the last remaining features which other databases had over Postgres. Sure we&rsquo;ll take a look at it, but first let&rsquo;s browse through some of the other features you can look forward to when Postgres 9.5 lands:</p>
-
-<!--more-->
-
-
-<h3>Grouping sets, cube, rollup</h3>
-
-<p>Pivoting in Postgres has <a href="http://www.craigkerstiens.com/2013/06/27/Pivoting-in-Postgres/">sort of been possible</a> as has rolling up data, but it required you to know what those values and what you were projecting to, to be known. With the new functionality to allow you to group various sets together rollups as you&rsquo;d normally expect to do in something like Excel become trivial.</p>
-
-<p>So now instead you simply add the grouping type just as you would on a normal group by:</p>
-
-<pre><code>SELECT department, role, gender, count(*)
-FROM employees
-GROUP BY your_grouping_type_here;
-</code></pre>
-
-<p>By simply selecting the type of rollup you want to do Postgres will do the hard work for you. Let&rsquo;s take a look at the given example of department, role, gender:</p>
-
-<ul>
-<li><code>grouping sets</code> will project out the count for each specific key. As a result you&rsquo;d get each department key, with other keys as null, and the count for each that met that department.</li>
-<li><code>cube</code> will give you the same values as above, but also the rollups of every individual combination. So in addition to the total for each department, you&rsquo;d get breakups by the department and gender, and department and role, and department and role and gender.</li>
-<li><code>rollup</code> will give you a slightly similar version to cube but only give you the detailed groupings in the order they&rsquo;re presented. So if you specified <code>roll (department, role, gender)</code> you&rsquo;d have no rollup for department and gender alone.</li>
-</ul>
-
-
-<p><em>Check the what&rsquo;s new wiki for a bit more clarity on <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#GROUPING_SETS.2C_CUBE_and_ROLLUP">examples and output</a></em></p>
-
-<h3>Import foreign  schemas</h3>
-
-<p>I only use foreign tables about once a month, but when I do use them they&rsquo;ve inevitably saved many hours of creating a one off ETL process. Even still the effort to setup new foreign tables has shown a bit of their infancy in Postgres. Now once you&rsquo;ve setup your foreign database, you can import the schema, either all of it or specific tables you prefer.</p>
-
-<p>It&rsquo;s as simple as:</p>
-
-<pre><code>IMPORT FOREIGN SCHEMA public
-FROM SERVER some_other_db INTO reference_to_other_db;
-</code></pre>
-
-<h3>pg_rewind</h3>
-
-<p>If you&rsquo;re managing your own Postgres instance for some reason and running HA, pg_rewind could become especially handy. Typically to spin up replication you have to first download the physical, also known as base, backup. Then you have to replay the Write-Ahead-Log or WAL–so it&rsquo;s up to date then you actually flip on replication.</p>
-
-<p>Typically with databases when you fail over you shoot the other node in the head or <a href="https://en.wikipedia.org/wiki/STONITH">STONITH</a>. This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and use pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over.</p>
-
-<h3>Upsert</h3>
-
-<p>Upsert of course will be the highlight of Postgres 9.5. I already talked about it some when <a href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/">it initially landed</a>. The short of it is, if you&rsquo;re inserting a record and there&rsquo;s a conflict, you can choose to:</p>
-
-<ul>
-<li>Do nothing</li>
-<li>Do some form of update</li>
-</ul>
-
-
-<p>Essentially this will let you have the typically experience of create or update that most frameworks provide but without a potential race condition of incorrect data.</p>
-
-<h3>JSONB pretty</h3>
-
-<p>There&rsquo;s a few updates <a href="https://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.5#JSONB-modifying_operators_and_functions">to JSONB</a>. The one I&rsquo;m most excited about is making JSONB output in psql read much more legibly.</p>
-
-<p>If you&rsquo;ve got a JSONB field just give it a try with:</p>
-
-<pre><code>SELECT jsonb_pretty(jsonb_column)
-FROM foo;
-</code></pre>
-
-<h3>Give it a try</h3>
-
-<p>Just in time for the new year <a href="http://www.postgresql.org/about/news/1631/">the RC is ready</a> and you can get hands on with it. Give it a try, and if there&rsquo;s more you&rsquo;d like to hear about Postgres please feel free to drop me a note <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a>.</p>
-
-<script type="text/javascript">
-  (function() {
-    window._pa = window._pa || {};
-    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
-    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
-    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
-    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
-    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/517fd07cf1409000020002dc.js";
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
-  })();
-</script>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres and Node - Hands on using Postgres as a Document Store with MassiveJS]]></title>
-    <link href="http://www.craigkerstiens.com/2015/12/08/massive-json/"/>
-    <updated>2015-12-08T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/12/08/massive-json</id>
-    <content type="html"><![CDATA[<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
-
-<ul>
-<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
-<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
-<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
-<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
-</ul>
-
-
-<!--more-->
-
-
-<p>This is all great, but when it comes to using JSON you need a library that plays well here. As you might have guessed it from <a href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/">my previous post this is where MassiveJS comes in</a>. Most ORMs take a more legacy approach to <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">how they work with the database</a>, in contrast the other side of the world believes in document only storage way is the future. In contrast Postgres believes there is a time and place for everything, just like Massive, except it believes Postgres is the path <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">just as I do</a>.</p>
-
-<p>Alright, enough context, let&rsquo;s take a look.</p>
-
-<h3>Getting all setup</h3>
-
-<p>First go ahead and create a database, let&rsquo;s call it massive, and then let&rsquo;s connect to it and create our example table:</p>
-
-<pre><code>$ createdb massive
-$ psql massive
-# create table posts (id serial primary key, body jsonb);
-</code></pre>
-
-<p>Now that we&rsquo;ve got our database setup let&rsquo;s seed it with some data. If you want you can simple hop over to the github repo and pull it down then run <code>node load_json.js</code> to load the example data. A quick look at it, given an <code>example.json</code> file we&rsquo;re going to iterate over it. For each record in there, we&rsquo;re going to call saveDoc. Based on our table which has a unique id key and a body jsonb field it&rsquo;ll simply save our JSON document into that table:</p>
-
-<pre><code>var parsedJSON = require('./example.json');
-
-for(i = 0; i &lt; parsedJSON.posts.length; i++) {
-    db.saveDoc("posts", parsedJSON.posts[1], function(err,res){});
-};
-</code></pre>
-
-<p><em>If you want to just take a look at this <a href="https://github.com/craigkerstiens/json_node_example">github repo</a>, once you create a database you can run <code>node load_json.js</code> to seed it.</em></p>
-
-<h3>Why JSON at all?</h3>
-
-<p>JSON data is all over the place, in many cases it&rsquo;s fast and flexible and allows you to move more quickly. Yes, much of the time normalizing your data can be useful, but there is something to be said for expediency saving some data and querying across it. Querying across some giant document also used to be much more expensive, but now with JSONB and it&rsquo;s indexes that can be extremely fast.</p>
-
-<h3>Querying</h3>
-
-<p>So how do we go about querying? Well it&rsquo;s pretty simple with Massive, they provide a nice <code>findDoc</code> function to let you just search for contents of a specific key within the document. Let&rsquo;s say I wanted to pull back all posts that are in the Postgres category, well it&rsquo;s as simple as:</p>
-
-<pre><code>db.posts.findDoc({title : 'Postgres'}, function(err,docs){
-    console.log(docs);
-});
-</code></pre>
-
-<p>The real beauty of this is if you added a GIN index (which will index the entire document) this query will be <a href="http://obartunov.livejournal.com/175235.html">quite performant</a>.</p>
-
-<p><em>Just make sure to add your GIN index</em>:</p>
-
-<pre><code>CREATE INDEX idx_posts ON posts USING GIN(body jsonb_path_ops); 
-CREATE INDEX idx_posts_search ON posts USING GIN(search);  
-</code></pre>
-
-<p>But even better, with Massive it&rsquo;ll automatically add these for you if you just start saving docs. It will automatically create the table and appropriate indexes, just doing the correct thing out of the box.</p>
-
-<h3>Full text and JSON</h3>
-
-<p>Cool, so you can do an exact look up. Which is great when you&rsquo;re matching a category&hellip; which could be easily normalized. It&rsquo;s great when you&rsquo;re matching numbers, which also could likely reside in their own column. But what about when you&rsquo;re searching over a large document, or a set of keys within some document which may require several joins, or indeterminate data structure, well you may want to search for the presence of that string at all. As you may have guessed this is quite trivial.</p>
-
-<pre><code>db.posts.searchDoc({
-    keys : ["title", "category"],
-    term : ["Postgres"]
-}, function(err,docs){
-    console.log(docs);
-})
-</code></pre>
-
-<p>Hopefully it&rsquo;s pretty straight forward, but to be very clear. Call out the document table you want to search, then the keys you&rsquo;ll want to include in the search, then the term. This will search for any place the contents that string are found in matching values for those keys.</p>
-
-<p>Which will nicely yield the expected documents:</p>
-
-<pre><code>[ { link: 'http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/',
-    title: 'Upsert Lands in PostgreSQL 9.5 – a First Look',
-    category: 'Postgres',
-    comments: [ [Object] ],
-    id: 2 },
-  { link: 'http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/',
-    title: 'Node, Postgres, MassiveJS - a Better Database Experience',
-    id: 3 } ]
-</code></pre>
-
-<h3>In conclusion</h3>
-
-<p>While Massive isn&rsquo;t perfect, its approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
-    <link href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/"/>
-    <updated>2015-11-30T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro</id>
-    <content type="html"><![CDATA[<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
-
-<ol>
-<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
-<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
-</ol>
-
-
-<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
-
-<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
-
-<!--more-->
-
-
-<h3>Getting setup</h3>
-
-<p>Without further adieu here&rsquo;s a quick tour around it.</p>
-
-<p>First let&rsquo;s pull down the example database from <a href="http://postgresguide.com/setup/example.html">PostgresGuide</a></p>
-
-<p>Then let&rsquo;s setup out Node app:</p>
-
-<pre><code>$ npm init
-$ npm install massive --save
-</code></pre>
-
-<h3>Connecting and querying</h3>
-
-<p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
-
-<pre><code>var massive = require("massive");
-var connectionString = "postgres://ckerstiens:@localhost/example";
-
-var db = massive.connectSync({connectionString : connectionString});
-
-db.users.find(1, function(err,res){
-  console.log(res);
-});
-</code></pre>
-
-<p>Upon first run if you&rsquo;re like me and use the <a href="http://postgresguide.com/setup/example.html">PostgresGuide example database</a> (which I now need to go back and tidy up), you&rsquo;ll get the following:</p>
-
-<pre><code>db.users.find(1, function(err,res){
-        ^
-TypeError: Cannot read property 'find' of undefined
-</code></pre>
-
-<p>I can&rsquo;t describe how awesome it is to see this. What&rsquo;s happening is when Massive loads up it&rsquo;s connecting to your database, checking what tables you have. In this case though because we don&rsquo;t have a proper primary key defined it doesn&rsquo;t load them. It could treat id as some magical field of course like Rails used to and ignore the need for an index, but instead it not only encourages a good database design but requires it.</p>
-
-<p>So let&rsquo;s go back and create our index in our database:</p>
-
-<pre><code>$ psql example
-$ alter table users add primary key (id);
-</code></pre>
-
-<p>Alright now let&rsquo;s run our script again with <code>node index.js</code> and see what we have:</p>
-
-<pre><code>{ id: 1,
-  email: 'john.doe@gmail.com',
-  created_at: Thu Sep 24 2015 03:42:52 GMT-0700 (PDT),
-  deleted_at: null }
-</code></pre>
-
-<p>Perfect! Now we&rsquo;re all connected and it even queried our database for us. Now let&rsquo;s take a few more look at some of the operators.</p>
-
-<h3>Running an arbitrary query</h3>
-
-<p><code>db.run</code> will let me run any arbritrary SQL. An example such as <code>db.run("select 'hello'")</code> will produce [ { &lsquo;?column?&rsquo;: &lsquo;hello&rsquo; } ].</p>
-
-<p>This makes it nice and easier for us to break out of the standard ORM model and just run SQL.</p>
-
-<h3>Find for quick look ups</h3>
-
-<p>Similar to so many other database tools <code>find</code> will offer you the most common quick look ups:</p>
-
-<pre><code>$ db.users.find({email: 'jane.doe@gmail.com'}, function(err, res){console.log(res)});
-$ db.users.find({'created_at &gt;': '2015-09-24'}, function(err, res){console.log(res)});
-</code></pre>
-
-<p>And of course there&rsquo;s a where operator for multiple conditions.</p>
-
-<h3>Structuring queries in your application</h3>
-
-<p>While in the next post I&rsquo;ll dig in deep to JSON, this is perhaps my favorite feature of Massive&hellip; It&rsquo;s design for pulling out queries into individudal SQL files. Simply create a <code>db</code> folder and put your SQL in there. Let&rsquo;s take the most basic example of our user email lookup and put it in <code>user_lookup.sql</code></p>
-
-<pre><code>SELECT *
-FROM users
-WHERE email = $1
-</code></pre>
-
-<p>Now back in our application we can run this and pass in a parameter to it:</p>
-
-<pre><code>db.user_lookup(['jane.doe@gmail.com'], function(err,res){
-  console.log(res);
-});
-</code></pre>
-
-<p>This separation of our queries from our code makes it easier to track them, view diffs, and even more so <a href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/">create very readable SQL</a>.</p>
-
-<h3>Up next</h3>
-
-<p>So sure, you can connect to a database, you can query some things. There were a couple of small but more novel things that we blew through in here. First is the fact I didn&rsquo;t have to define all my schema, it just knew it as <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">it really should</a>. The separation of SQL queries you&rsquo;ll custom write into files is simple, but will make for much more maintainable applications over the long term. And best of all is the JSON support, which I&rsquo;ll get to soon&hellip;</p>
 ]]></content>
   </entry>
   

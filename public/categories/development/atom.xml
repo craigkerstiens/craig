@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Development | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/development/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2016-06-07T10:27:45-07:00</updated>
+  <updated>2017-06-08T09:14:22-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -387,7 +387,9 @@ function mce_success_cb(resp){
     <link href="http://www.craigkerstiens.com/2012/11/30/sharding-your-database/"/>
     <updated>2012-11-30T00:00:00-08:00</updated>
     <id>http://www.craigkerstiens.com/2012/11/30/sharding-your-database</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
+    <content type="html"><![CDATA[<p><em>Update as of 8/2/2016 &ndash; As a follow-up if you&rsquo;re using Postgres and looking to shard your data I would encourage you taking a look at <a href="https://www.citusdata.com">Citus</a>. Citus is an extension to Postgres that makes easy for you to shard your data and allow you to continue to scale out memory or processing power. Disclaimer: I currently run Citus Cloud, a fully managed hosted offering of Citus on top of AWS</em></p>
+
+<p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
 
 <!--more-->
 

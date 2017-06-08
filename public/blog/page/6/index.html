@@ -6,11 +6,11 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title> Craig Kerstiens</title>
+	<title></title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Following up on my earlier post about CX or Conference Experience – I&rsquo;m going to dig in a bit on how you get good conversation to happen. In &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="If you&rsquo;re deciding what to put in Postgres and what not to, consider that Postgres can be a perfectly good schema-less database. Of course as &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,348 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/07/03/hstore-vs-json/">
+		
+			Hstore vs. JSON - Which to Use in Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;re deciding what to put in <a href="http://www.amazon.com/Seven-Databases-Weeks-Modern-Movement/dp/1934356921?tag=mypred-20">Postgres and what not to</a>, consider that Postgres can be a <a href="/2012/06/11/schemaless-django/">perfectly good schema-less database</a>. Of course as soon as people realized this then the common comes a question, is hstore or JSON better. Which do I use and in what cases. Well first, if you&rsquo;re not familiar check out some previous material on them:</p>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore on PostgresGuide</a></li>
+<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore in Postgres docs</a></li>
+<li><a href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/">hstore with Django</a></li>
+<li><a href="http://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.2#JSON_datatype">JSON datatype</a></li>
+<li><a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JavaScript support in Postgres</a></li>
+</ul>
+
+
+<p>If you&rsquo;re already up to date with both of them, but still wondering which to use lets dig in.</p>
+
+
+		
+		<a href="/2013/07/03/hstore-vs-json/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-03T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/06/27/Pivoting-in-Postgres/">
+		
+			Pivoting in Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>Earlier today on an internal Heroku group alias there was a <a href="https://postgres.heroku.com/dataclips">dataclip</a> shared. The dataclip listed off some data grouped by a category, there was a reply a few minutes later with a modification to the query that used the <code>crosstab</code> function to pivot directly in SQL. There were immediately several reactions on the list that went something like this:</p>
+
+<p><img src="http://f.cl.ly/items/1b0G101r0B2W243b2933/Image%202013.06.27%202%3A06%3A23%20PM.gif" alt="mindblown" /></p>
+
+<p>While a mostly simple function in Postgres (there are a few rough edges), it really is all too handy. So here it is in action. Taking some data that looks like</p>
+
+<ul>
+<li>row identifier, in this case date</li>
+<li>category grouping, in this case OS</li>
+<li>value</li>
+</ul>
+
+
+
+		
+		<a href="/2013/06/27/Pivoting-in-Postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/06/25/javascript-functions-for-postgres/">
+		
+			Javascript Functions for PostgreSQL</a>
+	</h2>
+	<div class="entry-content">
+		<p>Javascript in Postgres has gotten a good bit of love lately, part of that is from <a href="http://postgres.herpku.com">Heroku Postgres</a> recently <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">adding support for Javascript</a> and part from a variety of people championing the power of it such as <a href="http://twitter.com/leinweber">@leinweber</a> (<a href="http://www.youtube.com/watch?v=fRupMAVdmWA">Embracing the web with JSON and PLV8</a>) and <a href="http://twitter.com/selenamarie">@selenamarie</a> (<a href="https://speakerdeck.com/selenamarie/schema-liberation-with-json-and-plv8-and-postgres">schema liberation with JSON and PLV8</a>). In a recent conversation it was pointed out that it seems a bit of headache to have to create your own functions, or at least having an initial collection would make it that much more powerful. While many can look forward to <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">PostgreSQL 9.3</a> which will have a bit more built in support for JSON a few functions can really help make it more useful today.</p>
+
+
+		
+		<a href="/2013/06/25/javascript-functions-for-postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-25T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/06/13/explaining-your-data/">
+		
+			Explaining Your PostgreSQL Data</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve written a bit before about <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">understanding the output</a> from <code>EXPLAIN</code> and <code>EXPLAIN ANALYZE</code> in PostgreSQL. Though understandably getting a grasp on execution plans could probably use some more guidance. Yet, this time around I&rsquo;m taking a bit of a cop out and highlighting a few tools instead of documenting myself, which I&rsquo;ve done in a talk I&rsquo;ve frequently given <a href="https://speakerdeck.com/craigkerstiens/postgres-demystified-1">Postgres Demystified</a>.</p>
+
+<p><img src="http://f.cl.ly/items/2Y0A0H2B2q3C0622261C/Screenshot_6_13_13_9_57_AM.png" alt="Explain explained" /></p>
+
+
+		
+		<a href="/2013/06/13/explaining-your-data/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/05/30/a-collection-of-indexing-tips/">
+		
+			Postgres Indexing - a Collection of Indexing Tips</a>
+	</h2>
+	<div class="entry-content">
+		<p>Even from intial reviews of my previous post on expression based indexes I received a lot of questions and feedback around many different parts of indexing in Postgres. Here&rsquo;s a mixed collection of valuable tips and guides around much of that.</p>
+
+<h3>Unused Indexes</h3>
+
+<p>In an earlier tweet I joked about some SQL that would generate the SQL to add an index to every column:</p>
+
+<pre><code># SELECT 'CREATE INDEX idx_' 
+    || table_name || '_' 
+    || column_name || ' ON ' 
+    || table_name || ' ("' 
+    || column_name || '");' 
+  FROM information_schema.columns;
+                      ?column?
+---------------------------------------------------------------------
+ CREATE INDEX idx_pg_proc_proname ON pg_proc ("proname");
+ CREATE INDEX idx_pg_proc_pronamespace ON pg_proc ("pronamespace");
+ CREATE INDEX idx_pg_proc_proowner ON pg_proc ("proowner");
+</code></pre>
+
+
+		
+		<a href="/2013/05/30/a-collection-of-indexing-tips/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/">
+		
+			Postgres Indexes – Expression/Functional Indexing</a>
+	</h2>
+	<div class="entry-content">
+		<p>Postgres is rich with options for indexing. First you&rsquo;ve got a variety of types, and beyond that you can do a variety of things with each of these such as create unique indexes, use conditions to index only a portion of your data, or create indexes based on complex expressions or functions. In cases where you commonly use various PostgreSQL functions in your application or reporting you can get some great gains from this.</p>
+
+
+		
+		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/05/06/my-sql-bad-habits/">
+		
+			My SQL Bad Habits</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;m reasonably proficient at SQL – <em>a coworker when pseudocoding some logic for him pointed out that my pseudocode is what he thought was executable SQL</em>. I&rsquo;m fully capable of writing clear and readable SQL – which most SQL is not. Despite that I still have several bad habits when it comes to SQL. Without further adieu heres some of my dirty laundry so hopefully others can not make the same mistakes.</p>
+
+
+		
+		<a href="/2013/05/06/my-sql-bad-habits/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -244,350 +586,6 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/04/16/creating-advocates/">
-		
-			Scaling Evangelism – Creating Advocates</a>
-	</h2>
-	<div class="entry-content">
-		<p>The first area I tend to think about when it comes to developer marketing is around advocates. A simple definition of an advocate is <em>someone that speaks/writes in favor of some thing</em>.</p>
-
-<p>Creating advocates is a means of creating more of myself to go out and talk loudly and ideally effectively. However, they do take time to cultivate and it is a hard item to track. But by cultivating advocates I&rsquo;m able to scale what would otherwise be a bottleneck of my own personal time.</p>
-
-
-		
-		<a href="/2013/04/16/creating-advocates/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-16T07:59:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2013</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketing/'>Marketing</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/04/12/perspective-on-developer-marketing/">
-		
-			Doing Marketing (for Developers) Differently</a>
-	</h2>
-	<div class="entry-content">
-		<p>As developers we can tend to be a fickle bunch; especially in certain open source communities. We like to see intelligence and systems applied to things, hope for a better world through making things open, and appreciate when others relate to our world as we often attempt to relate to theirs. Marketing is often a loaded word when it comes to developers – leaving mixed feelings about webinars, email campaigns, and the like.</p>
-
-<p><em>A quick clarification in terms of marketing I&rsquo;m referring to product marketing, but of a technical product. This is based on the idea that <a href="http://thenewkingmakers.com/">developers are the new kingmakers</a> and when marketing a product to them it needs to be done differently.</em></p>
-
-
-		
-		<a href="/2013/04/12/perspective-on-developer-marketing/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketin/'>Marketin</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/03/31/why-i-blog/">
-		
-			Why I Blog</a>
-	</h2>
-	<div class="entry-content">
-		<p>I blog because I&rsquo;m lazy. There&rsquo;s more too it though: In any given day I may explain something to someone, the first time I do this I make a bit of a mental note. The second time I do this, especially within a short time frame I make a physical note of this in the form of the title of a blog post. Once I&rsquo;m already to a second time of doing this its almost inevitable I&rsquo;ll continue repeating myself – and its valuable to others.</p>
-
-
-		
-		<a href="/2013/03/31/why-i-blog/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/03/13/planning-and-prioritizing/">
-		
-			Prioritizing and Planning Within Heroku Postgres</a>
-	</h2>
-	<div class="entry-content">
-		<p>Over a year ago I blogged about Heroku&rsquo;s approach to <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools</a>. Since that time Heroku has grown from around 25 people to over 100, we&rsquo;ve continued to iterate and find new tools that work for how we do things. For many of the <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">product management</a> and software engineering books I&rsquo;ve read I&rsquo;ve yet to find something that helps a team priorize in a fashion I that feels right.</p>
-
-<p>One process emerged nearly a year ago from within the <a href="https://postgres.heroku.com">Heroku Postgres</a> team and is now followed by many others. Within a team this process is now commonly conducted each 6 months. Lets take a look at how this process looks</p>
-
-
-		
-		<a href="/2013/03/13/planning-and-prioritizing/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/03/07/Fixing-django-db-connections/">
-		
-			Fixing Database Connections in Django</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you&rsquo;re looking to get better performance from your Django apps you can check out <a href="http://www.amazon.com/Pro-Django-Experts-Voice-Development/dp/1430210478?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Pro Django</a>, <a href="http://www.amazon.com/PostgreSQL-High-Performance-Gregory-Smith/dp/184951030X?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">PostgreSQL High Performance</a>, or read some my earlier posts on <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">Postgres Performance</a>. All of these are of course good things to do – you can also start by correcting an incredibly common but also painful performance issue, that until 1.6 is unaddressed in Django.</p>
-
-<p>Django&rsquo;s current default behavior is to establish a connection for each request within a Django application. In many cases any particularly in distributed cloud environments this is a large time sink of your response time. An example application running on <a href="http://www.heroku.com">Heroku</a> shows a typical connection time of 70ms. A large part of this time is the SSL negotiation that occurs in connecting to your database, <em>which is a good practice to ensure security of your data</em>. Regardless, this is a long time in simply establishing a connection. As a point of comparisson its commonly encourage that most queries to your database are under 10ms.</p>
-
-<p>An example that highlights this in a small lightweight application shows the bulk of a request time being within a connection displayed by <a href="http://www.newrelic.com">New Relic</a>:</p>
-
-<p><img src="http://f.cl.ly/items/0X3u0e3Q3G0L19263k2Z/Screenshot_3_6_13_1_12_PM.png" alt="connection time" /></p>
-
-
-		
-		<a href="/2013/03/07/Fixing-django-db-connections/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/02/21/more-out-of-psql/">
-		
-			Getting More Out of Psql (the PostgreSQL CLI)</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>After my last post I had a variety of readers reach out about many different tweaks they&rsquo;d made to their workflows using with psql. One people <a href="https://github.com/chanmix51/">Grégoire Hubert</a> had a wondeful extensive list of items. Grégoire has been a freelance in web development and he has worked with Postgresql for some time now in addition to being the author of Pomm. Without further ado heres what he has to say on how he uses psql:</em></p>
-
-<h2>Get the most of psql</h2>
-
-<p>Psql, the CLI postgreSQL client, is a powerful tool. Sadly, lot of developers are not aware of the features and instead look for a GUI to provide what they need. Let&rsquo;s fly over what can psql do for you.</p>
-
-
-		
-		<a href="/2013/02/21/more-out-of-psql/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-21T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/02/13/How-I-Work-With-Postgres/">
-		
-			How I Work With Postgres – Psql, My PostgreSQL Admin</a>
-	</h2>
-	<div class="entry-content">
-		<p>On at least a weekly basis and not uncommonly multiple times in a single week I get this question:</p>
-
-<blockquote><p>I&#8217;ve been hunting for a nice PG interface that works within other things. PGAdmin kinda works, except the SQL editor is a piece of shit</p><footer><strong>@neilmiddleton</strong> <cite><a href='https://twitter.com/neilmiddleton'></a></cite></footer></blockquote>
-
-
-<p>Sometimes it leans more to, what is the Sequel Pro equivilant for Postgres. My default answer is I just use psql, though I do have to then go on to explain how I use it. For those just interested you can read more below or just get the highlights here:</p>
-
-<ul>
-<li>Set your default <code>EDITOR</code> then use \e</li>
-<li>On postgres 9.2 and up <code>\x auto</code> is your friend</li>
-<li>Set history to unlimited</li>
-<li><code>\d</code> all the things</li>
-</ul>
-
-
-<p>Before going into detail on why psql works perfectly fine as an interface I want to rant for a minute about what the problems with current editors are and where I expect them to go in the future. First this is not a knock on the work thats been done on previous ones, for their time PgAdmin, phpPgAdmin, and others were valuable tools, but we&rsquo;re coming to a point where theres a broader set of users of databases than ever before and empowering them is becoming ever more important.</p>
-
-<p>Empowering developers, DBA&rsquo;s, product people, marketers and others to be comfortable with their database will lead to more people taking advantage of whats in their data. <a href="http://craigkerstiens.com/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a> was a great start to this laying a great foundation for valuable information being captured. Even with all of the powerful stats being captured in the statistics of PostgreSQL so many are still terrified when they see something like:</p>
-
-<pre><code>                                                   QUERY PLAN
-----------------------------------------------------------------------------------------------------------------
- Hash Join  (cost=4.25..8.62 rows=100 width=107) (actual time=0.126..0.230 rows=100 loops=1)
-   Hash Cond: (purchases.user_id = users.id)
-   -&gt;  Seq Scan on purchases  (cost=0.00..3.00 rows=100 width=84) (actual time=0.012..0.035 rows=100 loops=1)
-   -&gt;  Hash  (cost=3.00..3.00 rows=100 width=27) (actual time=0.097..0.097 rows=100 loops=1)
-         Buckets: 1024  Batches: 1  Memory Usage: 6kB
-         -&gt;  Seq Scan on users  (cost=0.00..3.00 rows=100 width=27) (actual time=0.007..0.042 rows=100 loops=1)
- Total runtime: 0.799 ms
-(7 rows)
-</code></pre>
-
-<p>Empowering more developers by surfacing this information in a digestable form, such as building on top of <code>pg_stat_statements</code> tools such as <a href="http://datascope.heroku.com">datascope</a> by <a href="http://www.twitter.com/leinweber">@leinweber</a> and getting this to be part of the default admin we will truly begin empowering a new set of user.</p>
-
-<p>But enough of a detour, those tools aren&rsquo;t available today. If you&rsquo;re interested in helping build those to make the community better please reach out. For now I live in a work where I&rsquo;m quite content with simple ole <code>psql</code> here&rsquo;s how:</p>
-
-
-		
-		<a href="/2013/02/13/How-I-Work-With-Postgres/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-13T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/5/" class="prev">Prev</a>
@@ -597,7 +595,7 @@ $(document).ready(
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2016
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Craig Kerstiens
 
