@@ -13,7 +13,7 @@ A massive amount of reporting queries, whether really intensive data analysis, o
 
 ### Date math
 
-The most common thing I find myself doing is looking at users that have done something within some specific time window. If I'm executing this all from my app I can easily inject specific dates, but Postgres makes this really easy for you. Within Postgres you have a type called and interval that is some window of time. And fortunately Postgres takes care of the heavy lifting of how might something translate to or from hours/seconds/milliseconds/etc. Here's just a few examples of things you could do with interals:
+The most common thing I find myself doing is looking at users that have done something within some specific time window. If I'm executing this all from my app I can easily inject specific dates, but Postgres makes this really easy for you. Within Postgres you have a type called an interval that is some window of time. And fortunately Postgres takes care of the heavy lifting of how might something translate to or from hours/seconds/milliseconds/etc. Here's just a few examples of things you could do with interals:
 
 * '1 day'::interval
 * '5 days'::interval
