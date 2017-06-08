@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/python/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-06-08T11:45:52-07:00</updated>
+  <updated>2017-06-08T15:30:18-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -137,36 +137,6 @@ DATABASES['default']['OPTIONS'] = {
 <h3>Contributing</h3>
 
 <p>As with all code this is largely a work in progress. There&rsquo;s many items still to do such as providing default copy and error pages and potentially handling other edge cases. I&rsquo;d welcome others to contribute and give feedback if they find it helpful or how it can be improved on Github.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Pooling with Django]]></title>
-    <link href="http://www.craigkerstiens.com/2012/10/02/Postgres-pooling-with-django/"/>
-    <updated>2012-10-02T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2012/10/02/Postgres-pooling-with-django</id>
-    <content type="html"><![CDATA[<p>A feature thats glaringly missing within Django and common in many other frameworks including many Java frameworks and Rails is connection pooling for your database connection. As most Django users are Postgres users the default answer is to use something like pgPool or pgBouncer. This are tools that you can run that will persist a connection to your Postgres database intended to offer:</p>
-
-<ul>
-<li>Connection Pooling</li>
-<li>Replication</li>
-<li>Load Balancing</li>
-</ul>
-
-
-<p><em>Its of not that PgBouncer is intended very specifically for pooling while pgPool does much more.</em></p>
-
-<p>Each of these in many cases can come with caveats though. If there are issues within your network they may not re-establish the connection properly. They also are not known to handle SSL renegotiation very well. Finally given running one more piece of software to reduce connection times it seems like a lot of overhead to simply reduce the connection time to your database.</p>
-
-<h2>Is connection time a real problem?</h2>
-
-<p>Given a well refined app, with a well refined schema with appropriate indexes your view should be doing things pretty quickly. If this is the case without some form of connection pooling and running in a cloud environment (in this case Heroku) your application performance looks like:</p>
-
-<p>If you&rsquo;ll notice that about 50% of our request time was in Postgres. The hard part to see is how much of this is actually doing something. In this case its issuing some very basic queries then rendering a very basic view.</p>
-
-<h2>The solution</h2>
-
-<p>By using something in <em>the other Python ORM</em>, SQLAlchemy, we can take advantage of its connection pooling. Large thanks to <a href="https://twitter.com/kennethreitz">Kenneth Reitz</a> for packaging this up into an easy to install and easy to use format as a Django DB backend. Using django_postgrespool it will take advantage of connection pooling and we can then see the performance after:</p>
 ]]></content>
   </entry>
   
@@ -336,6 +306,128 @@ create index on product(((data-&gt;'rating')::int)) where ((data-&gt;'rating') =
 <p>If you need a sample project to start with immediately check out this one on <a href="https://github.com/craigkerstiens/hstore-demo">github</a>.</p>
 
 <p>When evaluating any database its important to choose the features you&rsquo;re evaluating it on, then examine further. Mongo may be great because its schemaless, this doesn&rsquo;t mean an RDMS can&rsquo;t be schemaless as well (and do a good job of it). In the long run, schemaless is likely to just become another feature in databases, but more on that later.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apps to Services]]></title>
+    <link href="http://www.craigkerstiens.com/2012/04/13/apps_to_services/"/>
+    <updated>2012-04-13T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2012/04/13/apps_to_services</id>
+    <content type="html"><![CDATA[<p><em>Update the talk for this is now viewable on YouTube <a href="http://www.youtube.com/watch?v=ztGpK-v2Oow">here</a></em></p>
+
+<p>When I first came across Django I was an immediate fan. It featured:</p>
+
+<ul>
+<li>Good documentation</li>
+<li>Steady but stable progress</li>
+<li>Community around apps which encouraged <em>DRY</em></li>
+</ul>
+
+
+<p>I&rsquo;ve been a user off and on depending on my needs for nearly four years since discovering it, and throughout that time all of the above have remained true. However, as I&rsquo;ve worked on and encountered more complex applications there&rsquo;s one thing that has time and again broke down for me, which is the Django apps model. It hasn&rsquo;t broken down due to Django only though, I&rsquo;ve seen it break down in Ruby (Rails), Java, .Net, take you&rsquo;re pick of language or framework.</p>
+
+<p>The breakdown of this model is due to several things:</p>
+
+<!-- more -->
+
+
+<ul>
+<li>Successful applications grow which mean more complex applications and more developers</li>
+<li>More complex applications often mean larger code bases
+
+<ul>
+<li>Deprecating code is good, but not always easy in large code bases</li>
+<li>More code means more testing, but slower releases</li>
+</ul>
+</li>
+</ul>
+
+
+<p>At Heroku one way we often describe the platform to others is <em>&ldquo;A distributed Unix in the cloud.&rdquo;</em> There may be many reasons for this, but one of which is that we love the Unix approach and philosophy of <em>Small sharp tools</em>. Sticking to that, many of our internal pieces are small individual apps that talk across defined contracts or APIs.</p>
+
+<p>Back to Django&rsquo;s app structure&hellip; Many people build apps and re-use them and often share them with the world. This is truly great for re-usability, which means you can focus on building key features. However, this does not enable your application to be more maintainable in the future nor does it enable scalability. Yes, you can absolutely scale a monolithic application, but it doesn&rsquo;t mean you should. This doesn&rsquo;t mean the app structure is entirely broken, it just means that it is a partial step to where you should be. The real solution is to build more of these pieces of your greater application as services.</p>
+
+<p>A Django app is defined as <em>A web application that does something. I.e. Weblog, Poll, Ticket system</em>. Within Django an app contains:</p>
+
+<ul>
+<li>Models</li>
+<li>Views</li>
+<li>URLs</li>
+</ul>
+
+
+<p>I couldn&rsquo;t find a great definition of a Service that was succinct and also said something of value (If you have one please pass along as I&rsquo;d love to have a definition from a source other than myself). For the sake setting something in place I&rsquo;m defining a service as <em>Method of communication over the web with a provider using a defined contract</em>. By this definition a service contains:</p>
+
+<ul>
+<li>Provider</li>
+<li>Endpoint</li>
+<li>Contract</li>
+</ul>
+
+
+<p>Let me clarify this a bit further&hellip;</p>
+
+<p>Tangible example/parable:</p>
+
+<p>Django Apps::</p>
+
+<ul>
+<li>Ticket</li>
+<li>FAQ</li>
+</ul>
+
+
+<p>Company Teams::</p>
+
+<ul>
+<li>Support</li>
+<li>Community Evangelist</li>
+</ul>
+
+
+<p>You start with two apps, that maybe share a little code. Moreover they at least exist in a central code base. Then you deploy something and the Ticket app can no longer create FAQ, due to a change in one or the other. There&rsquo;s no finger to point, but more importantly, you don&rsquo;t know how to contact to resolve. Neither team wants to deploy, so you test more. Before every deploy you run tests&hellip; and validate a build&hellip; and deployment slows&hellip; well maybe not with two teams. But as you get to 5 teams it does, and more so with 15, and more so with 30 teams. Then you hire a build master and release master, who really wants that?</p>
+
+<p>So within Django maybe you go from apps all in the same codebase to releasing private versions of apps&hellip;</p>
+
+<p>Your requirements.txt for a main site looks like:</p>
+
+<p>``` python requirements.txt</p>
+
+<p>FAQ==0.2</p>
+
+<p>```</p>
+
+<p>You have 3 apps which depend on it, support, marketing, billing. You bump a version <code>FAQ==0.3</code> but then all three or no teams have to upgrade the version to the new APIs. However if your interface was:</p>
+
+<p>``` python</p>
+
+<p>data = {
+‘question’: “my question”,
+‘source’: 123
+}
+requests.POST(os.environ[‘FAQ_API’] + ‘/v1/create’, data=data)</p>
+
+<p>```</p>
+
+<p>You could also have:</p>
+
+<p>``` python</p>
+
+<p>data = {
+‘question’: “my question”,
+‘source’: 123,
+‘related’: [456, 789]
+}
+requests.POST(os.environ[‘FAQ_API’] + ‘/v2/create’, data=data)</p>
+
+<p>```</p>
+
+<p>Then you can easily support both, deprecate v1, and track its usage easily. This doesn&rsquo;t guarantee, but it does enable <em>re-usability</em>, <em>scalability</em>, <em>maintainability</em>. And of course continues to let you build features instead of maintaining software.</p>
+
+<p>In the next post I&rsquo;ll go into a bit more detail of how a real example looks with apps in both forms, using a set of Django Apps and using a set of Services built on Django Apps.</p>
+
+<p><em>Slides from a corresponding talk at DjangoCong are <a href="http://bit.ly/djangocong">here</a></em></p>
 ]]></content>
   </entry>
   

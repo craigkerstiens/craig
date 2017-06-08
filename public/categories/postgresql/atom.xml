@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-06-08T11:45:52-07:00</updated>
+  <updated>2017-06-08T15:30:18-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -94,7 +94,7 @@ with weeks as (
 
 <h3>More</h3>
 
-<p>There&rsquo;s a number of other functions and capabilities when it comes to dealing with time in Postrges. You can <code>extract</code> various parts of a timesetamp or interval such as hour of the day or the month. You can grab the day of the week with <code>dow</code>. And one of my favorites which is when we celebrate happy hour at Citus, there&rsquo;s a literal for UTC 00:00:00 00:00:00 which is <a href="https://www.postgresql.org/message-id/20050124200645.GA6126%40winnie.fuhr.org"><code>allsballs()</code></a>. If you need to work with dates and times in Postgres I encourage you to check out the <a href="https://www.postgresql.org/docs/current/static/functions-datetime.html">docs</a> before you try to re-write something of your own, chances are what you need may already be there.</p>
+<p>There&rsquo;s a number of other functions and capabilities when it comes to dealing with time in Postrges. You can <code>extract</code> various parts of a timesetamp or interval such as hour of the day or the month. You can grab the day of the week with <code>dow</code>. And one of my favorites which is when we celebrate happy hour at Citus, there&rsquo;s a literal for UTC 00:00:00 00:00:00 which is <a href="https://www.postgresql.org/message-id/20050124200645.GA6126%40winnie.fuhr.org"><code>allballs()</code></a>. If you need to work with dates and times in Postgres I encourage you to check out the <a href="https://www.postgresql.org/docs/current/static/functions-datetime.html">docs</a> before you try to re-write something of your own, chances are what you need may already be there.</p>
 ]]></content>
   </entry>
   
