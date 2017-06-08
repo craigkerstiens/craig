@@ -6,7 +6,7 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title>Five mistakes beginners make when working with databases Craig Kerstiens</title>
+	<title>Five mistakes beginners make when working with databases - Craig Kerstiens </title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
@@ -128,7 +128,7 @@ $(document).ready(
 
 <p>Images don&rsquo;t belong in your database. Just because you can do something, it doesn&rsquo;t mean you should.Images take up a massive amount of space in databases, and slow applications down by unnecessarily eating your database&rsquo;s IO resources. The most common way this mistake occurs is when new developers base64 encode an image and store it in a database large text/blob field.</p>
 
-<p>The better approach is to upload your images directly to a service like Amazon S3, then store the image URL (hosted by Amazon) in your database as a text field. This way, each time you need to load an image, you need to simply output the image URL into a valid <img> tag. This will greatly improve website responsiveness, and generally help scale web applications.</p>
+<p>The better approach is to upload your images directly to a service like Amazon S3, then store the image URL (hosted by Amazon) in your database as a text field. This way, each time you need to load an image, you need to simply output the image URL into a valid <code>&lt;img&gt;</code> tag. This will greatly improve website responsiveness, and generally help scale web applications.</p>
 
 <h3>2. Limit/Offset</h3>
 
@@ -144,7 +144,7 @@ $(document).ready(
 
 <h3>3. Integer primary keys</h3>
 
-<p>The default for almost all ORMs when creating a primary key is to create a serial field. This is a sequence that auto-increments and then you use that number as your primary key. This seems straight forward as an admin, because you can browse from /users/1 to /users/2, etc. And for most applications this can often be fine. And for most applications, this is fine. But, you&rsquo;ll soon realize as you start to scale that integers primary keys can be exhausted, and are not ideal for large-scale systems. The better approach is to start <a href="https://til.hashrocket.com/posts/31a5135e19-generate-a-uuid-in-postgresql">taking advantage of UUIDs</a> from the start.</p>
+<p>The default for almost all ORMs when creating a primary key is to create a serial field. This is a sequence that auto-increments and then you use that number as your primary key. This seems straight forward as an admin, because you can browse from /users/1 to /users/2, etc. And for most applications this can often be fine. And for most applications, this is fine. But, you&rsquo;ll soon realize as you start to scale that integers primary keys can be exhausted, and are not ideal for large-scale systems. Further you&rsquo;re reliant on that single system generating your keys. If a time comes when you have to scale the pain here will be huge. The better approach is to start <a href="https://til.hashrocket.com/posts/31a5135e19-generate-a-uuid-in-postgresql">taking advantage of UUIDs</a> from the start.</p>
 
 <p><em>There&rsquo;s also the bonus advantage of not secretly showcasing how many users/listings/whatever the key references directly to users on accident.</em></p>
 
@@ -161,6 +161,8 @@ $(document).ready(
 <p>As you start to learn about normalization it feels like the right thing to do. You create a <code>posts</code> table, which contains <code>authors</code>, and each post belongs in a category. So you create a <code>categories</code> table, and then you create a join table <code>post_categories</code>. At the real root of it there&rsquo;s not anything fundamentally wrong with normalizing your data, but at a certain point there are diminishing returns.</p>
 
 <p>In the above case categories could very easily just be an array of varchar fields on a post. Normalization makes plenty of sense, but thinking through it a bit more every time you have a many to many table and wondering if you really need a full table on both sides is worth giving a second thought.</p>
+
+<p><em>Edit: It&rsquo;s probably worth saying that under-normalization is also a problem as well. There isn&rsquo;t a one size fits all here. In general there are times where it does make sense to have a completely de-normalized and a completely normalized approach. As <a href="https://twitter.com/fuzzychef/status/740248400243785728">@fuzzychef</a> described: &ldquo;use an appropriate amount of normalization i.e. The goldilocks principle&rdquo;</em></p>
 
 <h3>Conclusion</h3>
 
@@ -216,7 +218,7 @@ $(document).ready(
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2016
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Craig Kerstiens
 

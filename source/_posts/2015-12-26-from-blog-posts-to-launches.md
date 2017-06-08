@@ -18,7 +18,7 @@ This is often a more gradual process than a sudden single change, you'll introdu
 
 ### Product first
 
-Making sure the product is in the right shape is key to any big launch. You don't get a second shot and if the product isn't in shape customers often won't take a second look alter when it it. For this reason I strongly prefer to have your product locked and loaded before you even start talking launch times, or at least be in the bug clean up phase. This means you've built a feature, validated with alpha users or private beta, and are ready to open it up to the world. 
+Making sure the product is in the right shape is key to any big launch. You don't get a second shot and if the product isn't in shape customers often won't take a second look at it later. For this reason I strongly prefer to have your product locked and loaded before you even start talking launch times, or at least be in the bug clean up phase. This means you've built a feature, validated with alpha users or private beta, and are ready to open it up to the world. 
 
 If you have to set a launch date without the product or feature being already done allow padding. Sometimes it's good for the team to know the padding, sometimes it isn't. When you have extra time it's not uncommon for your development to magically consume exactly that amount of time and still result in a small scramble towards the end.
 

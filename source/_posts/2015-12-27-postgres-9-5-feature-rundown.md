@@ -43,7 +43,7 @@ It's as simple as:
 
 If you're managing your own Postgres instance for some reason and running HA, pg_rewind could become especially handy. Typically to spin up replication you have to first download the physical, also known as base, backup. Then you have to replay the Write-Ahead-Log or WAL–so it's up to date then you actually flip on replication. 
 
-Typically with databases when you fail over you shoot the other node in the head or [STONITH](https://en.wikipedia.org/wiki/STONITH). This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and us pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over. 
+Typically with databases when you fail over you shoot the other node in the head or [STONITH](https://en.wikipedia.org/wiki/STONITH). This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and use pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over. 
 
 ### Upsert
 
