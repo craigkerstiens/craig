@@ -6,11 +6,11 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title> Craig Kerstiens</title>
+	<title></title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -103,20 +103,30 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/09/12/disabling-muting-while-typing-in-hangouts/">
+		<a href="/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/">
 		
-			Disabling Muting While Typing in Google Hangouts</a>
+			What You Need to Know About April 7 and Your Security on the Web.</a>
 	</h2>
 	<div class="entry-content">
-		<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
+		<p><img src="http://heartbleed.com/heartbleed.png" style="float:right;margin-left:20px;height:300px;"/>
+On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In the most basic sense this library allowed intentional external parties to acquire data that was thought to be safe and secure from whomever was running a vulnerable website. There was little to know one that was except from this due to their security practices, major examples of sites that were affected include:</p>
 
-<pre><code> defaults write com.google.googletalkplugind exps -string [\"-tm\"]
-</code></pre>
+<ul>
+<li>Yahoo</li>
+<li>Amazon.com</li>
+<li>Netflix</li>
+<li>Various banks</li>
+<li>Many more</li>
+</ul>
 
-<p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
+
+<p>If you&rsquo;re interested in more technical details you can <a href="http://www.heartbleed.com">follow along</a> or on the <a href="https://blog.heroku.com/archives/2014/4/8/openssl_heartbleed_security_update">Heroku blog</a>.</p>
+
+<p>The short of it is you, yes you as in everyone, should rotate your passwords once all websites are safe. For further details please continue reading.</p>
+
 
 		
-		
+		<a href="/2014/04/08/What-you-need-to-know-about-april-7-and-the-web/" class="more-link">Read on </a>
 	</div>
 
 
@@ -133,12 +143,12 @@ $(document).ready(
   
 
 
-<time datetime="2013-09-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-04-08T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
+	<a class='category' href='/categories/technology/'>Technology</a>
 
 </div>
 
@@ -150,22 +160,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/09/11/diving-into-postgres-json-operators/">
+		<a href="/2014/03/31/some-short-untypical-marketing-tips/">
 		
-			Diving Into Postgres JSON Operators and Functions</a>
+			Some Non-traditional Marketing Tips</a>
 	</h2>
 	<div class="entry-content">
-		<p>Just as <a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/">PostgreSQL 9.3</a> was coming out I had a need to take advantage of the JSON datatype and some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">operators and functions</a> within it. The use case was pretty simple, run a query across a variety of databases, then take the results and store them. We explored doing something more elaborate with the columns/values, but in the end just opted to save the entire result set as JSON then I could use the operators to explore it as desired.</p>
-
-<p>Here&rsquo;s the general idea in code (using sequel):</p>
-
-<pre><code>result = r.connection { |c| c.fetch(self.query).all }
-mymodel.results = result.to_json
-</code></pre>
+		<p>Marketing is generally unexciting to a ton of engineers, until it brings eyeballs which bring feedback and dollars. Marketing doesn&rsquo;t have to always be cheesy campaigns or ads, it can often just be surfacing the things your customers actually do want to care about. My favorite type of marketing is when a service sells me on something at the exact time I want it. Here&rsquo;s a few short tips on some non-traditional marketing that won&rsquo;t seem sleezy but still can work quite well.</p>
 
 
 		
-		<a href="/2013/09/11/diving-into-postgres-json-operators/" class="more-link">Read on </a>
+		<a href="/2014/03/31/some-short-untypical-marketing-tips/" class="more-link">Read on </a>
 	</div>
 
 
@@ -182,7 +186,54 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/marketing/'>Marketing</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/03/26/a-year-of-postgres/">
+		
+			A Year&#8217;s Look at Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>A couple years back I started more regularly blogging, though I&rsquo;ve done this off and on before, this time I kept some regularity. A common theme started to emerge with some content on Postgres about once a month because most of what was out there was much more reference oriented. A bit after that I connected with <a href="http://www.twitter.com/peterc">petercooper</a>, who runs quite a few weekly email newsletters. As someone thats been interested helping give others a good reason to create content the obvious idea of <a href="http://www.postgresweekly.com">Postgres Weekly</a> emerged.</p>
+
+<p>Since then we&rsquo;ve now had the newsletter running for over a year, helped surface quite a bit of content, and grown to over 5,000 subscribers. First if you&rsquo;re not subscribed, then go <a href="http://www.postgresweekly.com">subscribe now</a>.</p>
+
+<p>And if you need some inspiration or just want to reminisce with me&hellip; here&rsquo;s a look back at a few highlights over the past year:</p>
+
+
+		
+		<a href="/2014/03/26/a-year-of-postgres/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-26T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -199,18 +250,20 @@ mymodel.results = result.to_json
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/08/13/rule-of-thirds/">
+		<a href="/2014/03/24/Postgres-9.4-Looking-up/">
 		
-			The Rule of Thirds - Followup</a>
+			PostgreSQL 9.4 - Looking Up (With JSONB and Logical Decoding)</a>
 	</h2>
 	<div class="entry-content">
-		<p>Several months back I wrote about how we do <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">higher level, long term planning within the Heroku Postgres team</a>. If you haven&rsquo;t read the previous article please start there.</p>
+		<p>Just a few weeks back I wrote a article discussing many of the things that were likely to miss making the <a href="http://www.craigkerstiens.com/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">9.4 PostgreSQL release</a>. Since that post a few weeks ago the landscape has already changed, and much more for the positive.</p>
 
-<p>The exercise or rule of thirds is intended to be approximate prioritization and not a perfect science. Since that time I&rsquo;m familiar with some teams both in and out of Heroku who have attempted this exercise with varying levels of success. We&rsquo;ve now done this process 4 times within the team and after the most recent exercise attempted to take some time to internalize why its worked well, creating some more specifics about the process. Heres an attempt to provide even more clarity:</p>
+<p><em>The lesson here, is never count Postgres out</em>. As <a href="www.linuxinsider.com/story/Bruce-Momjian-PostrgreSQL-Prefers-the-Scenic-Route-80045.html">Bruce discussed in a recent interview</a>, Postgres is slow and steady, but much like the turtle can win the race.</p>
+
+<p>So onto the actual features:</p>
 
 
 		
-		<a href="/2013/08/13/rule-of-thirds/" class="more-link">Read on </a>
+		<a href="/2014/03/24/Postgres-9.4-Looking-up/" class="more-link">Read on </a>
 	</div>
 
 
@@ -227,12 +280,12 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-08-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-03-24T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/heroku/'>Heroku</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
@@ -244,18 +297,16 @@ mymodel.results = result.to_json
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/08/07/the-missing-postgresql-documentation/">
+		<a href="/2014/02/26/Tracking-MoM-growth-in-SQL/">
 		
-			The Missing PostgreSQL Documentation</a>
+			Tracking Month Over Month Growth in SQL</a>
 	</h2>
 	<div class="entry-content">
-		<p>For a couple of years I&rsquo;ve complained about the Postgres documentation and at the same time paraded it as one of the best sets of documentation I&rsquo;ve encountered. In many ways the reason I veer towards <a href="http://www.postgresql.org">Postgres</a> as well as <a href="http://www.python.org">Python</a> and <a href="http://www.djangoproject.com">Django</a> is the quality of their documentation. If you need to find details about something its documented, and more importantly well and thoroughly documented.</p>
-
-<p>In large part I came to Python by happenstance through <a href="http://www.djangoproject.com">Django</a>, and Postgres through happenstance of an employer. Yet, Django was very little of an accident. The Django Tutorial got me a large part of what I needed to know and more excited about development than I had been in some time. Python has done some work at adding docs to make this even better, sadly its still very much needed for PostgreSQL.</p>
+		<p><img src="http://f.cl.ly/items/3f1q2N2s2V0d0G2s1T01/Blank.jpg" style="float:right;margin-left:20px;"/> In analyzing a business I commonly look at reports that have two lenses, one is by doing various cohort analysis. The other is that I look for Month over Month or Week over Week or some other X over X growth in terms of a percentage. This second form of looking at data is relevant when you&rsquo;re in a SaaS business or essentially anythign that does recurring billing. In such a business focusing on your MRR and working on <a href="http://www.amazon.com/dp/B003XVYKRW?tag=mypred-20">growing your MRR is how success can often be measured</a>.</p>
 
 
 		
-		<a href="/2013/08/07/the-missing-postgresql-documentation/" class="more-link">Read on </a>
+		<a href="/2014/02/26/Tracking-MoM-growth-in-SQL/" class="more-link">Read on </a>
 	</div>
 
 
@@ -272,12 +323,12 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-08-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
@@ -289,18 +340,16 @@ mymodel.results = result.to_json
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/08/05/a-look-at-FDWs/">
+		<a href="/2014/02/15/PostgreSQL-9.4-What-I-Wanted/">
 		
-			A Look at Foreign Data Wrappers</a>
+			PostgreSQL 9.4 - What I Was Hoping For</a>
 	</h2>
 	<div class="entry-content">
-		<p>There are two particular sets of features that continue to keep me very excited about the momentum of Postgres. And while PostgreSQL has had some great momentum in the past few years these features may give it an entirely new pace all together. One is extensions, which is really its own category. Dimitri Fontaine was talking about doing a full series just on extensions, so here&rsquo;s hoping he does so I dont have to :)</p>
-
-<p>One subset of extensions which I consider entirely separate is the other thing, which is foreign data wrappers or FDWs. FDWs allow you to connect to other data sources from within Postgres. From there you can query them with SQL, join across disparate data sets, or join across different systems. Recently I had a good excuse to give the <code>postgres_fdw</code> a try. And while I&rsquo;ve blogged about the Redis FDW previously, the Postgres one is particularly exciting because with PostgreSQL 9.3 it will ship as a contrib module, which means all Postgres installers should have it&hellip; you just have to turn it on.</p>
+		<p>Theres no doubt that the <a href="/2014/02/02/Examining-PostgreSQL-9.4/">9.4 release</a> of PostgreSQL will have some great improvements. However, for all of the improvements it delivering it had the promise of being perhaps the most impactful release of <a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">Postgres</a> yet. Several of the features that would have given it my stamp of best release in at least 5 years are now already not making it and a few others are still on the border. Here&rsquo;s a look at few of the things that were hoped for and not to be at least until another 18 months.</p>
 
 
 		
-		<a href="/2013/08/05/a-look-at-FDWs/" class="more-link">Read on </a>
+		<a href="/2014/02/15/PostgreSQL-9.4-What-I-Wanted/" class="more-link">Read on </a>
 	</div>
 
 
@@ -317,12 +366,12 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-08-05T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-02-15T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
@@ -334,21 +383,18 @@ mymodel.results = result.to_json
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/08/02/use-dollar-quoting-anywhere/">
+		<a href="/2014/02/07/my-email-hacks/">
 		
-			Postgres Dollar Quoting</a>
+			How I Hack Email</a>
 	</h2>
 	<div class="entry-content">
-		<p>After my most recent post on <a href="/2013/07/29/documenting-your-postgres-database/">documenting your database</a> I had a colleague and friend chime in:</p>
+		<p>In a conversation with <a href="http://www.twitter.com/alexbaldwin">@alexbaldwin</a> yesterday the topic of email came up, with each of us quickly diving into various observations, how its both awesome and a great form of communication/engagement, how most people still do it really bad. Alex has some good experience with it with hack design having over 100,000 subscribers. A tangent in an entirely unrelated meeting with <a href="http://www.twitter.com/mschoening">@mschoening</a> and others it was suggested instead of emailing a list to send out a ton of individual emails instead. Both of these reminded me that email is incredibly powerful, but taking advantage of its power has to be intentional.</p>
 
-<blockquote><p>@craigkerstiens You may want to mention for another post the generality of dollar quoting: it&#8217;s not just for CREATE FUNCTION.</p><footer><strong>@danfarina</strong> <cite><a href='https://twitter.com/danfarina/status/362007008079126528'>twitter.com/danfarina/status/&hellip;</a></cite></footer></blockquote>
-
-
-<p>Luckily I was able to convince him to create the post. You can read a bit more on him below, but without further adieu here&rsquo;s a bit on dollar quoting within Postgres:</p>
+<p>This is not about ways to get to inbox 0 or better manage your inflow of emails. Rather its about how to get the maximum output out of emails that you send, or minimum output depending on what you prefer.</p>
 
 
 		
-		<a href="/2013/08/02/use-dollar-quoting-anywhere/" class="more-link">Read on </a>
+		<a href="/2014/02/07/my-email-hacks/" class="more-link">Read on </a>
 	</div>
 
 
@@ -365,12 +411,12 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-08-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-02-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/productivity/'>Productivity</a>
 
 </div>
 
@@ -382,27 +428,16 @@ mymodel.results = result.to_json
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/07/29/documenting-your-postgres-database/">
+		<a href="/2014/02/02/Examining-PostgreSQL-9.4/">
 		
-			Documenting Your PostgreSQL Database</a>
+			Examining Postgres 9.4 - a First Look</a>
 	</h2>
 	<div class="entry-content">
-		<p>Just a few days ago I was surprised by what someone was doing with their database, and not in the typical horrifying travesty against mankind. Rather, it was a feature that while familiar with I&rsquo;d never seen anyone fully take proper advantage of &ndash; <code>COMMENT</code> or describing tables. Postgres has a nice facility for you to provide a description for just about anything:</p>
-
-<ul>
-<li>Table</li>
-<li>Column</li>
-<li>Function</li>
-<li>Schema</li>
-<li>View</li>
-<li>Index</li>
-<li>Etc.</li>
-</ul>
-
+		<p><a href="http://www.amazon.com/dp/B008IGIKY6?tag=mypred-20">PostgreSQL</a> is currently entering its final commit fest. While its still going, which means there could still be more great features to come, we can start to take a look at what you can expect from it now. This release seems to bring a lot of minor increments versus some bigger highlights of previous ones. At the same time there&rsquo;s still a lot on the bubble that may or may not make it which could entirely change the shape of this one. For a peek back of some of the past ones:</p>
 
 
 		
-		<a href="/2013/07/29/documenting-your-postgres-database/" class="more-link">Read on </a>
+		<a href="/2014/02/02/Examining-PostgreSQL-9.4/" class="more-link">Read on </a>
 	</div>
 
 
@@ -419,12 +454,12 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-07-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-02-02T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
@@ -436,27 +471,18 @@ mymodel.results = result.to_json
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/07/03/hstore-vs-json/">
+		<a href="/2014/01/28/where-to-go-developer-content/">
 		
-			Hstore vs. JSON - Which to Use in Postgres</a>
+			Where to Go With Developer Content</a>
 	</h2>
 	<div class="entry-content">
-		<p>If you&rsquo;re deciding what to put in <a href="http://www.amazon.com/Seven-Databases-Weeks-Modern-Movement/dp/1934356921?tag=mypred-20">Postgres and what not to</a>, consider that Postgres can be a <a href="/2012/06/11/schemaless-django/">perfectly good schema-less database</a>. Of course as soon as people realized this then the common comes a question, is hstore or JSON better. Which do I use and in what cases. Well first, if you&rsquo;re not familiar check out some previous material on them:</p>
+		<p>Last week I wrote up some <a href="/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
 
-<ul>
-<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore on PostgresGuide</a></li>
-<li><a href="http://www.postgresql.org/docs/9.2/static/hstore.html">hstore in Postgres docs</a></li>
-<li><a href="http://www.craigkerstiens.com/2012/06/11/schemaless-django/">hstore with Django</a></li>
-<li><a href="http://wiki.postgresql.org/wiki/What's_new_in_PostgreSQL_9.2#JSON_datatype">JSON datatype</a></li>
-<li><a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">JavaScript support in Postgres</a></li>
-</ul>
-
-
-<p>If you&rsquo;re already up to date with both of them, but still wondering which to use lets dig in.</p>
+<p>Perhaps the easiest way to do this is by highlighting some examples of it.</p>
 
 
 		
-		<a href="/2013/07/03/hstore-vs-json/" class="more-link">Read on </a>
+		<a href="/2014/01/28/where-to-go-developer-content/" class="more-link">Read on </a>
 	</div>
 
 
@@ -473,12 +499,12 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-07-03T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-01-28T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/developers/'>Developers</a>, <a class='category' href='/categories/marketing/'>Marketing</a>
 
 </div>
 
@@ -490,27 +516,20 @@ mymodel.results = result.to_json
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/06/27/Pivoting-in-Postgres/">
+		<a href="/2014/01/24/rethinking-limits-on-relational/">
 		
-			Pivoting in Postgres</a>
+			Rethinking the Limits on Relational Databases</a>
 	</h2>
 	<div class="entry-content">
-		<p>Earlier today on an internal Heroku group alias there was a <a href="https://postgres.heroku.com/dataclips">dataclip</a> shared. The dataclip listed off some data grouped by a category, there was a reply a few minutes later with a modification to the query that used the <code>crosstab</code> function to pivot directly in SQL. There were immediately several reactions on the list that went something like this:</p>
+		<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
 
-<p><img src="http://f.cl.ly/items/1b0G101r0B2W243b2933/Image%202013.06.27%202%3A06%3A23%20PM.gif" alt="mindblown" /></p>
+<h3>Forget migrations</h3>
 
-<p>While a mostly simple function in Postgres (there are a few rough edges), it really is all too handy. So here it is in action. Taking some data that looks like</p>
-
-<ul>
-<li>row identifier, in this case date</li>
-<li>category grouping, in this case OS</li>
-<li>value</li>
-</ul>
-
+<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
 
 
 		
-		<a href="/2013/06/27/Pivoting-in-Postgres/" class="more-link">Read on </a>
+		<a href="/2014/01/24/rethinking-limits-on-relational/" class="more-link">Read on </a>
 	</div>
 
 
@@ -527,55 +546,12 @@ mymodel.results = result.to_json
   
 
 
-<time datetime="2013-06-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-01-24T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/06/25/javascript-functions-for-postgres/">
-		
-			Javascript Functions for PostgreSQL</a>
-	</h2>
-	<div class="entry-content">
-		<p>Javascript in Postgres has gotten a good bit of love lately, part of that is from <a href="http://postgres.herpku.com">Heroku Postgres</a> recently <a href="https://postgres.heroku.com/blog/past/2013/6/5/javascript_in_your_postgres/">adding support for Javascript</a> and part from a variety of people championing the power of it such as <a href="http://twitter.com/leinweber">@leinweber</a> (<a href="http://www.youtube.com/watch?v=fRupMAVdmWA">Embracing the web with JSON and PLV8</a>) and <a href="http://twitter.com/selenamarie">@selenamarie</a> (<a href="https://speakerdeck.com/selenamarie/schema-liberation-with-json-and-plv8-and-postgres">schema liberation with JSON and PLV8</a>). In a recent conversation it was pointed out that it seems a bit of headache to have to create your own functions, or at least having an initial collection would make it that much more powerful. While many can look forward to <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">PostgreSQL 9.3</a> which will have a bit more built in support for JSON a few functions can really help make it more useful today.</p>
-
-
-		
-		<a href="/2013/06/25/javascript-functions-for-postgres/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-25T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
@@ -592,7 +568,7 @@ mymodel.results = result.to_json
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Craig Kerstiens
 

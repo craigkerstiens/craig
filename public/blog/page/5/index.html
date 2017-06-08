@@ -6,11 +6,11 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title> Craig Kerstiens</title>
+	<title></title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="I&rsquo;ve written a bit before about understanding the output from EXPLAIN and EXPLAIN ANALYZE in PostgreSQL. Though understandably getting a grasp &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -103,18 +103,20 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/06/13/explaining-your-data/">
+		<a href="/2014/01/16/developer-marketing-where-to-start-with-content/">
 		
-			Explaining Your PostgreSQL Data</a>
+			Where to Start With Developer Content</a>
 	</h2>
 	<div class="entry-content">
-		<p>I&rsquo;ve written a bit before about <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">understanding the output</a> from <code>EXPLAIN</code> and <code>EXPLAIN ANALYZE</code> in PostgreSQL. Though understandably getting a grasp on execution plans could probably use some more guidance. Yet, this time around I&rsquo;m taking a bit of a cop out and highlighting a few tools instead of documenting myself, which I&rsquo;ve done in a talk I&rsquo;ve frequently given <a href="https://speakerdeck.com/craigkerstiens/postgres-demystified-1">Postgres Demystified</a>.</p>
+		<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
 
-<p><img src="http://f.cl.ly/items/2Y0A0H2B2q3C0622261C/Screenshot_6_13_13_9_57_AM.png" alt="Explain explained" /></p>
+<h3>Stop marketing</h3>
+
+<p>Forget trying to &ldquo;market&rdquo; to developers. Hopefully you at least have developers that believe in the product their building, if thats not the case then find a new product or a new team. If you&rsquo;ve got a product targetted at developers and a team that believes in it then you&rsquo;re already half way there to marketing it. Now back to the first point, forget trying to market it. Start with building some form of an audience, reputation, respect among other developers. This isn&rsquo;t done through ads, email marketing, SEO or any of that. Its done by creating content that developers find interesting, as a first step forget your product entirely, but don&rsquo;t worry we&rsquo;ll get there soon enough.</p>
 
 
 		
-		<a href="/2013/06/13/explaining-your-data/" class="more-link">Read on </a>
+		<a href="/2014/01/16/developer-marketing-where-to-start-with-content/" class="more-link">Read on </a>
 	</div>
 
 
@@ -131,12 +133,12 @@ $(document).ready(
   
 
 
-<time datetime="2013-06-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2014-01-16T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/developers/'>Developers</a>, <a class='category' href='/categories/marketing/'>Marketing</a>
 
 </div>
 
@@ -148,33 +150,157 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/05/30/a-collection-of-indexing-tips/">
+		<a href="/2013/11/18/best-postgres-feature-youre-not-using/">
 		
-			Postgres Indexing - a Collection of Indexing Tips</a>
+			The Best Postgres Feature You&#8217;re Not Using – CTEs Aka WITH Clauses</a>
 	</h2>
 	<div class="entry-content">
-		<p>Even from intial reviews of my previous post on expression based indexes I received a lot of questions and feedback around many different parts of indexing in Postgres. Here&rsquo;s a mixed collection of valuable tips and guides around much of that.</p>
+		<p>SQL by default isn&rsquo;t typically friendly to dive into, and especially so if you&rsquo;re reading someone else&rsquo;s already created queries. For some reason most people throw out principles we follow in other languages <a href="http://www.craigkerstiens.com/2013/07/29/documenting-your-postgres-database/">such as commenting</a> and composability just for SQL. I was recently reminded of a key feature in Postgres that most don&rsquo;t use by <a href="http://www.twitter.com/timonk">@timonk</a> highlighting it in his AWS Re:Invent Redshift talk. The simple feature actually makes SQL both readable and composable, and even for my own queries capable of coming back to them months later and understanding them, where previously they would not be.</p>
 
-<h3>Unused Indexes</h3>
+<p>The feature itself is known as CTEs or common table expressions, you may also here it referred to as <code>WITH</code> clauses. The general idea is that it allows you to create something somewhat equivilant to a view that only exists during that transaction. You can create multiple of these which then allow for clear building blocks and make it simple to follow what you&rsquo;re doing.</p>
 
-<p>In an earlier tweet I joked about some SQL that would generate the SQL to add an index to every column:</p>
 
-<pre><code># SELECT 'CREATE INDEX idx_' 
-    || table_name || '_' 
-    || column_name || ' ON ' 
-    || table_name || ' ("' 
-    || column_name || '");' 
-  FROM information_schema.columns;
-                      ?column?
----------------------------------------------------------------------
- CREATE INDEX idx_pg_proc_proname ON pg_proc ("proname");
- CREATE INDEX idx_pg_proc_pronamespace ON pg_proc ("pronamespace");
- CREATE INDEX idx_pg_proc_proowner ON pg_proc ("proowner");
+		
+		<a href="/2013/11/18/best-postgres-feature-youre-not-using/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-18T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/10/13/simple-but-informative-emails/">
+		
+			Tooling for Simple but Informative Emails</a>
+	</h2>
+	<div class="entry-content">
+		<p>Emails are one of my favorite methods of communicating with users. Its works as a quick test for product validation. It works well at one->some->many-> all. Its still highly effective even as much noise as we receive in our inboxes. Over the years I&rsquo;ve tried a lot of email tools from custom built solutions, to newer entrants that help around drip actions (<a href="http://www.intercom.io">intercom.io</a> and <a href="http://www.customer.io">customer.io</a>), to more &ldquo;enterprise&rdquo; tools such as Marketo. While I have varying opinions on all of those, I still find myself coming back to a simple one off script setup to deliver clear concise emails.</p>
+
+
+		
+		<a href="/2013/10/13/simple-but-informative-emails/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/09/12/disabling-muting-while-typing-in-hangouts/">
+		
+			Disabling Muting While Typing in Google Hangouts</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google hangouts is awesome, its my preferred method for most audio/video calls these days. When running a group call I often dial into a separate phone if I have a better phone available for the group. It also got around the annoyance that when you are typing google automatically mutes you. This for most people is pretty subpar. While dialing in to the hangout can still be nice, you don&rsquo;t have to do so to get rid of the annoying muting while typing. To fix such simply open up your terminal and run:</p>
+
+<pre><code> defaults write com.google.googletalkplugind exps -string [\"-tm\"]
+</code></pre>
+
+<p><em>This clever hack discovered courtesy of <a href="http://www.twitter.com/timtyrrell">@timtyrrell</a> passed along to me by <a href="http://www.twitter.com/mattmanning">@mattmanning</a> and <a href="http://www.twitter.com/blakegentry">@blakegentry</a></em></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/hacks/'>Hacks</a>, <a class='category' href='/categories/tips/'>Tips</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/09/11/diving-into-postgres-json-operators/">
+		
+			Diving Into Postgres JSON Operators and Functions</a>
+	</h2>
+	<div class="entry-content">
+		<p>Just as <a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/">PostgreSQL 9.3</a> was coming out I had a need to take advantage of the JSON datatype and some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">operators and functions</a> within it. The use case was pretty simple, run a query across a variety of databases, then take the results and store them. We explored doing something more elaborate with the columns/values, but in the end just opted to save the entire result set as JSON then I could use the operators to explore it as desired.</p>
+
+<p>Here&rsquo;s the general idea in code (using sequel):</p>
+
+<pre><code>result = r.connection { |c| c.fetch(self.query).all }
+mymodel.results = result.to_json
 </code></pre>
 
 
 		
-		<a href="/2013/05/30/a-collection-of-indexing-tips/" class="more-link">Read on </a>
+		<a href="/2013/09/11/diving-into-postgres-json-operators/" class="more-link">Read on </a>
 	</div>
 
 
@@ -191,12 +317,12 @@ $(document).ready(
   
 
 
-<time datetime="2013-05-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 
@@ -208,16 +334,18 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/">
+		<a href="/2013/08/13/rule-of-thirds/">
 		
-			Postgres Indexes – Expression/Functional Indexing</a>
+			The Rule of Thirds - Followup</a>
 	</h2>
 	<div class="entry-content">
-		<p>Postgres is rich with options for indexing. First you&rsquo;ve got a variety of types, and beyond that you can do a variety of things with each of these such as create unique indexes, use conditions to index only a portion of your data, or create indexes based on complex expressions or functions. In cases where you commonly use various PostgreSQL functions in your application or reporting you can get some great gains from this.</p>
+		<p>Several months back I wrote about how we do <a href="http://www.craigkerstiens.com/2013/03/13/planning-and-prioritizing/">higher level, long term planning within the Heroku Postgres team</a>. If you haven&rsquo;t read the previous article please start there.</p>
+
+<p>The exercise or rule of thirds is intended to be approximate prioritization and not a perfect science. Since that time I&rsquo;m familiar with some teams both in and out of Heroku who have attempted this exercise with varying levels of success. We&rsquo;ve now done this process 4 times within the team and after the most recent exercise attempted to take some time to internalize why its worked well, creating some more specifics about the process. Heres an attempt to provide even more clarity:</p>
 
 
 		
-		<a href="/2013/05/29/postgres-indexes-expression-or-functional-indexes/" class="more-link">Read on </a>
+		<a href="/2013/08/13/rule-of-thirds/" class="more-link">Read on </a>
 	</div>
 
 
@@ -234,12 +362,12 @@ $(document).ready(
   
 
 
-<time datetime="2013-05-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-08-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/heroku/'>Heroku</a>
 
 </div>
 
@@ -251,16 +379,18 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/05/06/my-sql-bad-habits/">
+		<a href="/2013/08/07/the-missing-postgresql-documentation/">
 		
-			My SQL Bad Habits</a>
+			The Missing PostgreSQL Documentation</a>
 	</h2>
 	<div class="entry-content">
-		<p>I&rsquo;m reasonably proficient at SQL – <em>a coworker when pseudocoding some logic for him pointed out that my pseudocode is what he thought was executable SQL</em>. I&rsquo;m fully capable of writing clear and readable SQL – which most SQL is not. Despite that I still have several bad habits when it comes to SQL. Without further adieu heres some of my dirty laundry so hopefully others can not make the same mistakes.</p>
+		<p>For a couple of years I&rsquo;ve complained about the Postgres documentation and at the same time paraded it as one of the best sets of documentation I&rsquo;ve encountered. In many ways the reason I veer towards <a href="http://www.postgresql.org">Postgres</a> as well as <a href="http://www.python.org">Python</a> and <a href="http://www.djangoproject.com">Django</a> is the quality of their documentation. If you need to find details about something its documented, and more importantly well and thoroughly documented.</p>
+
+<p>In large part I came to Python by happenstance through <a href="http://www.djangoproject.com">Django</a>, and Postgres through happenstance of an employer. Yet, Django was very little of an accident. The Django Tutorial got me a large part of what I needed to know and more excited about development than I had been in some time. Python has done some work at adding docs to make this even better, sadly its still very much needed for PostgreSQL.</p>
 
 
 		
-		<a href="/2013/05/06/my-sql-bad-habits/" class="more-link">Read on </a>
+		<a href="/2013/08/07/the-missing-postgresql-documentation/" class="more-link">Read on </a>
 	</div>
 
 
@@ -277,12 +407,12 @@ $(document).ready(
   
 
 
-<time datetime="2013-05-06T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-08-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
 
 </div>
 
@@ -294,18 +424,18 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/04/29/cx_conference_experience_communicate/">
+		<a href="/2013/08/05/a-look-at-FDWs/">
 		
-			CX – Conference Experience (Facilitating Communication)</a>
+			A Look at Foreign Data Wrappers</a>
 	</h2>
 	<div class="entry-content">
-		<p>Following up on my earlier post about CX or Conference Experience – I&rsquo;m going to dig in a bit on how you get good conversation to happen. In the past two years I&rsquo;ve been to nearly 20 conferences, I&rsquo;ve been to conferences with great talks, with great parties, with great swag, and hands down my favorite conferences have always been a result of great conversation. With the number of talks that are recorded and immediately available online after, <em>what can I say I&rsquo;m a hallway track guy</em>.</p>
+		<p>There are two particular sets of features that continue to keep me very excited about the momentum of Postgres. And while PostgreSQL has had some great momentum in the past few years these features may give it an entirely new pace all together. One is extensions, which is really its own category. Dimitri Fontaine was talking about doing a full series just on extensions, so here&rsquo;s hoping he does so I dont have to :)</p>
 
-<p>I&rsquo;ve seen a number of conferences intentionally design around this concept, in some ways the unconference is purely a hallway track conference. I&rsquo;ve also seen conferences that weren&rsquo;t clearly planned for this and have pulled off some of the best situations where people turn their phones off and engage in real conversation.</p>
+<p>One subset of extensions which I consider entirely separate is the other thing, which is foreign data wrappers or FDWs. FDWs allow you to connect to other data sources from within Postgres. From there you can query them with SQL, join across disparate data sets, or join across different systems. Recently I had a good excuse to give the <code>postgres_fdw</code> a try. And while I&rsquo;ve blogged about the Redis FDW previously, the Postgres one is particularly exciting because with PostgreSQL 9.3 it will ship as a contrib module, which means all Postgres installers should have it&hellip; you just have to turn it on.</p>
 
 
 		
-		<a href="/2013/04/29/cx_conference_experience_communicate/" class="more-link">Read on </a>
+		<a href="/2013/08/05/a-look-at-FDWs/" class="more-link">Read on </a>
 	</div>
 
 
@@ -322,12 +452,12 @@ $(document).ready(
   
 
 
-<time datetime="2013-04-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-08-05T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/marketing/'>Marketing</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
 
 </div>
 
@@ -339,28 +469,75 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2013/04/27/cx_conference_experience_talks/">
+		<a href="/2013/08/02/use-dollar-quoting-anywhere/">
 		
-			CX – Conference Experience (Talks)</a>
+			Postgres Dollar Quoting</a>
 	</h2>
 	<div class="entry-content">
-		<p>A couple of weekends ago I had the great opportunity to attend <a href="http://lessconf.com">lessconf</a>. It was an all around great conference, and as a result of the greatness I ended up having a conversation with a few people around conference experience. I must give much of the credit to <a href="http://twitter.com/swiftalphaone">Swift</a>, as he mentioned he&rsquo;d already been thinking alot about this since <a href="http://waza.heroku.com">Waza</a>. In general it feels like there&rsquo;s a few key themes that any conference should focus on, then a lot of small things that can really push it over the top. Here&rsquo;s a few:</p>
+		<p>After my most recent post on <a href="/2013/07/29/documenting-your-postgres-database/">documenting your database</a> I had a colleague and friend chime in:</p>
 
-<p>In general the key areas for any great conference are:</p>
+<blockquote><p>@craigkerstiens You may want to mention for another post the generality of dollar quoting: it&#8217;s not just for CREATE FUNCTION.</p><footer><strong>@danfarina</strong> <cite><a href='https://twitter.com/danfarina/status/362007008079126528'>twitter.com/danfarina/status/&hellip;</a></cite></footer></blockquote>
+
+
+<p>Luckily I was able to convince him to create the post. You can read a bit more on him below, but without further adieu here&rsquo;s a bit on dollar quoting within Postgres:</p>
+
+
+		
+		<a href="/2013/08/02/use-dollar-quoting-anywhere/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-02T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/07/29/documenting-your-postgres-database/">
+		
+			Documenting Your PostgreSQL Database</a>
+	</h2>
+	<div class="entry-content">
+		<p>Just a few days ago I was surprised by what someone was doing with their database, and not in the typical horrifying travesty against mankind. Rather, it was a feature that while familiar with I&rsquo;d never seen anyone fully take proper advantage of &ndash; <code>COMMENT</code> or describing tables. Postgres has a nice facility for you to provide a description for just about anything:</p>
 
 <ul>
-<li>Talks</li>
-<li>Great people</li>
-<li>Ensuring communication happens</li>
-<li>Bonus points</li>
+<li>Table</li>
+<li>Column</li>
+<li>Function</li>
+<li>Schema</li>
+<li>View</li>
+<li>Index</li>
+<li>Etc.</li>
 </ul>
 
 
-<p>Digging in deeper on the first area&hellip;</p>
-
 
 		
-		<a href="/2013/04/27/cx_conference_experience_talks/" class="more-link">Read on </a>
+		<a href="/2013/07/29/documenting-your-postgres-database/" class="more-link">Read on </a>
 	</div>
 
 
@@ -377,186 +554,14 @@ $(document).ready(
   
 
 
-<time datetime="2013-04-27T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2013-07-29T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/marketing/'>Marketing</a>
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
 
 </div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/04/17/array-agg/">
-		
-			Using Array_agg in Postgres – Powerful and Flexible</a>
-	</h2>
-	<div class="entry-content">
-		<p>In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do this by running a query to get much of the raw data, looping over the data and pushing it into a set, appending each new value to the appropriate key. Hopefully, it&rsquo;s not a surprise that there&rsquo;s a much better way to do this with PostgreSQL.</p>
-
-<p>Postgres has a flexible and robust <a href="/2012/08/20/arrays-in-postgres/">array datatype</a> that comes with a variety of functions. Even without taking advantage of the array datatype in <a href="/2012/11/06/django-and-arrays/">your application</a>, you can still take advantage of some of the functions to get the functionality you need. Lets take a look at an example schema and use case.</p>
-
-
-		
-		<a href="/2013/04/17/array-agg/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-17T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/04/16/creating-advocates/">
-		
-			Scaling Evangelism – Creating Advocates</a>
-	</h2>
-	<div class="entry-content">
-		<p>The first area I tend to think about when it comes to developer marketing is around advocates. A simple definition of an advocate is <em>someone that speaks/writes in favor of some thing</em>.</p>
-
-<p>Creating advocates is a means of creating more of myself to go out and talk loudly and ideally effectively. However, they do take time to cultivate and it is a hard item to track. But by cultivating advocates I&rsquo;m able to scale what would otherwise be a bottleneck of my own personal time.</p>
-
-
-		
-		<a href="/2013/04/16/creating-advocates/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-16T07:59:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2013</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketing/'>Marketing</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/04/12/perspective-on-developer-marketing/">
-		
-			Doing Marketing (for Developers) Differently</a>
-	</h2>
-	<div class="entry-content">
-		<p>As developers we can tend to be a fickle bunch; especially in certain open source communities. We like to see intelligence and systems applied to things, hope for a better world through making things open, and appreciate when others relate to our world as we often attempt to relate to theirs. Marketing is often a loaded word when it comes to developers – leaving mixed feelings about webinars, email campaigns, and the like.</p>
-
-<p><em>A quick clarification in terms of marketing I&rsquo;m referring to product marketing, but of a technical product. This is based on the idea that <a href="http://thenewkingmakers.com/">developers are the new kingmakers</a> and when marketing a product to them it needs to be done differently.</em></p>
-
-
-		
-		<a href="/2013/04/12/perspective-on-developer-marketing/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-12T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketin/'>Marketin</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/03/31/why-i-blog/">
-		
-			Why I Blog</a>
-	</h2>
-	<div class="entry-content">
-		<p>I blog because I&rsquo;m lazy. There&rsquo;s more too it though: In any given day I may explain something to someone, the first time I do this I make a bit of a mental note. The second time I do this, especially within a short time frame I make a physical note of this in the form of the title of a blog post. Once I&rsquo;m already to a second time of doing this its almost inevitable I&rsquo;ll continue repeating myself – and its valuable to others.</p>
-
-
-		
-		<a href="/2013/03/31/why-i-blog/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-31T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
 
 
 	
@@ -571,7 +576,7 @@ $(document).ready(
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Craig Kerstiens
 

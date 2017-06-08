@@ -6,7 +6,7 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title>Postgres 9.5 - The feature rundown Craig Kerstiens</title>
+	<title>Postgres 9.5 - The feature rundown - Craig Kerstiens </title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
@@ -158,7 +158,7 @@ FROM SERVER some_other_db INTO reference_to_other_db;
 
 <p>If you&rsquo;re managing your own Postgres instance for some reason and running HA, pg_rewind could become especially handy. Typically to spin up replication you have to first download the physical, also known as base, backup. Then you have to replay the Write-Ahead-Log or WAL–so it&rsquo;s up to date then you actually flip on replication.</p>
 
-<p>Typically with databases when you fail over you shoot the other node in the head or <a href="https://en.wikipedia.org/wiki/STONITH">STONITH</a>. This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and us pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over.</p>
+<p>Typically with databases when you fail over you shoot the other node in the head or <a href="https://en.wikipedia.org/wiki/STONITH">STONITH</a>. This means just get rid of it, completely throw it out. This is still a good practice, so bring it offline, make it inactive, but from there now you could then flip it into a mode and use pg_rewind. This could save you pulling down lots and lots of data to get a replica back up once you have failed over.</p>
 
 <h3>Upsert</h3>
 
@@ -245,7 +245,7 @@ FROM foo;
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Craig Kerstiens
 

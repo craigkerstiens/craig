@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Startups | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/startups/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-12-27T09:06:05-08:00</updated>
+  <updated>2017-06-08T09:14:22-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[What being a PM is really like - Software is easy, People are hard]]></title>
+    <link href="http://www.craigkerstiens.com/2016/01/28/On-being-a-PM-software-is-easy-people-are-hard/"/>
+    <updated>2016-01-28T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/01/28/On-being-a-PM-software-is-easy-people-are-hard</id>
+    <content type="html"><![CDATA[<p>In recent months I&rsquo;ve had the question nearly once a week about advice/tips for becoming a Product Manager or more commonly referred to as PM. These are generally coming from people that are either currently engineers, or previously were and are in some engineer/customer role such as a sales engineer or solution architect. There&rsquo;s a number of <a href="http://www.amazon.com/Inspired-Create-Products-Customers-Love/dp/0981690408?tag=mypred-20">high level</a> pieces talking about PM and it often feels glorious, I mean you get to make product decisions right? You get to call some shots. Well that sometimes may be true, but don&rsquo;t assume it&rsquo;s all rainbows and sparkles.</p>
+
+<p>Especially as a first time PM what your day to day will look like won&rsquo;t be debating strategy all day long. Here&rsquo;s a few of the good and the bad sides of being a PM.</p>
+
+<!--more-->
+
+
+<h3>Plenty of grunt work</h3>
+
+<p>While you may get to make a decision or two, the bulk of your time will not be thinking about grandiose visions, instead you&rsquo;ll be doing a lot to gather data. There&rsquo;s a lot of means for gathering data across lots of sources, the more you use the better you&rsquo;ll be. Knowing the ones you steer towards, as well as ones you steer away from is useful so you can balance a bias more fairly. For myself SQL is a go-to, then customer interactions both qualitative and quantitative such as surveys, following what media is saying about your space is important as well. And while user studies are often relegated to design and UX, as a PM you need to make sure it at least happens (<a href="http://www.invisionapp.com/">Invision App</a> is a favorite for lightweight tests).</p>
+
+<p>In a given week I probably spend 10 hrs interacting with customers, looking at data, and sadly that&rsquo;s probably not enough.</p>
+
+<p><em>A few practical examples of this</em></p>
+
+<p>Each morning I send emails to 10-20 users who used the product for the first time, yes this is automated but carving out 30 minutes of my day to actually follow-up with each of them is less automated.</p>
+
+<p>Another example is keeping a health of business dashboard up to date. Personally I use google sheets for this. Within one spreadsheet I have monthly and weekly targets as well as how we’re tracking against them. These are all updated on actual real time data, powered by Heroku’s dataclips with a simple <code>=importCSV(‘http://dataclips.heroku.com/abcdefghij….csv’)</code>. In total my google spreadsheets has 1 high level overview, with about 20 underlying sheets that do all of the computations. In any given month 1 of my key 4-5 goals may be missed, which then spawns digging in deeper to figure out why and what we can do about it.</p>
+
+<h3>Dictating vs. consensus</h3>
+
+<p>From a product decision making perspective you can force alignment by explicitly making every decision, or you can allow decisions to be made as a group voting if needed. Expect to use some balance of both of these among the team, and neither is never perfect. When it comes to outside the team you may still use both, but steer more strongly one way or the other. For example with the executive team it may be more consensus, with marketing it may be dictating your product roadmap which they can help support.</p>
+
+<p>Even within the team there will be times a decision must be made and there will be some people that don&rsquo;t align. It&rsquo;s key that you make the decision clearly and explicitly. Even though some individuals don&rsquo;t like it, they won&rsquo;t fight against it&hellip; unless you make a habit of taking the input, then discarding it and going along your &lsquo;intuition&rsquo;. Even when there&rsquo;s a strong case based on the data it may not be as clear as you think.</p>
+
+<p>In contrast, decision making by consensus most people will feel happier that they provided input into the product. If you take everyone&rsquo;s input expect to end up with a product that feels like 10 people designed it, needless to say incoherent.</p>
+
+<p>As a PM expect to do a lot of listening, a good bit of convincing, and some occasional big decision making.</p>
+
+<h3>The pain you feel inside the building doesn&rsquo;t matter</h3>
+
+<p>You may think you&rsquo;re solving a problem that exists for users, when in reality there was no problem at all. This is just a reminder that you need to keep empathy in mind above so much else.</p>
+
+<p>As an example, once a data team put in place a tool, supposedly for me. I looked at the tool and more or less didn&rsquo;t understand why it was in place. They proceeded to explain that my problem was it took me too long to write SQL, so this tool will help me get the reports I need without SQL. At that point I proceeded to actually list off all the issues I did have, none of which <a href="http://www.craigkerstiens.com/categories/postgres/">were SQL</a>.</p>
+
+<p>Prescribing a solution without knowing clearly <strong>from customers</strong> what the problem is will leave you in a bad spot. All this means you have to set aside building the tool you want to use, and make sure you know what the <a href="http://headrush.typepad.com/creating_passionate_users/2005/01/keeping_users_e.html">customer wants</a>.</p>
+
+<h3>Marketing is your job</h3>
+
+<p>Not external marketing, though often that work may still fall to you, but rather internal marketing.</p>
+
+<p>It’s important that you internally market the wins for your <em>team</em>. These wins should very much be for the team, and not for your own benefit. The best PMs seem to disappear into the background, this is because you’re more surfacing all the work your team is doing than any of the details you helped coordinate. This is often counter to our natural instinct to tout our own accomplishments. This is only exaggerated in PM role, one where things can still ship if you’re not there, so there can often be a tendency to try to highlight the roles value. Fight that urge to self market.</p>
+
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/412j330z173E1d432M05/Untitled.png?v=4ceec9d2" style="float:right; width:50%; margin-left:20px;" /></p>
+
+<p>Rest assured though–getting the team focused on solving the right problems, and then surfacing their wins will only help you go faster.</p>
+
+<h3>On leading</h3>
+
+<p><img src="https://s3.amazonaws.com/f.cl.ly/items/3E2c3k1p1j2g2O1O0b0L/Untitled.png?v=9daf9e58" style="float:right; width:50%; margin-left:20px;margin-bottom:15px;" />
+You’ll have to lead at times, follow at others, and all of this will likely be with no reports. Don’t confuse a lack of engineers reporting to you (which they should not, a common team structure can be seen on the right) for not needing to lead the team at times. <em>For those less familiar it’s very rare for a PM to have engineers report to them, though occasionally designers will. It’s typically the cross-reporting structure you’ll find talked about by Andy Grove in <a href="http://www.amazon.com/High-Output-Management-Andrew-Grove/dp/0679762884?tag=mypred-20">High output management</a>.</em> If the team is firing on all cylinders, knows the direction, and executing then step back and let things roll forward. If that’s not the case and leadership around direction or otherwise is needed be prepared to step up.</p>
+
+<p>At the end of the day ensuring the product is advancing is your job, so be prepared to do what you need to whether it’s leading or not to accomplish that.</p>
+
+<h3>It’s not all rainbows, but it is fun</h3>
+
+<p>The range of things you’ll have to focus on can be diverse and complex. In the end if you get a rush out of shipping and launching products, then all the work that goes into it can make it all worthwhile. It’s as much about figuring out what customers want and then getting your team building the right thing. For a first time PM it can be summed up by the notion that software is easy, people are hard.</p>
+
+<p><em>Special thanks to <a href="http://www.twitter.com/lukasfittl">Lukas Fittl</a> and <a href="http://www.twitter.com/iamclovin">Arun Thampi</a> for reviews and feedback on this post.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Marketing definitions for developers]]></title>
+    <link href="http://www.craigkerstiens.com/2016/01/17/marketing-definitions-for-developers/"/>
+    <updated>2016-01-17T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/01/17/marketing-definitions-for-developers</id>
+    <content type="html"><![CDATA[<p>Marketing often feels like a dirty-icky thing to many developers. Well until you feel like you have a great product, but no one using it then you have to get a crash course in all of that. And while I might cover some of the actual basics in the future, just knowing what marketing people actually mean when they’re talking can be a huge jump start. Here&rsquo;s a guide that distills many of the acronyms and terms down to what they actually mean in reality.</p>
+
+<!--more-->
+
+
+<p><strong>SEO &ndash; Search engine optimization.</strong> There&rsquo;s two sides to this, one where you&rsquo;re attempting to game the system known known as black hat. The other is simply creating good content.</p>
+
+<p>Tip: Now, unlike several years ago social sharing helps impact this.</p>
+
+<p><strong>SEM &ndash; Search engine marketing.</strong> The short of this is adwords, but broadly it&rsquo;s any search engine.</p>
+
+<p>Tip: Be wary here, you can spend a lot of money quickly. Properly managing it takes time and effort otherwise you&rsquo;re wasting money.</p>
+
+<p><strong>Display ads</strong> &ndash; Banner ads on websites. There&rsquo;s a few common form factors in this world, so you&rsquo;ll create a few then reuse them across lots of properties.</p>
+
+<p>Tip: Results may vary here, there are some hidden gems when advertising on various long tail sites.</p>
+
+<p><strong>Retargeting</strong> &ndash; This is where you&rsquo;re serving an ad (most commonly display) to someone that&rsquo;s previously visited your site. The process happens due to you &lsquo;pixeling&rsquo; them, and a cookie being set so the ad server knows they&rsquo;ve seen you.</p>
+
+<p>Tip: Generally good bang for the buck here, but you still need initial visitors to even retarget to.</p>
+
+<p><strong>Funnel</strong> &ndash; The process of someone going from finding you to paying to paying more. Generally a process will look something like: Anonymous visitor by referral, sign ups, low money bucket, big money bucket.</p>
+
+<p><strong>Top of the funnel</strong> &ndash; Hopefully clear from the previous one, top of the funnel would be the max of users you reach out to or get to your site, usually down to getting them to sign up.</p>
+
+<p><strong>Bottom of the funnel</strong> &ndash; This is usually going from time you have a user to customer and then growing that customer via cross-selling and upselling.</p>
+
+<p><strong>Drip marketing</strong> &ndash; This is the process of gradually sending emails/notifications to your customers to get them to engage and learn about the product. Think of it as a welcome email on day 1, an intro on day 3, and on day 5 a different email based on what they&rsquo;ve done so far. Really good drip marketing will create a different email for the user based on what they have or haven&rsquo;t done.</p>
+
+<p><strong>Attribution (last/first/multi)</strong> &ndash; Attribution relates to how you got the user or customer (via web referral). There&rsquo;s a few different ways of looking at this, last touch is the last website they visited before signing up, first touch is the first referral they were sent from, and multi touch (often more complicated to put in place) attributes something to all referrals they&rsquo;ve come from.</p>
+
+<p><strong>AR &ndash; Analyst relations</strong>. Analysts cover particular products or areas in an industry, write reports, and often consult with large enterprises when making buying decisions. Analyst relations or AR is the common term for interacting with them, you can <a href="/2015/07/25/A-guide-to-analyst-relations-for-startups/">learn more here</a></p>
+
+<p><strong>PR &ndash; Public relations</strong>. This is generally the press/media side. It often involves launches, press releases, pitching media etc. You can read more of a <a href="/2015/07/21/An-intro-PR-guide-for-startups/">guide on it here</a></p>
+
+<p><strong>Briefing</strong> &ndash; This is normally with an analyst or press, and is typically a quick 30 minute call occasionally a demo of an upcoming launch.Usually</p>
+
+<p><strong>Inquiry</strong> &ndash; This refers more to the analyst side. Where a briefing is often more one sided for you to pitch/update them on what you’ve been doing, an inquiry is more a back and forth where you can ask what they’re seeing in the market and for input on direction.</p>
+
+<p><strong>Campaign</strong> &ndash; A collection of activities that go on around a certain thing focused on specific keywords or theme. This can be as little as a search engine marketing campaign which is the most common, or much larger and coordinated with billboards, webinars, etc.</p>
+
+<p><strong>Lead Gen</strong> &ndash; The sales funnel usually goes from just getting an email, to talking to them, to getting them to try a demo or run a POC, to eventually buying. Lead gen is the activity of just getting that initial contact so you can then further engage with them. In practice this can often involve giving something away, like a t-shirt in exchange for an email.</p>
+
+<h3>Conclusion</h3>
+
+<p>While this doesn&rsquo;t cover every marketing activity under the sun, hopefully it&rsquo;s a good primer on things you may have heard but been confused by. If there&rsquo;s important ones I&rsquo;ve missed please feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Seeding a sharing-economy or platform company]]></title>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Marketing | Craig Kerstiens]]></title>
+  <title><![CDATA[Category: marketing | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/marketing/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2015-12-27T09:06:05-08:00</updated>
+  <updated>2017-06-08T09:14:22-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -14,280 +14,56 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Going from blog posts to full launches]]></title>
-    <link href="http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches/"/>
-    <updated>2015-12-26T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches</id>
-    <content type="html"><![CDATA[<p>I recall extremely early stage where you&rsquo;d build a feature, realize it was awesome, then the next day write a blog post for it. At some point you start to move from that to more coordinated launches. A larger coordinated launch allows you to reach a bigger audience, can lead to bigger deals, and help expand your overall market. But perhaps more importantly by the time you hit full launch you&rsquo;ve message tested and ensured it&rsquo;s going to resonate in the way you expect.</p>
-
-<p><em>The process itself will both help amplify and validate/refine your message</em></p>
-
-<p>This is often a more gradual process than a sudden single change, you&rsquo;ll introduce new parts of this in time. And for many what an entire launch process looks like comes by trial an error, to help shorten that learning curve here&rsquo;s key areas I pay attention for a launch and process followed by a rough timeline.</p>
+    <title type="html"><![CDATA[Marketing definitions for developers]]></title>
+    <link href="http://www.craigkerstiens.com/2016/01/17/marketing-definitions-for-developers/"/>
+    <updated>2016-01-17T00:00:00-08:00</updated>
+    <id>http://www.craigkerstiens.com/2016/01/17/marketing-definitions-for-developers</id>
+    <content type="html"><![CDATA[<p>Marketing often feels like a dirty-icky thing to many developers. Well until you feel like you have a great product, but no one using it then you have to get a crash course in all of that. And while I might cover some of the actual basics in the future, just knowing what marketing people actually mean when they’re talking can be a huge jump start. Here&rsquo;s a guide that distills many of the acronyms and terms down to what they actually mean in reality.</p>
 
 <!--more-->
 
 
-<h3>Product first</h3>
+<p><strong>SEO &ndash; Search engine optimization.</strong> There&rsquo;s two sides to this, one where you&rsquo;re attempting to game the system known known as black hat. The other is simply creating good content.</p>
 
-<p>Making sure the product is in the right shape is key to any big launch. You don&rsquo;t get a second shot and if the product isn&rsquo;t in shape customers often won&rsquo;t take a second look alter when it it. For this reason I strongly prefer to have your product locked and loaded before you even start talking launch times, or at least be in the bug clean up phase. This means you&rsquo;ve built a feature, validated with alpha users or private beta, and are ready to open it up to the world.</p>
+<p>Tip: Now, unlike several years ago social sharing helps impact this.</p>
 
-<p>If you have to set a launch date without the product or feature being already done allow padding. Sometimes it&rsquo;s good for the team to know the padding, sometimes it isn&rsquo;t. When you have extra time it&rsquo;s not uncommon for your development to magically consume exactly that amount of time and still result in a small scramble towards the end.</p>
+<p><strong>SEM &ndash; Search engine marketing.</strong> The short of this is adwords, but broadly it&rsquo;s any search engine.</p>
 
-<p>A good driver I&rsquo;ve found is needing to have it fully like to demo a few weeks out from the launch itself, such as during <a href="">analyst pre-briefings</a>.</p>
+<p>Tip: Be wary here, you can spend a lot of money quickly. Properly managing it takes time and effort otherwise you&rsquo;re wasting money.</p>
 
-<h3>Crafting your message</h3>
+<p><strong>Display ads</strong> &ndash; Banner ads on websites. There&rsquo;s a few common form factors in this world, so you&rsquo;ll create a few then reuse them across lots of properties.</p>
 
-<p>Every launch is an opportunity to tell your core message and value prop. If you miss this opportunity for focusing on a single narrow feature you&rsquo;ve missed the biggest opportunity you had in a launch. You can&rsquo;t relaunch your full product every time though–you do need some big improvements or feature that you can highlight, but you should still hit your core message.</p>
+<p>Tip: Results may vary here, there are some hidden gems when advertising on various long tail sites.</p>
 
-<p>First you should know that your feature solves some specific problem, you should know this from the alpha/beta testing and if it doesn&rsquo;t solve this problem <a href="/2014/08/13/when-to-ship-when-to-kill/">you&rsquo;re not ready to launch</a>. Yes, some people will launch a product before the product is completely there–this is common in a marketing driven company as opposed to a product/engineering driven company.</p>
+<p><strong>Retargeting</strong> &ndash; This is where you&rsquo;re serving an ad (most commonly display) to someone that&rsquo;s previously visited your site. The process happens due to you &lsquo;pixeling&rsquo; them, and a cookie being set so the ad server knows they&rsquo;ve seen you.</p>
 
-<p>Your message should lead with the problem you&rsquo;re solving, not the laundry list of features. The best launches lead with some  broader thematic message, even better if it&rsquo;s an altruistic world changing one. A rough example of this:</p>
+<p>Tip: Generally good bang for the buck here, but you still need initial visitors to even retarget to.</p>
 
-<p>To the point to the product, and probably over generalized as boring:</p>
+<p><strong>Funnel</strong> &ndash; The process of someone going from finding you to paying to paying more. Generally a process will look something like: Anonymous visitor by referral, sign ups, low money bucket, big money bucket.</p>
 
-<ul>
-<li>Connectify brings a new way of taking your dumb devices at home and turning them into intelligent connected devices.</li>
-</ul>
+<p><strong>Top of the funnel</strong> &ndash; Hopefully clear from the previous one, top of the funnel would be the max of users you reach out to or get to your site, usually down to getting them to sign up.</p>
 
+<p><strong>Bottom of the funnel</strong> &ndash; This is usually going from time you have a user to customer and then growing that customer via cross-selling and upselling.</p>
 
-<p>In contrast, broad thematic message, followed lightly by the product.</p>
+<p><strong>Drip marketing</strong> &ndash; This is the process of gradually sending emails/notifications to your customers to get them to engage and learn about the product. Think of it as a welcome email on day 1, an intro on day 3, and on day 5 a different email based on what they&rsquo;ve done so far. Really good drip marketing will create a different email for the user based on what they have or haven&rsquo;t done.</p>
 
-<ul>
-<li>We live in a connected world, and with new connected devices there&rsquo;s the opportunity not just give you more data but help you improve how you live your life. Connectify helps you at bringing the devices that matter together with ease.</li>
-</ul>
+<p><strong>Attribution (last/first/multi)</strong> &ndash; Attribution relates to how you got the user or customer (via web referral). There&rsquo;s a few different ways of looking at this, last touch is the last website they visited before signing up, first touch is the first referral they were sent from, and multi touch (often more complicated to put in place) attributes something to all referrals they&rsquo;ve come from.</p>
 
+<p><strong>AR &ndash; Analyst relations</strong>. Analysts cover particular products or areas in an industry, write reports, and often consult with large enterprises when making buying decisions. Analyst relations or AR is the common term for interacting with them, you can <a href="/2015/07/25/A-guide-to-analyst-relations-for-startups/">learn more here</a></p>
 
-<h3>Testing your message</h3>
+<p><strong>PR &ndash; Public relations</strong>. This is generally the press/media side. It often involves launches, press releases, pitching media etc. You can read more of a <a href="/2015/07/21/An-intro-PR-guide-for-startups/">guide on it here</a></p>
 
-<p>You should treat your message just like a product, testing it gradually along the way. Once you&rsquo;ve got some initial framing of it, test it internally, then with friendly customers or community members. Leading up to the launch I usually have a timeline and get all the content and communication rolling about 3 weeks out. I&rsquo;ll give a bit of a timeline below but first some more around message testing</p>
+<p><strong>Briefing</strong> &ndash; This is normally with an analyst or press, and is typically a quick 30 minute call occasionally a demo of an upcoming launch.Usually</p>
 
-<h4>Analysts</h4>
+<p><strong>Inquiry</strong> &ndash; This refers more to the analyst side. Where a briefing is often more one sided for you to pitch/update them on what you’ve been doing, an inquiry is more a back and forth where you can ask what they’re seeing in the market and for input on direction.</p>
 
-<p>If you regularly use <a href="/2015/07/25/A-guide-to-analyst-relations-for-startups/">any analysts</a> you should absolutely use them to help with a launch. Several weeks out is a great time to test key messages with them, get feedback, and if you&rsquo;re lucky you may even get them to provide a quote for the launch.</p>
+<p><strong>Campaign</strong> &ndash; A collection of activities that go on around a certain thing focused on specific keywords or theme. This can be as little as a search engine marketing campaign which is the most common, or much larger and coordinated with billboards, webinars, etc.</p>
 
-<p>Keep in mind here a inquiry is an opportunity to test your message and get feedback. You should talk roughly half of the time here, they should be talking the other half. In contrast briefings before launch you should have your message fully baked and should simply be pitching your message and possibly demo-ing.</p>
+<p><strong>Lead Gen</strong> &ndash; The sales funnel usually goes from just getting an email, to talking to them, to getting them to try a demo or run a POC, to eventually buying. Lead gen is the activity of just getting that initial contact so you can then further engage with them. In practice this can often involve giving something away, like a t-shirt in exchange for an email.</p>
 
-<h4>Friendlies</h4>
+<h3>Conclusion</h3>
 
-<p>This may be more contentious, but at least at early stage sharing drafts with friendly community members is a great way to get feedback and refine your message. Here you should be especially concious of the request of their time and expect to have some delay before they get back to you. Being top secret about your message ahead of time won&rsquo;t add much value to it being a home run, where as better ensuring it resonates will help it to be more successful.</p>
-
-<h4>Customers</h4>
-
-<p>Customers I call out as a separate bucket. Customers have less incentive to leak your news than friendlies, but also fall somewhere on the other spectrum of analysts. A key piece about customers is there is an opportunity for them to be a launch partner. And so on to that topic:</p>
-
-<h3>Launch partners</h3>
-
-<p>Press and others like seeing and knowing you have external validation. Similarly many see the benefit of being part of a launch, after all it&rsquo;s more free press for them. For a launch partner there are various levels, though for most providing some quote is a pretty common level.</p>
-
-<p>The best way to do this is talk to them about what they like about the feature/product and take a first stab at the quote for them from their feedback. Some may very much want to wordsmith their own which is fine, but minimizing the work required of them while–trying to hit something they&rsquo;d say as well–as a message that flows can best be done by you taking a first pass.</p>
-
-<p>Further there&rsquo;s varying levels of value with quotes and references. In descending order:</p>
-
-<ol>
-<li>Customers</li>
-<li>Analysts</li>
-<li>Community Members</li>
-</ol>
-
-
-<h3>The other details</h3>
-
-<p>During launch week I mostly want to be dotting i&rsquo;s and crossing t&rsquo;s, meaning: I want the product done. I want documentation done. I want the blog post finalized. I want to be in the mode of send internal announcements, prep internal teams, talk to media.</p>
-
-<h4>Prepping internal teams</h4>
-
-<p>Obviously the engineering and product people involved will be in the loop. But you need to notify many others some of which should have been in the loop already, some less so:</p>
-
-<ul>
-<li>Support &ndash; There&rsquo;s a new product surface area, support should be top of your list so they can field the tickets and questions that come in</li>
-<li>Sales &ndash; Even if there is no price change or impact, new features allow sales to communicate value to customers</li>
-</ul>
-
-
-<h3>Timeline</h3>
-
-<p>Finally what&rsquo;s the end to end timeline look like with all the little details. Here&rsquo;s a rough one that&rsquo;s fully built out. IF you&rsquo;re smaller and don&rsquo;t have a regular cadence of analysts in hand then just expect that doesn&rsquo;t apply. IF your support team is the product and engineers maybe that&rsquo;s lighter weight. Basically feel free to take out parts, but expect your process to grow to something of this size.</p>
-
-<ul>
-<li>4 weeks out &ndash; Outline of blog post with key messages</li>
-<li>Test that outline internally</li>
-<li>3 weeks out &ndash; Start to get a rough draft in place</li>
-<li>3 weeks out &ndash; Share internally and with friendlies. At this point you&rsquo;re explicitely looking for message feedback. Tell people to not waste time on nitpicks of words or grammar, it will be 98% re-written by the time you&rsquo;re done</li>
-<li>2.5 weeks out &ndash; Analyst inquiries for message testing</li>
-<li>2.5 weeks out &ndash; Start putting together product demo</li>
-<li>2 weeks out &ndash; Start putting together documentation</li>
-<li>2 weeks out &ndash; Start nailing down blog post for final messages</li>
-<li>1 weeks out &ndash; Start to put final touches on blog post for grammar</li>
-<li>1 week out &ndash; Analyst briefings</li>
-<li>1 week out &ndash; Update support</li>
-<li>3-5 days out &ndash; Stage blog post</li>
-<li>3-5 days out &ndash; Stage new documentation</li>
-<li>2-4 days out &ndash; Make sure PRs are ready or feature flags, in short the switch is there or live but not public</li>
-<li>1-3 days out &ndash; Update sales</li>
-<li>1-3 days out &ndash; Interall communication to all@</li>
-<li>1-3 days out &ndash; Media briefings</li>
-<li>LAUNCH DAY &ndash; Sit in a room and watch all the things, engage with twitter/HN/etc.</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Some non-traditional marketing tips]]></title>
-    <link href="http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips/"/>
-    <updated>2014-03-31T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2014/03/31/some-short-untypical-marketing-tips</id>
-    <content type="html"><![CDATA[<p>Marketing is generally unexciting to a ton of engineers, until it brings eyeballs which bring feedback and dollars. Marketing doesn&rsquo;t have to always be cheesy campaigns or ads, it can often just be surfacing the things your customers actually do want to care about. My favorite type of marketing is when a service sells me on something at the exact time I want it. Here&rsquo;s a few short tips on some non-traditional marketing that won&rsquo;t seem sleezy but still can work quite well.</p>
-
-<!--more-->
-
-
-<h3>Email subscriptions to your blog</h3>
-
-<p>RSS is pretty dead, google went and killed it with google reader. Sure there&rsquo;s some decent replacements if you&rsquo;re really tied to it. In particular <a href="http://newsblur.com/">newsblur</a> by <a href="http://www.twitter.com/samuelclay">@samuelclay</a> is a great reader. But now days content emerges on twitter, fb, and ranking services, then later is discovered via search. Both of these work pretty well, but twitter is ephemeral for so many. Email still converts incredibly well, if people are abandoning rss but still care about your content give them the ability for it to be put right in front of their face via email.</p>
-
-<h3>Market in transactional emails</h3>
-
-<p>Have emails that include receipts? Account confirmations? General notices? No not a monthly newsletter! Transactional emails are obviously valuable to your users. Why not include a small call out to your latest announcement? Have a central hook that your emails can check from and simply include a small call to action within there.</p>
-
-<p><em>Credit to <a href="http://www.twitter.com/stevenbristol">@stevenbristol</a> on <a href="http://strongbusinessespodcast.com/16571/149964-episode-17-security-authy-and-disney">strong business podcast</a> for this one</em></p>
-
-<h3>Retarget to your existing users</h3>
-
-<p>In a similar vein of notifying your existing customers in transactional emails about news, you should be doing this all over the web. Retargeting is great to convert people once you&rsquo;ve already got them on a landing page, but its also incredibly useful to get existing users to <a href="http://insideintercom.io/talk-product-strategy-saying/">use a specific feature</a>. If you track if they&rsquo;ve never used a feature retargeting is a great way to make them aware of it, and once they&rsquo;ve used it just count it as a conversion.</p>
-
-<p><em>My favorite retargeting provider <a href="http://www.perfectaudience.com/">perfect audience</a> makes this quite convenient as they allow a bit more control than most retargeting services</em></p>
-
-<h3>In conclusion</h3>
-
-<p>Marketing doesn&rsquo;t have to be throwing your product and messaging in someones face, but you should make your users aware of it. The more engaged they are they more they&rsquo;ll stick around and be happy about using you&rsquo;re product, assuming you&rsquo;ve built a good one. What are some of your favorite tips?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Where to go with developer content]]></title>
-    <link href="http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content/"/>
-    <updated>2014-01-28T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/01/28/where-to-go-developer-content</id>
-    <content type="html"><![CDATA[<p>Last week I wrote up some <a href="/2014/01/16/developer-marketing-where-to-start-with-content/">initial steps for getting started with marketing a developer</a> focused product. The short of it was quite trying to do &ldquo;marketing&rdquo; and just start putting out interesting material. A big part of this is sourcing material from your company&rsquo;s developers. From there you want to gradually shift it from simply interesting technical posts to things that align with your core beliefs and add value to your customers.</p>
-
-<p>Perhaps the easiest way to do this is by highlighting some examples of it.</p>
-
-<!--more-->
-
-
-<h3>Teach them how to</h3>
-
-<p><a href="https://www.tindie.com/">Tindie</a> is a marketplace focused on makers. Browsing their site is simply awesome, there&rsquo;s everything from fully <a href="https://www.tindie.com/products/browse/home/">built things</a> to raw supplies to let me <a href="https://www.tindie.com/supplies/">start hacking</a>. The biggest problem though is they don&rsquo;t tell me how to take advantage of so much on their site. Posts similar to New Relic&rsquo;s on how they made their <a href="http://blog.newrelic.com/2013/11/18/making-futurestack-badge/">awesome conference badges</a> with a ready made shopping list of components would both get me excited and teach me something I didn&rsquo;t know how to do prior.</p>
-
-<p>Now a lot of this may seem obvious, but its not just about giving a how to. This doesn&rsquo;t belong in a readme or in product documentation. Instead the activity of regularly crafting relevant stories that stretch how people think about hardware hacking should be a top of mind focus. It also positions you as a thought leader within the space. Right now there is no thought leader for makers, and theres ample opportunity to be that.</p>
-
-<h3>Timely content</h3>
-
-<p>Chipmaker <a href="https://www.spark.io/">Spark.io</a> recently hugely capitalized on the <a href="http://gizmodo.com/google-just-bought-nest-for-3-2-billion-1500503899">Nest acquisition</a> by writing a post only days after of how you can build an <a href="http://blog.spark.io/2014/01/17/open-source-thermostat/">open source Nest for $70</a>. I suspect they didn&rsquo;t have such a post just lying around waiting for the acquisition and instead scrambled to get it all together almost as soon as it occurred.</p>
-
-<p>Over time the opportunity will always present itself in some form to attach yourself to another story. Sometimes this can be related to a direct competitor, sometimes its simply tangential. Being willing to quickly invest time when an opportunity presents itself is key to taking advantage of those opportunities. But please don&rsquo;t let such opportunities be your only way of capturing attention, there should still be a steady beat and focus.</p>
-
-<h3>Let your beliefs come out</h3>
-
-<p>Nearly everytime I sit down with some founder or very early employee at a company the vibe and impression I get from them is an order of magnitude stronger than the company&rsquo;s public persona. At the root of every company trying to do something big is an acute focus on a problem with strong opinions about how to solve them. You don&rsquo;t win people over by giving middle of the road opinions.</p>
-
-<p>Heroku&rsquo;s often been an example of being extremely opinionated. For a long time you found bits of this within our product such as with an ephermal filesystem – which in the long term enables scalability. Or with directing the separation of code and config – which helps reproducability for when things go wrong and spinning up new copies of your app.</p>
-
-<p>Again the biggest problem with this opinionation wasn&rsquo;t that it existed, but that it wasn&rsquo;t talked about clearly or loudly enough. Its now much clearer and broader in the form of <a href="http://12factor.net/">12 Factor</a> which fully codifies those strong opinions which influence the product, but also has applicability outside of Heroku.</p>
-
-<h3>All of the approaches</h3>
-
-<p>Doing just one of the above really isn&rsquo;t enough. Having multiple types of content such as the above three allow you to be much more effective. Of course the way you manage them and distribute them changes based on the type of content, but more on that later.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Where to start with developer content]]></title>
-    <link href="http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content/"/>
-    <updated>2014-01-16T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2014/01/16/developer-marketing-where-to-start-with-content</id>
-    <content type="html"><![CDATA[<p>Commonly at developer focused companies the question from a marketing team will come up of &ldquo;How do we get content that developers find interesting&rdquo;? Or how can I get our developers to blog more? Or some other similar question. I general the question of creating content and engaging with developers is a very common one, and often theres a mismatch between what marketing wants to do and what developers appreciate.</p>
-
-<h3>Stop marketing</h3>
-
-<p>Forget trying to &ldquo;market&rdquo; to developers. Hopefully you at least have developers that believe in the product their building, if thats not the case then find a new product or a new team. If you&rsquo;ve got a product targetted at developers and a team that believes in it then you&rsquo;re already half way there to marketing it. Now back to the first point, forget trying to market it. Start with building some form of an audience, reputation, respect among other developers. This isn&rsquo;t done through ads, email marketing, SEO or any of that. Its done by creating content that developers find interesting, as a first step forget your product entirely, but don&rsquo;t worry we&rsquo;ll get there soon enough.</p>
-
-<!--more-->
-
-
-<h3>Sourcing content</h3>
-
-<p>The first piece of it on finding content should actually be extremely simple. Typically engineers love sharing knowledge and information. At least once a week there&rsquo;s an email out to all the engineers of a truly interesting approach to something. This content is often not in a perfect form for external publication, but quite close. In particular Heroku has <a href="https://twitter.com/mmcgrana">one employee</a>, an early employee and now architect, that every email he sends to such a group I pull down and save for future reading. Another example of this was one of the Heroku founder Adam Wiggins, you can find many similar emails slightly cleaned up as blog posts on his own <a href="https://adam.heroku.com/">blog</a>.</p>
-
-<p>Take these emails, find someone technical enough to clean them up and ship them. Your goals here are to simply build some level of connection with other developers. Now a lot of time these may not be in the right &ldquo;voice&rdquo; for your company blog. Thats quite fine, I&rsquo;m a strong proponent of letting developers create their own personalitiies. The place for the content then may not always be on the company blog. In general I find there&rsquo;s three groupings:</p>
-
-<ul>
-<li>Content for the company blog by an employee</li>
-<li>Content for an individuals blog (the caveat here is they need to regularly create content &ndash; every 6 months doesnt cut it)</li>
-<li>Content for an <a href="http://codeascraft.com/">engineering blog</a> (if you have enough of the above that blog infrequently this is a great home for it)</li>
-</ul>
-
-
-<h3>Don&rsquo;t worry about the product yet</h3>
-
-<p>No really don&rsquo;t worry about pitching your product. There was an awesome piece on the <a href="http://insideintercom.io/new-features-usually-flop/">intercom blog talking about why most features fail</a> and how companies pitch the details versus the problem they solve. Though there was a hidden gem in there:</p>
-
-<p><blockquote><p>Telling your customers something is a “ground up rewrite”, “HTML5 based”, “responsive” or anything like that will miss the mark unless you’re selling to developers.</p><footer><strong>[Des Traynor] [<a href="http://insideintercom.io/new-features-usually-flop/">http://insideintercom.io/new-features-usually-flop/</a>] [New Features Usually Flop]</strong></footer></blockquote></p>
-
-<p>For companies targetting developers this actually works really well, as a developer I care about the how. Simply put its interesting. Another great example of this is <a href="http://blog.priceonomics.com/">priceonomics</a>. To be honest I only checked what they actually do in writing this post, but their posts I regularly find interesting.</p>
-
-<h3>Whats next</h3>
-
-<p>What do you want to know about? Creating a voice/brand, starting to pitch your product, content distribution? Let me know. A good about of my time is spent on these and happy to discuss further on whats valuable to others so we don&rsquo;t have to suffer through painful marketing. Let me know <a href="mailto:craig.kerstiens@gmail.com">craig.kerstiens@gmail.com</a> or <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CX – Conference Experience (Facilitating Communication)]]></title>
-    <link href="http://www.craigkerstiens.com/2013/04/29/cx_conference_experience_communicate/"/>
-    <updated>2013-04-29T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2013/04/29/cx_conference_experience_communicate</id>
-    <content type="html"><![CDATA[<p>Following up on my earlier post about CX or Conference Experience – I&rsquo;m going to dig in a bit on how you get good conversation to happen. In the past two years I&rsquo;ve been to nearly 20 conferences, I&rsquo;ve been to conferences with great talks, with great parties, with great swag, and hands down my favorite conferences have always been a result of great conversation. With the number of talks that are recorded and immediately available online after, <em>what can I say I&rsquo;m a hallway track guy</em>.</p>
-
-<p>I&rsquo;ve seen a number of conferences intentionally design around this concept, in some ways the unconference is purely a hallway track conference. I&rsquo;ve also seen conferences that weren&rsquo;t clearly planned for this and have pulled off some of the best situations where people turn their phones off and engage in real conversation.</p>
-
-<!--more-->
-
-
-<h2>Breaks</h2>
-
-<p>Breaks are always a hard part to balance. Every conference organizer I&rsquo;ve talked to felt they had the perfect mix for breaks. If you&rsquo;re designing for convesation then you need to allow time for conversation to actually happen. Whether a multi-track or single track conference 15 minutes for breaks doesn&rsquo;t give you the time to actually engage in conversation. If multitrack its time enough to grab a drink then head to the next room. If single track its time to have the entire room leave and then come back.</p>
-
-<p>Even 30 minute breaks fall into this category. At a multitrack conference I&rsquo;m usually saying hi to enough people during a 30 minute break that I don&rsquo;t have the chance to really get deep into a conversation. If I do it usually results in skipping the next talk.</p>
-
-<h2>Staggered Talks</h2>
-
-<div style="display:block;clear:both;height:0px"></div>
-
-
-<p><img src="http://f.cl.ly/items/3V1S1A2W1K2h3z0r3p2b/Blank.png" style="float:left;height:215px;width:325px;vertical-align:bottom; margin-right: 10px;" >
-One pattern thats a bit more unique is to schedule talks so that you cannot catch the next talk. This forces either moderate breaks or very long breaks intentionally forcing a hallway track. Though for most anyone thats used to conferences or new comers this concept has to be clearly explained otherwise people try to rush from one talk to the next and it can be a bit chaotic</p>
-
-<h2>Locations for Conversations</h2>
-
-<p>Having places for people to get away an talk is critical, in a venue that only has 1 main room and no convenient places for a quick coffee or beer it becomes very hard for conversations to happen. If its on the agenda to facilitate such things thats great, but going a step further and allowing for it to be facilitated naturally is even better. On more than one occasion I&rsquo;ve been mid conversation wtih someone, we cut it off agreeing to pick it back up at the next break only to never locate them again for the rest of the conference. I&rsquo;d have just as much preferred to continue the conversation there, but sadly there was in the middle of a talk room with no where else feasible to go.</p>
-
-<h2>Water</h2>
-
-<div style="float:right;">
-<img src="http://f.cl.ly/items/1l1N331x2B42300Q3D36/Image%202013.04.28%2011%3A04%3A27%20AM.jpeg" style="height:215px;width:285px;margin-left:6px;">
-<p>Image courtesy of <a href="http://www.twitter.com/sundaykofax">@sundaykofax</a></p>
-</div>
-
-
-<p> This one caught me by surprise&hellip; The event was <a href="http://py.codeconf.com/">PyCodeConf in Miami</a> and it was one of the evening activities – a pool party with food, drinks, and mariachi band. Early into the evening, inevitably someone was thrown into the pool (by friends in a general good nature), but thus ruining a lovely iPhone. As a result I&rsquo;m pretty most people, just as I did, went to their rooms but their cell phone away, or set it near their stuff. Much of the rest of the evening was an entirely internet and twitter free evening. Causing lots of uninterrupted conversations to happen and resulted in a pool full of geeks.</p>
-
-<h2>Welcoming noobs</h2>
-
-<p>The big difference between just assuming this will happen and actively working to facilitate it is who gets involved in the conversation. For a first time presenter there&rsquo;s a wealth of nerves about talking. For a first time attendee there&rsquo;s a wealth of knowledge to soak up. First time attendees may not feel as comfortable interjecting them into a conversation, approaching presenters, or talking to someone they&rsquo;ve been following for years – <em>yet they have just as much to add as anyone else</em>.</p>
-
-<p>Creating places where more conversation is happening helps ease this and build a better community.</p>
+<p>While this doesn&rsquo;t cover every marketing activity under the sun, hopefully it&rsquo;s a good primer on things you may have heard but been confused by. If there&rsquo;s important ones I&rsquo;ve missed please feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
 ]]></content>
   </entry>
   

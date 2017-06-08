@@ -9,6 +9,8 @@ published: true
 comments: false
 ---
 
+*Update as of 8/2/2016 - As a follow-up if you're using Postgres and looking to shard your data I would encourage you taking a look at [Citus](https://www.citusdata.com). Citus is an extension to Postgres that makes easy for you to shard your data and allow you to continue to scale out memory or processing power. Disclaimer: I currently run Citus Cloud, a fully managed hosted offering of Citus on top of AWS*
+
 I'm increasingly encountering users on [Heroku](http://www.heroku.com) that are encountering the need to [shard](http://en.wikipedia.org/wiki/Shard_(database_architecture\)) their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide. 
 
 <!--more-->
@@ -78,6 +80,7 @@ At this point you can update your application code to have the new number of phy
 While many applications may never need to scale out their database, when they do, sharding can be both straight forward and effective. While I would encourage many to scale up first as it is an easy option, hopefully this provides further guidance to how to scale out. For those that do anticipate this needed planning for it early with key things such as using UUID's can make the process less painful. 
 
 This article of course only grazes the surface, if there's interest from readers there will be more specifics to follow with actual code examples.
+
 
 <!-- Perfect Audience - why postgres - DO NOT MODIFY -->
 <img src="http://ads.perfectaudience.com/seg?add=691030&t=2" width="1" height="1" border="0" />

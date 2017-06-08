@@ -6,11 +6,11 @@
 	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
 	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
-	<title>Sharding your database Craig Kerstiens</title>
+	<title>Sharding your database - Craig Kerstiens </title>
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="I&rsquo;m increasingly encountering users on Heroku that are encountering the need to shard their data. For most users this is something you delay as &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Update as of 8/2/2016 &ndash; As a follow-up if you&rsquo;re using Postgres and looking to shard your data I would encourage you taking a look at &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -117,7 +117,9 @@ $(document).ready(
 </div>
 
 	</div>
-	<div class="entry-content"><p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
+	<div class="entry-content"><p><em>Update as of 8/2/2016 &ndash; As a follow-up if you&rsquo;re using Postgres and looking to shard your data I would encourage you taking a look at <a href="https://www.citusdata.com">Citus</a>. Citus is an extension to Postgres that makes easy for you to shard your data and allow you to continue to scale out memory or processing power. Disclaimer: I currently run Citus Cloud, a fully managed hosted offering of Citus on top of AWS</em></p>
+
+<p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
 
 <!--more-->
 
@@ -245,7 +247,7 @@ physical_shard = logical_shard % total_physical_shards
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Craig Kerstiens
 
