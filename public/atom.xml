@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-07-01T07:58:21-07:00</updated>
+  <updated>2017-07-01T08:05:06-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -20,28 +20,28 @@
     <id>http://www.craigkerstiens.com/2017/07/01/postgresopen-sv-line-up</id>
     <content type="html"><![CDATA[<p>This year Postgres open and PGConf SV have combined to great a bigger and better conference right in downtown San Francisco. <em>I&rsquo;m obviously biased as I&rsquo;m one of the co-chairs, and I know every conference organizer says picking the talks was hard, but I&rsquo;m especially excited for the line-up this year</em>. The hard part for me is going to be which talks do I miss out on because I&rsquo;m sitting in the other session that&rsquo;s ongoing. You can see the full list of <a href="https://postgresql.us/events/sessions/pgopen2017/">talk and tutorial sessions</a>, but I thought it&rsquo;d be fun to do a rundown of some of my favorites. <!--more--></p>
 
-<h3>How Postgres could index itself</h3>
+<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/399-how-postgres-could-index-itself/">How Postgres could index itself</a></h3>
 
 <p><a href="https://postgresql.us/events/sessions/pgopen2017/session/399-how-postgres-could-index-itself/">Postgres indexing itself</a> has long been on my wishlist. <a href="https://www.twitter.com/akane">Andrew Kane</a> from Instacart, and creator of <a href="https://github.com/ankane/pghero/">PgHero</a> has bottled up many learnings into a new tool: <a href="https://medium.com/@ankane/introducing-dexter-the-automatic-indexer-for-postgres-5f8fa8b28f27">Dexter</a>. I suspect we&rsquo;ll get a look at all that went into this, how it works, and how you can leverage it to have a more automatically tuned database.</p>
 
-<h3>Scaling a SaaS Application Beyond a Single Postgres with Citus</h3>
+<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/376-scaling-a-saas-application-beyond-a-single-postgres-with-citus/">Scaling a SaaS Application Beyond a Single Postgres with Citus</a></h3>
 
 <p>Migration talks are all to common, from Postgres to MySQL from MySQL to Postgres, or from <a href="https://containership.engineering/dynamodb-to-postgres-why-and-how-aa891681af4d">Dynamo to Postgres</a>. But this one is a little different flavor from Postgres to sharded Postgres with <a href="https://www.citusdata.com">Citus</a>. Sharding into a distributed system of course brings new things to consider and think about, and <a href="https://postgresql.us/events/sessions/pgopen2017/session/376-scaling-a-saas-application-beyond-a-single-postgres-with-citus/">here you&rsquo;ll learn about them</a> from first hand experience so hopefully you can avoid mistakes yourself.</p>
 
-<h3>Concurrency Deep Dive</h3>
+<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/374-concurrency-deep-dive/">Concurrency Deep Dive</a></h3>
 
 <p><a href="https://postgresql.us/events/sessions/pgopen2017/session/374-concurrency-deep-dive/">This one</a> looks to be a great under the hood look as well as likely very practical. It&rsquo;ll cover MVCC which is really at so much of the core of how Postgres works, but then bring it up to what it means for things like locks. Best of all, this one like so many others comes with lots of real world experience from Segment.</p>
 
-<h3>Postgres window magic</h3>
+<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/364-postgres-window-magic/">Postgres window magic</a></h3>
 
 <p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/140p363n3b1N1X440Y0a/Image%202017-06-30%20at%2010.43.55%20AM.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&v=e35b6d4d" style="float:right; width:20%; margin-left:15px; " />
 I love me some windows, though not always the easiest things to work with. They can let you easily do things like compute month over month growth between rows in a single query. Bruce whose always a great presenter <a href="https://postgresql.us/events/sessions/pgopen2017/session/364-postgres-window-magic/">walks us through them</a> and all the things they&rsquo;re capable of.</p>
 
-<h3>Running PostgreSQL @ Instagram</h3>
+<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/371-running-postgresql-instagram/">Running PostgreSQL @ Instagram</a></h3>
 
 <p>Instagram is well known as one of the largest apps in the world. They optimized and changed their setup multiple times and probably scaled in about every way possible. <a href="https://postgresql.us/events/sessions/pgopen2017/session/371-running-postgresql-instagram/">Here we get to learn</a> about all the various things you need in running at a truly astonishing scale.</p>
 
-<h3>Many many more</h3>
+<h3><a href="https://postgresql.us/events/sessions/pgopen2017/">Many many more</a></h3>
 
 <p>Of course there&rsquo;s many more. Talks range from looks at new features, to how certain companies are using Postgres. We&rsquo;ve got companies like Instacart and Instagram as mentioned giving talks, to Postgres core committers. Whether you want to learn about the inner workings of Postgres (which often hurts my brain) to how you can simply speed up your app you should find something you like, as long as you like Postgres that is. Take a look at the <a href="https://postgresql.us/events/sessions/pgopen2017/">full list of sessions</a> and we hope to see you there.</p>
 ]]></content>
@@ -554,7 +554,7 @@ I love me some windows, though not always the easiest things to work with. They 
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#x62;&#x69;&#x6c;&#x6c;&#105;&#x6e;&#103;&#x40;&#x6d;&#121;&#99;&#x6f;&#x6d;&#x70;&#x61;&#110;&#x79;&#46;&#x63;&#111;&#x6d;">&#98;&#x69;&#x6c;&#x6c;&#105;&#110;&#x67;&#64;&#109;&#121;&#99;&#x6f;&#x6d;&#x70;&#x61;&#110;&#x79;&#46;&#x63;&#x6f;&#109;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6a;&#x61;&#x6e;&#x65;&#x40;&#109;&#x79;&#x63;&#111;&#109;&#x70;&#97;&#110;&#x79;&#x2e;&#x63;&#111;&#109;">&#x6a;&#x61;&#110;&#101;&#x40;&#x6d;&#x79;&#99;&#x6f;&#109;&#x70;&#97;&#110;&#121;&#x2e;&#x63;&#111;&#109;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x62;&#105;&#108;&#108;&#x69;&#x6e;&#103;&#64;&#x6d;&#121;&#99;&#111;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#109;">&#x62;&#105;&#108;&#108;&#x69;&#110;&#x67;&#x40;&#109;&#121;&#99;&#x6f;&#109;&#112;&#97;&#x6e;&#121;&#x2e;&#x63;&#111;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#106;&#x61;&#x6e;&#101;&#64;&#x6d;&#121;&#x63;&#111;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;">&#x6a;&#97;&#x6e;&#101;&#x40;&#109;&#x79;&#x63;&#111;&#109;&#x70;&#97;&#x6e;&#x79;&#46;&#99;&#x6f;&#109;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
