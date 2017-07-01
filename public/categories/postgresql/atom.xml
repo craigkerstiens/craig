@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-06-08T15:57:38-07:00</updated>
+  <updated>2017-07-01T07:58:21-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres Open Silicon Valley line-up: First take]]></title>
+    <link href="http://www.craigkerstiens.com/2017/07/01/postgresopen-sv-line-up/"/>
+    <updated>2017-07-01T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/07/01/postgresopen-sv-line-up</id>
+    <content type="html"><![CDATA[<p>This year Postgres open and PGConf SV have combined to great a bigger and better conference right in downtown San Francisco. <em>I&rsquo;m obviously biased as I&rsquo;m one of the co-chairs, and I know every conference organizer says picking the talks was hard, but I&rsquo;m especially excited for the line-up this year</em>. The hard part for me is going to be which talks do I miss out on because I&rsquo;m sitting in the other session that&rsquo;s ongoing. You can see the full list of <a href="https://postgresql.us/events/sessions/pgopen2017/">talk and tutorial sessions</a>, but I thought it&rsquo;d be fun to do a rundown of some of my favorites. <!--more--></p>
+
+<h3>How Postgres could index itself</h3>
+
+<p><a href="https://postgresql.us/events/sessions/pgopen2017/session/399-how-postgres-could-index-itself/">Postgres indexing itself</a> has long been on my wishlist. <a href="https://www.twitter.com/akane">Andrew Kane</a> from Instacart, and creator of <a href="https://github.com/ankane/pghero/">PgHero</a> has bottled up many learnings into a new tool: <a href="https://medium.com/@ankane/introducing-dexter-the-automatic-indexer-for-postgres-5f8fa8b28f27">Dexter</a>. I suspect we&rsquo;ll get a look at all that went into this, how it works, and how you can leverage it to have a more automatically tuned database.</p>
+
+<h3>Scaling a SaaS Application Beyond a Single Postgres with Citus</h3>
+
+<p>Migration talks are all to common, from Postgres to MySQL from MySQL to Postgres, or from <a href="https://containership.engineering/dynamodb-to-postgres-why-and-how-aa891681af4d">Dynamo to Postgres</a>. But this one is a little different flavor from Postgres to sharded Postgres with <a href="https://www.citusdata.com">Citus</a>. Sharding into a distributed system of course brings new things to consider and think about, and <a href="https://postgresql.us/events/sessions/pgopen2017/session/376-scaling-a-saas-application-beyond-a-single-postgres-with-citus/">here you&rsquo;ll learn about them</a> from first hand experience so hopefully you can avoid mistakes yourself.</p>
+
+<h3>Concurrency Deep Dive</h3>
+
+<p><a href="https://postgresql.us/events/sessions/pgopen2017/session/374-concurrency-deep-dive/">This one</a> looks to be a great under the hood look as well as likely very practical. It&rsquo;ll cover MVCC which is really at so much of the core of how Postgres works, but then bring it up to what it means for things like locks. Best of all, this one like so many others comes with lots of real world experience from Segment.</p>
+
+<h3>Postgres window magic</h3>
+
+<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/140p363n3b1N1X440Y0a/Image%202017-06-30%20at%2010.43.55%20AM.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&v=e35b6d4d" style="float:right; width:20%; margin-left:15px; " />
+I love me some windows, though not always the easiest things to work with. They can let you easily do things like compute month over month growth between rows in a single query. Bruce whose always a great presenter <a href="https://postgresql.us/events/sessions/pgopen2017/session/364-postgres-window-magic/">walks us through them</a> and all the things they&rsquo;re capable of.</p>
+
+<h3>Running PostgreSQL @ Instagram</h3>
+
+<p>Instagram is well known as one of the largest apps in the world. They optimized and changed their setup multiple times and probably scaled in about every way possible. <a href="https://postgresql.us/events/sessions/pgopen2017/session/371-running-postgresql-instagram/">Here we get to learn</a> about all the various things you need in running at a truly astonishing scale.</p>
+
+<h3>Many many more</h3>
+
+<p>Of course there&rsquo;s many more. Talks range from looks at new features, to how certain companies are using Postgres. We&rsquo;ve got companies like Instacart and Instagram as mentioned giving talks, to Postgres core committers. Whether you want to learn about the inner workings of Postgres (which often hurts my brain) to how you can simply speed up your app you should find something you like, as long as you like Postgres that is. Take a look at the <a href="https://postgresql.us/events/sessions/pgopen2017/">full list of sessions</a> and we hope to see you there.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Working with time in Postgres]]></title>
@@ -45,7 +79,7 @@ WHERE created_at &gt;= now() - '1 week'::interval
 
 <h3>Date functions</h3>
 
-<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you worth with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
+<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you work with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
 
 <p>```
 SELECT date_trunc(&lsquo;week&rsquo;, created_at),</p>
@@ -68,8 +102,8 @@ SELECT generate_series('2017-01-01'::date, now()::date, '1 week'::interval) week
 
 <p>```
 with weeks as (
-  select week as week
-  from generate_series(&lsquo;2017-01-01&rsquo;::date, now()::date, &lsquo;1 week&rsquo;::interval) weeks
+  select week
+  from generate_series(&lsquo;2017-01-01&rsquo;::date, now()::date, &lsquo;1 week&rsquo;::interval) week
 )</p>
 
 <p>SELECT weeks.week,</p>
@@ -83,14 +117,16 @@ with weeks as (
 </code></pre>
 
 <p>WHERE users.created_at > weeks.week
-  AND users.created_at &lt;= weeks.week &ndash; &lsquo;1 week&rsquo;::interval
+  AND users.created_at &lt;= (weeks.week &ndash; &lsquo;1 week&rsquo;::interval)
+GROUP BY 1
+ORDER BY 1 DESC;
 ```</p>
 
 <h3>Timestamp vs. Timestamptz</h3>
 
 <p>What about storing the times themselves? Postgres has two types of timestamps. It has a generic timestamp and one with timezone embedded in it. In most cases you should generally opt for timestamptz. Why not timestamp? What happens if you move a server, or your server somehow swaps its configuration. Or perhaps more practically what about daylight savings time? In general you might think that you can simply just put in the time as you see it, but when different countries around the world observe things like daylight savings time differently it introduces complexities into your application.</p>
 
-<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone and store your dates correctly. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
+<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone as it comes in. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
 
 <h3>More</h3>
 
@@ -382,81 +418,6 @@ FROM lookup_data;</p>
 <p>This one isn&rsquo;t Postgres specific, but I use it on a weekly basis and it&rsquo;s key for us at <a href="https://www.citusdata.com">Citus</a>. If you use something like Heroku Postgres, dataclips is an extremely handy feature that lets you have a real-time view of a query and the results of it, including an anonymous URL you can it for it. At Citus much like we did at Heroku Postgres we have a dashboard in google sheets which pulls in this data in real-time. To do this simple select a cell then put in: <code>=importdata("pathtoyourdataclip.csv")</code>. Google will import any data using this as long as it&rsquo;s in CSV form. It&rsquo;s a great lightweight way to build out a dashboard for your business without rolling your own complicated dashboarding or building out a complex ETL pipeline.</p>
 
 <p>I&rsquo;m sure I&rsquo;m missing a ton of the smaller features that you use on a daily basis. Let me know <a href="https://www.twitter.com/craigkerstiens">@craigkerstiens</a> the ones I forgot that you feel should be listed.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Writing more legible SQL]]></title>
-    <link href="http://www.craigkerstiens.com/2016/01/08/writing-better-sql/"/>
-    <updated>2016-01-08T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2016/01/08/writing-better-sql</id>
-    <content type="html"><![CDATA[<p>A number of times in a crowd I&rsquo;ve asked how many people enjoy writing SQL, and often there&rsquo;s a person or two. The follow up is how many people enjoy reading other people&rsquo;s SQL and that&rsquo;s unanimously 0. The reason for this is that so many people write bad SQL. It&rsquo;s not that it doesn&rsquo;t do the job, it&rsquo;s just that people don&rsquo;t tend to treat SQL the same as other languages and don&rsquo;t follow strong code formatting guidelines. So, of course here&rsquo;s some of my own recommendations on how to make SQL more readable.</p>
-
-<!--more-->
-
-
-<h3>One thing per line</h3>
-
-<p>Only put a single column/table/join per line. This is going to make for slightly more verbose SQL, but it will be easier to read and edit.. Here&rsquo;s a basic example:</p>
-
-<pre><code>SELECT foo,
-       bar
-FROM baz
-</code></pre>
-
-<h3>Align your projections and conditions</h3>
-
-<p>You can somewhat see this in the above with <code>foo</code> and <code>bar</code> being on the same line. This is reasonably common for columns you&rsquo;re selecting, but it&rsquo;s not applied as often in <code>AND</code> or <code>GROUP BY</code> clauses. As you can see there is a difference though between:</p>
-
-<pre><code>SELECT foo,
-       bar
-FROM baz
-WHERE foo &gt; 3
-AND bar = 'craig.kerstiens@gmail.com'
-</code></pre>
-
-<p>And a cleaner version:</p>
-
-<pre><code>SELECT foo,
-       bar
-FROM baz
-WHERE foo &gt; 3
-  AND bar = 'craig.kerstiens@gmail.com'
-</code></pre>
-
-<h3>Use column names when grouping/ordering</h3>
-
-<p>This is personally an awful habit of mine, but it is extremely convenient to just order by the column number. In the above query we could just <code>ORDER BY 1</code>. This is especially easy when column 1 may be something like SUM(foo). However, ensuring you explicitly <code>ORDER BY SUM(foo)</code> will help limit any misunderstanding of the data.</p>
-
-<h3>Comments</h3>
-
-<p>You comment your code all the time, yet so few seem to comment their queries. A simple <code>--</code> allows you to inline a comment, perhaps where there&rsquo;s some oddities to what you&rsquo;re joining or just anywhere it may need clarification. You can of course <a href="/2013/07/29/documenting-your-postgres-database/">go much further</a>, but at least some basic level of commenting should be required.</p>
-
-<h3>Casing</h3>
-
-<p>As highlighted in these examples, having a standard for how you case your queries is especially handy. Sticking with all SQL keywords in caps allows you to easily parse what is SQL and what are columns or literals that you&rsquo;re using in queries.</p>
-
-<h3>CTEs</h3>
-
-<p>First, yes they can be an optimisation boundary. But they can also make your query much more read-able and prevent you from doing the wrong thing because you couldn&rsquo;t reason about a query.</p>
-
-<p>For those unfamiliar CTEs are like a view that exist just for the duration of that query being executed. You can have them reference previous CTEs so you can gradually build on them, much like you would code blocks. I won&rsquo;t repeat too much of what <a href="/2013/11/18/best-postgres-feature-youre-not-using/">I&rsquo;ve already written about them</a>, but if you&rsquo;re unfamiliar with them or not using them <a href="/2013/11/18/best-postgres-feature-youre-not-using/">they are a must</a>. CTEs are easily one of the few pieces of SQL that I use on a daily basis.</p>
-
-<h3>Conclusion</h3>
-
-<p>Of course this isn&rsquo;t the only way to make your SQL more readable and this isn&rsquo;t an exhaustive list. But hopefully you find these tips helpful, and for your favorite tip that I missed&hellip; let me know about it <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>.</p>
-
-<p><em>A special thanks to <a href="http://www.twitter.com/Case">@Case</a> for reviewing.</em></p>
-
-<script type="text/javascript">
-  (function() {
-    window._pa = window._pa || {};
-    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
-    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/517fd07cf1409000020002dc.js";
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
-  })();
-</script>
-
 ]]></content>
   </entry>
   

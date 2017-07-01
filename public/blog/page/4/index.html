@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programming library that helps power somewhere over half of the internet. In &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,51 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/">
+		
+			Postgres Datatypes – the Ones You&#8217;re Not Using.</a>
+	</h2>
+	<div class="entry-content">
+		<p><img src="http://cl.ly/image/0V3d2A0w2V0N/Naws__Its_all_just_1_s_and_0_s.png" style="float:right;" />Postgres has a variety of datatypes, in fact quite a few more than most other databases. Most commonly applications take advantage of the standard ones – integers, text, numeric, etc. Almost every application needs these basic types, the rarer ones may be needed less frequently. And while not needed on every application when you do need them they can be an extremely handy. So without further ado let&rsquo;s look at some of these rarer but awesome types.</p>
+
+<h3>hstore</h3>
+
+<p>Yes, I&rsquo;ve talked about <a href="/2013/07/03/hstore-vs-json/">this one before</a>, yet still not enough people are using it. Of this list of datatypes this is one that could also have benefit for most if not all applications. 
+		
+		<a href="/2014/05/07/Postgres-datatypes-the-ones-youre-not-using/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -505,53 +550,6 @@ On April 7 a vulnerability, nicknamed heartbleed, was discovered in a programmin
 <div class="tags">
 
 	<a class='category' href='/categories/developers/'>Developers</a>, <a class='category' href='/categories/marketing/'>Marketing</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2014/01/24/rethinking-limits-on-relational/">
-		
-			Rethinking the Limits on Relational Databases</a>
-	</h2>
-	<div class="entry-content">
-		<p>Theres a lot of back and forth on NoSQL databases. The unfortunate part with all the back and forth and unclear definitions of NoSQL is that many of the valuable learnings are lost. This post isn&rsquo;t about the differences in NoSQL definitions, but rather some of the huge benefits that do exist in whats often grouped into the schema-less world that could easily be applied to the relational world.</p>
-
-<h3>Forget migrations</h3>
-
-<p>Perhaps the best thing about the idea of a schemaless database is that you can just push code and it works. Almost exactly five years ago Heroku shipped <code>git push heroku master</code> letting you simply push code from git and it just work. CouchDB and MongoDB have done similar for databases&hellip; you don&rsquo;t have to run <code>CREATE TABLE</code> or <code>ALTER TABLE</code> migrations before working with your database. There&rsquo;s something wonderful about just building and shipping your application without worrying about migrations.</p>
-
-
-		
-		<a href="/2014/01/24/rethinking-limits-on-relational/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-24T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
 
 </div>
 

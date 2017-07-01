@@ -147,7 +147,7 @@ $(document).ready(
 
 <h3>Date functions</h3>
 
-<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you worth with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
+<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you work with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -182,9 +182,11 @@ $(document).ready(
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">with</span> <span class="n">weeks</span> <span class="k">as</span> <span class="p">(</span>
-</span><span class='line'>  <span class="k">select</span> <span class="n">week</span> <span class="k">as</span> <span class="n">week</span>
-</span><span class='line'>  <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">::</span><span class="nb">date</span><span class="p">,</span> <span class="n">now</span><span class="p">()::</span><span class="nb">date</span><span class="p">,</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span> <span class="n">weeks</span>
+</span><span class='line'>  <span class="k">select</span> <span class="n">week</span>
+</span><span class='line'>  <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">::</span><span class="nb">date</span><span class="p">,</span> <span class="n">now</span><span class="p">()::</span><span class="nb">date</span><span class="p">,</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span> <span class="n">week</span>
 </span><span class='line'><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">SELECT</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span><span class="p">,</span>
@@ -192,7 +194,9 @@ $(document).ready(
 </span><span class='line'><span class="k">FROM</span> <span class="n">weeks</span><span class="p">,</span>
 </span><span class='line'>     <span class="n">users</span>
 </span><span class='line'><span class="k">WHERE</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&gt;</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span>
-</span><span class='line'>  <span class="k">AND</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&lt;=</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span> <span class="o">-</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span>
+</span><span class='line'>  <span class="k">AND</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">weeks</span><span class="p">.</span><span class="n">week</span> <span class="o">-</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+</span><span class='line'><span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span> <span class="k">DESC</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -200,7 +204,7 @@ $(document).ready(
 
 <p>What about storing the times themselves? Postgres has two types of timestamps. It has a generic timestamp and one with timezone embedded in it. In most cases you should generally opt for timestamptz. Why not timestamp? What happens if you move a server, or your server somehow swaps its configuration. Or perhaps more practically what about daylight savings time? In general you might think that you can simply just put in the time as you see it, but when different countries around the world observe things like daylight savings time differently it introduces complexities into your application.</p>
 
-<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone and store your dates correctly. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
+<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone as it comes in. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
 
 <h3>More</h3>
 

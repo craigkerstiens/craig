@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="The first area I tend to think about when it comes to developer marketing is around advocates. A simple definition of an advocate is someone that &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,51 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/04/17/array-agg/">
+		
+			Using Array_agg in Postgres – Powerful and Flexible</a>
+	</h2>
+	<div class="entry-content">
+		<p>In almost any application it&rsquo;s common to want to aggregate some set of values together, commonly in a comma separated form. Most developers do this by running a query to get much of the raw data, looping over the data and pushing it into a set, appending each new value to the appropriate key. Hopefully, it&rsquo;s not a surprise that there&rsquo;s a much better way to do this with PostgreSQL.</p>
+
+<p>Postgres has a flexible and robust <a href="/2012/08/20/arrays-in-postgres/">array datatype</a> that comes with a variety of functions. Even without taking advantage of the array datatype in <a href="/2012/11/06/django-and-arrays/">your application</a>, you can still take advantage of some of the functions to get the functionality you need. Lets take a look at an example schema and use case.</p>
+
+
+		
+		<a href="/2013/04/17/array-agg/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-17T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -530,51 +575,6 @@ $(document).ready(
 <div class="tags">
 
 	<a class='category' href='/categories/development/'>Development</a>, <a class='category' href='/categories/performance/'>Performance</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/11/30/sharding-your-database/">
-		
-			Sharding Your Database</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>Update as of 8/2/2016 &ndash; As a follow-up if you&rsquo;re using Postgres and looking to shard your data I would encourage you taking a look at <a href="https://www.citusdata.com">Citus</a>. Citus is an extension to Postgres that makes easy for you to shard your data and allow you to continue to scale out memory or processing power. Disclaimer: I currently run Citus Cloud, a fully managed hosted offering of Citus on top of AWS</em></p>
-
-<p>I&rsquo;m increasingly encountering users on <a href="http://www.heroku.com">Heroku</a> that are encountering the need to <a href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">shard</a> their data. For most users this is something you delay as long as possible as you can generally go for sometime before you have to worry about it. Additionally scaling up your database is often a reasonable approach early on and something I encourage as a starting point as scaling up is easy to do with regards to databases. However, for the 1% of users that do need to shard when the time comes many are left wondering where to start, hence the following guide.</p>
-
-
-		
-		<a href="/2012/11/30/sharding-your-database/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-30T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/development/'>Development</a>
 
 </div>
 

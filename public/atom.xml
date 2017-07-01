@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-06-08T15:57:38-07:00</updated>
+  <updated>2017-07-01T07:58:21-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres Open Silicon Valley line-up: First take]]></title>
+    <link href="http://www.craigkerstiens.com/2017/07/01/postgresopen-sv-line-up/"/>
+    <updated>2017-07-01T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/07/01/postgresopen-sv-line-up</id>
+    <content type="html"><![CDATA[<p>This year Postgres open and PGConf SV have combined to great a bigger and better conference right in downtown San Francisco. <em>I&rsquo;m obviously biased as I&rsquo;m one of the co-chairs, and I know every conference organizer says picking the talks was hard, but I&rsquo;m especially excited for the line-up this year</em>. The hard part for me is going to be which talks do I miss out on because I&rsquo;m sitting in the other session that&rsquo;s ongoing. You can see the full list of <a href="https://postgresql.us/events/sessions/pgopen2017/">talk and tutorial sessions</a>, but I thought it&rsquo;d be fun to do a rundown of some of my favorites. <!--more--></p>
+
+<h3>How Postgres could index itself</h3>
+
+<p><a href="https://postgresql.us/events/sessions/pgopen2017/session/399-how-postgres-could-index-itself/">Postgres indexing itself</a> has long been on my wishlist. <a href="https://www.twitter.com/akane">Andrew Kane</a> from Instacart, and creator of <a href="https://github.com/ankane/pghero/">PgHero</a> has bottled up many learnings into a new tool: <a href="https://medium.com/@ankane/introducing-dexter-the-automatic-indexer-for-postgres-5f8fa8b28f27">Dexter</a>. I suspect we&rsquo;ll get a look at all that went into this, how it works, and how you can leverage it to have a more automatically tuned database.</p>
+
+<h3>Scaling a SaaS Application Beyond a Single Postgres with Citus</h3>
+
+<p>Migration talks are all to common, from Postgres to MySQL from MySQL to Postgres, or from <a href="https://containership.engineering/dynamodb-to-postgres-why-and-how-aa891681af4d">Dynamo to Postgres</a>. But this one is a little different flavor from Postgres to sharded Postgres with <a href="https://www.citusdata.com">Citus</a>. Sharding into a distributed system of course brings new things to consider and think about, and <a href="https://postgresql.us/events/sessions/pgopen2017/session/376-scaling-a-saas-application-beyond-a-single-postgres-with-citus/">here you&rsquo;ll learn about them</a> from first hand experience so hopefully you can avoid mistakes yourself.</p>
+
+<h3>Concurrency Deep Dive</h3>
+
+<p><a href="https://postgresql.us/events/sessions/pgopen2017/session/374-concurrency-deep-dive/">This one</a> looks to be a great under the hood look as well as likely very practical. It&rsquo;ll cover MVCC which is really at so much of the core of how Postgres works, but then bring it up to what it means for things like locks. Best of all, this one like so many others comes with lots of real world experience from Segment.</p>
+
+<h3>Postgres window magic</h3>
+
+<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/140p363n3b1N1X440Y0a/Image%202017-06-30%20at%2010.43.55%20AM.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&v=e35b6d4d" style="float:right; width:20%; margin-left:15px; " />
+I love me some windows, though not always the easiest things to work with. They can let you easily do things like compute month over month growth between rows in a single query. Bruce whose always a great presenter <a href="https://postgresql.us/events/sessions/pgopen2017/session/364-postgres-window-magic/">walks us through them</a> and all the things they&rsquo;re capable of.</p>
+
+<h3>Running PostgreSQL @ Instagram</h3>
+
+<p>Instagram is well known as one of the largest apps in the world. They optimized and changed their setup multiple times and probably scaled in about every way possible. <a href="https://postgresql.us/events/sessions/pgopen2017/session/371-running-postgresql-instagram/">Here we get to learn</a> about all the various things you need in running at a truly astonishing scale.</p>
+
+<h3>Many many more</h3>
+
+<p>Of course there&rsquo;s many more. Talks range from looks at new features, to how certain companies are using Postgres. We&rsquo;ve got companies like Instacart and Instagram as mentioned giving talks, to Postgres core committers. Whether you want to learn about the inner workings of Postgres (which often hurts my brain) to how you can simply speed up your app you should find something you like, as long as you like Postgres that is. Take a look at the <a href="https://postgresql.us/events/sessions/pgopen2017/">full list of sessions</a> and we hope to see you there.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Working with time in Postgres]]></title>
@@ -48,7 +82,7 @@
 
 <h3>Date functions</h3>
 
-<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you worth with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
+<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you work with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -83,9 +117,11 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">with</span> <span class="n">weeks</span> <span class="k">as</span> <span class="p">(</span>
-</span><span class='line'>  <span class="k">select</span> <span class="n">week</span> <span class="k">as</span> <span class="n">week</span>
-</span><span class='line'>  <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">::</span><span class="nb">date</span><span class="p">,</span> <span class="n">now</span><span class="p">()::</span><span class="nb">date</span><span class="p">,</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span> <span class="n">weeks</span>
+</span><span class='line'>  <span class="k">select</span> <span class="n">week</span>
+</span><span class='line'>  <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="s1">&#39;2017-01-01&#39;</span><span class="p">::</span><span class="nb">date</span><span class="p">,</span> <span class="n">now</span><span class="p">()::</span><span class="nb">date</span><span class="p">,</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span> <span class="n">week</span>
 </span><span class='line'><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">SELECT</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span><span class="p">,</span>
@@ -93,7 +129,9 @@
 </span><span class='line'><span class="k">FROM</span> <span class="n">weeks</span><span class="p">,</span>
 </span><span class='line'>     <span class="n">users</span>
 </span><span class='line'><span class="k">WHERE</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&gt;</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span>
-</span><span class='line'>  <span class="k">AND</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&lt;=</span> <span class="n">weeks</span><span class="p">.</span><span class="n">week</span> <span class="o">-</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span>
+</span><span class='line'>  <span class="k">AND</span> <span class="n">users</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">weeks</span><span class="p">.</span><span class="n">week</span> <span class="o">-</span> <span class="s1">&#39;1 week&#39;</span><span class="p">::</span><span class="nb">interval</span><span class="p">)</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span>
+</span><span class='line'><span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span> <span class="k">DESC</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -101,7 +139,7 @@
 
 <p>What about storing the times themselves? Postgres has two types of timestamps. It has a generic timestamp and one with timezone embedded in it. In most cases you should generally opt for timestamptz. Why not timestamp? What happens if you move a server, or your server somehow swaps its configuration. Or perhaps more practically what about daylight savings time? In general you might think that you can simply just put in the time as you see it, but when different countries around the world observe things like daylight savings time differently it introduces complexities into your application.</p>
 
-<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone and store your dates correctly. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
+<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone as it comes in. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
 
 <h3>More</h3>
 
@@ -516,7 +554,7 @@
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x62;&#105;&#108;&#x6c;&#x69;&#x6e;&#103;&#x40;&#x6d;&#121;&#x63;&#111;&#x6d;&#x70;&#97;&#x6e;&#x79;&#46;&#x63;&#111;&#109;">&#x62;&#105;&#108;&#x6c;&#105;&#110;&#103;&#64;&#109;&#121;&#x63;&#111;&#109;&#x70;&#x61;&#110;&#x79;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x6a;&#97;&#110;&#101;&#64;&#109;&#121;&#x63;&#111;&#109;&#x70;&#97;&#110;&#x79;&#46;&#99;&#111;&#109;">&#106;&#x61;&#110;&#x65;&#x40;&#109;&#121;&#99;&#111;&#109;&#112;&#97;&#110;&#x79;&#46;&#99;&#111;&#x6d;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#x62;&#x69;&#x6c;&#x6c;&#105;&#x6e;&#103;&#x40;&#x6d;&#121;&#99;&#x6f;&#x6d;&#x70;&#x61;&#110;&#x79;&#46;&#x63;&#111;&#x6d;">&#98;&#x69;&#x6c;&#x6c;&#105;&#110;&#x67;&#64;&#109;&#121;&#99;&#x6f;&#x6d;&#x70;&#x61;&#110;&#x79;&#46;&#x63;&#x6f;&#109;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6a;&#x61;&#x6e;&#x65;&#x40;&#109;&#x79;&#x63;&#111;&#109;&#x70;&#97;&#110;&#x79;&#x2e;&#x63;&#111;&#109;">&#x6a;&#x61;&#110;&#101;&#x40;&#x6d;&#x79;&#99;&#x6f;&#109;&#x70;&#97;&#110;&#121;&#x2e;&#x63;&#111;&#109;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
@@ -1725,83 +1763,6 @@ WHERE email = $1
 <li>Powerpoint/Keynote/Google presentations are useful in briefings, even if it&rsquo;s just for you to follow along.</li>
 </ol>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A guide to PR for startups]]></title>
-    <link href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/"/>
-    <updated>2015-07-21T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups</id>
-    <content type="html"><![CDATA[<p>You&rsquo;ve built your product and you&rsquo;re now ready for your first major launch. Or you&rsquo;ve been through a launch or two, but are looking to scale the process as you&rsquo;re doing more launches and announcements. You really have two options: do it <a href="http://jasonlbaptiste.com/featured-articles/how-i-pitched-techcrunch-and-13-ways-to-get-press-when-you-launch-your-startup/">all on your own</a>, or work with a PR agency. One frequent crossroad is that you&rsquo;re not at the point of a full time PR person, but unsure what a PR agency can offer you; and, further what&rsquo;s the best way to work with them so you&rsquo;re getting the maximum value.</p>
-
-<p>As I&rsquo;ve talked to more startups lately, it&rsquo;s become clear that effectively working with PR teams and the media is mostly learned by doing. Because there&rsquo;s not much guidance out there, here&rsquo;s an attempt at some basic guidelines.</p>
-
-<!--more-->
-
-
-<h3>On PR</h3>
-
-<p>First there&rsquo;s two types here and they&rsquo;re not mutually exclusive. In-house PR is a full time person or team that works within your company, here you&rsquo;ll often have a pretty different experience. From my experience, in-house PR people tend to understand a company message and vision because they are living and breathing your company values every day.</p>
-
-<p>The other alternative is hiring a PR agency. An agency will have several (sometimes hundreds!) of clients. The relationship that you’ll have with an agency is much different than in-house. You&rsquo;ll use them just like you would a consultant or contractor. Most startups end up with the agency approach first, because of the perception of “more people working for a cheaper cost than hiring in-house.” However, it&rsquo;s of note an agency doesn&rsquo;t alleviate you of doing work, nor should you want them to handle all parts of it.</p>
-
-<h4>Messaging</h4>
-
-<p>An agency may offer to help with messaging, but take this somewhat lightly. I don&rsquo;t doubt that some are very good at it, but in most cases I&rsquo;ve found they don&rsquo;t have the same amount of customer interaction as you as a founder or early employee would. Further, your vision of impact to the market and direction may be more distant than theirs. You should expect to own your messaging, just like you own your product.</p>
-
-<p>Where they can heavily help is providing a lot of structured frameworks for helping you get to your messaging. Some pretty basic templates of standard questions for customers and partners can go along way in helping you actually uncover what they feel your value is.</p>
-
-<p><em>On your key messaging/value prop, there&rsquo;s two pieces I&rsquo;ll drop in here. While I&rsquo;d love to write another long post on it, I wonder when I&rsquo;ll actually get it out. So the first is pitch the problem you&rsquo;re trying to solve–<a href="http://500hats.typepad.com/500blogs/2009/08/your-solution-is-not-my-problem.html">Dave McClure</a> talks about this as well as anyone. The second is don&rsquo;t pitch features, pitch the use cases and solutions. Pitch what&rsquo;s possible</em></p>
-
-<h4>Pitching</h4>
-
-<p>This is the number one area I&rsquo;ve found that having PR makes a huge difference. In the world of reporting, different reporters have different beats (areas of coverage), styles, outreach preferences, and most importantly, different relationships with companies and people. Knowing <em>all</em> of this and how to pitch a story to them is key. Yes you can spend hours researching and creating a perfect story just for them, and do that again, and again and hopefully land some coverage. But I&rsquo;d argue a bit: that&rsquo;s not the best use of your time.</p>
-
-<p>With a good PR person or agency you&rsquo;ll be able to strike a mix of:</p>
-
-<ul>
-<li>Here&rsquo;s the outlets I want to be in and why (have a good reason for why).</li>
-<li>Understanding the audience and readership.</li>
-<li>What outlets you feel like your key customers are reading, and validate this with the agency.</li>
-</ul>
-
-
-<p>From there, if you&rsquo;ve found a good agency they already have relationships with your key journalists / publications. So if you have a compelling product, you just need to give them the right messaging of the particular launch or news.</p>
-
-<h4>What else to expect from your agency</h4>
-
-<p>A surprise for some is how the whole process works. The agency is going to be there on the phone with you. You&rsquo;re not going to hang out over beers while pitching being chummy. The reporter is listening to multiple other pitches, it&rsquo;s likely they had one right before you and right after. The agency is there listening, helping keep time and track of conversation for reporter fact-checking after the interview.</p>
-
-<p>Hopefully they&rsquo;re also keeping notes. They should be able to provide you with some high level notes of what message resonated with each reporter and what didn&rsquo;t, what you covered, and what they asked. This is especially useful for future interactions.</p>
-
-<p>Similarly you should get a briefing 1 pager ahead of time. You should be able to skim this, you don&rsquo;t have to memorize. But it&rsquo;ll include key things about recent articles written by the reporter, their beat, topics to dive into and ones to stay away from. If you can connect the dots, those notes from an initial call start to feed into the 1 pagers for future calls.</p>
-
-<h3>Onto the briefing</h3>
-
-<p>Of course it&rsquo;s important to land the briefing in the first place, but just as important is getting it right. Coming into it, the reporter will have already gotten the high level pitch&hellip; It&rsquo;s why they took the call. You&rsquo;ll get a mixed bag of those that are open to teeing up the opportunity to those that want to get right to the news. Roll with what they prefer, but also don&rsquo;t be afraid of trying to hit some of your key points.</p>
-
-<h4>Have your key messages ready</h4>
-
-<p>Sound bites help hugely here. Analogies, customer references, whatever you want to hit. Have it ready. Also if you&rsquo;ve got a great sound bite that helps tell the story, it can make the reporter&rsquo;s job easier. Just don&rsquo;t swing too far into happy go lucky marketing land. It’s important to remember that you’re talking to a person. Have a conversation &ndash; don’t talk at them.</p>
-
-<h4>Go slow</h4>
-
-<p>It may seem obvious when you think about it, but as you&rsquo;re talking the reporter is writing. Or at least you hope they are. Some do it by hand and type up notes late, some type right then and there. When you hear a pause it doesn&rsquo;t always mean to keep going and it seldom means hurry up. Become extra comfortable with pauses. Check in if you&rsquo;re going to fast, if they&rsquo;re following, if they have any questions. I&rsquo;ve had people bring me in a beer before because I&rsquo;d had multiple cups of coffee through a few pitches, and they were trying to slow me down a bit. Know your pace, and then slow it down.</p>
-
-<h4>Questions</h4>
-
-<p>It&rsquo;s okay if they don&rsquo;t have a lot of questions, they may not. They may have none at all. Yes, pause, and give them a chance, or even ask if they have any. But don&rsquo;t stress too much if they have no questions.</p>
-
-<p>On the flip side of that &ndash; you’re PR person should have prepared a list of questions for you beforehand that the reporter could possibly throw your way. Be sure you’ve thought through and practiced all the Q&amp;A scenarios before the interview so you aren’t caught off-guard when you’re in front of the reporter.</p>
-
-<h3>In conclusion</h3>
-
-<p>If it&rsquo;s your first go around, don&rsquo;t stress too much. Have the headlines you want in your mind and key messages, or better yet write them out. <em>Personally I write key things on a whiteboard nice and large before I&rsquo;m on the call</em>. Finally once you&rsquo;re all done, enjoy reading the coverage. <strong>But you&rsquo;re not all done</strong> after you get some coverage look back, run a retrospective just like you would for a software project. What worked well, why did or didn&rsquo;t something work. What can you improve next time.</p>
-
-<p>*Full disclosure, this is based across interactions with a small sample size of different PR agencies and individuals. Mileage may differ heavily from PR firm to PR firm, but hopefully the above provides at least some roadmap for more clarity vs. flying blind. As always if you&rsquo;ve got feedback/questions, feel free to let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a></p>
-
-<p><em>Finally a special thanks to <a href="http://www.twitter.com/pavtalk">Paul Katsen</a> for much of the inspiration on creating this post and to he and <a href="http://www.twitter.com">Katie Boysen</a> for review</em></p>
 ]]></content>
   </entry>
   
