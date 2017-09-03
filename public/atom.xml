@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-07-01T08:05:06-07:00</updated>
+  <updated>2017-09-03T08:55:54-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres backups: Logical vs. Physical]]></title>
+    <link href="http://www.craigkerstiens.com/2017/09/03/postgres-backups-physical-vs-logical/"/>
+    <updated>2017-09-03T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/09/03/postgres-backups-physical-vs-logical</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s not a very disputed topic that you should backup your database, and further test your backups. What is a little less discussed, at least for Postgres, is the types of backups that exist. Within Postgres there are two forms of backups and understanding them is a useful foundation for anyone working with Postgres. The two backup types are</p>
+
+<ol>
+<li>Physical: which consist of the actual bytes on disk,</li>
+<li>Logical: which is a more portable format.</li>
+</ol>
+
+
+<p>Let&rsquo;s dig into each a bit more so you can better assess which makes sense for you. <!--more--></p>
+
+<h3>Logical backups</h3>
+
+<p>Logical backups are the most well known type within Postgres. This is what you get when you run <code>pg_dump</code> against a database. There are a number of different formats you can get from <a href="http://postgresguide.com/utilities/backup-restore.html">logical backups</a> and Postgres does a good job of making it easy to compress and configure this backup how you see fit.</p>
+
+<p>When a logical backup is run against a database it is not throttled, this introduces a noticable load on your database.</p>
+
+<p>As it&rsquo;s reading the data from disk and generating (in layman terms) a bunch of SQL <code>INSERT</code> statements, it has to actually see the data. It&rsquo;s of note that older Postgres databases (read: prior to 9.3) there were no checksums against your database. Checksums are just one tool for you to help check against data corruption. Because a logical dump has to actually read and generate the data to insert it will discover any corruption that exists for you.</p>
+
+<p>This portable format is also very useful to pull down copies from production to different environments. I.e. if you need a copy of production data down on your local laptop <code>pg_dump</code> is the way to do it. Logical backups are also database specific, but then allow you to dump only certain tables.</p>
+
+<p>All in all logical backups bring some good features, but come at two cost:</p>
+
+<ul>
+<li>Load on your system</li>
+<li>The backup contains data as of the time when it ran</li>
+</ul>
+
+
+<h3>Physical backups</h3>
+
+<p>Physical backups are another option when it comes to backing up your database. As we mentioned earlier it is the physical bytes on disk. To understand physical backups we need to know a bit more under the covers about how Postgres works.</p>
+
+<p>Postgres, under the covers, is essentially one giant append only log. When you insert data it gets written to the log known as the write-ahead log (commonly called WAL). When you update data a new record gets written to the WAL. When you delete data a new record gets written to the WAL. Nearly all changes in Postgres including to indexes and otherwise cause an update to the WAL.</p>
+
+<p>With physical backups what you require to be able to create a restore of your database is two things:</p>
+
+<ol>
+<li>A <code>base backup</code>, which is a copy of the bytes on disk as of that point and time</li>
+<li>Additional segments of the WAL to put the database in some consistent state.</li>
+</ol>
+
+
+<p>A physical backup only requires a small amount of WAL to restore the database to some valid state, <em>but</em> this also gives you some new flexibility. With a base backup plus WAL you can start to replay transactions up to a specific point in time. This is often how point-in-time recovery is performed within Postgres. If you accidentally drop a table, yes&hellip; it happens, you can:</p>
+
+<ol>
+<li>Find a base backup before you dropped the table</li>
+<li>Restore that base backup</li>
+<li>Replay walk segments up to roughly that time just before you dropped the table.</li>
+</ol>
+
+
+<p><em>If you&rsquo;re considering setting up physical backups, consider using a tool like <a href="https://www.citusdata.com/blog/2017/08/18/introducing-wal-g-faster-restores-for-postgres/">WAL-G</a> to help.</em></p>
+
+<h3>Logical vs. Physical which to choose</h3>
+
+<p>Both are useful and provide different benefits. At smaller scale, say under 100 GB of data logical backups via <code>pg_dump</code> are something you should absolutely be doing. Because backups happen quickly on smaller databases you may be able to get out without functionality like point-in-time recovery. At larger scale, as you approach 1 TB physical backups start to become your only option. Because of the load introduced by logical backups and the time lapse between capturing them they become less suitable for production.</p>
+
+<p>Hopefully this primer helps provide a high level overview of the two primary types of backups that exist as options for Postgres. Of course there is much deeper you can go on each, but consider ensuring you have at least one of the two if not both in place. Oh and make sure to test them, an un-tested backup isn&rsquo;t a backup at all.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postgres Open Silicon Valley line-up: First take]]></title>
@@ -554,7 +620,7 @@ I love me some windows, though not always the easiest things to work with. They 
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x62;&#105;&#108;&#108;&#x69;&#x6e;&#103;&#64;&#x6d;&#121;&#99;&#111;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#109;">&#x62;&#105;&#108;&#108;&#x69;&#110;&#x67;&#x40;&#109;&#121;&#99;&#x6f;&#109;&#112;&#97;&#x6e;&#121;&#x2e;&#x63;&#111;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#106;&#x61;&#x6e;&#101;&#64;&#x6d;&#121;&#x63;&#111;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;">&#x6a;&#97;&#x6e;&#101;&#x40;&#109;&#x79;&#x63;&#111;&#109;&#x70;&#97;&#x6e;&#x79;&#46;&#99;&#x6f;&#109;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#x62;&#105;&#x6c;&#108;&#x69;&#x6e;&#103;&#x40;&#109;&#x79;&#x63;&#111;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#99;&#x6f;&#x6d;">&#x62;&#105;&#108;&#x6c;&#x69;&#110;&#x67;&#64;&#109;&#x79;&#99;&#111;&#109;&#112;&#x61;&#110;&#121;&#46;&#99;&#x6f;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#x6a;&#x61;&#110;&#x65;&#64;&#109;&#121;&#x63;&#111;&#x6d;&#x70;&#97;&#x6e;&#x79;&#46;&#x63;&#111;&#x6d;">&#x6a;&#97;&#x6e;&#101;&#64;&#x6d;&#121;&#99;&#111;&#x6d;&#112;&#97;&#110;&#x79;&#46;&#99;&#111;&#109;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
@@ -1676,93 +1742,6 @@ WHERE email = $1
 <p>But what about a platform? Slack continues to grow like wildfire as the new medium for communication. These days there&rsquo;s endless integrations for slack, and I expect they&rsquo;ll continue to expand what a platform for communication looks like. But a year ago they were quite a ways from having people show up at their door to add an integration. Sure there were people using them, but to expect github/trello/asana to immediately build an integration for every new flavor of the week tool would be crazy. Yet, without these integrations slack wouldn&rsquo;t be nearly as useful as it is today–and probably wouldn&rsquo;t have seen the growth it&rsquo;s seen. In the early days of a platform the easiest way to get these integrations and partners in place is to show up and build the work yourself. Slack carried the weight early of building these integrations, much as Heroku add-ons showed up at partners offices and help write the code to get them as a provider in the marketplace. And while both Slack and Heroku are larger companies now, it still holds true for smaller ones starting today. <a href="https://www.blockspring.com/">Blockspring</a>, a company which aims to make web services available through spreadsheets, had to do very much the same thing building their initial integrations themselves. Now with their rapidly growing user base and already large collection of APIs they may be able to shift the model, but early on that wasn&rsquo;t so much an option.</p>
 
 <p>If you want to build a platform, start by creating the impression of one while still carrying the load yourself. Yes, move to a true platform as soon as you can, but don&rsquo;t wait for others to show up before you go that route.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A guide to analyst relations for startups]]></title>
-    <link href="http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/"/>
-    <updated>2015-07-25T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups</id>
-    <content type="html"><![CDATA[<p>When it comes to go to market and marketing there&rsquo;s lots of pieces in a toolchest that all work together. One that comes a bit later, but if used properly (much like a <a href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/">PR agency</a>) can be valuable is industry analysts. And while working with a PR agency can quickly start to become clear. How to work with analysts so it is productive on both sides can take a bit longer to figure out, or at least it did for me. Even before you do start working with them there&rsquo;s the question of if or when should you. Here&rsquo;s hoping this primer makes it a bit faster and easier for others.</p>
-
-<!--more-->
-
-
-<h3>What is an analyst</h3>
-
-<p><em>Apologies to all analysts, but of all parts of this post I might butcher this one</em></p>
-
-<p>Analysts talk to a lot of companies, both the ones making products as well as the ones purchasing them. I&rsquo;m not actually sure what the spread is I&rsquo;d guess 80-20. A large output of this and other activities is  creating various reports and rankings. Gartner&rsquo;s Magic Quadrant is probably the most well known industry ranking. Much of what they create isn&rsquo;t freely available for consumption so you likely don&rsquo;t see the sheer volume of insights they put out.</p>
-
-<h3>Why would you engage with an analyst</h3>
-
-<p>So what do they do for you? There’s really two major buckets:</p>
-
-<p><strong>Help with sales/marketing</strong> &ndash; Given they&rsquo;re informing and influencing buying decisions of businesses they can be one more person on your side. If a launch in Techcrunch makes business foo aware of product bar, then an analyst report or ranking can help sway a decision on whether to try bar vs. baz.</p>
-
-<p><strong>Consulting</strong> &ndash; The other major opportunity is for the analyst to give some form of guidance. In a larger company when you already have an established product they should absolutely be part of your launch process (more on that in a future post). They&rsquo;re actively following your market and space, hopefully just as you are to some extent. They can offer an outside perspective and help with broad areas of focus and messaging.</p>
-
-<p><em>More</em> &ndash; In reality it’s as clean cut as above. They may be able to introduce you to good candidates for hiring. They may be able to introduce you to a large company interested in acquiring some capability which you have. They may be able to connect you with investors. All of these things can and do happen, but the above buckets typically are the primary drivers.</p>
-
-<h3>When?</h3>
-
-<p>First, engaging with analysts should always come after you have some confidence in the product, after you&rsquo;ve started some marketing drumbeat, and after sales. In short don&rsquo;t be in a huge rush here, you&rsquo;ll get there, but don&rsquo;t be in too big of a rush. As you start to get some attention and momentum it&rsquo;s just as likely they&rsquo;ll engage with you first as you reaching out. Also, marketing != sales, more on that in a future post.</p>
-
-<p>But, let&rsquo;s assume you&rsquo;ve got a product <strong>which targets business</strong> (<em>Analysts aren&rsquo;t just for tech companies, though you’ll see the benefit here sooner if you’re say a database company than a HR product</em>). Let’s also assume you&rsquo;ve got some sales and have some <a href="http://www.craigkerstiens.com/2015/07/21/An-intro-PR-guide-for-startups/">good launches under your belt</a>. As it starts to come up in sales calls if you&rsquo;re in any industry reports or rankings that may be an indicator, if you&rsquo;re hearing about other competitors having more validation in such reports. As a general rule of thumb once you&rsquo;ve got inhouse PR they should be able to help guide and steer to the right time.</p>
-
-<h3>So how do you engage with an analyst</h3>
-
-<p>If you&rsquo;re engaging in some form of report or article, that should start to be pretty self explanatory. They&rsquo;ll send you a questionnaire, you fill it out. You go back and forth a little bit.</p>
-
-<p>However, the majority of my interactions aren&rsquo;t on those articles and reports, for ever one time I fill out lots of questions to help some report or ranking I have 20 calls with an analyst.</p>
-
-<p>There are two primary calls you can have, an inquiry and a briefing.</p>
-
-<h4>Inquiries</h4>
-
-<p>Inquiry is just a fancy word for consulting call. An inquiry you will always be paying for.</p>
-
-<p><em>A small detour here. The regularity and consistency in which you engage with an analyst makes a difference. They&rsquo;re also people at the end of the day, so while firms have certain styles it&rsquo;s even further multiplied by being very people driven. In your interactions you&rsquo;ll have a different rapport with different people, it&rsquo;s at a minimum important to be aware of this.</em></p>
-
-<p>So back to an inquiry. Within an inquiry your goal is to pull back the curtain and give some backstage insights into what you&rsquo;re doing and where you&rsquo;re headed. This is typically under NDA and trust the NDA of an analyst. It&rsquo;s worthwhile to be as candid as you can here, yes it feels weird, but you&rsquo;ll get the most value. They&rsquo;re not like that of a reporter looking for a scoop (not that you can&rsquo;t trust reporters, just know if you say it, it&rsquo;s on record). You don&rsquo;t have to relish the entire call to one area, but areas of coverage are often:</p>
-
-<ul>
-<li>Upcoming products and major releases you’re working on</li>
-<li>Broader strategy and roadmap</li>
-<li>Get input on what they&rsquo;re seeing and hearing from customers</li>
-</ul>
-
-
-<h4>Briefings</h4>
-
-<p>The other type of call we have is a briefing. This is a little similar to that of a press briefing. You&rsquo;ll get on the call, and walk through some upcoming launch or just give an update on your company and progress. The latter is more common if they&rsquo;re unfamiliar with you or your product.</p>
-
-<p>Analyst briefings are good to do earlier than your press briefings, compared to press they&rsquo;re like a bike with training wheels. It&rsquo;s best if you still maintain your balance–the ride will be smoother, but there&rsquo;s a little less risk of completely toppling over. One key difference is you often have a powerpoint deck you get to walk through during an analyst briefing. I&rsquo;ve found this is helpful for pacing and key messages, I used to be skeptical, but now very much feel it&rsquo;s always worth doing.</p>
-
-<p><em>Pro-tip: You can create a deck and use it for press too, no they won&rsquo;t want to get on a gotomeeting, but you can send it over so they have more content later. BUT, more importantly you can also walk through it on your own screen if it helps with pacing.</em></p>
-
-<p>Within a briefing you&rsquo;ll have some ability to ask them questions at points. Does this resonate? Are you hearing similar? What are you seeing in the market? Don&rsquo;t turn it into an inquiry, but knowing the parts that hit home for them allow you to refine your pitch for the next call.</p>
-
-<h4>Engaging &ndash; the tactical parts</h4>
-
-<p>&ldquo;Analysts are pretty much paid to talk and write&rdquo; &ndash; <a href="http://www.twitter.com/cote">@cote</a>. So expect that often when you occupy their time there&rsquo;s a price to it. In terms of finding them it should be pretty easy, to know the list of ones in your space, you may see them quoted or reference in various media outlets. You may just naturally crop up in a report.</p>
-
-<p>If you create a regular relationship with them you&rsquo;ll have some contract of hours over the course of a quarter or year. At an early stage company this is often owned and manage by whomever runs your PR from an internal perspective.</p>
-
-<h3>Conclusion</h3>
-
-<p>If you&rsquo;re about to engage with analysts for the first time or haven’t figured out how to get the most out of your interactions I hope the broad overview is helpful. If there&rsquo;s some glaring parts you feel I&rsquo;ve missed let me know <a href="http://www.twitter.com/craigkerstiens">@craigkerstiens</a>. And for further reading/watching I’d encourage checking out the great talk from <a href="http://www.twitter.com/cote">@cote</a> in the <a href="http://www.heavybit.com/library/video/2014-01-21-michael-cote">Heavybit library</a>.</p>
-
-<p>As far as take-aways and a recap:</p>
-
-<ol>
-<li>Don&rsquo;t be too eager to jump in with analysts. They can absolutely provide value, but you have to put some time in before it really starts to pay off. It&rsquo;s not an overnight change and takes building a rapport with them.</li>
-<li>At the same time, analysts can be useful in many B2B areas not just tech ones.</li>
-<li>When in an inquiry be open and as transparent as possible.</li>
-<li>Powerpoint/Keynote/Google presentations are useful in briefings, even if it&rsquo;s just for you to follow along.</li>
-</ol>
-
 ]]></content>
   </entry>
   

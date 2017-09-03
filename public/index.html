@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="This year Postgres open and PGConf SV have combined to great a bigger and better conference right in downtown San Francisco. I&rsquo;m obviously &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="It&rsquo;s not a very disputed topic that you should backup your database, and further test your backups. What is a little less discussed, at least &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,55 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2017/09/03/postgres-backups-physical-vs-logical/">
+		
+			Postgres Backups: Logical vs. Physical</a>
+	</h2>
+	<div class="entry-content">
+		<p>It&rsquo;s not a very disputed topic that you should backup your database, and further test your backups. What is a little less discussed, at least for Postgres, is the types of backups that exist. Within Postgres there are two forms of backups and understanding them is a useful foundation for anyone working with Postgres. The two backup types are</p>
+
+<ol>
+<li>Physical: which consist of the actual bytes on disk,</li>
+<li>Logical: which is a more portable format.</li>
+</ol>
+
+
+<p>Let&rsquo;s dig into each a bit more so you can better assess which makes sense for you. 
+		
+		<a href="/2017/09/03/postgres-backups-physical-vs-logical/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-09-03T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres,</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -473,55 +522,6 @@ $(document).ready(
 
 
 <time datetime="2016-06-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2016/02/28/Hands-on-postgres-sharding/">
-		
-			Hands on Postgres Sharding</a>
-	</h2>
-	<div class="entry-content">
-		<p><em><strong>Notice</strong>: Much of this post still applies, but now applies more directly to <a href="https://www.citusdata.com">Citus</a>. Since this post originally published, pg_shard is now deprecated. Citus now has an open source version which offer a superset of the features of pg_shard, as well as a <a href="https://www.citusdata.com/products/cloud">cloud</a> offering. Finally you can find some further guidance for sharding on the <a href="https://www.citusdata.com/blog/">Citus blog</a> and <a href="http://docs.citusdata.com">docs</a></em></p>
-
-<p>Back in 2012 I wrote an overview of database sharding. Since then I&rsquo;ve had a few questions about it, which have really increased in frequency over the last two months. As a result I thought I&rsquo;d do a deeper dive with some actual hands on for sharding. Though for this hands on, because I do value my time I&rsquo;m going to take advantage of <code>pg_shard</code> rather than creating mechanisms from scratch.</p>
-
-<p>For those unfamiliar <a href="https://github.com/citusdata/pg_shard/">pg_shard</a> is an open source extension from <a href="http://citusdata.com">Citus data</a> who has a commerical product that you can think of is pg_shard++ (and probably much more). Pg_shard adds a little extra to let data automatically distribute to other Postgres tables (logical shards) and Postgres databases/instances (physical shards) thus letting you outgrow a single Postgres node pretty simply.</p>
-
-<p>Alright, enough talk about it, let&rsquo;s get things up and running.</p>
-
-
-		
-		<a href="/2016/02/28/Hands-on-postgres-sharding/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-02-28T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

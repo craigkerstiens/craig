@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-07-01T08:05:06-07:00</updated>
+  <updated>2017-09-03T08:55:54-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postgres backups: Logical vs. Physical]]></title>
+    <link href="http://www.craigkerstiens.com/2017/09/03/postgres-backups-physical-vs-logical/"/>
+    <updated>2017-09-03T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/09/03/postgres-backups-physical-vs-logical</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s not a very disputed topic that you should backup your database, and further test your backups. What is a little less discussed, at least for Postgres, is the types of backups that exist. Within Postgres there are two forms of backups and understanding them is a useful foundation for anyone working with Postgres. The two backup types are</p>
+
+<ol>
+<li>Physical: which consist of the actual bytes on disk,</li>
+<li>Logical: which is a more portable format.</li>
+</ol>
+
+
+<p>Let&rsquo;s dig into each a bit more so you can better assess which makes sense for you. <!--more--></p>
+
+<h3>Logical backups</h3>
+
+<p>Logical backups are the most well known type within Postgres. This is what you get when you run <code>pg_dump</code> against a database. There are a number of different formats you can get from <a href="http://postgresguide.com/utilities/backup-restore.html">logical backups</a> and Postgres does a good job of making it easy to compress and configure this backup how you see fit.</p>
+
+<p>When a logical backup is run against a database it is not throttled, this introduces a noticable load on your database.</p>
+
+<p>As it&rsquo;s reading the data from disk and generating (in layman terms) a bunch of SQL <code>INSERT</code> statements, it has to actually see the data. It&rsquo;s of note that older Postgres databases (read: prior to 9.3) there were no checksums against your database. Checksums are just one tool for you to help check against data corruption. Because a logical dump has to actually read and generate the data to insert it will discover any corruption that exists for you.</p>
+
+<p>This portable format is also very useful to pull down copies from production to different environments. I.e. if you need a copy of production data down on your local laptop <code>pg_dump</code> is the way to do it. Logical backups are also database specific, but then allow you to dump only certain tables.</p>
+
+<p>All in all logical backups bring some good features, but come at two cost:</p>
+
+<ul>
+<li>Load on your system</li>
+<li>The backup contains data as of the time when it ran</li>
+</ul>
+
+
+<h3>Physical backups</h3>
+
+<p>Physical backups are another option when it comes to backing up your database. As we mentioned earlier it is the physical bytes on disk. To understand physical backups we need to know a bit more under the covers about how Postgres works.</p>
+
+<p>Postgres, under the covers, is essentially one giant append only log. When you insert data it gets written to the log known as the write-ahead log (commonly called WAL). When you update data a new record gets written to the WAL. When you delete data a new record gets written to the WAL. Nearly all changes in Postgres including to indexes and otherwise cause an update to the WAL.</p>
+
+<p>With physical backups what you require to be able to create a restore of your database is two things:</p>
+
+<ol>
+<li>A <code>base backup</code>, which is a copy of the bytes on disk as of that point and time</li>
+<li>Additional segments of the WAL to put the database in some consistent state.</li>
+</ol>
+
+
+<p>A physical backup only requires a small amount of WAL to restore the database to some valid state, <em>but</em> this also gives you some new flexibility. With a base backup plus WAL you can start to replay transactions up to a specific point in time. This is often how point-in-time recovery is performed within Postgres. If you accidentally drop a table, yes&hellip; it happens, you can:</p>
+
+<ol>
+<li>Find a base backup before you dropped the table</li>
+<li>Restore that base backup</li>
+<li>Replay walk segments up to roughly that time just before you dropped the table.</li>
+</ol>
+
+
+<p><em>If you&rsquo;re considering setting up physical backups, consider using a tool like <a href="https://www.citusdata.com/blog/2017/08/18/introducing-wal-g-faster-restores-for-postgres/">WAL-G</a> to help.</em></p>
+
+<h3>Logical vs. Physical which to choose</h3>
+
+<p>Both are useful and provide different benefits. At smaller scale, say under 100 GB of data logical backups via <code>pg_dump</code> are something you should absolutely be doing. Because backups happen quickly on smaller databases you may be able to get out without functionality like point-in-time recovery. At larger scale, as you approach 1 TB physical backups start to become your only option. Because of the load introduced by logical backups and the time lapse between capturing them they become less suitable for production.</p>
+
+<p>Hopefully this primer helps provide a high level overview of the two primary types of backups that exist as options for Postgres. Of course there is much deeper you can go on each, but consider ensuring you have at least one of the two if not both in place. Oh and make sure to test them, an un-tested backup isn&rsquo;t a backup at all.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postgres Open Silicon Valley line-up: First take]]></title>
@@ -347,77 +413,6 @@ FROM companies;
 <h3>Much more</h3>
 
 <p>There&rsquo;s a lot more in the <a href="https://www.postgresql.org/docs/9.5/static/functions-json.html">docs</a> that you can find handy for the specialized cases when you need them. <code>jsonb_each</code> will expand a JSONB document into individual rows. So if you wanted to count the number of occurences of every tag for a company, this would help. Want to parse out a JSONB to a row/record in Postgres there&rsquo;s <code>jsonb_to_record</code>. The docs are your friends for about everything you want to do but hopefully these few steps help kick start things if you want to get started with <code>JSONB</code>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Simple but handy Postgres features]]></title>
-    <link href="http://www.craigkerstiens.com/2017/01/08/simple-but-handy-postgresql-features/"/>
-    <updated>2017-01-08T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2017/01/08/simple-but-handy-postgresql-features</id>
-    <content type="html"><![CDATA[<p>It seems each week when I&rsquo;m reviewing data with someone a feature comes up that they had no idea existed within Postgres. In an effort to continue documenting many of the features and functionality that are useful, here&rsquo;s a list of just a few that you may find handy the next time your working with your data.</p>
-
-<h3>Psql, and \e</h3>
-
-<p>This one I&rsquo;ve <a href="http://www.craigkerstiens.com/2013/02/13/How-I-Work-With-Postgres/">covered before</a>, but it&rsquo;s worth restating. Psql is a great editor that already comes with Postgres. If you&rsquo;re comfortable on the CLI you should consider giving it a try. You can even setup you&rsquo;re own <code>.psqlrc</code> for it so that it&rsquo;s well customized to your liking. In particular turning <code>\timing</code> on is especially useful. But even with all sorts of customization if you&rsquo;re not aware that you can use your preferred editor by using <code>\e</code> then you&rsquo;re missing out. This will allow you to open up the last run query, edit it, save–and then it&rsquo;ll run for you. Vim, Emacs, even Sublime text works just take your pick by setting your <code>$EDITOR</code> variable.</p>
-
-<!--more-->
-
-
-<h3>Watch</h3>
-
-<p>Ever sit at a terminal running a query over and over to see if something on your system changed? If you&rsquo;re debugging something whether locally or even live in production, watching data change can be key to figuring out. Instead of re-running your query you could simply use the <code>\watch</code> command in Postgres, this will re-run your query automatically every few seconds.</p>
-
-<p>```sql
-SELECT now() &ndash;</p>
-
-<pre><code>   query_start, 
-   state, 
-   query 
-</code></pre>
-
-<p>FROM pg_stat_activity
-\watch
-```</p>
-
-<h3>JSONB pretty print</h3>
-
-<p>I love <a href="https://www.citusdata.com/blog/2016/07/14/choosing-nosql-hstore-json-jsonb/">JSONB</a> as a datatype. Yes, in cases it won&rsquo;t be the <a href="http://blog.heapanalytics.com/when-to-avoid-jsonb-in-a-postgresql-schema/">optimal</a> for performance (though at times it can be perfectly fine). If I&rsquo;m hitting some API that returns a ton of data, I&rsquo;m usually not using all of it right away. But, you never know when you&rsquo;ll want to use the rest of it. I use <a href="https://www.clearbit.com">Clearbit</a> this way today, and for safety sake I save all the JSON result instead of de-normalizing it. Unfortunately, when you query this in Postgres you get one giant compressed text of JSON. Yes, you could pipe out to something like jq, or you could simply use Postgres built in function to make it legible:</p>
-
-<p>```sql
-SELECT jsonb_pretty(clearbit_response)
-FROM lookup_data;</p>
-
-<pre><code>                            jsonb_pretty
-</code></pre>
-
-<hr />
-
-<p> {</p>
-
-<pre><code> "person": { 
-     "id": "063f6192-935b-4f31-af6b-b24f63287a60", 
-     "bio": null, 
-     "geo": { 
-         "lat": 37.7749295, 
-         "lng": -122.4194155,                                              
-         "city": "San Francisco", 
-         "state": "California", 
-         "country": "United States", 
-         "stateCode": "CA", 
-         "countryCode": "US" 
-     }, 
-     "name": { 
-     ...
-</code></pre>
-
-<p>```</p>
-
-<h3>Importing my data into Google</h3>
-
-<p>This one isn&rsquo;t Postgres specific, but I use it on a weekly basis and it&rsquo;s key for us at <a href="https://www.citusdata.com">Citus</a>. If you use something like Heroku Postgres, dataclips is an extremely handy feature that lets you have a real-time view of a query and the results of it, including an anonymous URL you can it for it. At Citus much like we did at Heroku Postgres we have a dashboard in google sheets which pulls in this data in real-time. To do this simple select a cell then put in: <code>=importdata("pathtoyourdataclip.csv")</code>. Google will import any data using this as long as it&rsquo;s in CSV form. It&rsquo;s a great lightweight way to build out a dashboard for your business without rolling your own complicated dashboarding or building out a complex ETL pipeline.</p>
-
-<p>I&rsquo;m sure I&rsquo;m missing a ton of the smaller features that you use on a daily basis. Let me know <a href="https://www.twitter.com/craigkerstiens">@craigkerstiens</a> the ones I forgot that you feel should be listed.</p>
 ]]></content>
   </entry>
   
