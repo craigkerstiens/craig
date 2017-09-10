@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="It&rsquo;s not a very disputed topic that you should backup your database, and further test your backups. What is a little less discussed, at least &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="As your database grows and scales there are some operations that you need to take more care of than you did when you were just starting. When &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,49 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2017/09/10/better-postgres-migrations/">
+		
+			Better Database Migrations in Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p>As your database grows and scales there are some operations that you need to take more care of than you did when you were just starting. When working with your application in your dev environment you may not be fully aware of the cost of some operations until you run them against production. And at some point most of us have been guilty of it, running some migration that starts at 5 minutes, then 15 minutes in it&rsquo;s still running, and suddenly production traffic is impacted.</p>
+
+<p>There are two operations that tend to happen quite frequently, each with some straightforward approaches to mitigate having any noticable amount of downtime. Let&rsquo;s look at each of the operations, how they work and then how you can approach them in a safer way. 
+		
+		<a href="/2017/09/10/better-postgres-migrations/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-09-10T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres,</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -477,51 +520,6 @@ $(document).ready(
 
 
 <time datetime="2016-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2016/06/07/five-mistakes-databases/">
-		
-			Five Mistakes Beginners Make When Working With Databases</a>
-	</h2>
-	<div class="entry-content">
-		<p>When you start out as a developer there&rsquo;s an overwhelming amount of things to grasp. First there&rsquo;s the language itself, then all the quirks of the specific framework you&rsquo;re using,and after that (or maybe before) we&rsquo;ll throw front-end development into the mix, and somewhere along the line you have to decide to store your data somewhere.</p>
-
-<p>Early on, with so many things to quickly master, the database tends to be an after-though in application design (perhaps because it doesn&rsquo;t make an impact to end user experience). As a result there&rsquo;s a number of bad practices that tend to get picked up when working with databases, here&rsquo;s a rundown of just a few.</p>
-
-
-		
-		<a href="/2016/06/07/five-mistakes-databases/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-06-07T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

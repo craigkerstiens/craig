@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-04T09:35:02-07:00</updated>
+  <updated>2017-09-10T08:43:47-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Better database migrations in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/09/10/better-postgres-migrations/"/>
+    <updated>2017-09-10T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/09/10/better-postgres-migrations</id>
+    <content type="html"><![CDATA[<p>As your database grows and scales there are some operations that you need to take more care of than you did when you were just starting. When working with your application in your dev environment you may not be fully aware of the cost of some operations until you run them against production. And at some point most of us have been guilty of it, running some migration that starts at 5 minutes, then 15 minutes in it&rsquo;s still running, and suddenly production traffic is impacted.</p>
+
+<p>There are two operations that tend to happen quite frequently, each with some straightforward approaches to mitigate having any noticable amount of downtime. Let&rsquo;s look at each of the operations, how they work and then how you can approach them in a safer way. <!--more--></p>
+
+<h3>Adding new columns</h3>
+
+<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates it&rsquo;s underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
+
+<p>The most common reason for slowness of adding a new column is that most frameworks make it very simple for you to set a default value for the new column. It&rsquo;s one thing to do this for all new records, but when you do this when an existing table it means the database has to read all the records and re-write them with the new default value attached. This isn&rsquo;t so bad for a table with a few hundred records, but for a few hundred million run it then go get yourself coffee, or lunch, or a 5 course meal because you&rsquo;ll be waiting for a while.</p>
+
+<p>In short, <code>not null</code> and setting a default value (on creation) of your new column will cause you pain. The solution is to not do those things. But, what if you want to have a default value and don&rsquo;t want to allow <code>nulls</code>. There&rsquo;s a few simple steps you can take, by essentially splitting your migration up from 1 step to 4 migrations:</p>
+
+<ol>
+<li>Add your new column <em>that allows nulls</em></li>
+<li>Start writing your default value on all new records and updates</li>
+<li>Gradually backfill the default value</li>
+<li>Apply your constraint</li>
+</ol>
+
+
+<p>Yes, this is a little more work, but it doesn&rsquo;t impact production in nearly the same magnitude.</p>
+
+<h3>Indexes</h3>
+
+<p>Index creation like most DDL operations holds a lock while it&rsquo;s occurring, this means any new data has to wait for the index to be created and then the new writes flow through. Again when firsting creating the table or on a small table this time is not very noticable. On a large database though, you can again wait minutes to possibly even hours. <em>It&rsquo;s a bit ironic when you think about it that adding an index to speed things up can slow things down while it&rsquo;s happening.</em></p>
+
+<p>Postgres of course has the answer for this with <code>CONCURRENT</code> index creation. What this does is gradually build up the index in the background. You can create your index concurrently with: <code>CREATE INDEX CONCURRENTLY</code>. As soon as the index is created and available as long as you did what you were hoping to Postgres will swap over to using it on queries.</p>
+
+<h3>A tool to help</h3>
+
+<p>It&rsquo;s a good practice to understand what is happening when you run a migration and its performance impact. That said you don&rsquo;t have to manage this all on your own. At least for Rails there&rsquo;s a tool to help enforce more of these as you&rsquo;re developing to catch it earlier. <a href="https://github.com/ankane/strong_migrations">Strong migrations</a> aims to catch many of these expensive operations for you to have your back, if you&rsquo;re on Rails consider giving it a look.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postgres backups: Logical vs. Physical an overview]]></title>
@@ -277,142 +316,6 @@ ORDER BY 1 DESC;
 <li>Per transaction synchronous replication</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Getting started with JSONB in Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2017/03/12/getting-started-with-jsonb-in-postgres/"/>
-    <updated>2017-03-12T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2017/03/12/getting-started-with-jsonb-in-postgres</id>
-    <content type="html"><![CDATA[<p>JSONB is an awesome datatype in Postgres. I find myself using it on a weekly basis these days. Often in using some API (such as <a href="https://www.clearbit.com">clearbit</a>) I&rsquo;ll get a JSON response back, instead of parsing that out into a table structure it&rsquo;s really easy to throw it into a JSONB then query for various parts of it.</p>
-
-<p><em>If you&rsquo;re not familiar with JSONB, it&rsquo;s a binary representation of JSON in your database. You can read a bit more about it vs. JSON <a href="https://www.citusdata.com/blog/2016/07/14/choosing-nosql-hstore-json-jsonb/">here</a>.</em></p>
-
-<p>In working with JSONB here&rsquo;s a few quick tips to get up and running with it even faster: <!--more--></p>
-
-<h3>Indexing</h3>
-
-<p>For the most part you don&rsquo;t have to think to much about this. With Postgres powerful indexing types you can add one index and have everything within the JSON document, all the keys and all the values, automatically indexed. The key here is to add a <code>GIN</code> index. Once this is done queries should be much faster where you&rsquo;re searching for some value:</p>
-
-<p><code>sql
-CREATE INDEX idx_data ON companies USING GIN (data);
-</code></p>
-
-<h3>Querying</h3>
-
-<p>Querying is a little bit more work, but once you get the basics it can be pretty straight forward. There&rsquo;s a few new operators you&rsquo;ll want to quickly ramp up on and from there querying becomes easy.</p>
-
-<p>For the most basic part you now have an operator so traverse down the various keys. First let&rsquo;s get some idea of what the JSON looks like so we can have something to work with. Here&rsquo;s a sample set of data that we get back from Clearbit:</p>
-
-<p>```
-{
-  &ldquo;domain&rdquo;: &ldquo;citusdata.com&rdquo;,
-  &ldquo;company&rdquo;: {</p>
-
-<pre><code>"id": "b1ff2bdf-0d8d-4d6d-8bcc-313f6d45996a",
-"url": "http:\/\/citusdata.com",
-"logo": "https:\/\/logo.clearbit.com\/citusdata.com",
-"name": "Citus Data",
-"site": {
-  "h1": null,
-  "url": "http:\/\/citusdata.com",
-  "title": "Citus Data",
-},
-"tags": [
-  "SAAS",
-  "Enterprise",
-  "B2B",
-  "Information Technology &amp; Services",
-  "Technology",
-  "Software"
-],
-"domain": "citusdata.com",
-"twitter": {
-  "id": "304455171",
-  "bio": "Builders of Citus, the extremely scalable PostgreSQL database.",
-  "site": "https:\/\/t.co\/hKpZjIy7Ej",
-  "avatar": "https:\/\/pbs.twimg.com\/profile_images\/630900468995108865\/GJFCCXrv_normal.png",
-  "handle": "citusdata",
-  "location": "San Francisco, CA",
-  "followers": 3770,
-  "following": 570
-},
-"category": {
-  "sector": "Information Technology",
-  "industry": "Internet Software &amp; Services",
-  "subIndustry": "Internet Software &amp; Services",
-  "industryGroup": "Software &amp; Services"
-},
-"emailProvider": false
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>Sorry it&rsquo;s a bit long, but it gives us a good example to work with.</p>
-
-<h3>Basic lookups</h3>
-
-<p>Now let&rsquo;s query something fairly basic, the domain:</p>
-
-<p>```sql</p>
-
-<h1>SELECT data->&lsquo;domain&rsquo;</h1>
-
-<p>FROM companies
-WHERE domain=&lsquo;citusdata.com&rsquo;
-LIMIT 1;</p>
-
-<pre><code>?column?
-</code></pre>
-
-<hr />
-
-<p> &ldquo;citusdata.com&rdquo;
-```</p>
-
-<p>The <code>-&gt;</code> is likely the first operator you&rsquo;ll use in JSONB. It&rsquo;s helpful to traverse the JSON. Though of you&rsquo;re looking to get the value as text you&rsquo;ll actually want to use <code>-&gt;&gt;</code>. Instead of giving you some quoted response back or JSON object you&rsquo;re going to get it as text which will be a bit cleaner:</p>
-
-<p>```sql</p>
-
-<h1>SELECT data->>&lsquo;domain&rsquo;</h1>
-
-<p>FROM companies
-WHERE domain=&lsquo;citusdata.com&rsquo;
-LIMIT 1;</p>
-
-<pre><code>?column?
-</code></pre>
-
-<hr />
-
-<p> citusdata.com
-```</p>
-
-<h3>Filtering for values</h3>
-
-<p>Now with something like clearbit you may want to filter out for only certain type of companies. We can see in the example data that there&rsquo;s a bunch of tags. If we wanted to find only companies that had the tag B2B we could use the <code>?</code> operator once we&rsquo;ve targetted down to that part of the JSON. The <code>?</code> operator will tell us if some part of JSON has a top level key:</p>
-
-<p><code>sql
-SELECT *
-FROM companies
-WHERE data-&gt;'company'-&gt;'tags' ? 'B2B'
-</code></p>
-
-<h3>JSONB but pretty</h3>
-
-<p>In querying JSONB you&rsquo;ll typically get a nice compressed set of JSON back. While this is all fine if you&rsquo;re putting it into your application, if you&rsquo;re manually debugging and testing things you probably want something a bit more readable. Of course Postgres has your back here and you can wrap your JSONB with a pretty print function:</p>
-
-<p><code>sql
-SELECT jsonb_pretty(data)
-FROM companies;
-</code></p>
-
-<h3>Much more</h3>
-
-<p>There&rsquo;s a lot more in the <a href="https://www.postgresql.org/docs/9.5/static/functions-json.html">docs</a> that you can find handy for the specialized cases when you need them. <code>jsonb_each</code> will expand a JSONB document into individual rows. So if you wanted to count the number of occurences of every tag for a company, this would help. Want to parse out a JSONB to a row/record in Postgres there&rsquo;s <code>jsonb_to_record</code>. The docs are your friends for about everything you want to do but hopefully these few steps help kick start things if you want to get started with <code>JSONB</code>.</p>
 ]]></content>
   </entry>
   

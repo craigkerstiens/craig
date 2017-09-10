@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-04T09:35:02-07:00</updated>
+  <updated>2017-09-10T08:43:47-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Better database migrations in Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/09/10/better-postgres-migrations/"/>
+    <updated>2017-09-10T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/09/10/better-postgres-migrations</id>
+    <content type="html"><![CDATA[<p>As your database grows and scales there are some operations that you need to take more care of than you did when you were just starting. When working with your application in your dev environment you may not be fully aware of the cost of some operations until you run them against production. And at some point most of us have been guilty of it, running some migration that starts at 5 minutes, then 15 minutes in it&rsquo;s still running, and suddenly production traffic is impacted.</p>
+
+<p>There are two operations that tend to happen quite frequently, each with some straightforward approaches to mitigate having any noticable amount of downtime. Let&rsquo;s look at each of the operations, how they work and then how you can approach them in a safer way. <!--more--></p>
+
+<h3>Adding new columns</h3>
+
+<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates it&rsquo;s underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
+
+<p>The most common reason for slowness of adding a new column is that most frameworks make it very simple for you to set a default value for the new column. It&rsquo;s one thing to do this for all new records, but when you do this when an existing table it means the database has to read all the records and re-write them with the new default value attached. This isn&rsquo;t so bad for a table with a few hundred records, but for a few hundred million run it then go get yourself coffee, or lunch, or a 5 course meal because you&rsquo;ll be waiting for a while.</p>
+
+<p>In short, <code>not null</code> and setting a default value (on creation) of your new column will cause you pain. The solution is to not do those things. But, what if you want to have a default value and don&rsquo;t want to allow <code>nulls</code>. There&rsquo;s a few simple steps you can take, by essentially splitting your migration up from 1 step to 4 migrations:</p>
+
+<ol>
+<li>Add your new column <em>that allows nulls</em></li>
+<li>Start writing your default value on all new records and updates</li>
+<li>Gradually backfill the default value</li>
+<li>Apply your constraint</li>
+</ol>
+
+
+<p>Yes, this is a little more work, but it doesn&rsquo;t impact production in nearly the same magnitude.</p>
+
+<h3>Indexes</h3>
+
+<p>Index creation like most DDL operations holds a lock while it&rsquo;s occurring, this means any new data has to wait for the index to be created and then the new writes flow through. Again when firsting creating the table or on a small table this time is not very noticable. On a large database though, you can again wait minutes to possibly even hours. <em>It&rsquo;s a bit ironic when you think about it that adding an index to speed things up can slow things down while it&rsquo;s happening.</em></p>
+
+<p>Postgres of course has the answer for this with <code>CONCURRENT</code> index creation. What this does is gradually build up the index in the background. You can create your index concurrently with: <code>CREATE INDEX CONCURRENTLY</code>. As soon as the index is created and available as long as you did what you were hoping to Postgres will swap over to using it on queries.</p>
+
+<h3>A tool to help</h3>
+
+<p>It&rsquo;s a good practice to understand what is happening when you run a migration and its performance impact. That said you don&rsquo;t have to manage this all on your own. At least for Rails there&rsquo;s a tool to help enforce more of these as you&rsquo;re developing to catch it earlier. <a href="https://github.com/ankane/strong_migrations">Strong migrations</a> aims to catch many of these expensive operations for you to have your back, if you&rsquo;re on Rails consider giving it a look.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postgres backups: Logical vs. Physical an overview]]></title>
@@ -620,7 +659,7 @@ I love me some windows, though not always the easiest things to work with. They 
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#x62;&#105;&#108;&#108;&#x69;&#x6e;&#x67;&#x40;&#x6d;&#x79;&#99;&#x6f;&#x6d;&#112;&#97;&#110;&#x79;&#x2e;&#x63;&#x6f;&#109;">&#98;&#105;&#x6c;&#108;&#x69;&#110;&#x67;&#x40;&#x6d;&#121;&#99;&#x6f;&#109;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x6a;&#97;&#x6e;&#x65;&#64;&#109;&#x79;&#x63;&#111;&#x6d;&#112;&#x61;&#x6e;&#121;&#46;&#x63;&#111;&#109;">&#x6a;&#97;&#x6e;&#x65;&#64;&#109;&#x79;&#99;&#111;&#x6d;&#112;&#97;&#110;&#x79;&#46;&#99;&#111;&#109;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#98;&#105;&#108;&#108;&#x69;&#x6e;&#x67;&#x40;&#109;&#x79;&#99;&#x6f;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#x63;&#x6f;&#x6d;">&#98;&#105;&#108;&#108;&#105;&#110;&#103;&#64;&#x6d;&#x79;&#99;&#x6f;&#x6d;&#112;&#x61;&#110;&#x79;&#46;&#99;&#111;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#106;&#x61;&#x6e;&#101;&#x40;&#x6d;&#121;&#99;&#x6f;&#109;&#112;&#x61;&#x6e;&#121;&#46;&#99;&#111;&#x6d;">&#106;&#97;&#110;&#101;&#64;&#x6d;&#x79;&#99;&#x6f;&#109;&#112;&#x61;&#110;&#121;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
@@ -1722,26 +1761,6 @@ WHERE email = $1
 <h3>Up next</h3>
 
 <p>So sure, you can connect to a database, you can query some things. There were a couple of small but more novel things that we blew through in here. First is the fact I didn&rsquo;t have to define all my schema, it just knew it as <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">it really should</a>. The separation of SQL queries you&rsquo;ll custom write into files is simple, but will make for much more maintainable applications over the long term. And best of all is the JSON support, which I&rsquo;ll get to soon&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Seeding a sharing-economy or platform company]]></title>
-    <link href="http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company/"/>
-    <updated>2015-10-02T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2015/10/02/seeding-a-sharing-economy-or-platform-company</id>
-    <content type="html"><![CDATA[<p>These days if you&rsquo;re creating a company you likely hope to accomplish more with less people, two ways of doing this fall to: The sharing economy and creating a platform. It&rsquo;s easy to see the case for this when you have such <a href="http://graphics.wsj.com/billion-dollar-club/">unicorns</a> like AirBnB or Uber. The opportunity for each of those to compete against hotel chains or taxi services which each need to manage their own inventory is incredibly exciting and revolutionary. In a similar fashion platforms can offer much the same, Heroku&rsquo;s platform and marketplace made it easier than ever for developers to click a button and get everything they needed years ago. It&rsquo;s not just their code, it&rsquo;s everything from <a href="https://www.heroku.com/postgres">Postgres</a> to Mongo to <a href="https://elements.heroku.com/addons#logging">Logging</a>. Or take the app store as example. Smart phones weren&rsquo;t a new thing when the iPhone came out, but it was only the saviest of users that had apps installed on their windows smartphone or blackberry. The app store made the iPhone different than any other phone by allowing others to build and improve it, turning the iPhone not into a phone but a platform.</p>
-
-<!--more-->
-
-
-<p>Platforms and the sharing economy both let you get further than having to take on the costs of offering the equivilent all on your own. And while a great idea to venture into one of these two areas, starting them isn&rsquo;t as trivial as simply deciding to. For both of these you have issues with having a two sided market, first you have to convince the providers to come along, then the customers or vice versa. As a result of this two sided market issue the easiest way to actually start is by bootstrapping it yourself – or faking it til you make it.</p>
-
-<p>What are some good examples of faking this? I&rsquo;m sure you can probably find some good stories going back about AirBnB or Uber, but let&rsquo;s assume times were different then. Let&rsquo;s take a look at a very recent example: <a href="http://techcrunch.com/2015/08/26/lugg-an-app-for-on-demand-short-distance-moves-raises-3-8-million/">Lugg</a> which just launched in the latest batch of YC. Lugg is Uber for moving essentially, allowing you to on-demand request furniture moved from one place to another. Early on Lugg built their app, then waited for requests to come in, then the founders got in a truck and moved the furniture themselves. As a customer the founders are likely providing a great experience, without ever having to tip their hat at the ways their hacking the impression of being a large well oiled machine.</p>
-
-<p>But what about a platform? Slack continues to grow like wildfire as the new medium for communication. These days there&rsquo;s endless integrations for slack, and I expect they&rsquo;ll continue to expand what a platform for communication looks like. But a year ago they were quite a ways from having people show up at their door to add an integration. Sure there were people using them, but to expect github/trello/asana to immediately build an integration for every new flavor of the week tool would be crazy. Yet, without these integrations slack wouldn&rsquo;t be nearly as useful as it is today–and probably wouldn&rsquo;t have seen the growth it&rsquo;s seen. In the early days of a platform the easiest way to get these integrations and partners in place is to show up and build the work yourself. Slack carried the weight early of building these integrations, much as Heroku add-ons showed up at partners offices and help write the code to get them as a provider in the marketplace. And while both Slack and Heroku are larger companies now, it still holds true for smaller ones starting today. <a href="https://www.blockspring.com/">Blockspring</a>, a company which aims to make web services available through spreadsheets, had to do very much the same thing building their initial integrations themselves. Now with their rapidly growing user base and already large collection of APIs they may be able to shift the model, but early on that wasn&rsquo;t so much an option.</p>
-
-<p>If you want to build a platform, start by creating the impression of one while still carrying the load yourself. Yes, move to a true platform as soon as you can, but don&rsquo;t wait for others to show up before you go that route.</p>
 ]]></content>
   </entry>
   
