@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres, | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-10T08:43:47-07:00</updated>
+  <updated>2017-09-10T08:49:20-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -49,6 +49,8 @@
 <h3>A tool to help</h3>
 
 <p>It&rsquo;s a good practice to understand what is happening when you run a migration and its performance impact. That said you don&rsquo;t have to manage this all on your own. At least for Rails there&rsquo;s a tool to help enforce more of these as you&rsquo;re developing to catch it earlier. <a href="https://github.com/ankane/strong_migrations">Strong migrations</a> aims to catch many of these expensive operations for you to have your back, if you&rsquo;re on Rails consider giving it a look.</p>
+
+<p>Have other tools or tips that can help with database migrations in Postgres? <a href="https://www.twitter.com/craigkerstiens">Drop me a note</a> and I&rsquo;ll work to add them to the list.</p>
 ]]></content>
   </entry>
   

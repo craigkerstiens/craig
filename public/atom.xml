@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-10T08:43:47-07:00</updated>
+  <updated>2017-09-10T08:49:20-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -49,6 +49,8 @@
 <h3>A tool to help</h3>
 
 <p>It&rsquo;s a good practice to understand what is happening when you run a migration and its performance impact. That said you don&rsquo;t have to manage this all on your own. At least for Rails there&rsquo;s a tool to help enforce more of these as you&rsquo;re developing to catch it earlier. <a href="https://github.com/ankane/strong_migrations">Strong migrations</a> aims to catch many of these expensive operations for you to have your back, if you&rsquo;re on Rails consider giving it a look.</p>
+
+<p>Have other tools or tips that can help with database migrations in Postgres? <a href="https://www.twitter.com/craigkerstiens">Drop me a note</a> and I&rsquo;ll work to add them to the list.</p>
 ]]></content>
   </entry>
   
@@ -659,7 +661,7 @@ I love me some windows, though not always the easiest things to work with. They 
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#98;&#105;&#108;&#108;&#x69;&#x6e;&#x67;&#x40;&#109;&#x79;&#99;&#x6f;&#x6d;&#x70;&#97;&#x6e;&#x79;&#x2e;&#x63;&#x6f;&#x6d;">&#98;&#105;&#108;&#108;&#105;&#110;&#103;&#64;&#x6d;&#x79;&#99;&#x6f;&#x6d;&#112;&#x61;&#110;&#x79;&#46;&#99;&#111;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#106;&#x61;&#x6e;&#101;&#x40;&#x6d;&#121;&#99;&#x6f;&#109;&#112;&#x61;&#x6e;&#121;&#46;&#99;&#111;&#x6d;">&#106;&#97;&#110;&#101;&#64;&#x6d;&#x79;&#99;&#x6f;&#109;&#112;&#x61;&#110;&#121;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#98;&#x69;&#x6c;&#108;&#x69;&#110;&#103;&#64;&#109;&#x79;&#x63;&#x6f;&#x6d;&#112;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#x6d;">&#98;&#105;&#108;&#x6c;&#x69;&#110;&#103;&#64;&#x6d;&#121;&#99;&#x6f;&#x6d;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#106;&#97;&#x6e;&#101;&#64;&#x6d;&#x79;&#99;&#x6f;&#109;&#112;&#x61;&#110;&#121;&#46;&#99;&#x6f;&#109;">&#x6a;&#97;&#x6e;&#x65;&#64;&#109;&#121;&#99;&#x6f;&#109;&#112;&#97;&#110;&#121;&#x2e;&#99;&#111;&#x6d;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
