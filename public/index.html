@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="As your database grows and scales there are some operations that you need to take more care of than you did when you were just starting. When &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Managing connections in Postgres is a topic that seems to come up several times a week in conversations. I&rsquo;ve written some about scaling your &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,47 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2017/09/18/postgres-connection-management/">
+		
+			Tracking and Managing Your Postgres Connections</a>
+	</h2>
+	<div class="entry-content">
+		<p>Managing connections in Postgres is a topic that seems to come up several times a week in conversations. I&rsquo;ve written some about scaling your connections and the right approach when you truly need a high level of connections, which is to use a connection pooler like pgBouncer. But what do you do before that point and how can you better track what is going on with your connections in Postgres? 
+		
+		<a href="/2017/09/18/postgres-connection-management/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-09-18T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres,</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -480,53 +521,6 @@ $(document).ready(
 
 <time datetime="2016-10-21T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2016/09/11/a-tour-of-fdws/">
-		
-			A Tour of Postgres&#8217; Foreign Data Wrappers</a>
-	</h2>
-	<div class="entry-content">
-		<p>SQL can be a powerful language for reporting. Whether you&rsquo;re just exploring some data, or generating reports that show <a href="/2014/02/26/Tracking-MoM-growth-in-SQL/">month over month revenue growth</a> it&rsquo;s the <a href="https://www.amazon.com/SQL-Relational-Theory-Write-Accurate/dp/1491941170/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1473612603&amp;sr=1-1&amp;keywords=sql+relational&amp;tag=mypred-20">lingua franca</a> for data analysis. But, your data isn&rsquo;t always in a SQL database, even then if you&rsquo;re using Postgres you can still likely use SQL to analyze, query, even joing with that data. Foreign data wrappers have been around for years in Postgres, but are continuing to mature and be a great option for joining disparate systems.</p>
-
-<h3>Overview of foreign data wrappers</h3>
-
-<p>If you&rsquo;re unfamiliar, foreign data wrappers, or FDW, allow you to connect from within Postgres to a remote system. Then you can query them from directly within Postgres. While there is an official Postgres FDW that ships with Postgres itself, that allows you to connect from one Postgres DB to another, there&rsquo;s also a broad community of others.</p>
-
-<p>At the core of it Postgres provides certain APIs under the covers which each FDW extension can implement. This can include the ability to map SQL to whatever makes sense for a given system, push down various operators like where clauses, and as of Postgres 9.3 can even write data. 
-		
-		<a href="/2016/09/11/a-tour-of-fdws/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
 
 
 	

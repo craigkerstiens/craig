@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres, | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-10T08:49:20-07:00</updated>
+  <updated>2017-09-18T16:14:32-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Tracking and managing your Postgres connections]]></title>
+    <link href="http://www.craigkerstiens.com/2017/09/18/postgres-connection-management/"/>
+    <updated>2017-09-18T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/09/18/postgres-connection-management</id>
+    <content type="html"><![CDATA[<p>Managing connections in Postgres is a topic that seems to come up several times a week in conversations. I&rsquo;ve written some about scaling your connections and the right approach when you truly need a high level of connections, which is to use a connection pooler like pgBouncer. But what do you do before that point and how can you better track what is going on with your connections in Postgres? <!--more--></p>
+
+<p>Postgres under the covers has a lot of metadata about both historical and current activity against a system. Within Postgres you can run the following query which will give you a few results:</p>
+
+<p>```sql
+SELECT count(*),</p>
+
+<pre><code>   state 
+</code></pre>
+
+<p>FROM pg_stat_activity
+GROUP BY 2;
+ count |             state
+&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</p>
+
+<pre><code> 7 | active
+69 | idle
+26 | idle in transaction
+11 | idle in transaction (aborted)
+</code></pre>
+
+<p>(4 rows)</p>
+
+<p>Time: 30.337 ms
+```</p>
+
+<p>Each of these is useful in determining what you should do to better manage your connection count. All of these numbers can be useful to record every say 30 seconds and chart on your own internal monitoring. Lets break down each:</p>
+
+<ul>
+<li><strong>active</strong> &ndash; This is currently running queries, in a sense this is truly how many connections you may require at a time</li>
+<li><strong>idle</strong> &ndash; This is where you have opened a connection to the DB (most frameworks do this and maintain a pool of them), but nothing is happening. This is the one area that a connection pooler like pgBouncer can most help.</li>
+<li><strong>idle in transaction</strong> &ndash; This is where your app has run a <code>BEGIN</code> but it&rsquo;s now waiting somewhere in a transaction and not doing work.</li>
+</ul>
+
+
+<p>For <strong>idle</strong> as mentioned above it&rsquo;s one that you do want to monitor and if you see a high number here it&rsquo;s worth investing in setting up a pgBouncer.</p>
+
+<p>For <strong>idle in transaction</strong> this one is a bit more interesting. Here what you likely want to do when first investigating is get an idea of how old those are. You can do this by querying pg_stat_activity and filtering for where the state is <code>idle in transaction</code> and checking how old those queries are.</p>
+
+<p>If you find that you have some stale transactions hanging around this could be for days, hours, or even just a few minutes you may want to set a default to kill those transactions. To help with this Postgres has a nice feature of a <code>statement_timeout</code>. You can set this at both a global level and for a specific session. To do this at the database level you&rsquo;d run this with an <code>alter database dbnamehere set statement_timeout = 60000;</code> which is 60 seconds.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Better database migrations in Postgres]]></title>
@@ -24,7 +72,7 @@
 
 <h3>Adding new columns</h3>
 
-<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates it&rsquo;s underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
+<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates its underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
 
 <p>The most common reason for slowness of adding a new column is that most frameworks make it very simple for you to set a default value for the new column. It&rsquo;s one thing to do this for all new records, but when you do this when an existing table it means the database has to read all the records and re-write them with the new default value attached. This isn&rsquo;t so bad for a table with a few hundred records, but for a few hundred million run it then go get yourself coffee, or lunch, or a 5 course meal because you&rsquo;ll be waiting for a while.</p>
 
@@ -238,86 +286,6 @@ ORDER BY 1 DESC;
 <h3>More</h3>
 
 <p>There&rsquo;s a number of other functions and capabilities when it comes to dealing with time in Postrges. You can <code>extract</code> various parts of a timesetamp or interval such as hour of the day or the month. You can grab the day of the week with <code>dow</code>. And one of my favorites which is when we celebrate happy hour at Citus, there&rsquo;s a literal for UTC 00:00:00 00:00:00 which is <a href="https://www.postgresql.org/message-id/20050124200645.GA6126%40winnie.fuhr.org"><code>allballs()</code></a>. If you need to work with dates and times in Postgres I encourage you to check out the <a href="https://www.postgresql.org/docs/current/static/functions-datetime.html">docs</a> before you try to re-write something of your own, chances are what you need may already be there.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why use Postgres (Updated for last 5 years)]]></title>
-    <link href="http://www.craigkerstiens.com/2017/04/30/why-postgres-five-years-later/"/>
-    <updated>2017-04-30T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2017/04/30/why-postgres-five-years-later</id>
-    <content type="html"><![CDATA[<p>Five years ago <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">I wrote a post</a> that got some good attention on why you should use Postgres. Almost a year later I <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">added a bunch of things</a> I missed. Many of those items bear repeating, and I&rsquo;ll recap a few of those in the latter half of this post. But in the last 4-5 years there&rsquo;s been a lot of improvements and more reasons added to the list of why you should use Postgres. Here&rsquo;s the rundown of the things that make Postgres a great database you should consider using. <!--more--></p>
-
-<h3>Datatypes, including JSONB and range types</h3>
-
-<p>Postgres has long had an open and friendly attitude for adding datatypes. It&rsquo;s had arrays, geospatical and more for some time. A few years ago it got two datatypes worth thinking about using:</p>
-
-<h4>JSONB</h4>
-
-<p>JSONB is a binary representation of JSON. It&rsquo;s capable of being indexed on with <code>GIN</code> and <code>GIST</code> index types. You can also query into your full JSON document for quick lookups.</p>
-
-<h4>Range types</h4>
-
-<p>While it didn&rsquo;t arrive to the same fame as JSONB, <a href="https://wiki.postgresql.org/images/7/73/Range-types-pgopen-2012.pdf">range types</a> can be especially handy if they&rsquo;re what you need. Within a single column you can have a range from one value to another–this is especially helpful for time ranges. If you&rsquo;re building a calendaring application or often have a from and to of timestamps then range types can let you put that in a single column. The real benefit is that you can then have constraints that certain time stamps can&rsquo;t overlap or other constraints that may make sense for your application.</p>
-
-<h3>Extensions</h3>
-
-<p>It&rsquo;d be hard to talk about Postgres without all the ecosystem around it. Extensions are increasingly quite key when it comes to the community and growth of Postgres. Extensions allow you to hook into Postgres very natively without requiring them to be committed back to the core of Postgres. This means they can add rich functionality without being tied to a Postgres release and review cycle. Some great examples of this are:</p>
-
-<h4>Citus</h4>
-
-<p><a href="https://www.citusdata.com">Citus</a> (who I work for) turns Postgres into a distributed database allowing you to easily shard your database across multiple nodes. To your application it still looks like a single database, but then under the covers it&rsquo;s spread across multiple physical machines and Postgres instances.</p>
-
-<h4>HyperLogLog</h4>
-
-<p>This is a personal favorite of mine that allows you to easily have close-enough distinct counts pre-aggregated, but then also do various operations on them across days such as unions, intersections, and more. <a href="https://www.citusdata.com/blog/2017/04/04/distributed_count_distinct_with_postgresql/">HyperLogLog and other sketch algorithms</a> can be extremely common across large datasets and distributed systems, but it&rsquo;s especially exciting to find them pretty close to out of the box in Postgres.</p>
-
-<h4>PostGIS</h4>
-
-<p>PostGIS isn&rsquo;t new, but it&rsquo;s worth highlighting again. It&rsquo;s commonly regarded as the most advanced geospatial database. PostGIS adds new advanced geospatial datatypes, operators, and makes it easy to do many of the location based activities you need if you&rsquo;re dealing with mapping or routing.</p>
-
-<h3>Logical replication</h3>
-
-<p>For many years the biggest knock against Postgres was the difficulty in setting up replication. Originally this was any form of replication, but then streaming replication came along (this is streaming of the binary WAL or write-ahead-log format). Tools like <a href="https://github.com/wal-e/wal-e">wal-e</a> help leverage much of the Postgres mechanisms for things like disaster recovery.</p>
-
-<p>Then we had the foundation for logical replication in recent releases, though it still required an <a href="https://github.com/2ndQuadrant/pglogical">extension</a> to Postgres so it wasn&rsquo;t 100% out of the box. And, then finally we got full logical replication. Logical replication allows the sending of more or less actual commands, this means you could replicate only certain commands or certain tables.</p>
-
-<h3>Scale</h3>
-
-<p>In addition to all of the usability featuers we&rsquo;ve seen Postgres continue to get better and better at <a href="https://www.slideshare.net/fuzzycz/postgresql-performance-improvements-in-95-and-96">performance</a>. In particular we now have the foundations for <a href="https://www.postgresql.org/docs/current/static/parallel-query.html">parallelism</a> and on some queries you&rsquo;ll see much better performance. Then if you need even greater scale than single node Postgres (such as 122 or 244 GB of RAM on RDS or Heroku) you have options like <a href="https://www.citusdata.com">Citus</a> which was mentioned earlier that can help you scale out.</p>
-
-<h3>Richer indexing</h3>
-
-<p>Postgres already had some pretty powerful indexing before with <a href="https://www.postgresql.org/docs/9.5/static/textsearch-indexes.html">GIN and GiST</a>, those are now useful for JSONB. But we&rsquo;ve also seen the arrival of KNN indexes and Sp-GiST and have even more on the way.</p>
-
-<h3>Upsert</h3>
-
-<p>Upsert was a work in progress for several years. It was one of those features that most people hacked around with <a href="http://www.craigkerstiens.com/2013/11/18/best-postgres-feature-youre-not-using/">CTEs</a>, but that could create race conditions. It was also one of the few features MySQL had over Postgres. And just over a year ago we got <a href="http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/">official upsert</a> support.</p>
-
-<h3>Foreign Data Wrappers</h3>
-
-<p>Okay, yes foreign data wrappers did exist many years ago. If you&rsquo;re not familiar with foreign data wrappers, they allow you map an external data system to tables directly in Postgres. This means could could for example interact and query your <a href="http://www.craigkerstiens.com/2012/10/18/connecting_to_redis_from_postgres/">Redis</a> database from directly in Postgres with SQL. They&rsquo;ve continued to be improved more and more from what we had over 5 years ago. In particular we got support for write-able foreign data wrappers, meaning you can write data to other systems from directly in Postgres. There&rsquo;s also now an official Postgres FDW which comes out of the box with Postgres and it by itself is quite useful when querying across various Postgres instances.</p>
-
-<h3>Much more</h3>
-
-<p>And if you missed the <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">earlier editions</a> of this, please feel free to <a href="http://www.craigkerstiens.com/2012/05/07/why-postgres-part-2/">check them out</a>. The cliff notes of them include:</p>
-
-<ul>
-<li>Window functions</li>
-<li>Functions</li>
-<li>Custom languages (PLV8 anyone?)</li>
-<li>NoSQL datatypes</li>
-<li>Custom functions</li>
-<li>Common table expressions</li>
-<li>Concurrent index creation</li>
-<li>Transactional DDL</li>
-<li>Foreign Data Wrappers</li>
-<li>Conditional and functional indexes</li>
-<li>Listen/Notify</li>
-<li>Table inheritance</li>
-<li>Per transaction synchronous replication</li>
-</ul>
-
 ]]></content>
   </entry>
   

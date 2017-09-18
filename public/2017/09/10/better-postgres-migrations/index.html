@@ -123,7 +123,7 @@ $(document).ready(
 
 <h3>Adding new columns</h3>
 
-<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates it&rsquo;s underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
+<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates its underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
 
 <p>The most common reason for slowness of adding a new column is that most frameworks make it very simple for you to set a default value for the new column. It&rsquo;s one thing to do this for all new records, but when you do this when an existing table it means the database has to read all the records and re-write them with the new default value attached. This isn&rsquo;t so bad for a table with a few hundred records, but for a few hundred million run it then go get yourself coffee, or lunch, or a 5 course meal because you&rsquo;ll be waiting for a while.</p>
 

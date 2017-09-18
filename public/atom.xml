@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-10T08:49:20-07:00</updated>
+  <updated>2017-09-18T16:14:32-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Tracking and managing your Postgres connections]]></title>
+    <link href="http://www.craigkerstiens.com/2017/09/18/postgres-connection-management/"/>
+    <updated>2017-09-18T00:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/09/18/postgres-connection-management</id>
+    <content type="html"><![CDATA[<p>Managing connections in Postgres is a topic that seems to come up several times a week in conversations. I&rsquo;ve written some about scaling your connections and the right approach when you truly need a high level of connections, which is to use a connection pooler like pgBouncer. But what do you do before that point and how can you better track what is going on with your connections in Postgres? <!--more--></p>
+
+<p>Postgres under the covers has a lot of metadata about both historical and current activity against a system. Within Postgres you can run the following query which will give you a few results:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>
+</span><span class='line'>       <span class="k">state</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">pg_stat_activity</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'> <span class="k">count</span> <span class="o">|</span>             <span class="k">state</span>
+</span><span class='line'><span class="c1">-------+-------------------------------</span>
+</span><span class='line'>     <span class="mi">7</span> <span class="o">|</span> <span class="n">active</span>
+</span><span class='line'>    <span class="mi">69</span> <span class="o">|</span> <span class="n">idle</span>
+</span><span class='line'>    <span class="mi">26</span> <span class="o">|</span> <span class="n">idle</span> <span class="k">in</span> <span class="n">transaction</span>
+</span><span class='line'>    <span class="mi">11</span> <span class="o">|</span> <span class="n">idle</span> <span class="k">in</span> <span class="n">transaction</span> <span class="p">(</span><span class="n">aborted</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Time</span><span class="p">:</span> <span class="mi">30</span><span class="p">.</span><span class="mi">337</span> <span class="n">ms</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each of these is useful in determining what you should do to better manage your connection count. All of these numbers can be useful to record every say 30 seconds and chart on your own internal monitoring. Lets break down each:</p>
+
+<ul>
+<li><strong>active</strong> &ndash; This is currently running queries, in a sense this is truly how many connections you may require at a time</li>
+<li><strong>idle</strong> &ndash; This is where you have opened a connection to the DB (most frameworks do this and maintain a pool of them), but nothing is happening. This is the one area that a connection pooler like pgBouncer can most help.</li>
+<li><strong>idle in transaction</strong> &ndash; This is where your app has run a <code>BEGIN</code> but it&rsquo;s now waiting somewhere in a transaction and not doing work.</li>
+</ul>
+
+
+<p>For <strong>idle</strong> as mentioned above it&rsquo;s one that you do want to monitor and if you see a high number here it&rsquo;s worth investing in setting up a pgBouncer.</p>
+
+<p>For <strong>idle in transaction</strong> this one is a bit more interesting. Here what you likely want to do when first investigating is get an idea of how old those are. You can do this by querying pg_stat_activity and filtering for where the state is <code>idle in transaction</code> and checking how old those queries are.</p>
+
+<p>If you find that you have some stale transactions hanging around this could be for days, hours, or even just a few minutes you may want to set a default to kill those transactions. To help with this Postgres has a nice feature of a <code>statement_timeout</code>. You can set this at both a global level and for a specific session. To do this at the database level you&rsquo;d run this with an <code>alter database dbnamehere set statement_timeout = 60000;</code> which is 60 seconds.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Better database migrations in Postgres]]></title>
@@ -24,7 +79,7 @@
 
 <h3>Adding new columns</h3>
 
-<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates it&rsquo;s underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
+<p>Adding a new column is actually quite cheap in Postgres. When you do this it updates its underlying tracking of the columns that exist–which is almost instant. The part that becomes expensive is when you have some constraint against the column. A constraint could be a primary or foreign key, or some uniqueness constraint. Here Postgres has to scan through all the records in the table to ensure that it&rsquo;s not being violated. Adding some constraint such as <code>not null</code> does happen some, but is not the most common cause.</p>
 
 <p>The most common reason for slowness of adding a new column is that most frameworks make it very simple for you to set a default value for the new column. It&rsquo;s one thing to do this for all new records, but when you do this when an existing table it means the database has to read all the records and re-write them with the new default value attached. This isn&rsquo;t so bad for a table with a few hundred records, but for a few hundred million run it then go get yourself coffee, or lunch, or a 5 course meal because you&rsquo;ll be waiting for a while.</p>
 
@@ -661,7 +716,7 @@ I love me some windows, though not always the easiest things to work with. They 
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#98;&#x69;&#x6c;&#108;&#x69;&#110;&#103;&#64;&#109;&#x79;&#x63;&#x6f;&#x6d;&#112;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#x6d;">&#98;&#105;&#108;&#x6c;&#x69;&#110;&#103;&#64;&#x6d;&#121;&#99;&#x6f;&#x6d;&#112;&#97;&#x6e;&#x79;&#x2e;&#99;&#111;&#109;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#106;&#97;&#x6e;&#101;&#64;&#x6d;&#x79;&#99;&#x6f;&#109;&#112;&#x61;&#110;&#121;&#46;&#99;&#x6f;&#109;">&#x6a;&#97;&#x6e;&#x65;&#64;&#109;&#121;&#99;&#x6f;&#109;&#112;&#97;&#110;&#121;&#x2e;&#99;&#111;&#x6d;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x62;&#105;&#108;&#108;&#105;&#110;&#103;&#x40;&#109;&#121;&#x63;&#x6f;&#109;&#112;&#x61;&#x6e;&#121;&#46;&#99;&#111;&#x6d;">&#98;&#x69;&#108;&#x6c;&#105;&#110;&#x67;&#x40;&#109;&#x79;&#99;&#x6f;&#x6d;&#112;&#x61;&#x6e;&#121;&#46;&#99;&#x6f;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#106;&#97;&#x6e;&#101;&#x40;&#109;&#x79;&#99;&#111;&#109;&#x70;&#97;&#x6e;&#x79;&#x2e;&#x63;&#111;&#109;">&#106;&#97;&#x6e;&#101;&#x40;&#109;&#x79;&#99;&#111;&#109;&#112;&#97;&#110;&#x79;&#46;&#99;&#x6f;&#109;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
@@ -1652,117 +1707,6 @@ CREATE INDEX idx_posts_search ON posts USING GIN(search);
 <h3>In conclusion</h3>
 
 <p>While Massive isn&rsquo;t perfect, its approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Node, Postgres, MassiveJS - A better database experience]]></title>
-    <link href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/"/>
-    <updated>2015-11-30T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro</id>
-    <content type="html"><![CDATA[<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
-
-<ol>
-<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
-<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
-</ol>
-
-
-<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
-
-<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
-
-<!--more-->
-
-
-<h3>Getting setup</h3>
-
-<p>Without further adieu here&rsquo;s a quick tour around it.</p>
-
-<p>First let&rsquo;s pull down the example database from <a href="http://postgresguide.com/setup/example.html">PostgresGuide</a></p>
-
-<p>Then let&rsquo;s setup out Node app:</p>
-
-<pre><code>$ npm init
-$ npm install massive --save
-</code></pre>
-
-<h3>Connecting and querying</h3>
-
-<p>Now let&rsquo;s try to connect and say query a user from within our database. Create the following as an <code>index.js</code> file, then run with <code>node index.js</code>:</p>
-
-<pre><code>var massive = require("massive");
-var connectionString = "postgres://ckerstiens:@localhost/example";
-
-var db = massive.connectSync({connectionString : connectionString});
-
-db.users.find(1, function(err,res){
-  console.log(res);
-});
-</code></pre>
-
-<p>Upon first run if you&rsquo;re like me and use the <a href="http://postgresguide.com/setup/example.html">PostgresGuide example database</a> (which I now need to go back and tidy up), you&rsquo;ll get the following:</p>
-
-<pre><code>db.users.find(1, function(err,res){
-        ^
-TypeError: Cannot read property 'find' of undefined
-</code></pre>
-
-<p>I can&rsquo;t describe how awesome it is to see this. What&rsquo;s happening is when Massive loads up it&rsquo;s connecting to your database, checking what tables you have. In this case though because we don&rsquo;t have a proper primary key defined it doesn&rsquo;t load them. It could treat id as some magical field of course like Rails used to and ignore the need for an index, but instead it not only encourages a good database design but requires it.</p>
-
-<p>So let&rsquo;s go back and create our index in our database:</p>
-
-<pre><code>$ psql example
-$ alter table users add primary key (id);
-</code></pre>
-
-<p>Alright now let&rsquo;s run our script again with <code>node index.js</code> and see what we have:</p>
-
-<pre><code>{ id: 1,
-  email: 'john.doe@gmail.com',
-  created_at: Thu Sep 24 2015 03:42:52 GMT-0700 (PDT),
-  deleted_at: null }
-</code></pre>
-
-<p>Perfect! Now we&rsquo;re all connected and it even queried our database for us. Now let&rsquo;s take a few more look at some of the operators.</p>
-
-<h3>Running an arbitrary query</h3>
-
-<p><code>db.run</code> will let me run any arbritrary SQL. An example such as <code>db.run("select 'hello'")</code> will produce [ { &lsquo;?column?&rsquo;: &lsquo;hello&rsquo; } ].</p>
-
-<p>This makes it nice and easier for us to break out of the standard ORM model and just run SQL.</p>
-
-<h3>Find for quick look ups</h3>
-
-<p>Similar to so many other database tools <code>find</code> will offer you the most common quick look ups:</p>
-
-<pre><code>$ db.users.find({email: 'jane.doe@gmail.com'}, function(err, res){console.log(res)});
-$ db.users.find({'created_at &gt;': '2015-09-24'}, function(err, res){console.log(res)});
-</code></pre>
-
-<p>And of course there&rsquo;s a where operator for multiple conditions.</p>
-
-<h3>Structuring queries in your application</h3>
-
-<p>While in the next post I&rsquo;ll dig in deep to JSON, this is perhaps my favorite feature of Massive&hellip; It&rsquo;s design for pulling out queries into individudal SQL files. Simply create a <code>db</code> folder and put your SQL in there. Let&rsquo;s take the most basic example of our user email lookup and put it in <code>user_lookup.sql</code></p>
-
-<pre><code>SELECT *
-FROM users
-WHERE email = $1
-</code></pre>
-
-<p>Now back in our application we can run this and pass in a parameter to it:</p>
-
-<pre><code>db.user_lookup(['jane.doe@gmail.com'], function(err,res){
-  console.log(res);
-});
-</code></pre>
-
-<p>This separation of our queries from our code makes it easier to track them, view diffs, and even more so <a href="http://www.craigkerstiens.com/2012/11/17/how-i-write-sql/">create very readable SQL</a>.</p>
-
-<h3>Up next</h3>
-
-<p>So sure, you can connect to a database, you can query some things. There were a couple of small but more novel things that we blew through in here. First is the fact I didn&rsquo;t have to define all my schema, it just knew it as <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">it really should</a>. The separation of SQL queries you&rsquo;ll custom write into files is simple, but will make for much more maintainable applications over the long term. And best of all is the JSON support, which I&rsquo;ll get to soon&hellip;</p>
 ]]></content>
   </entry>
   

@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Following up on my earlier post about CX or Conference Experience – I&rsquo;m going to dig in a bit on how you get good conversation to happen. In &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="I&rsquo;m reasonably proficient at SQL – a coworker when pseudocoding some logic for him pointed out that my pseudocode is what he thought was &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,49 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/05/06/my-sql-bad-habits/">
+		
+			My SQL Bad Habits</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;m reasonably proficient at SQL – <em>a coworker when pseudocoding some logic for him pointed out that my pseudocode is what he thought was executable SQL</em>. I&rsquo;m fully capable of writing clear and readable SQL – which most SQL is not. Despite that I still have several bad habits when it comes to SQL. Without further adieu heres some of my dirty laundry so hopefully others can not make the same mistakes.</p>
+
+
+		
+		<a href="/2013/05/06/my-sql-bad-habits/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -500,82 +543,6 @@ $(document).ready(
 
 
 <time datetime="2013-02-21T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/database/'>Database</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/02/13/How-I-Work-With-Postgres/">
-		
-			How I Work With Postgres – Psql, My PostgreSQL Admin</a>
-	</h2>
-	<div class="entry-content">
-		<p>On at least a weekly basis and not uncommonly multiple times in a single week I get this question:</p>
-
-<blockquote><p>I&#8217;ve been hunting for a nice PG interface that works within other things. PGAdmin kinda works, except the SQL editor is a piece of shit</p><footer><strong>@neilmiddleton</strong> <cite><a href='https://twitter.com/neilmiddleton'></a></cite></footer></blockquote>
-
-
-<p>Sometimes it leans more to, what is the Sequel Pro equivilant for Postgres. My default answer is I just use psql, though I do have to then go on to explain how I use it. For those just interested you can read more below or just get the highlights here:</p>
-
-<ul>
-<li>Set your default <code>EDITOR</code> then use \e</li>
-<li>On postgres 9.2 and up <code>\x auto</code> is your friend</li>
-<li>Set history to unlimited</li>
-<li><code>\d</code> all the things</li>
-</ul>
-
-
-<p>Before going into detail on why psql works perfectly fine as an interface I want to rant for a minute about what the problems with current editors are and where I expect them to go in the future. First this is not a knock on the work thats been done on previous ones, for their time PgAdmin, phpPgAdmin, and others were valuable tools, but we&rsquo;re coming to a point where theres a broader set of users of databases than ever before and empowering them is becoming ever more important.</p>
-
-<p>Empowering developers, DBA&rsquo;s, product people, marketers and others to be comfortable with their database will lead to more people taking advantage of whats in their data. <a href="http://craigkerstiens.com/2013/01/10/more-on-postgres-performance/">pg_stat_statements</a> was a great start to this laying a great foundation for valuable information being captured. Even with all of the powerful stats being captured in the statistics of PostgreSQL so many are still terrified when they see something like:</p>
-
-<pre><code>                                                   QUERY PLAN
-----------------------------------------------------------------------------------------------------------------
- Hash Join  (cost=4.25..8.62 rows=100 width=107) (actual time=0.126..0.230 rows=100 loops=1)
-   Hash Cond: (purchases.user_id = users.id)
-   -&gt;  Seq Scan on purchases  (cost=0.00..3.00 rows=100 width=84) (actual time=0.012..0.035 rows=100 loops=1)
-   -&gt;  Hash  (cost=3.00..3.00 rows=100 width=27) (actual time=0.097..0.097 rows=100 loops=1)
-         Buckets: 1024  Batches: 1  Memory Usage: 6kB
-         -&gt;  Seq Scan on users  (cost=0.00..3.00 rows=100 width=27) (actual time=0.007..0.042 rows=100 loops=1)
- Total runtime: 0.799 ms
-(7 rows)
-</code></pre>
-
-<p>Empowering more developers by surfacing this information in a digestable form, such as building on top of <code>pg_stat_statements</code> tools such as <a href="http://datascope.heroku.com">datascope</a> by <a href="http://www.twitter.com/leinweber">@leinweber</a> and getting this to be part of the default admin we will truly begin empowering a new set of user.</p>
-
-<p>But enough of a detour, those tools aren&rsquo;t available today. If you&rsquo;re interested in helping build those to make the community better please reach out. For now I live in a work where I&rsquo;m quite content with simple ole <code>psql</code> here&rsquo;s how:</p>
-
-
-		
-		<a href="/2013/02/13/How-I-Work-With-Postgres/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-13T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

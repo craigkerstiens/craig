@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="When you start out as a developer there&rsquo;s an overwhelming amount of things to grasp. First there&rsquo;s the language itself, then all the &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="SQL can be a powerful language for reporting. Whether you&rsquo;re just exploring some data, or generating reports that show month over month &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,53 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2016/09/11/a-tour-of-fdws/">
+		
+			A Tour of Postgres&#8217; Foreign Data Wrappers</a>
+	</h2>
+	<div class="entry-content">
+		<p>SQL can be a powerful language for reporting. Whether you&rsquo;re just exploring some data, or generating reports that show <a href="/2014/02/26/Tracking-MoM-growth-in-SQL/">month over month revenue growth</a> it&rsquo;s the <a href="https://www.amazon.com/SQL-Relational-Theory-Write-Accurate/dp/1491941170/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1473612603&amp;sr=1-1&amp;keywords=sql+relational&amp;tag=mypred-20">lingua franca</a> for data analysis. But, your data isn&rsquo;t always in a SQL database, even then if you&rsquo;re using Postgres you can still likely use SQL to analyze, query, even joing with that data. Foreign data wrappers have been around for years in Postgres, but are continuing to mature and be a great option for joining disparate systems.</p>
+
+<h3>Overview of foreign data wrappers</h3>
+
+<p>If you&rsquo;re unfamiliar, foreign data wrappers, or FDW, allow you to connect from within Postgres to a remote system. Then you can query them from directly within Postgres. While there is an official Postgres FDW that ships with Postgres itself, that allows you to connect from one Postgres DB to another, there&rsquo;s also a broad community of others.</p>
+
+<p>At the core of it Postgres provides certain APIs under the covers which each FDW extension can implement. This can include the ability to map SQL to whatever makes sense for a given system, push down various operators like where clauses, and as of Postgres 9.3 can even write data. 
+		
+		<a href="/2016/09/11/a-tour-of-fdws/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -496,59 +543,6 @@ $(document).ready(
 
 
 <time datetime="2015-12-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/node/'>Node</a>, <a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2015/11/30/massive-node-postgres-an-overview-and-intro/">
-		
-			Node, Postgres, MassiveJS - a Better Database Experience</a>
-	</h2>
-	<div class="entry-content">
-		<p>First some background–I&rsquo;ve always had a bit of a love hate relationship with ORMs. ORMs are great for basic crud applications, which inevitably happens at some point for an app. The main two problems I have with ORMs is:</p>
-
-<ol>
-<li>They treat all databases as equal (yes, this is a little overgeneralized but typically true). They claim to do this for database portability, but in reality an app still can&rsquo;t just up and move from one to another.</li>
-<li>They don&rsquo;t handle complex queries well at all. As someone that sees SQL as a very powerful language, taking away all the power just leaves me with pain.</li>
-</ol>
-
-
-<p><em>Of course these aren&rsquo;t the <a href="https://kev.inburke.com/kevin/faster-correct-database-queries/">only issues</a> with them, just the two ones I personally run into over and over.</em></p>
-
-<p>In some playing with Node I was optimistic to explore <a href="http://massive-js.readthedocs.org">Massive.JS</a> as it seems to buck the trend of just imitating all other ORMs. My initial results–it makes me want to do more with Node just for this library. After all the power of a language is the ecosystem of libraries around it, not just the core language. So let&rsquo;s take a quick tour through with a few highlights of what makes it really great.</p>
-
-
-		
-		<a href="/2015/11/30/massive-node-postgres-an-overview-and-intro/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-11-30T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
