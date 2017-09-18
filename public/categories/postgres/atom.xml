@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres, | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-18T16:14:32-07:00</updated>
+  <updated>2017-09-18T16:18:27-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -57,7 +57,9 @@ GROUP BY 2;
 
 <p>For <strong>idle in transaction</strong> this one is a bit more interesting. Here what you likely want to do when first investigating is get an idea of how old those are. You can do this by querying pg_stat_activity and filtering for where the state is <code>idle in transaction</code> and checking how old those queries are.</p>
 
-<p>If you find that you have some stale transactions hanging around this could be for days, hours, or even just a few minutes you may want to set a default to kill those transactions. To help with this Postgres has a nice feature of a <code>statement_timeout</code>. You can set this at both a global level and for a specific session. To do this at the database level you&rsquo;d run this with an <code>alter database dbnamehere set statement_timeout = 60000;</code> which is 60 seconds.</p>
+<p>If you find that you have some stale transactions hanging around this could be for days, hours, or even just a few minutes you may want to set a default to kill those transactions. To help with this Postgres has a nice feature of a <code>statement_timeout</code>. A statement timeout will automatically kill queries and transactions that run longer than the allotted time. You can set this at both a global level and for a specific session. To do this at the database level you&rsquo;d run this with an <code>alter database dbnamehere set statement_timeout = 60000;</code> which is 60 seconds. To do so during a given session simply run <code>set statment_timeout = 6000000;</code>.</p>
+
+<p>Keeping your connection limits in check should lead to a much healthier performing database and thus app.</p>
 ]]></content>
   </entry>
   
