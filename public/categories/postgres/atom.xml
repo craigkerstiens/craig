@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres, | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-18T18:18:59-07:00</updated>
+  <updated>2017-09-18T19:42:10-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Tracking and managing your Postgres connections]]></title>
     <link href="http://www.craigkerstiens.com/2017/09/18/postgres-connection-management/"/>
-    <updated>2017-09-18T00:00:00-07:00</updated>
+    <updated>2017-09-18T16:00:00-07:00</updated>
     <id>http://www.craigkerstiens.com/2017/09/18/postgres-connection-management</id>
     <content type="html"><![CDATA[<p>Managing connections in Postgres is a topic that seems to come up several times a week in conversations. I&rsquo;ve written some about scaling your connections and the right approach when you truly need a high level of connections, which is to use a connection pooler like pgBouncer. But what do you do before that point and how can you better track what is going on with your connections in Postgres? <!--more--></p>
 
