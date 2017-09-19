@@ -161,9 +161,13 @@ $(document).ready(
 
 <p>For <strong>idle</strong> as mentioned above it&rsquo;s one that you do want to monitor and if you see a high number here it&rsquo;s worth investing in setting up a pgBouncer.</p>
 
-<p>For <strong>idle in transaction</strong> this one is a bit more interesting. Here what you likely want to do when first investigating is get an idea of how old those are. You can do this by querying pg_stat_activity and filtering for where the state is <code>idle in transaction</code> and checking how old those queries are.</p>
+<p>For <strong>idle in transaction</strong> this one is a bit more interesting. Here what you likely want to do when first investigating is get an idea of how old those are. You can do this by querying pg_stat_activity and filtering for where the state is <code>idle in transaction</code> and checking how old those queries are. For ones that have been running too long you may want to manually kill them.</p>
 
-<p>If you find that you have some stale transactions hanging around this could be for days, hours, or even just a few minutes you may want to set a default to kill those transactions. To help with this Postgres has a nice feature of a <code>statement_timeout</code>. A statement timeout will automatically kill queries and transactions that run longer than the allotted time. You can set this at both a global level and for a specific session. To do this at the database level you&rsquo;d run this with an <code>alter database dbnamehere set statement_timeout = 60000;</code> which is 60 seconds. To do so during a given session simply run <code>set statment_timeout = 6000000;</code>.</p>
+<p>If you find that you have some stale transactions hanging around this could be for days, hours, or even just a few minutes you may want to set a default to kill those transactions.</p>
+
+<p>To help with this Postgres has a nice feature of a <code>statement_timeout</code>. A statement timeout will automatically kill queries that run longer than the allotted time. You can set this at both a global level and for a specific session. To do this at the database level you&rsquo;d run this with an <code>alter database dbnamehere set statement_timeout = 60000;</code> which is 60 seconds. To do so during a given session simply run <code>set statment_timeout = 6000000;</code>.</p>
+
+<p>For <em>idle in transaction</em> that have been running too long there is its own setting setting that you can set in a similar fashion <code>idle_in_transaction_session_timeout</code> (on Postgres 9.6 and up). Setting both <code>statement_timeout</code> and <code>idle_in_transaction_session_timeout</code> will help with cancelling long running queries and transactions.</p>
 
 <p>Keeping your connection limits in check should lead to a much healthier performing database and thus app.</p>
 </div>
