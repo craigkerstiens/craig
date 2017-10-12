@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres, | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-18T19:42:10-07:00</updated>
+  <updated>2017-10-12T09:19:13-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dear Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/10/12/dear-postgres/"/>
+    <updated>2017-10-12T08:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/10/12/dear-postgres</id>
+    <content type="html"><![CDATA[<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/242D1y2p2g0g281S0O3W/dear_postgres.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&amp;v=977a17bd" alt="" /></p>
+
+<p>Dear Postgres,</p>
+
+<p>I&rsquo;ve always felt an affinity for you in my 9 years of working with you. I know others have known you longer, but that doesn&rsquo;t mean they love you more. Years ago when others complained about your rigidness or that you weren&rsquo;t as accommodating as others I found solace in your steadfast values:</p>
+
+<ol>
+<li>Don&rsquo;t lose data</li>
+<li>Adhere to standards</li>
+<li>Move forward with a balancing act between new fads of the day while still continuously improving</li>
+</ol>
+
+
+<p>You&rsquo;ve been there and seen it all. Years ago you were being disrupted by XML databases. As companies made heavy investment into what such a document database would do for their organization you proceeded to &ldquo;simply&rdquo; add a datatype that accomplished the same and brought your years of progress along with it.</p>
+
+<p>In the early years you had the standard format of index <em>b-tree</em> that most database engines leveraged. Then quietly but confidently you started adding more. Then came K-nearest neighbor, generalized inverted indexes (GIN), and generalized search-tree (GiST), only to be followed by space partitioned GiST and block range indexes (BRIN). Now the only question is which do I use?</p>
+
+<p><img src=”https://d3vv6lp55qjaqc.cloudfront.net/items/2I43101m250a363W0s0m/Image%202017-10-12%20at%209.11.57%20AM.gif?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&v=100f9c67” style=”width:50%” /></p>
+
+<p>All the while there was this other camp using for something that felt cool but outside my world: GIS. GIS, geographical information systems, I thought was something only civil engineers used. Then GPS came along, then the iPhone and location based devices came along and suddenly I wanted to find out the nearest path to my Peets, or manage geographical region for my grocery delivery service. PostGIS had been there all along building up this powerful feature set, sadly to this day I still mostly marvel from the sideline at this whole other feature set I long to take advantage of&hellip; <em>one day&hellip; one day</em>.</p>
+
+<p>A little over 5 years ago I fell in love with your fastly improving analytical capabilities. No you weren&rsquo;t an MPP system yet, but here came window functions and CTEs, then I almost understood recursive CTEs <em>(still working on that one)</em>. I can iterate over data in a recursive fashion without PL/PgSQL? Yes please! I only want to use it more.</p>
+
+<p>And then five years ago, document stores start taking over the world. I feel like I&rsquo;ve seen this story before, wasn&rsquo;t XML going to change the internet? Enter JSON, the JSON datatype, and JSONB. Wow, this is really nice to mix relational, document storage, join against things. I suddenly don&rsquo;t get why more don&rsquo;t take this flexible approach to building on a good foundation and layering on the refinements.</p>
+
+<p>Extensions! Where have you been all my life? There’s <a href="https://www.citusdata.com">Citus</a>, and <a href="https://github.com/aggregateknowledge/postgresql-hll">HyperLogLog</a>, and <a href="https://www.zombodb.com/">ZomboDB</a>, with each I can add functionality to Postgres without it being limited to the standard release, they can be in C or not. Wait, all along so much has been built on this foundation? PostGIS, full-text search, hstore? I like all those things, why didn&rsquo;t you tell me all along about this foundation? Postgres, I like what I&rsquo;m seeing how you&rsquo;re allowing others to do more without having it be in the core of Postgres. This extension stuff is really kinda cool that it&rsquo;s Postgres and then some, kinda like C and then ++, wait nevermind scratch that analogy.</p>
+
+<p>Sorry, I&rsquo;ve rambled a bit. You&rsquo;re a little over twenty years old now. I&rsquo;ve known you for nearly ten of those years so I know there&rsquo;s so much about your background I don&rsquo;t know, I hope we get to spend the time together to share it all. This 10 release is really an exciting one to me. We&rsquo;ve spent all this time together and I feel like each passing year the bond grows fonder.</p>
+
+<p>Now you&rsquo;ve brought me better parallelism so I can further utilize my system resources. I now have partitioning. Thank you! I don&rsquo;t have to roll my own hacks to help age out old data for my time series database. Logical replication will make so many other things possible, such as more online upgrades and integration with other systems.</p>
+
+<p>Postgres, I just want to say thank you for the past ten years together. Thank you for all you’ve done and for all you’ll continue to do in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Tracking and managing your Postgres connections]]></title>
@@ -205,93 +245,6 @@ I love me some windows, though not always the easiest things to work with. They 
 <h3><a href="https://postgresql.us/events/sessions/pgopen2017/">Many many more</a></h3>
 
 <p>Of course there&rsquo;s many more. Talks range from looks at new features, to how certain companies are using Postgres. We&rsquo;ve got companies like Instacart and Instagram as mentioned giving talks, to Postgres core committers. Whether you want to learn about the inner workings of Postgres (which often hurts my brain) to how you can simply speed up your app you should find something you like, as long as you like Postgres that is. Take a look at the <a href="https://postgresql.us/events/sessions/pgopen2017/">full list of sessions</a> and we hope to see you there.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Working with time in Postgres]]></title>
-    <link href="http://www.craigkerstiens.com/2017/06/08/working-with-time-in-postgres/"/>
-    <updated>2017-06-08T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2017/06/08/working-with-time-in-postgres</id>
-    <content type="html"><![CDATA[<p>A massive amount of reporting queries, whether really intensive data analysis, or just basic insights into your business involving looking at data over a certain time period. Postgres has really rich support for dealing with time out of the box, something that&rsquo;s often very underweighted when dealing with a database. Sure, if you have a time-series database it&rsquo;s implied, but even then how flexible and friendly is it from a query perspective? With Postgres there&rsquo;s a lot of key items available to you, let&rsquo;s dig in at the things that make your life easier when querying. <!--more--></p>
-
-<h3>Date math</h3>
-
-<p>The most common thing I find myself doing is looking at users that have done something within some specific time window. If I&rsquo;m executing this all from my app I can easily inject specific dates, but Postgres makes this really easy for you. Within Postgres you have a type called an interval that is some window of time. And fortunately Postgres takes care of the heavy lifting of how might something translate to or from hours/seconds/milliseconds/etc. Here&rsquo;s just a few examples of things you could do with interals:</p>
-
-<ul>
-<li>&lsquo;1 day&rsquo;::interval</li>
-<li>&lsquo;5 days&rsquo;::interval</li>
-<li>&lsquo;1 week&rsquo;::interval</li>
-<li>&lsquo;30 days&rsquo;::interval</li>
-<li>&lsquo;1 month&rsquo;::interval</li>
-</ul>
-
-
-<p><em>A note that if you&rsquo;re looking to remove something like a full month, you actually want to use 1 month instead of trying to calculate yourself.</em></p>
-
-<p>With a given interval you can easily shift some window of time, such as finding all users that have signed up for your service within the past week:</p>
-
-<p><code>sql
-SELECT *
-FROM users
-WHERE created_at &gt;= now() - '1 week'::interval
-</code></p>
-
-<h3>Date functions</h3>
-
-<p>Date math makes it pretty easy for you to go and find some specific set of data that applies, but what do you do when you want a broader report around time? There&rsquo;s a few options here. One is to leverage the built-in Postgres functions that help you work with dates and times. <code>date_trunc</code> is one of the most used ones that will truncate a date down to some interval level. Here you can use the same general values as the above, but simply pass in the type of interval it will be. So if we wanted to find the count of users that signed up per week:</p>
-
-<p>```
-SELECT date_trunc(&lsquo;week&rsquo;, created_at),</p>
-
-<pre><code>   count(*)
-</code></pre>
-
-<p>FROM users
-GROUP BY 1
-ORDER BY 1 DESC;
-```</p>
-
-<p>This gives us a nice roll-up of how many users signed up each week. What&rsquo;s missing here though is if you have a week that has no users. In that case because no users signed up there is no count of 0, it just simply doesn&rsquo;t exist. If you did want something like this you could generate some range of time and then do a cross join with it against users to see which week they fell into. To do this first you&rsquo;d generate a series of dates:</p>
-
-<p><code>sql
-SELECT generate_series('2017-01-01'::date, now()::date, '1 week'::interval) weeks
-</code></p>
-
-<p>Then we&rsquo;re going to join this against the actual users table and check that the <code>created_at</code> falls within the right range.</p>
-
-<p>```
-with weeks as (
-  select week
-  from generate_series(&lsquo;2017-01-01&rsquo;::date, now()::date, &lsquo;1 week&rsquo;::interval) week
-)</p>
-
-<p>SELECT weeks.week,</p>
-
-<pre><code>   count(*)
-</code></pre>
-
-<p>FROM weeks,</p>
-
-<pre><code> users
-</code></pre>
-
-<p>WHERE users.created_at > weeks.week
-  AND users.created_at &lt;= (weeks.week &ndash; &lsquo;1 week&rsquo;::interval)
-GROUP BY 1
-ORDER BY 1 DESC;
-```</p>
-
-<h3>Timestamp vs. Timestamptz</h3>
-
-<p>What about storing the times themselves? Postgres has two types of timestamps. It has a generic timestamp and one with timezone embedded in it. In most cases you should generally opt for timestamptz. Why not timestamp? What happens if you move a server, or your server somehow swaps its configuration. Or perhaps more practically what about daylight savings time? In general you might think that you can simply just put in the time as you see it, but when different countries around the world observe things like daylight savings time differently it introduces complexities into your application.</p>
-
-<p>With timestamptz it&rsquo;ll be aware of the extra parts of your timezone as it comes in. Then when you query from one timezone that accounts for daylights savings you&rsquo;re all covered. There&rsquo;s a <a href="http://phili.pe/posts/timestamps-and-time-zones-in-postgresql/">number of articles</a> that cover a bit more in depth on the logic between timestamp and timestamp with timezone, so if you&rsquo;re curious I encourage you to check them out, but by default you mostly just need to use timestamptz.</p>
-
-<h3>More</h3>
-
-<p>There&rsquo;s a number of other functions and capabilities when it comes to dealing with time in Postrges. You can <code>extract</code> various parts of a timesetamp or interval such as hour of the day or the month. You can grab the day of the week with <code>dow</code>. And one of my favorites which is when we celebrate happy hour at Citus, there&rsquo;s a literal for UTC 00:00:00 00:00:00 which is <a href="https://www.postgresql.org/message-id/20050124200645.GA6126%40winnie.fuhr.org"><code>allballs()</code></a>. If you need to work with dates and times in Postgres I encourage you to check out the <a href="https://www.postgresql.org/docs/current/static/functions-datetime.html">docs</a> before you try to re-write something of your own, chances are what you need may already be there.</p>
 ]]></content>
   </entry>
   

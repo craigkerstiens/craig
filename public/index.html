@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Managing connections in Postgres is a topic that seems to come up several times a week in conversations. I&rsquo;ve written some about scaling your &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Dear Postgres, I&rsquo;ve always felt an affinity for you in my 9 years of working with you. I know others have known you longer, but that doesn& &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,79 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2017/10/12/dear-postgres/">
+		
+			Dear Postgres</a>
+	</h2>
+	<div class="entry-content">
+		<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/242D1y2p2g0g281S0O3W/dear_postgres.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&amp;v=977a17bd" alt="" /></p>
+
+<p>Dear Postgres,</p>
+
+<p>I&rsquo;ve always felt an affinity for you in my 9 years of working with you. I know others have known you longer, but that doesn&rsquo;t mean they love you more. Years ago when others complained about your rigidness or that you weren&rsquo;t as accommodating as others I found solace in your steadfast values:</p>
+
+<ol>
+<li>Don&rsquo;t lose data</li>
+<li>Adhere to standards</li>
+<li>Move forward with a balancing act between new fads of the day while still continuously improving</li>
+</ol>
+
+
+<p>You&rsquo;ve been there and seen it all. Years ago you were being disrupted by XML databases. As companies made heavy investment into what such a document database would do for their organization you proceeded to &ldquo;simply&rdquo; add a datatype that accomplished the same and brought your years of progress along with it.</p>
+
+<p>In the early years you had the standard format of index <em>b-tree</em> that most database engines leveraged. Then quietly but confidently you started adding more. Then came K-nearest neighbor, generalized inverted indexes (GIN), and generalized search-tree (GiST), only to be followed by space partitioned GiST and block range indexes (BRIN). Now the only question is which do I use?</p>
+
+<p><img src=”https://d3vv6lp55qjaqc.cloudfront.net/items/2I43101m250a363W0s0m/Image%202017-10-12%20at%209.11.57%20AM.gif?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&v=100f9c67” style=”width:50%” /></p>
+
+<p>All the while there was this other camp using for something that felt cool but outside my world: GIS. GIS, geographical information systems, I thought was something only civil engineers used. Then GPS came along, then the iPhone and location based devices came along and suddenly I wanted to find out the nearest path to my Peets, or manage geographical region for my grocery delivery service. PostGIS had been there all along building up this powerful feature set, sadly to this day I still mostly marvel from the sideline at this whole other feature set I long to take advantage of&hellip; <em>one day&hellip; one day</em>.</p>
+
+<p>A little over 5 years ago I fell in love with your fastly improving analytical capabilities. No you weren&rsquo;t an MPP system yet, but here came window functions and CTEs, then I almost understood recursive CTEs <em>(still working on that one)</em>. I can iterate over data in a recursive fashion without PL/PgSQL? Yes please! I only want to use it more.</p>
+
+<p>And then five years ago, document stores start taking over the world. I feel like I&rsquo;ve seen this story before, wasn&rsquo;t XML going to change the internet? Enter JSON, the JSON datatype, and JSONB. Wow, this is really nice to mix relational, document storage, join against things. I suddenly don&rsquo;t get why more don&rsquo;t take this flexible approach to building on a good foundation and layering on the refinements.</p>
+
+<p>Extensions! Where have you been all my life? There’s <a href="https://www.citusdata.com">Citus</a>, and <a href="https://github.com/aggregateknowledge/postgresql-hll">HyperLogLog</a>, and <a href="https://www.zombodb.com/">ZomboDB</a>, with each I can add functionality to Postgres without it being limited to the standard release, they can be in C or not. Wait, all along so much has been built on this foundation? PostGIS, full-text search, hstore? I like all those things, why didn&rsquo;t you tell me all along about this foundation? Postgres, I like what I&rsquo;m seeing how you&rsquo;re allowing others to do more without having it be in the core of Postgres. This extension stuff is really kinda cool that it&rsquo;s Postgres and then some, kinda like C and then ++, wait nevermind scratch that analogy.</p>
+
+<p>Sorry, I&rsquo;ve rambled a bit. You&rsquo;re a little over twenty years old now. I&rsquo;ve known you for nearly ten of those years so I know there&rsquo;s so much about your background I don&rsquo;t know, I hope we get to spend the time together to share it all. This 10 release is really an exciting one to me. We&rsquo;ve spent all this time together and I feel like each passing year the bond grows fonder.</p>
+
+<p>Now you&rsquo;ve brought me better parallelism so I can further utilize my system resources. I now have partitioning. Thank you! I don&rsquo;t have to roll my own hacks to help age out old data for my time series database. Logical replication will make so many other things possible, such as more online upgrades and integration with other systems.</p>
+
+<p>Postgres, I just want to say thank you for the past ten years together. Thank you for all you’ve done and for all you’ll continue to do in the future.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-10-12T08:00:00-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2017</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres,</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -478,48 +551,6 @@ $(document).ready(
 
 
 <time datetime="2016-11-23T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2016/10/21/opendns/">
-		
-			Open DNS for When DNS Outages Occur</a>
-	</h2>
-	<div class="entry-content">
-		<p>Open DNS is a DNS resolver that caches records beyond their TTL if the upstream DNS server cannot be found. In cases like today&rsquo;s major outage it can be handy to swap your DNS settings out for this, or it may be worth using as a standard default. Resolution may be a bit slow as it will try to see if the upstream server cannot be found, but it at least can get you back to a working state.</p>
-
-<p>If you know what you&rsquo;re doing then all you need to do is configure your DNS settings to: <code>208.67.220.220</code> and <code>208.67.222.222</code>.</p>
-
-<p>If you need a little more guidance you can go into your System Preferences on Mac, select Network, then Advanced and finally the DNS tab. You should set it up to look as follows:</p>
-
-<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/0c2T1M251T0D3r1D2Q3x/Network.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&amp;v=cd767ce0" alt="DNS Configuration" /></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-10-21T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 

@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for Google Analytics first &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -103,184 +103,87 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2012/01/25/sphinx-buildpack/">
+		<a href="/2011/02/28/setting-goals-funnels/">
 		
-			Sphinx Build Pack on Heroku</a>
+			Setting Up Goals and Funnels - Google Analytics</a>
 	</h2>
 	<div class="entry-content">
-		<p>Heroku&rsquo;s latest Cedar stack supports running anything. Heroku&rsquo;s officially supported languages actually have their buildpacks public via <a href="http://github.com/heroku/">Heroku&rsquo;s github</a>, you can view several of them at:</p>
+		<p>I had a recent request on how to setup a funnel in Google Analytics. If you&rsquo;ve missed by first post on some tips for <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">Google Analytics</a> first check that out. With most websites today there is some portion of the site that is event and not page based, meaning you have some workflow on the page based on Javascript. If this is the case you&rsquo;ll want to <a href="http://www.craigekerstiens.com/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">fake a page view</a> instead of an event in order to entirely use it in funnels and goals.</p>
+
+<p>A personal recommendation is actually to use both, goals and funnels. The key a funnel is that you need to have successive steps that occur in some order. With regards to metrics tracking this is absolutely needed, but typically you may have 1-2 total funnels with many steps in your site versus goals where you could have 10-15 single goals. For <a href="http://www.registrystop.com">Registry Stop</a> we&rsquo;ve structured our site so that our earlier stage goals become the same as steps in later stage funnels. For us in almost all cases the first part of the funnel is the visit, the second is registering for an account. We do have independent goals for visits and registrations as well, but we do not have funnels on those goals.</p>
+
+
+		
+		<a href="/2011/02/28/setting-goals-funnels/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-28T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/analytics/'>Analytics</a>, <a class='category' href='/categories/startup/'>Startup</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/25/jquery-django-autocomplete/">
+		
+			JQuery and Django Autocomplete</a>
+	</h2>
+	<div class="entry-content">
+		<p>In a couple of various places I&rsquo;ve seen light requests of how to put autocomplete in for a Django web application. Here&rsquo;s a really light weight version with a view and autocomplete functionality using:</p>
 
 <ul>
-<li><a href="https://github.com/heroku/heroku-buildpack-python">Python Build Pack</a></li>
-<li><a href="https://github.com/heroku/heroku-buildpack-ruby">Ruby Build Pack</a></li>
-<li><a href="https://github.com/heroku/heroku-buildpack-scala">Scala Build Pack</a></li>
+    <li><a href="http://www.djangoproject.com">Django</a></li>
+    <li><a href="http://www.jquery.com">JQuery</a></li>
+    <li><a href="http://www.jqueryui.com">JQuery UI</a></li>
 </ul>
 
 
-<p><em>There have even been some created as fun weekend hacks such as the <a href="http://github.com/hone/heroku-buildpack-jsnes">NES Rom Buildpack</a>.</em></p>
+<p>For a view to search within your django model it would look something like:</p>
 
-
-		
-		<a href="/2012/01/25/sphinx-buildpack/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-25T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>, <a class='category' href='/categories/python/'>Python</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2012/01/23/securing-your-organization/">
-		
-			Securing Your Internal Organization With OpenID</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve recently been amazed at the number of companies that are still using a VPN or other means to manage their apps/network. Not just large enterprisey companies, but small agile startups. I fully understand that it works, but 95% of these places are also using another key tool for access inside their company&hellip; <em>Google Apps</em>. I fully expect companies to use google apps, its more of the former that surprises me most. For a long time OpenID wasn&rsquo;t at a usable point, even today it still isn&rsquo;t without its faults. However, it does make for a much cleaner workflow once in place than having your users login to something with they&rsquo;re used to using elsewhere.</p>
-
-<p>In our personal lives we use email as our keys to the kingdom. In fact I now almost refuse to sign up for any service that doesn&rsquo;t let me use oauth, so why should a work place be much different. So I inquired with a few companies to see if they were fine with securing things like documentation or wiki&rsquo;s being google auth, they indeed were. Yet they still seem to have users keep one more username and password for their VPN to be able to login to access internal docs/tools.</p>
-
-
-		
-		<a href="/2012/01/23/securing-your-organization/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-23T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/startup/'>Startup</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/12/02/how-heroku-works-hiring/">
-		
-			How Heroku Works - Hiring</a>
-	</h2>
-	<div class="entry-content">
-		<p>I alluded in earlier posts of <a href="http://www.craigkerstiens.com/2011/11/02/how-heroku-works-teams-tools/">How Heroku Works</a> that we have talented engineers. In fact I would venture to say that there is not a weak link when it comes to our engineers at Heroku. Ensuring we have talented engineers makes it easier for us to find other talented engineers and maintains a level of quality in our product. This means we must be very careful about not diluting our pool of engineering talent, which is where our hiring process becomes especially key. By the time we hire a new employee, we know without a doubt they&rsquo;re a fit within our organization.</p>
-
-<p><em>Our goal in hiring is seldom to fill a role, but more commonly to find more talented people share our goal (changing the world for developers).</em></p>
-
-
-		
-		<a href="/2011/12/02/how-heroku-works-hiring/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-02T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2011/11/12/startingwithdjango/">
-		
-			Getting Started With Django</a>
-	</h2>
-	<div class="entry-content">
-		<p>For those completely new to web development, Django is a web framework that makes it easier to build web applications with Python. For those that have some knowledge of other web frameworks and Django you may be able to fly through much of the following. Django is a slight modification on the <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a> construct which views itself as a <a href="https://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names">MVT</a> Model, View, Template. Django views a website as a project and within it smaller apps are contained.</p>
-
-<p>Earlier we installed Django into your virtual environment. If your environment is loaded we can get started with a Django project. First lets create the project:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>django-admin.py startproject myproject
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This should have created a directory for your project called myproject. Within the myproject folder you&rsquo;ll find some core files to every Django project.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>models.py </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ls
-</span><span class='line'>myproject venv
-</span><span class='line'><span class="nv">$ </span>ls myproject
-</span><span class='line'>manage.py myproject
-</span><span class='line'><span class="nv">$ </span>ls myproject/myproject
-</span><span class='line'>__init__.py   settings.py urls.py
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">simplejson</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">autocompleteModel</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">search_qs</span> <span class="o">=</span> <span class="n">ModelName</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name__startswith</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">[</span><span class="s">&#39;search&#39;</span><span class="p">])</span>
+</span><span class='line'>    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">search_qs</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">resp</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">REQUEST</span><span class="p">[</span><span class="s">&#39;callback&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;);&#39;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Let&rsquo;s examine a little of each of the files and what they&rsquo;re used for:</p>
-
-<p><code>manage.py</code> &ndash; A management utility for interacting with your Django project. In addition to the default commands available which you see by running <code>python manage.py</code>, you can create custom commands (we&rsquo;ll get into that much later).
-<code>settings.py</code> &ndash; This is the settings file for your application. Here you&rsquo;ll put various configuration and load things such as your database connection.
-<code>urls.py</code> &ndash; This is the place to setup how your urls will work. You&rsquo;ll define a path for the url and then which code is to be executed when you visit that url.</p>
+<p>For the jQuery autocomplete and call:</p>
 
 		
 		
@@ -300,12 +203,12 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-12T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-25T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
+	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/jquery/'>JQuery</a>, <a class='category' href='/categories/python/'>Python</a>
 
 </div>
 
@@ -317,57 +220,18 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/08/Postgres-the-death-of-nosql/">
+		<a href="/2011/02/25/evaluating-paying-blog-post/">
 		
-			Postgres&#8230; The Death of NoSQL</a>
+			Evaluating Paying for a Blog Post</a>
 	</h2>
 	<div class="entry-content">
-		<p>NoSQL has long been a trend that many have talked about. While there&rsquo;s a place for various key-value stores and tools such as memcache and redis, this will address most specifically how NoSQL is attempting to replace a traditional database. I&rsquo;ve long been a fan of postgres and in general traditional relational databases. In a broad sense traditional databases offer multiple things.</p>
+		<p>At a recent meetup I talked a bit about how I&rsquo;d been using blog posts on other blogs, both free and paid for as a primary user acquisition tool. I was very shocked, when several were surprised and curious on the method for this. In tech startups coverage is common, but its usually just that press, not paid for press. I must say I love how the tech community doesn&rsquo;t force people to pay to get the word out, but it is very much a competition; that might be just as much work as paying.</p>
 
-<h2>RDMS</h2>
+<p>In contrast the wedding industry is very much a pay to play space. If you give some money you can get some attention.</p>
 
-<h3>Data guarantees</h3>
-
-<p>The current major SQL databases (SQL Server, Postgres, MySQL, Oracle) offer guarantees around your data that doesn&rsquo;t always exist with other systems. At a very high level this means when they say they have the data there&rsquo;s not a chance they&rsquo;ll loose it. When using something as a primary datastore this is always my first requirement. Data is a valuable commodity so keeping it around is obviously important. There are cases where exceptions exist (reporting applications are common here). The specific thing I always look for is that a system upholds the ACID properties. For a quick breakdown of these:</p>
-
-<ul>
-<li><em>A</em> is for atomic. In short it means no transaction can be partially completed, its all or nothing.</li>
-<li><em>C</em> is for consistent. This means you go from one consistent state to another. Meaning things like cascades and constraints are upheld and can&rsquo;t be ignored for a period of time.</li>
-<li><em>I</em> is for isolation. This means transactions don&rsquo;t get to interfere with each other.</li>
-<li><em>D</em> is for durability. This means once the transactions there its not going anywhere.</li>
-</ul>
-
-
-<p>These basic principles make me feel pretty content with my data being safe. This doesn&rsquo;t include things like backups and replication, but rather is a baseline for me feeling safe with a system.</p>
-
-<p><em>Here&rsquo;s a hint, many NoSQL solutions don&rsquo;t enforce these which is where they get speed from</em></p>
-
-<h3>Consistent means for accessing data (SQL)</h3>
-
-<p>Many people complain about SQL and while its not a perfect language it is a common standard for accessing data. There are idioms that exist in Oracle that do not in Postgres and ones that exist in MySQL that do not in SQL Server, but on the whole ANSI-SQL is a common standard. This means if you learn one in large part you learn another (from an application developers perspective). This means you have a broader people to pull from when you consider moving from one to another, and that skills are more portable. While Mongo may be growing, its in no way guaranteed to be around in 5 years, nor is CouchDB. In fact there have been many NoSQL databases that have come and gone:</p>
-
-<ul>
-<li>Tokyo Cabinent</li>
-<li></li>
-</ul>
-
-
-<h2>Postgres</h2>
-
-<p>So there&rsquo;s some shared things that make databases great, but in particular Postgres aims to be the single database capable of ushering in a death to NoSQL. While each item could easily be its own blog post hopefully the following calls out they key values and allows people to dive in deeper.</p>
-
-<h3>HStore</h3>
-
-<p>I strongly debated saving the best for last, but really just couldn&rsquo;t wait. If there&rsquo;s a single feature in Postgres that will kill NoSQL its HStore. HStore is a data-type that allows you to store a dictionary within postgres.</p>
-
-<h3>Custom datatypes</h3>
-
-<h3>PostGIS</h3>
-
-<p>Location is all the buzz these days and more and more applications have some tough of location involved in them.</p>
 
 		
-		
+		<a href="/2011/02/25/evaluating-paying-blog-post/" class="more-link">Read on </a>
 	</div>
 
 
@@ -384,12 +248,12 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-08T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-25T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/sql/'>SQL</a>
+	<a class='category' href='/categories/marketing/'>Marketing</a>
 
 </div>
 
@@ -401,16 +265,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/07/how-heroku-works-maker-day/">
+		<a href="/2011/02/22/bootstrappedstartup-marketing-part-4/">
 		
-			How Heroku Works - Maker&#8217;s Day</a>
+			Bootstrapped/Startup Marketing Part 4</a>
 	</h2>
 	<div class="entry-content">
-		<p>In my earlier post on <a href="/2011/11/02/how-heroku-works-teams-tools/">Teams and Tools at Heroku</a>, I mentioned how we value engineers&#8217; time; their work has enabled us to build a great platform. As a result of what we&rsquo;ve built, we&rsquo;ve had great growth both of our platform and of our teams internally. With that growth inevitably comes different distractions on engineers&#8217; time. Despite how a manager may plan things, engineering work needs long periods of uninterrupted time. To ensure that no matter what, an engineer has plenty of opportunity to do the work he or she was hired to do, Heroku has Maker&rsquo;s Day.</p>
+		<p>We&rsquo;ve talked some about <a href="http://craigekerstiens.com/2011/02/14/bootstrappedstartup-marketing-part-1/">SEO</a>, <a href="http://craigekerstiens.com/2011/02/16/bootstrappedstartup-marketing-part-2/">media/blog posts</a>, adwords, no one of these is a magic bullet. Some work better for different reasons. As I mentioned in the first post, if you haven&rsquo;t checked out the post on <a href="http://craigekerstiens.com/2011/02/03/tactical-steps-for-startup-metrics/">tactically measuring metrics</a> then please do. If you have followed those steps and explore each of these options, then you should have an idea of which one works well for you and which doesn&rsquo;t. The final piece of marketing may be a bit harder to measure, but is going to do great things towards growing your brand to users and visitors.</p>
 
 
 		
-		<a href="/2011/11/07/how-heroku-works-maker-day/" class="more-link">Read on </a>
+		<a href="/2011/02/22/bootstrappedstartup-marketing-part-4/" class="more-link">Read on </a>
 	</div>
 
 
@@ -427,12 +291,12 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-22T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
+	<a class='category' href='/categories/marketing/'>Marketing</a>, <a class='category' href='/categories/startup/'>Startup</a>
 
 </div>
 
@@ -444,19 +308,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/06/how-heroku-works-dashboards/">
+		<a href="/2011/02/18/bootstrappedstartup-marketing-part-3/">
 		
-			How Heroku Works - Dashboards</a>
+			Bootstrapped/Startup Marketing Part 3</a>
 	</h2>
 	<div class="entry-content">
-		<p>Commonly these broader metrics are constantly visible. Heroku takes an approach that if a dashboard is visible and something looks bad its likely to get asked about and fixed. These aren&rsquo;t executive level dashboards about user count and revenue, instead its engineering focused like so much else of Heroku.</p>
+		<p>For this third part on the series I&rsquo;m going to dive into what people perhaps most traditionally think of with marketing startups, online advertising. Online advertising can work, but its definitely not cheap and it does take a good about of pounding at it to know what works. I&rsquo;m going to break up the three key types of advertising, based on the way I&rsquo;ve utilized them and evaluated them recently.</p>
 
-<p>Because we love building a product for engineers, displayed publicly are the metrics engineers care about. Near the lunch table you&rsquo;ll find a persistent TV with average response time per request, tests that are passing, and requests per second across the platform.</p>
-
-<p>Additionally individual dashboards exist on a per team basis. For example in The Vault (Heroku&rsquo;s payments and billings team), you&rsquo;ll find a screen constantly displaying recent test results and a quick view of percentages in the top right that relate to success versus failures for certain metrics.</p>
 
 		
-		
+		<a href="/2011/02/18/bootstrappedstartup-marketing-part-3/" class="more-link">Read on </a>
 	</div>
 
 
@@ -473,12 +334,12 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-06T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-18T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
+	<a class='category' href='/categories/marketing/'>Marketing</a>, <a class='category' href='/categories/startup/'>Startup</a>
 
 </div>
 
@@ -490,21 +351,16 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/06/hackernews-api/">
+		<a href="/2011/02/16/bootstrappedstartup-marketing-part-2/">
 		
-			Hacker News API</a>
+			Bootstrapped/Startup Marketing Part 2</a>
 	</h2>
 	<div class="entry-content">
-		<p><a href="http://news.ycombinator.com">Hacker News</a> is a great source for developers, entrepreneurs, startup people, and in general tech enthusiasts. Given who the community is I&rsquo;m very surprised to find few apps that make it easier to digest the content or to push content to it. <a href="http://www.hnsearch.com/">HNSearch</a> is a great start to be able to search data and they even have a <a href="http://www.hnsearch.com/apps">list of apps</a>. In particular I was most surprised to find not many apps existed as tools to make it easier to build on top of HN. As a result I&rsquo;ve created two things to make such easier&hellip;</p>
+		<p>For the second part of the series we&rsquo;re going talk a bit about finding the influencers in certain industries. We&rsquo;ll get to more traditional means that people think of later, and if you&rsquo;ve missed our first post that dealt mostly with SEO make sure you check it out first. In most online ventures there&rsquo;s a key set of influencers, often times these are blogs or podcasts. Blogs can receive a huge readership, which are often very loyal.</p>
 
-<h3>JSON wrapper for HNSearch.com</h3>
-
-<p>The first problem I encountered is there was no way to access the HNSearch API directly from javascript. Sure you could write all of your code server side, but for many cases this may not be necessary.</p>
-
-<h3>HN Button</h3>
 
 		
-		
+		<a href="/2011/02/16/bootstrappedstartup-marketing-part-2/" class="more-link">Read on </a>
 	</div>
 
 
@@ -521,12 +377,12 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-06T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-16T00:00:00-08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/api/'>API</a>, <a class='category' href='/categories/hacker-news/'>Hacker News</a>, <a class='category' href='/categories/javascript/'>Javascript</a>
+	<a class='category' href='/categories/marketing/'>Marketing</a>, <a class='category' href='/categories/startup/'>Startup</a>
 
 </div>
 
@@ -538,16 +394,18 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/05/oldmakersday/">
+		<a href="/2011/02/14/bootstrappedstartup-marketing-part-1/">
 		
-			How Heroku Works - Maker Day</a>
+			Bootstrapped/Startup Marketing Part 1</a>
 	</h2>
 	<div class="entry-content">
-		<p>Heroku has been growing rapidly lately, both in terms of our user base as well as our teams that help make Heroku great. With this growth there&rsquo;s an increasing demand on individuals&#8217; time to interview candidates, ramp up new hires, collaborate cross organization&hellip; in short, individuals are putting in more time on procedural things. Many of those items, while very valuable, start to conflict with actually producing the code which at the end of the day is what we want engineers doing. As a result most teams at Heroku observe Maker Day.</p>
+		<p>This is the first of a 4 part series on marketing for startups/bootstrapped companies. Much of the learnings from this are a result of experiences with Registry Stop. The key to each of these is going to be measuring and reacting to your efforts. If you need help on this, check out previous post around metrics for startups.</p>
+
+<p>So without further adieu, on this initial post of the series we&rsquo;re going to talk a bit about the biggest free way to get traction and traffic for your startup. The best way to aquire free traffic to your site, is to ensure your site is optimized for search engines or more commonly <strong>SEO</strong>. Sure you can pay $3 for your ad to show up on certain keywords, but why spend the $3 per click if you can simply ensure you&rsquo;re the first search result. There are slightly different methods for this for each search engine, but we&rsquo;ll cover a broad set of items to pay attention to.</p>
 
 
 		
-		<a href="/2011/11/05/oldmakersday/" class="more-link">Read on </a>
+		<a href="/2011/02/14/bootstrappedstartup-marketing-part-1/" class="more-link">Read on </a>
 	</div>
 
 
@@ -564,12 +422,12 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-05T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-14T19:55:56-08:00" pubdate data-updated="true">Feb 14<span>th</span>, 2011</time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/business/'>Business</a>, <a class='category' href='/categories/engineering/'>Engineering</a>, <a class='category' href='/categories/heroku/'>Heroku</a>
+	<a class='category' href='/categories/marketing/'>Marketing</a>, <a class='category' href='/categories/startup/'>Startup</a>
 
 </div>
 
@@ -581,18 +439,18 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/2011/11/03/moreadvanceddependencies/">
+		<a href="/2011/02/08/requirements-gathering-for-consumer-startups/">
 		
-			More Advanced Dependencies</a>
+			Requirements Gathering for Consumer Startups</a>
 	</h2>
 	<div class="entry-content">
-		<p>So we walked through setting up your <a href="/2011/11/01/installingpythonpackages/">virtualenv and installing some packages</a>. The basic workflow for installing packages will work 95% of the time, however part of the time you will need a little more. Below are several cases that may require extra effort. Its likely worthwhile to skim these and only reference them when needed as they likely wont be part of your everyday workflow (with the exception of using mirrors).</p>
+		<p>Most all development projects start with a hunch at a problem. Seldom do you have the opportunity of enough resources prior beginning building to fully vet all assumptions and define all requirements. Or at the very least if you do, you&rsquo;re not in startup mode. For this reason the very first thing you build is often not the perfect solution. If you&rsquo;re lucky its a start at a solution, and even if its not, if you&rsquo;re close users will tell you what they want.</p>
 
-<p>Most packages you install should be on pip and an actual released version of a package. There are times however when you may need to test out a package that is still being worked on. For these cases there&rsquo;s what developers commonly do and what you should do.</p>
+<p>What this leaves you with is a couple of key items. First is get to the minimum product you can to vet your idea. Most commonly known as Minimally Viable Product. This should be the minimum product you need to vet your idea, and add some form of value for users. Once you&rsquo;ve created this, don&rsquo;t refine, don&rsquo;t keep iterating, <strong>launch</strong>. More time won&rsquo;t let you perfectly solve the problem, getting it in front of users will help you solve things perfect.</p>
 
 
 		
-		<a href="/2011/11/03/moreadvanceddependencies/" class="more-link">Read on </a>
+		<a href="/2011/02/08/requirements-gathering-for-consumer-startups/" class="more-link">Read on </a>
 	</div>
 
 
@@ -609,14 +467,107 @@ $(document).ready(
   
 
 
-<time datetime="2011-11-03T00:00:00-07:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-02-08T06:49:20-08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2011</time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/categories/python/'>Python</a>
+	<a class='category' href='/categories/startup/'>Startup</a>
 
 </div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/03/tactical-steps-for-startup-metrics/">
+		
+			Tactical Steps for Startup Metrics</a>
+	</h2>
+	<div class="entry-content">
+		<p>Metrics are obviously a very valuable area for start-ups, if you don&rsquo;t believe in metrics and think you&rsquo;re idea wins just because its great then you better start searching for your next day job. <a href="http://twitter.com/davemcclure">Dave McClure</a> has done a great talk on start-ups several times over, you can check out a video and corresponding slide show at:</p>
+
+<p><a href="http://www.ustream.tv/recorded/5336115"><a href="http://www.ustream.tv/recorded/5336115">http://www.ustream.tv/recorded/5336115</a></a>
+<a href="http://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version"><a href="http://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version">http://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version</a></a></p>
+
+<p>And besides, it&rsquo;s a pirates acronym, so it&rsquo;s got to be great. But translating these from concept to actual technology metrics is also something that needs discussion. You can&rsquo;t exactly say we&rsquo;re going to use Google Analytics and let it magically tell you everything, furthermore all of the web developers out there talking about tweaks on Google Analytics do little to actually tell you what you need to know.</p>
+
+
+		
+		<a href="/2011/02/03/tactical-steps-for-startup-metrics/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-03T19:39:54-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/analytics/'>Analytics</a>, <a class='category' href='/categories/startup/'>Startup</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">
+		
+			Events With Google Analytics and Tricking Pageviews</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond this. There are two key items with tracking that you can do that will let you get a bit further. There&rsquo;s also plenty more on the reporting side, but we&rsquo;ll get to some of that later. On the tracking side the first item is event tracking. This is perhaps most commonly used for tracking various Javascript events that occur during a visit, however it can also be a bit more flexible towards tracking values. A very simple example might be:</p>
+
+<pre>_ga._trackEvent(category, action, opt_label, opt_value)</pre>
+
+
+<p>Or a real life example of this, might be on a FAQ screen, clicking the link to an anchored section of the page:</p>
+
+<pre>_ga._trackEvent('faq', 'anchor click', $(this))</pre>
+
+
+<p>But events by their sheer nature give a bit more flexibility with that value field. In the case of a user sending a message 
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T16:28:56-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	
 
 
 	

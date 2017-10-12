@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-18T19:42:10-07:00</updated>
+  <updated>2017-10-12T09:19:13-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dear Postgres]]></title>
+    <link href="http://www.craigkerstiens.com/2017/10/12/dear-postgres/"/>
+    <updated>2017-10-12T08:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/10/12/dear-postgres</id>
+    <content type="html"><![CDATA[<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/242D1y2p2g0g281S0O3W/dear_postgres.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&amp;v=977a17bd" alt="" /></p>
+
+<p>Dear Postgres,</p>
+
+<p>I&rsquo;ve always felt an affinity for you in my 9 years of working with you. I know others have known you longer, but that doesn&rsquo;t mean they love you more. Years ago when others complained about your rigidness or that you weren&rsquo;t as accommodating as others I found solace in your steadfast values:</p>
+
+<ol>
+<li>Don&rsquo;t lose data</li>
+<li>Adhere to standards</li>
+<li>Move forward with a balancing act between new fads of the day while still continuously improving</li>
+</ol>
+
+
+<p>You&rsquo;ve been there and seen it all. Years ago you were being disrupted by XML databases. As companies made heavy investment into what such a document database would do for their organization you proceeded to &ldquo;simply&rdquo; add a datatype that accomplished the same and brought your years of progress along with it.</p>
+
+<p>In the early years you had the standard format of index <em>b-tree</em> that most database engines leveraged. Then quietly but confidently you started adding more. Then came K-nearest neighbor, generalized inverted indexes (GIN), and generalized search-tree (GiST), only to be followed by space partitioned GiST and block range indexes (BRIN). Now the only question is which do I use?</p>
+
+<p><img src=”https://d3vv6lp55qjaqc.cloudfront.net/items/2I43101m250a363W0s0m/Image%202017-10-12%20at%209.11.57%20AM.gif?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&v=100f9c67” style=”width:50%” /></p>
+
+<p>All the while there was this other camp using for something that felt cool but outside my world: GIS. GIS, geographical information systems, I thought was something only civil engineers used. Then GPS came along, then the iPhone and location based devices came along and suddenly I wanted to find out the nearest path to my Peets, or manage geographical region for my grocery delivery service. PostGIS had been there all along building up this powerful feature set, sadly to this day I still mostly marvel from the sideline at this whole other feature set I long to take advantage of&hellip; <em>one day&hellip; one day</em>.</p>
+
+<p>A little over 5 years ago I fell in love with your fastly improving analytical capabilities. No you weren&rsquo;t an MPP system yet, but here came window functions and CTEs, then I almost understood recursive CTEs <em>(still working on that one)</em>. I can iterate over data in a recursive fashion without PL/PgSQL? Yes please! I only want to use it more.</p>
+
+<p>And then five years ago, document stores start taking over the world. I feel like I&rsquo;ve seen this story before, wasn&rsquo;t XML going to change the internet? Enter JSON, the JSON datatype, and JSONB. Wow, this is really nice to mix relational, document storage, join against things. I suddenly don&rsquo;t get why more don&rsquo;t take this flexible approach to building on a good foundation and layering on the refinements.</p>
+
+<p>Extensions! Where have you been all my life? There’s <a href="https://www.citusdata.com">Citus</a>, and <a href="https://github.com/aggregateknowledge/postgresql-hll">HyperLogLog</a>, and <a href="https://www.zombodb.com/">ZomboDB</a>, with each I can add functionality to Postgres without it being limited to the standard release, they can be in C or not. Wait, all along so much has been built on this foundation? PostGIS, full-text search, hstore? I like all those things, why didn&rsquo;t you tell me all along about this foundation? Postgres, I like what I&rsquo;m seeing how you&rsquo;re allowing others to do more without having it be in the core of Postgres. This extension stuff is really kinda cool that it&rsquo;s Postgres and then some, kinda like C and then ++, wait nevermind scratch that analogy.</p>
+
+<p>Sorry, I&rsquo;ve rambled a bit. You&rsquo;re a little over twenty years old now. I&rsquo;ve known you for nearly ten of those years so I know there&rsquo;s so much about your background I don&rsquo;t know, I hope we get to spend the time together to share it all. This 10 release is really an exciting one to me. We&rsquo;ve spent all this time together and I feel like each passing year the bond grows fonder.</p>
+
+<p>Now you&rsquo;ve brought me better parallelism so I can further utilize my system resources. I now have partitioning. Thank you! I don&rsquo;t have to roll my own hacks to help age out old data for my time series database. Logical replication will make so many other things possible, such as more online upgrades and integration with other systems.</p>
+
+<p>Postgres, I just want to say thank you for the past ten years together. Thank you for all you’ve done and for all you’ll continue to do in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Tracking and managing your Postgres connections]]></title>
@@ -722,7 +762,7 @@ I love me some windows, though not always the easiest things to work with. They 
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#98;&#105;&#108;&#108;&#x69;&#110;&#x67;&#64;&#x6d;&#121;&#99;&#111;&#x6d;&#x70;&#x61;&#110;&#x79;&#x2e;&#99;&#x6f;&#109;">&#98;&#x69;&#x6c;&#108;&#x69;&#x6e;&#x67;&#64;&#109;&#121;&#x63;&#111;&#109;&#x70;&#97;&#x6e;&#121;&#46;&#99;&#x6f;&#x6d;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#106;&#x61;&#110;&#101;&#64;&#x6d;&#x79;&#x63;&#111;&#109;&#112;&#x61;&#x6e;&#x79;&#x2e;&#x63;&#111;&#x6d;">&#106;&#x61;&#110;&#101;&#64;&#x6d;&#121;&#99;&#x6f;&#x6d;&#112;&#x61;&#x6e;&#x79;&#x2e;&#x63;&#x6f;&#x6d;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x62;&#x69;&#x6c;&#108;&#x69;&#x6e;&#103;&#x40;&#x6d;&#x79;&#x63;&#111;&#x6d;&#112;&#97;&#x6e;&#x79;&#46;&#x63;&#x6f;&#109;">&#x62;&#105;&#108;&#108;&#105;&#x6e;&#103;&#64;&#109;&#x79;&#x63;&#111;&#109;&#x70;&#x61;&#x6e;&#x79;&#46;&#99;&#x6f;&#109;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x6a;&#97;&#x6e;&#101;&#x40;&#x6d;&#121;&#x63;&#111;&#109;&#x70;&#x61;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#109;">&#106;&#x61;&#x6e;&#x65;&#64;&#x6d;&#x79;&#99;&#x6f;&#109;&#x70;&#97;&#110;&#121;&#x2e;&#x63;&#111;&#109;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
@@ -1616,103 +1656,6 @@ FROM foo;
 <li>LAUNCH DAY &ndash; Sit in a room and watch all the things, engage with twitter/HN/etc.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres and Node - Hands on using Postgres as a Document Store with MassiveJS]]></title>
-    <link href="http://www.craigkerstiens.com/2015/12/08/massive-json/"/>
-    <updated>2015-12-08T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/12/08/massive-json</id>
-    <content type="html"><![CDATA[<p>JSONB in Postgres is absolutely awesome, but it&rsquo;s taken a little while for libraries to come around to make it as useful as would be ideal. For those not following along with Postgres lately, here&rsquo;s the quick catchup for it as a NoSQL database.</p>
-
-<ul>
-<li>In Postgres 8.3 over 5 years ago Postgres received <a href="http://www.craigkerstiens.com/2013/07/03/hstore-vs-json/">hstore a key/value</a> store directly in Postgres. It&rsquo;s big limitation was it was only for text</li>
-<li>In the years after it got GIN and GiST indexes to make queries over hstore extremely fast indexing the entire collection</li>
-<li>In Postgres 9.2 we got JSON&hellip; sort of. Really this way only text validation, but allowed us to create some <a href="http://www.craigkerstiens.com/2013/05/29/postgres-indexes-expression-or-functional-indexes/">functional indexes</a> which were still nice.</li>
-<li>In Postgres 9.4 we got JSONB &ndash; the B stands for Better according to <a href="http://www.twitter.com/leinweber">@leinweber</a>. Essentially this is a full binary JSON on disk, which can perform as fast as other NoSQL databases using JSON.</li>
-</ul>
-
-
-<!--more-->
-
-
-<p>This is all great, but when it comes to using JSON you need a library that plays well here. As you might have guessed it from <a href="http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/">my previous post this is where MassiveJS comes in</a>. Most ORMs take a more legacy approach to <a href="http://www.craigkerstiens.com/2014/01/24/rethinking-limits-on-relational/">how they work with the database</a>, in contrast the other side of the world believes in document only storage way is the future. In contrast Postgres believes there is a time and place for everything, just like Massive, except it believes Postgres is the path <a href="http://www.craigkerstiens.com/2012/04/30/why-postgres/">just as I do</a>.</p>
-
-<p>Alright, enough context, let&rsquo;s take a look.</p>
-
-<h3>Getting all setup</h3>
-
-<p>First go ahead and create a database, let&rsquo;s call it massive, and then let&rsquo;s connect to it and create our example table:</p>
-
-<pre><code>$ createdb massive
-$ psql massive
-# create table posts (id serial primary key, body jsonb);
-</code></pre>
-
-<p>Now that we&rsquo;ve got our database setup let&rsquo;s seed it with some data. If you want you can simple hop over to the github repo and pull it down then run <code>node load_json.js</code> to load the example data. A quick look at it, given an <code>example.json</code> file we&rsquo;re going to iterate over it. For each record in there, we&rsquo;re going to call saveDoc. Based on our table which has a unique id key and a body jsonb field it&rsquo;ll simply save our JSON document into that table:</p>
-
-<pre><code>var parsedJSON = require('./example.json');
-
-for(i = 0; i &lt; parsedJSON.posts.length; i++) {
-    db.saveDoc("posts", parsedJSON.posts[1], function(err,res){});
-};
-</code></pre>
-
-<p><em>If you want to just take a look at this <a href="https://github.com/craigkerstiens/json_node_example">github repo</a>, once you create a database you can run <code>node load_json.js</code> to seed it.</em></p>
-
-<h3>Why JSON at all?</h3>
-
-<p>JSON data is all over the place, in many cases it&rsquo;s fast and flexible and allows you to move more quickly. Yes, much of the time normalizing your data can be useful, but there is something to be said for expediency saving some data and querying across it. Querying across some giant document also used to be much more expensive, but now with JSONB and it&rsquo;s indexes that can be extremely fast.</p>
-
-<h3>Querying</h3>
-
-<p>So how do we go about querying? Well it&rsquo;s pretty simple with Massive, they provide a nice <code>findDoc</code> function to let you just search for contents of a specific key within the document. Let&rsquo;s say I wanted to pull back all posts that are in the Postgres category, well it&rsquo;s as simple as:</p>
-
-<pre><code>db.posts.findDoc({title : 'Postgres'}, function(err,docs){
-    console.log(docs);
-});
-</code></pre>
-
-<p>The real beauty of this is if you added a GIN index (which will index the entire document) this query will be <a href="http://obartunov.livejournal.com/175235.html">quite performant</a>.</p>
-
-<p><em>Just make sure to add your GIN index</em>:</p>
-
-<pre><code>CREATE INDEX idx_posts ON posts USING GIN(body jsonb_path_ops); 
-CREATE INDEX idx_posts_search ON posts USING GIN(search);  
-</code></pre>
-
-<p>But even better, with Massive it&rsquo;ll automatically add these for you if you just start saving docs. It will automatically create the table and appropriate indexes, just doing the correct thing out of the box.</p>
-
-<h3>Full text and JSON</h3>
-
-<p>Cool, so you can do an exact look up. Which is great when you&rsquo;re matching a category&hellip; which could be easily normalized. It&rsquo;s great when you&rsquo;re matching numbers, which also could likely reside in their own column. But what about when you&rsquo;re searching over a large document, or a set of keys within some document which may require several joins, or indeterminate data structure, well you may want to search for the presence of that string at all. As you may have guessed this is quite trivial.</p>
-
-<pre><code>db.posts.searchDoc({
-    keys : ["title", "category"],
-    term : ["Postgres"]
-}, function(err,docs){
-    console.log(docs);
-})
-</code></pre>
-
-<p>Hopefully it&rsquo;s pretty straight forward, but to be very clear. Call out the document table you want to search, then the keys you&rsquo;ll want to include in the search, then the term. This will search for any place the contents that string are found in matching values for those keys.</p>
-
-<p>Which will nicely yield the expected documents:</p>
-
-<pre><code>[ { link: 'http://www.craigkerstiens.com/2015/05/08/upsert-lands-in-postgres-9.5/',
-    title: 'Upsert Lands in PostgreSQL 9.5 – a First Look',
-    category: 'Postgres',
-    comments: [ [Object] ],
-    id: 2 },
-  { link: 'http://www.craigkerstiens.com/2015/11/30/massive-node-postgres-an-overview-and-intro/',
-    title: 'Node, Postgres, MassiveJS - a Better Database Experience',
-    id: 3 } ]
-</code></pre>
-
-<h3>In conclusion</h3>
-
-<p>While Massive isn&rsquo;t perfect, its approach to storing queries in files, using the schema vs. having to define your models in code and the database, and it&rsquo;s smooth document integration makes it a real contender as a better database library when working with Node. Give it a try and let me know your thoughts.</p>
 ]]></content>
   </entry>
   

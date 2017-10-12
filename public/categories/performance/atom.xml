@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Performance | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/performance/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-09-18T19:42:10-07:00</updated>
+  <updated>2017-10-12T09:19:13-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -379,36 +379,6 @@ function mce_success_cb(resp){
 
 <!--End mc_embed_signup-->
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Pooling with Django]]></title>
-    <link href="http://www.craigkerstiens.com/2012/10/02/Postgres-pooling-with-django/"/>
-    <updated>2012-10-02T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2012/10/02/Postgres-pooling-with-django</id>
-    <content type="html"><![CDATA[<p>A feature thats glaringly missing within Django and common in many other frameworks including many Java frameworks and Rails is connection pooling for your database connection. As most Django users are Postgres users the default answer is to use something like pgPool or pgBouncer. This are tools that you can run that will persist a connection to your Postgres database intended to offer:</p>
-
-<ul>
-<li>Connection Pooling</li>
-<li>Replication</li>
-<li>Load Balancing</li>
-</ul>
-
-
-<p><em>Its of not that PgBouncer is intended very specifically for pooling while pgPool does much more.</em></p>
-
-<p>Each of these in many cases can come with caveats though. If there are issues within your network they may not re-establish the connection properly. They also are not known to handle SSL renegotiation very well. Finally given running one more piece of software to reduce connection times it seems like a lot of overhead to simply reduce the connection time to your database.</p>
-
-<h2>Is connection time a real problem?</h2>
-
-<p>Given a well refined app, with a well refined schema with appropriate indexes your view should be doing things pretty quickly. If this is the case without some form of connection pooling and running in a cloud environment (in this case Heroku) your application performance looks like:</p>
-
-<p>If you&rsquo;ll notice that about 50% of our request time was in Postgres. The hard part to see is how much of this is actually doing something. In this case its issuing some very basic queries then rendering a very basic view.</p>
-
-<h2>The solution</h2>
-
-<p>By using something in <em>the other Python ORM</em>, SQLAlchemy, we can take advantage of its connection pooling. Large thanks to <a href="https://twitter.com/kennethreitz">Kenneth Reitz</a> for packaging this up into an easy to install and easy to use format as a Django DB backend. Using django_postgrespool it will take advantage of connection pooling and we can then see the performance after:</p>
 ]]></content>
   </entry>
   
