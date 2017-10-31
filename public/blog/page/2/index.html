@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Open DNS is a DNS resolver that caches records beyond their TTL if the upstream DNS server cannot be found. In cases like today&rsquo;s major outage &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="For the second time now I&rsquo;ve had to implement a system that syncs from my system of record into Salesforce.com, the first at Heroku and now at &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -62,6 +62,43 @@
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2016/11/23/syncing-from-postgres-to-salesforce-part-1/">
+		
+			Syncing From Postgres to Salesforce - Data Mappings</a>
+	</h2>
+	<div class="entry-content">
+		<p>For the second time now I&rsquo;ve had to implement a system that syncs from my system of record into Salesforce.com, the first at Heroku and now at <a href="https://www.citusdata.com">Citus Data</a>. The case here is pretty simple, I have a software-as-a-service, B2B product. It&rsquo;s a homegrown application in these cases in Ruby, but could be Python, .Net, any language of your choosing. The problem is I don&rsquo;t want to have to be rebuilding my own CRM, reporting, etc. on top of all of my internal database. And as soon as you&rsquo;re at some reasonable size (sales guy of 1 or more) you need to be able to provide insights on what&rsquo;s in that system of record database to others.</p>
+
+<p>While my tooling isn&rsquo;t a full fledged product by any means, here&rsquo;s a bit of how I&rsquo;ve developed this process a few times over and some of the annoying bits of code to help get you started. In this post I&rsquo;ll walk through some of the basic datatypes, then we&rsquo;ll follow-up with the overall architecture and tweaks you need to make to Salesforce, and finally we&rsquo;ll provide some example code to help you create this setup yourself.
+		
+		<a href="/2016/11/23/syncing-from-postgres-to-salesforce-part-1/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-11-23T00:00:00-08:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -456,53 +493,6 @@
 <div class="tags">
 
 	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2015/12/26/from-blog-posts-to-launches/">
-		
-			Going From Blog Posts to Full Launches</a>
-	</h2>
-	<div class="entry-content">
-		<p>I recall extremely early stage where you&rsquo;d build a feature, realize it was awesome, then the next day write a blog post for it. At some point you start to move from that to more coordinated launches. A larger coordinated launch allows you to reach a bigger audience, can lead to bigger deals, and help expand your overall market. But perhaps more importantly by the time you hit full launch you&rsquo;ve message tested and ensured it&rsquo;s going to resonate in the way you expect.</p>
-
-<p><em>The process itself will both help amplify and validate/refine your message</em></p>
-
-<p>This is often a more gradual process than a sudden single change, you&rsquo;ll introduce new parts of this in time. And for many what an entire launch process looks like comes by trial an error, to help shorten that learning curve here&rsquo;s key areas I pay attention for a launch and process followed by a rough timeline.</p>
-
-
-		
-		<a href="/2015/12/26/from-blog-posts-to-launches/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-12-26T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/marketing/'>Marketing</a>, <a class='category' href='/categories/startup/'>Startup</a>
 
 </div>
 

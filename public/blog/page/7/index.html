@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Postgres is rich with options for indexing. First you&rsquo;ve got a variety of types, and beyond that you can do a variety of things with each of &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Even from intial reviews of my previous post on expression based indexes I received a lot of questions and feedback around many different parts of &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -62,6 +62,66 @@
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/05/30/a-collection-of-indexing-tips/">
+		
+			Postgres Indexing - a Collection of Indexing Tips</a>
+	</h2>
+	<div class="entry-content">
+		<p>Even from intial reviews of my previous post on expression based indexes I received a lot of questions and feedback around many different parts of indexing in Postgres. Here&rsquo;s a mixed collection of valuable tips and guides around much of that.</p>
+
+<h3>Unused Indexes</h3>
+
+<p>In an earlier tweet I joked about some SQL that would generate the SQL to add an index to every column:</p>
+
+<pre><code># SELECT 'CREATE INDEX idx_' 
+    || table_name || '_' 
+    || column_name || ' ON ' 
+    || table_name || ' ("' 
+    || column_name || '");' 
+  FROM information_schema.columns;
+                      ?column?
+---------------------------------------------------------------------
+ CREATE INDEX idx_pg_proc_proname ON pg_proc ("proname");
+ CREATE INDEX idx_pg_proc_pronamespace ON pg_proc ("pronamespace");
+ CREATE INDEX idx_pg_proc_proowner ON pg_proc ("proowner");
+</code></pre>
+
+
+		
+		<a href="/2013/05/30/a-collection-of-indexing-tips/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -459,55 +519,6 @@
 <div class="tags">
 
 	<a class='category' href='/categories/heroku/'>Heroku</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/03/07/Fixing-django-db-connections/">
-		
-			Fixing Database Connections in Django</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you&rsquo;re looking to get better performance from your Django apps you can check out <a href="http://www.amazon.com/Pro-Django-Experts-Voice-Development/dp/1430210478?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">Pro Django</a>, <a href="http://www.amazon.com/PostgreSQL-High-Performance-Gregory-Smith/dp/184951030X?ref=as_li_tf_tl?ie=UTF8&amp;tag=mypred-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633439">PostgreSQL High Performance</a>, or read some my earlier posts on <a href="http://www.craigkerstiens.com/2013/01/10/more-on-postgres-performance/">Postgres Performance</a>. All of these are of course good things to do – you can also start by correcting an incredibly common but also painful performance issue, that until 1.6 is unaddressed in Django.</p>
-
-<p>Django&rsquo;s current default behavior is to establish a connection for each request within a Django application. In many cases any particularly in distributed cloud environments this is a large time sink of your response time. An example application running on <a href="http://www.heroku.com">Heroku</a> shows a typical connection time of 70ms. A large part of this time is the SSL negotiation that occurs in connecting to your database, <em>which is a good practice to ensure security of your data</em>. Regardless, this is a long time in simply establishing a connection. As a point of comparisson its commonly encourage that most queries to your database are under 10ms.</p>
-
-<p>An example that highlights this in a small lightweight application shows the bulk of a request time being within a connection displayed by <a href="http://www.newrelic.com">New Relic</a>:</p>
-
-<p><img src="http://f.cl.ly/items/0X3u0e3Q3G0L19263k2Z/Screenshot_3_6_13_1_12_PM.png" alt="connection time" /></p>
-
-
-		
-		<a href="/2013/03/07/Fixing-django-db-connections/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-07T00:00:00-08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/django/'>Django</a>, <a class='category' href='/categories/python/'>Python</a>
 
 </div>
 

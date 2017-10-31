@@ -4,7 +4,7 @@
   <title><![CDATA[Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-10-12T09:50:57-07:00</updated>
+  <updated>2017-10-31T13:40:10-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[About Postgres - the non-code bits]]></title>
+    <link href="http://www.craigkerstiens.com/2017/10/31/postgres-the-non-code-bits/"/>
+    <updated>2017-10-31T13:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/10/31/postgres-the-non-code-bits</id>
+    <content type="html"><![CDATA[<p>Postgres is an interesting open source project. It&rsquo;s truly one of a kind, it has it&rsquo;s own license to prove it as opposed to falling under something like Apache or GPL. The Postgres community structure is something that is pretty well defined if you&rsquo;re involved in the community, but to those outside it&rsquo;s likely a little less clear. In case you&rsquo;re curious to learn more about the community here&rsquo;s a rundown of a few various aspects of it: <!--more--></p>
+
+<h3>PostgreSQL License</h3>
+
+<p>Let&rsquo;s start with the legal part first. <em>First IANAL</em>. PostgreSQL is under it&rsquo;s own license. For those who don&rsquo;t regularly follow software licensing it&rsquo;s extremely liberal and flexible. You can take Postgres, fork it, change it, package it up, and resell it. This is actually one of the reasons you see Postgres at the core of so many other databases like Par Accel, Asterdata, etc. That and that it&rsquo;s such a solid code base that is capable of being extended. <em>I once heard someone describe how they don&rsquo;t really like writing C, but they enjoy writing Postgres C ;)</em></p>
+
+<p><em>A thing you can&rsquo;t do is profit off the PostgreSQL logo without any approval from the core team.</em></p>
+
+<h3>The people</h3>
+
+<p>Within the Postgres community there are 2 major sets of people.</p>
+
+<p><strong>The core team</strong></p>
+
+<p>The core team is a smaller team within the Postgres community. The core team is effectively a <a href="https://www.postgresql.org/developer/core/">steering committee</a> for Postgres. They&rsquo;re responsible for coordinating releases, handling confidential issues (read: security issues), managing permissions around PostgreSQL code and infrastructure, defining policy.</p>
+
+<p>The core team is a very small list of people, at the moment 5 individuals.</p>
+
+<h3>Contributors</h3>
+
+<p>Yes, anyone can contribute to Postgres, and with each release there are a laundry of people that write some code that goes into Postgres. If fact Postgres 10 had <a href="https://www.postgresql.org/docs/current/static/release-10.html#idm46046833759776">325 people</a> that contributed in some form. That said there is a hierarchy that exists. The two biggest ones are committers and major contributors.</p>
+
+<p><strong>Committers</strong> gain access after years of contributing to Postgres showing sustained commitment to the project. New committers are voted on each year at PgCon which happens in March/April in Ottawa. If you&rsquo;re ever curious for a conference of what&rsquo;s coming and being deep in the internals of Postgres it&rsquo;s one to check out. Once you do gain your commit bit you&rsquo;re expected to contribute every couple of years to the project. And of course there are a <a href="https://wiki.postgresql.org/wiki/Committers">number of qualifications</a> such as contributing high quality code and perhaps most key is helping review others contributions.</p>
+
+<p><strong>Major contributors</strong> are another notable group. Major contributors don&rsquo;t have full sole commit access, but are held in a higher regard from consistently contributing major features as well as providing review for others.</p>
+
+<p><strong>Contributors</strong>  in general are another area worth calling out. While they may not have a flagship feature to their name like the major contributors, Postgres is what it is because of the contributions of everyone.</p>
+
+<h3>PostgreSQL the company</h3>
+
+<p>Well, it turns out there isn&rsquo;t a company behind Postgres, it&rsquo;s one thing that makes it unique–no one can ever &ldquo;own it&rdquo;. There are some official PostgreSQL non-profits though in particular the US non-profit and the EU non-profit. These non-profits ensure that the core guidelines are enforced and also give coverage for the community to help put on official community conferences. A few of these happen each year which include:</p>
+
+<ul>
+<li><a href="https://www.pgcon.org/2018/">PGCon</a> &ndash; The hackers conference</li>
+<li>[PostgresOpen SV] &ndash; A consolidation of PostgresOpen and PGConf Silicon Valley</li>
+<li><a href="https://postgresopen.org/">PGConf EU</a> &ndash; The largest PG European Conference which moves around each year</li>
+</ul>
+
+
+<p>If you&rsquo;re looking for a way to support the PostgreSQL non-profit organization I&rsquo;d encourage you to consider joining <a href="https://postgresql.us/">PostgreSQL.us</a>.</p>
+
+<h3>Engaging</h3>
+
+<p>So you want to jump into the community, where do you even start? The first place I&rsquo;d encourage is to subscribe to the <a href="https://www.postgresql.org/list/">mailing list</a> or check out the <a href="http://postgres-slack.herokuapp.com/">slack channel</a>. The users mailing is a great one to just jump in and help answer questions and see what people need help with. The hackers list is where you go to get a peek at all the fun debates/discussions/development.</p>
+
+<p>If you&rsquo;re thinking about contributing it&rsquo;s a good idea to lurk on the hackers list for a bit first. Then when the commitfest comes chip in and help review some patches and do some testing. Oh and of course, you can always blog about what you&rsquo;re doing with Postgres and will aim to get it included into <a href="https://www.postgresweekly.com">Postgres Weekly</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dear Postgres]]></title>
@@ -762,7 +816,7 @@ I love me some windows, though not always the easiest things to work with. They 
 
 <p>Opportunities is a much harder one in the SaaS world. In traditional marketing you have your standard stages of MQL (Marketing Qualified Lead), progressing to SQL (Sales Qualified Lead), etc. that you expect these potential customers to flow through. In the as-a-service world you may have people look from afar for weeks, then suddenly sign-up and give you a credit card and start paying within minutes. While there is still steps the customer may go through before buying you often have less insight into these. How you decide to structure your opportunities flow is entirely up to you. In my case I tend to opt to still have htem, but they&rsquo;re an exception basis where a salesperson is actively engaged vs. the other 90%+ of fully self-service customers.</p>
 
-<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#98;&#105;&#108;&#x6c;&#x69;&#x6e;&#x67;&#64;&#109;&#121;&#x63;&#x6f;&#109;&#112;&#97;&#110;&#121;&#x2e;&#x63;&#111;&#x6d;">&#x62;&#x69;&#108;&#x6c;&#105;&#110;&#x67;&#x40;&#x6d;&#121;&#x63;&#x6f;&#109;&#x70;&#97;&#x6e;&#121;&#x2e;&#x63;&#x6f;&#109;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#106;&#x61;&#x6e;&#x65;&#64;&#x6d;&#121;&#99;&#x6f;&#109;&#112;&#97;&#110;&#x79;&#x2e;&#99;&#111;&#x6d;">&#106;&#x61;&#110;&#x65;&#64;&#109;&#121;&#x63;&#x6f;&#x6d;&#112;&#x61;&#x6e;&#x79;&#46;&#99;&#111;&#109;</a>&rdquo; who logged in yesterday.</p>
+<p>Shifting back a little bit on accounts. The key with accounts is that if you have some notion of an team or org within your system of record then it makes sense to have that same structure setup in Salesforce. The most basic of this might be an idea of &ldquo;Account owner&rdquo; and &ldquo;Team members&rdquo;. You may have a person in there just for billing, an admin, and then users. Even if you don&rsquo;t want to recreate the entire structure at least having all the contacts tied to the account is critical. I can&rsquo;t count the number of times I&rsquo;ve seen teams setup a &ldquo;<a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#98;&#x69;&#x6c;&#x6c;&#105;&#110;&#x67;&#x40;&#109;&#121;&#x63;&#x6f;&#109;&#x70;&#x61;&#x6e;&#121;&#46;&#x63;&#x6f;&#x6d;">&#x62;&#105;&#x6c;&#108;&#x69;&#x6e;&#103;&#x40;&#109;&#121;&#99;&#x6f;&#109;&#x70;&#97;&#110;&#x79;&#x2e;&#99;&#x6f;&#109;</a>&rdquo; email, seen people try to interact with that email when in reality they wanted to be talking to &ldquo;<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#106;&#x61;&#x6e;&#x65;&#x40;&#109;&#121;&#99;&#x6f;&#109;&#112;&#x61;&#x6e;&#121;&#46;&#x63;&#x6f;&#109;">&#x6a;&#97;&#110;&#101;&#64;&#109;&#121;&#99;&#111;&#x6d;&#x70;&#x61;&#x6e;&#x79;&#46;&#99;&#111;&#109;</a>&rdquo; who logged in yesterday.</p>
 
 <h3>In summary</h3>
 
@@ -1536,125 +1590,6 @@ FROM foo;
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
   })();
 </script>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Going from blog posts to full launches]]></title>
-    <link href="http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches/"/>
-    <updated>2015-12-26T00:00:00-08:00</updated>
-    <id>http://www.craigkerstiens.com/2015/12/26/from-blog-posts-to-launches</id>
-    <content type="html"><![CDATA[<p>I recall extremely early stage where you&rsquo;d build a feature, realize it was awesome, then the next day write a blog post for it. At some point you start to move from that to more coordinated launches. A larger coordinated launch allows you to reach a bigger audience, can lead to bigger deals, and help expand your overall market. But perhaps more importantly by the time you hit full launch you&rsquo;ve message tested and ensured it&rsquo;s going to resonate in the way you expect.</p>
-
-<p><em>The process itself will both help amplify and validate/refine your message</em></p>
-
-<p>This is often a more gradual process than a sudden single change, you&rsquo;ll introduce new parts of this in time. And for many what an entire launch process looks like comes by trial an error, to help shorten that learning curve here&rsquo;s key areas I pay attention for a launch and process followed by a rough timeline.</p>
-
-<!--more-->
-
-
-<h3>Product first</h3>
-
-<p>Making sure the product is in the right shape is key to any big launch. You don&rsquo;t get a second shot and if the product isn&rsquo;t in shape customers often won&rsquo;t take a second look at it later. For this reason I strongly prefer to have your product locked and loaded before you even start talking launch times, or at least be in the bug clean up phase. This means you&rsquo;ve built a feature, validated with alpha users or private beta, and are ready to open it up to the world.</p>
-
-<p>If you have to set a launch date without the product or feature being already done allow padding. Sometimes it&rsquo;s good for the team to know the padding, sometimes it isn&rsquo;t. When you have extra time it&rsquo;s not uncommon for your development to magically consume exactly that amount of time and still result in a small scramble towards the end.</p>
-
-<p>A good driver I&rsquo;ve found is needing to have it fully like to demo a few weeks out from the launch itself, such as during <a href="">analyst pre-briefings</a>.</p>
-
-<h3>Crafting your message</h3>
-
-<p>Every launch is an opportunity to tell your core message and value prop. If you miss this opportunity for focusing on a single narrow feature you&rsquo;ve missed the biggest opportunity you had in a launch. You can&rsquo;t relaunch your full product every time though–you do need some big improvements or feature that you can highlight, but you should still hit your core message.</p>
-
-<p>First you should know that your feature solves some specific problem, you should know this from the alpha/beta testing and if it doesn&rsquo;t solve this problem <a href="http://www.craigkerstiens.com/2014/08/13/when-to-ship-when-to-kill/">you&rsquo;re not ready to launch</a>. Yes, some people will launch a product before the product is completely there–this is common in a marketing driven company as opposed to a product/engineering driven company.</p>
-
-<p>Your message should lead with the problem you&rsquo;re solving, not the laundry list of features. The best launches lead with some  broader thematic message, even better if it&rsquo;s an altruistic world changing one. A rough example of this:</p>
-
-<p>To the point to the product, and probably over generalized as boring:</p>
-
-<ul>
-<li>Connectify brings a new way of taking your dumb devices at home and turning them into intelligent connected devices.</li>
-</ul>
-
-
-<p>In contrast, broad thematic message, followed lightly by the product.</p>
-
-<ul>
-<li>We live in a connected world, and with new connected devices there&rsquo;s the opportunity not just give you more data but help you improve how you live your life. Connectify helps you at bringing the devices that matter together with ease.</li>
-</ul>
-
-
-<h3>Testing your message</h3>
-
-<p>You should treat your message just like a product, testing it gradually along the way. Once you&rsquo;ve got some initial framing of it, test it internally, then with friendly customers or community members. Leading up to the launch I usually have a timeline and get all the content and communication rolling about 3 weeks out. I&rsquo;ll give a bit of a timeline below but first some more around message testing</p>
-
-<h4>Analysts</h4>
-
-<p>If you regularly use <a href="http://www.craigkerstiens.com/2015/07/25/A-guide-to-analyst-relations-for-startups/">any analysts</a> you should absolutely use them to help with a launch. Several weeks out is a great time to test key messages with them, get feedback, and if you&rsquo;re lucky you may even get them to provide a quote for the launch.</p>
-
-<p>Keep in mind here a inquiry is an opportunity to test your message and get feedback. You should talk roughly half of the time here, they should be talking the other half. In contrast briefings before launch you should have your message fully baked and should simply be pitching your message and possibly demo-ing.</p>
-
-<h4>Friendlies</h4>
-
-<p>This may be more contentious, but at least at early stage sharing drafts with friendly community members is a great way to get feedback and refine your message. Here you should be especially concious of the request of their time and expect to have some delay before they get back to you. Being top secret about your message ahead of time won&rsquo;t add much value to it being a home run, where as better ensuring it resonates will help it to be more successful.</p>
-
-<h4>Customers</h4>
-
-<p>Customers I call out as a separate bucket. Customers have less incentive to leak your news than friendlies, but also fall somewhere on the other spectrum of analysts. A key piece about customers is there is an opportunity for them to be a launch partner. And so on to that topic:</p>
-
-<h3>Launch partners</h3>
-
-<p>Press and others like seeing and knowing you have external validation. Similarly many see the benefit of being part of a launch, after all it&rsquo;s more free press for them. For a launch partner there are various levels, though for most providing some quote is a pretty common level.</p>
-
-<p>The best way to do this is talk to them about what they like about the feature/product and take a first stab at the quote for them from their feedback. Some may very much want to wordsmith their own which is fine, but minimizing the work required of them while–trying to hit something they&rsquo;d say as well–as a message that flows can best be done by you taking a first pass.</p>
-
-<p>Further there&rsquo;s varying levels of value with quotes and references. In descending order:</p>
-
-<ol>
-<li>Customers</li>
-<li>Analysts</li>
-<li>Community Members</li>
-</ol>
-
-
-<h3>The other details</h3>
-
-<p>During launch week I mostly want to be dotting i&rsquo;s and crossing t&rsquo;s, meaning: I want the product done. I want documentation done. I want the blog post finalized. I want to be in the mode of send internal announcements, prep internal teams, talk to media.</p>
-
-<h4>Prepping internal teams</h4>
-
-<p>Obviously the engineering and product people involved will be in the loop. But you need to notify many others some of which should have been in the loop already, some less so:</p>
-
-<ul>
-<li>Support &ndash; There&rsquo;s a new product surface area, support should be top of your list so they can field the tickets and questions that come in</li>
-<li>Sales &ndash; Even if there is no price change or impact, new features allow sales to communicate value to customers</li>
-</ul>
-
-
-<h3>Timeline</h3>
-
-<p>Finally what&rsquo;s the end to end timeline look like with all the little details. Here&rsquo;s a rough one that&rsquo;s fully built out. IF you&rsquo;re smaller and don&rsquo;t have a regular cadence of analysts in hand then just expect that doesn&rsquo;t apply. IF your support team is the product and engineers maybe that&rsquo;s lighter weight. Basically feel free to take out parts, but expect your process to grow to something of this size.</p>
-
-<ul>
-<li>4 weeks out &ndash; Outline of blog post with key messages</li>
-<li>Test that outline internally</li>
-<li>3 weeks out &ndash; Start to get a rough draft in place</li>
-<li>3 weeks out &ndash; Share internally and with friendlies. At this point you&rsquo;re explicitely looking for message feedback. Tell people to not waste time on nitpicks of words or grammar, it will be 98% re-written by the time you&rsquo;re done</li>
-<li>2.5 weeks out &ndash; Analyst inquiries for message testing</li>
-<li>2.5 weeks out &ndash; Start putting together product demo</li>
-<li>2 weeks out &ndash; Start putting together documentation</li>
-<li>2 weeks out &ndash; Start nailing down blog post for final messages</li>
-<li>1 weeks out &ndash; Start to put final touches on blog post for grammar</li>
-<li>1 week out &ndash; Analyst briefings</li>
-<li>1 week out &ndash; Update support</li>
-<li>3-5 days out &ndash; Stage blog post</li>
-<li>3-5 days out &ndash; Stage new documentation</li>
-<li>2-4 days out &ndash; Make sure PRs are ready or feature flags, in short the switch is there or live but not public</li>
-<li>1-3 days out &ndash; Update sales</li>
-<li>1-3 days out &ndash; Interall communication to all@</li>
-<li>1-3 days out &ndash; Media briefings</li>
-<li>LAUNCH DAY &ndash; Sit in a room and watch all the things, engage with twitter/HN/etc.</li>
-</ul>
 
 ]]></content>
   </entry>

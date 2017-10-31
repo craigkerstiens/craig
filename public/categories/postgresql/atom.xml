@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PostgreSQL | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-10-12T09:50:57-07:00</updated>
+  <updated>2017-10-31T13:40:10-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[About Postgres - the non-code bits]]></title>
+    <link href="http://www.craigkerstiens.com/2017/10/31/postgres-the-non-code-bits/"/>
+    <updated>2017-10-31T13:00:00-07:00</updated>
+    <id>http://www.craigkerstiens.com/2017/10/31/postgres-the-non-code-bits</id>
+    <content type="html"><![CDATA[<p>Postgres is an interesting open source project. It&rsquo;s truly one of a kind, it has it&rsquo;s own license to prove it as opposed to falling under something like Apache or GPL. The Postgres community structure is something that is pretty well defined if you&rsquo;re involved in the community, but to those outside it&rsquo;s likely a little less clear. In case you&rsquo;re curious to learn more about the community here&rsquo;s a rundown of a few various aspects of it: <!--more--></p>
+
+<h3>PostgreSQL License</h3>
+
+<p>Let&rsquo;s start with the legal part first. <em>First IANAL</em>. PostgreSQL is under it&rsquo;s own license. For those who don&rsquo;t regularly follow software licensing it&rsquo;s extremely liberal and flexible. You can take Postgres, fork it, change it, package it up, and resell it. This is actually one of the reasons you see Postgres at the core of so many other databases like Par Accel, Asterdata, etc. That and that it&rsquo;s such a solid code base that is capable of being extended. <em>I once heard someone describe how they don&rsquo;t really like writing C, but they enjoy writing Postgres C ;)</em></p>
+
+<p><em>A thing you can&rsquo;t do is profit off the PostgreSQL logo without any approval from the core team.</em></p>
+
+<h3>The people</h3>
+
+<p>Within the Postgres community there are 2 major sets of people.</p>
+
+<p><strong>The core team</strong></p>
+
+<p>The core team is a smaller team within the Postgres community. The core team is effectively a <a href="https://www.postgresql.org/developer/core/">steering committee</a> for Postgres. They&rsquo;re responsible for coordinating releases, handling confidential issues (read: security issues), managing permissions around PostgreSQL code and infrastructure, defining policy.</p>
+
+<p>The core team is a very small list of people, at the moment 5 individuals.</p>
+
+<h3>Contributors</h3>
+
+<p>Yes, anyone can contribute to Postgres, and with each release there are a laundry of people that write some code that goes into Postgres. If fact Postgres 10 had <a href="https://www.postgresql.org/docs/current/static/release-10.html#idm46046833759776">325 people</a> that contributed in some form. That said there is a hierarchy that exists. The two biggest ones are committers and major contributors.</p>
+
+<p><strong>Committers</strong> gain access after years of contributing to Postgres showing sustained commitment to the project. New committers are voted on each year at PgCon which happens in March/April in Ottawa. If you&rsquo;re ever curious for a conference of what&rsquo;s coming and being deep in the internals of Postgres it&rsquo;s one to check out. Once you do gain your commit bit you&rsquo;re expected to contribute every couple of years to the project. And of course there are a <a href="https://wiki.postgresql.org/wiki/Committers">number of qualifications</a> such as contributing high quality code and perhaps most key is helping review others contributions.</p>
+
+<p><strong>Major contributors</strong> are another notable group. Major contributors don&rsquo;t have full sole commit access, but are held in a higher regard from consistently contributing major features as well as providing review for others.</p>
+
+<p><strong>Contributors</strong>  in general are another area worth calling out. While they may not have a flagship feature to their name like the major contributors, Postgres is what it is because of the contributions of everyone.</p>
+
+<h3>PostgreSQL the company</h3>
+
+<p>Well, it turns out there isn&rsquo;t a company behind Postgres, it&rsquo;s one thing that makes it unique–no one can ever &ldquo;own it&rdquo;. There are some official PostgreSQL non-profits though in particular the US non-profit and the EU non-profit. These non-profits ensure that the core guidelines are enforced and also give coverage for the community to help put on official community conferences. A few of these happen each year which include:</p>
+
+<ul>
+<li><a href="https://www.pgcon.org/2018/">PGCon</a> &ndash; The hackers conference</li>
+<li>[PostgresOpen SV] &ndash; A consolidation of PostgresOpen and PGConf Silicon Valley</li>
+<li><a href="https://postgresopen.org/">PGConf EU</a> &ndash; The largest PG European Conference which moves around each year</li>
+</ul>
+
+
+<p>If you&rsquo;re looking for a way to support the PostgreSQL non-profit organization I&rsquo;d encourage you to consider joining <a href="https://postgresql.us/">PostgreSQL.us</a>.</p>
+
+<h3>Engaging</h3>
+
+<p>So you want to jump into the community, where do you even start? The first place I&rsquo;d encourage is to subscribe to the <a href="https://www.postgresql.org/list/">mailing list</a> or check out the <a href="http://postgres-slack.herokuapp.com/">slack channel</a>. The users mailing is a great one to just jump in and help answer questions and see what people need help with. The hackers list is where you go to get a peek at all the fun debates/discussions/development.</p>
+
+<p>If you&rsquo;re thinking about contributing it&rsquo;s a good idea to lurk on the hackers list for a bit first. Then when the commitfest comes chip in and help review some patches and do some testing. Oh and of course, you can always blog about what you&rsquo;re doing with Postgres and will aim to get it included into <a href="https://www.postgresweekly.com">Postgres Weekly</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dear Postgres]]></title>
@@ -211,40 +265,6 @@ GROUP BY 2;
 <p>Both are useful and provide different benefits. At smaller scale, say under 100 GB of data logical backups via <code>pg_dump</code> are something you should absolutely be doing. Because backups happen quickly on smaller databases you may be able to get out without functionality like point-in-time recovery. At larger scale, as you approach 1 TB physical backups start to become your only option. Because of the load introduced by logical backups and the time lapse between capturing them they become less suitable for production.</p>
 
 <p>Hopefully this primer helps provide a high level overview of the two primary types of backups that exist as options for Postgres. Of course there is much deeper you can go on each, but consider ensuring you have at least one of the two if not both in place. Oh and make sure to test them, an un-tested backup isn&rsquo;t a backup at all.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Postgres Open Silicon Valley line-up: First take]]></title>
-    <link href="http://www.craigkerstiens.com/2017/07/01/postgresopen-sv-line-up/"/>
-    <updated>2017-07-01T00:00:00-07:00</updated>
-    <id>http://www.craigkerstiens.com/2017/07/01/postgresopen-sv-line-up</id>
-    <content type="html"><![CDATA[<p>This year Postgres open and PGConf SV have combined to great a bigger and better conference right in downtown San Francisco. <em>I&rsquo;m obviously biased as I&rsquo;m one of the co-chairs, and I know every conference organizer says picking the talks was hard, but I&rsquo;m especially excited for the line-up this year</em>. The hard part for me is going to be which talks do I miss out on because I&rsquo;m sitting in the other session that&rsquo;s ongoing. You can see the full list of <a href="https://postgresql.us/events/sessions/pgopen2017/">talk and tutorial sessions</a>, but I thought it&rsquo;d be fun to do a rundown of some of my favorites. <!--more--></p>
-
-<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/399-how-postgres-could-index-itself/">How Postgres could index itself</a></h3>
-
-<p><a href="https://postgresql.us/events/sessions/pgopen2017/session/399-how-postgres-could-index-itself/">Postgres indexing itself</a> has long been on my wishlist. <a href="https://www.twitter.com/akane">Andrew Kane</a> from Instacart, and creator of <a href="https://github.com/ankane/pghero/">PgHero</a> has bottled up many learnings into a new tool: <a href="https://medium.com/@ankane/introducing-dexter-the-automatic-indexer-for-postgres-5f8fa8b28f27">Dexter</a>. I suspect we&rsquo;ll get a look at all that went into this, how it works, and how you can leverage it to have a more automatically tuned database.</p>
-
-<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/376-scaling-a-saas-application-beyond-a-single-postgres-with-citus/">Scaling a SaaS Application Beyond a Single Postgres with Citus</a></h3>
-
-<p>Migration talks are all to common, from Postgres to MySQL from MySQL to Postgres, or from <a href="https://containership.engineering/dynamodb-to-postgres-why-and-how-aa891681af4d">Dynamo to Postgres</a>. But this one is a little different flavor from Postgres to sharded Postgres with <a href="https://www.citusdata.com">Citus</a>. Sharding into a distributed system of course brings new things to consider and think about, and <a href="https://postgresql.us/events/sessions/pgopen2017/session/376-scaling-a-saas-application-beyond-a-single-postgres-with-citus/">here you&rsquo;ll learn about them</a> from first hand experience so hopefully you can avoid mistakes yourself.</p>
-
-<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/374-concurrency-deep-dive/">Concurrency Deep Dive</a></h3>
-
-<p><a href="https://postgresql.us/events/sessions/pgopen2017/session/374-concurrency-deep-dive/">This one</a> looks to be a great under the hood look as well as likely very practical. It&rsquo;ll cover MVCC which is really at so much of the core of how Postgres works, but then bring it up to what it means for things like locks. Best of all, this one like so many others comes with lots of real world experience from Segment.</p>
-
-<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/364-postgres-window-magic/">Postgres window magic</a></h3>
-
-<p><img src="https://d3vv6lp55qjaqc.cloudfront.net/items/140p363n3b1N1X440Y0a/Image%202017-06-30%20at%2010.43.55%20AM.png?X-CloudApp-Visitor-Id=e4475d145dcf11ebcffabf840edcc11f&v=e35b6d4d" style="float:right; width:20%; margin-left:15px; " />
-I love me some windows, though not always the easiest things to work with. They can let you easily do things like compute month over month growth between rows in a single query. Bruce whose always a great presenter <a href="https://postgresql.us/events/sessions/pgopen2017/session/364-postgres-window-magic/">walks us through them</a> and all the things they&rsquo;re capable of.</p>
-
-<h3><a href="https://postgresql.us/events/sessions/pgopen2017/session/371-running-postgresql-instagram/">Running PostgreSQL @ Instagram</a></h3>
-
-<p>Instagram is well known as one of the largest apps in the world. They optimized and changed their setup multiple times and probably scaled in about every way possible. <a href="https://postgresql.us/events/sessions/pgopen2017/session/371-running-postgresql-instagram/">Here we get to learn</a> about all the various things you need in running at a truly astonishing scale.</p>
-
-<h3><a href="https://postgresql.us/events/sessions/pgopen2017/">Many many more</a></h3>
-
-<p>Of course there&rsquo;s many more. Talks range from looks at new features, to how certain companies are using Postgres. We&rsquo;ve got companies like Instacart and Instagram as mentioned giving talks, to Postgres core committers. Whether you want to learn about the inner workings of Postgres (which often hurts my brain) to how you can simply speed up your app you should find something you like, as long as you like Postgres that is. Take a look at the <a href="https://postgresql.us/events/sessions/pgopen2017/">full list of sessions</a> and we hope to see you there.</p>
 ]]></content>
   </entry>
   

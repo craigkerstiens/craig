@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Google&rsquo;s documentation is pretty good when it comes to how to create an extension that opens a full page and has large functionality. But if &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -62,6 +62,51 @@
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/">
+		
+			Events With Google Analytics and Tricking Pageviews</a>
+	</h2>
+	<div class="entry-content">
+		<p>Google analytics is great out of the box, the basic tracking tag on every page will do a lot for you. Unfortunately most people never get beyond this. There are two key items with tracking that you can do that will let you get a bit further. There&rsquo;s also plenty more on the reporting side, but we&rsquo;ll get to some of that later. On the tracking side the first item is event tracking. This is perhaps most commonly used for tracking various Javascript events that occur during a visit, however it can also be a bit more flexible towards tracking values. A very simple example might be:</p>
+
+<pre>_ga._trackEvent(category, action, opt_label, opt_value)</pre>
+
+
+<p>Or a real life example of this, might be on a FAQ screen, clicking the link to an anchored section of the page:</p>
+
+<pre>_ga._trackEvent('faq', 'anchor click', $(this))</pre>
+
+
+<p>But events by their sheer nature give a bit more flexibility with that value field. In the case of a user sending a message 
+		
+		<a href="/2011/02/02/events-with-google-analytics-and-tricking-pageviews/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T16:28:56-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -408,50 +453,6 @@
 
 
 <time datetime="2010-01-21T14:49:33-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time></div>
-	
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2010/01/20/parallelizing-the-product-process/">
-		
-			Parallelizing the Product Process?</a>
-	</h2>
-	<div class="entry-content">
-		<div id="_mcePaste">A few days ago I was told things needed to be parallelized, not serialized with regards to the process. To me there could not be much more of a detrimental approach.</div>
-
-
-<div></div>
-
-
-<div id="_mcePaste">To give some background there is currently some selling going on, as the case often is with selling you sell the next version of what you&#8217;ll have. Or really sell what you think customers want, and that gives you validation if you should build it or not. I&#8217;m generally quite happy with this process, assuming you&#8217;ll have some time to test the market out, then build it. In fact this is the way a lot of businesses proceed and is a valid process. My problem isn&#8217;t with this process, it&#8217;s that I was told that we have to deviate from this process due to time constraints.</div>
-
-
-<div>
-		
-		<a href="/2010/01/20/parallelizing-the-product-process/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-20T14:42:49-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2010</time></div>
 	
 
 

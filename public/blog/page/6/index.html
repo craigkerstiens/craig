@@ -10,7 +10,7 @@
 
 <meta name="author" content="Craig Kerstiens"> 
 
-<meta name="description" content="Several months back I wrote about how we do higher level, long term planning within the Heroku Postgres team. If you haven&rsquo;t read the previous &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Just as PostgreSQL 9.3 was coming out I had a need to take advantage of the JSON datatype and some of the operators and functions within it. The use &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -62,6 +62,55 @@
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/2013/09/11/diving-into-postgres-json-operators/">
+		
+			Diving Into Postgres JSON Operators and Functions</a>
+	</h2>
+	<div class="entry-content">
+		<p>Just as <a href="https://postgres.heroku.com/blog/past/2013/9/9/postgres_93_now_available/">PostgreSQL 9.3</a> was coming out I had a need to take advantage of the JSON datatype and some of the <a href="http://www.postgresql.org/docs/9.3/static/functions-json.html">operators and functions</a> within it. The use case was pretty simple, run a query across a variety of databases, then take the results and store them. We explored doing something more elaborate with the columns/values, but in the end just opted to save the entire result set as JSON then I could use the operators to explore it as desired.</p>
+
+<p>Here&rsquo;s the general idea in code (using sequel):</p>
+
+<pre><code>result = r.connection { |c| c.fetch(self.query).all }
+mymodel.results = result.to_json
+</code></pre>
+
+
+		
+		<a href="/2013/09/11/diving-into-postgres-json-operators/" class="more-link">Read on </a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-11T00:00:00-07:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/categories/postgres/'>Postgres</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -484,66 +533,6 @@
 
 
 <time datetime="2013-06-13T00:00:00-07:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/categories/postgres/'>Postgres</a>, <a class='category' href='/categories/sql/'>SQL</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/2013/05/30/a-collection-of-indexing-tips/">
-		
-			Postgres Indexing - a Collection of Indexing Tips</a>
-	</h2>
-	<div class="entry-content">
-		<p>Even from intial reviews of my previous post on expression based indexes I received a lot of questions and feedback around many different parts of indexing in Postgres. Here&rsquo;s a mixed collection of valuable tips and guides around much of that.</p>
-
-<h3>Unused Indexes</h3>
-
-<p>In an earlier tweet I joked about some SQL that would generate the SQL to add an index to every column:</p>
-
-<pre><code># SELECT 'CREATE INDEX idx_' 
-    || table_name || '_' 
-    || column_name || ' ON ' 
-    || table_name || ' ("' 
-    || column_name || '");' 
-  FROM information_schema.columns;
-                      ?column?
----------------------------------------------------------------------
- CREATE INDEX idx_pg_proc_proname ON pg_proc ("proname");
- CREATE INDEX idx_pg_proc_pronamespace ON pg_proc ("pronamespace");
- CREATE INDEX idx_pg_proc_proowner ON pg_proc ("proowner");
-</code></pre>
-
-
-		
-		<a href="/2013/05/30/a-collection-of-indexing-tips/" class="more-link">Read on </a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-30T00:00:00-07:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
