@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgres, | Craig Kerstiens]]></title>
   <link href="http://www.craigkerstiens.com/categories/postgres/atom.xml" rel="self"/>
   <link href="http://www.craigkerstiens.com/"/>
-  <updated>2017-10-31T13:46:08-07:00</updated>
+  <updated>2017-10-31T13:48:14-07:00</updated>
   <id>http://www.craigkerstiens.com/</id>
   <author>
     <name><![CDATA[Craig Kerstiens]]></name>
@@ -52,7 +52,7 @@
 
 <ul>
 <li><a href="https://www.pgcon.org/2018/">PGCon</a> &ndash; The hackers conference</li>
-<li>[PostgresOpen SV] &ndash; A consolidation of PostgresOpen and PGConf Silicon Valley</li>
+<li><a href="https://2017.postgresopen.org/">PostgresOpen SV</a> &ndash; A consolidation of PostgresOpen and PGConf Silicon Valley</li>
 <li><a href="https://postgresopen.org/">PGConf EU</a> &ndash; The largest PG European Conference which moves around each year</li>
 </ul>
 
